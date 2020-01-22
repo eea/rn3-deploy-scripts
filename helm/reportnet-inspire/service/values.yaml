@@ -1,0 +1,25 @@
+# Default values for reportnet.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Specific Values for Inspire
+
+# Environment Variables
+consul:
+  server: consul
+  port: 8500
+
+kafka:
+  bootstrap: bootstrap-kafka
+  port: 9092
+zipkin:
+    ip: zipkin-ui
+    port: 9411
+redis:
+    ip: redis-master
+    port: 6379
+tagSufix: 
+replicas: 1
+repo: eeacms
+
+# Other Variables

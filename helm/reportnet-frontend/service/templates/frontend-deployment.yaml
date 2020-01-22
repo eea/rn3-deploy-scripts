@@ -1,0 +1,49 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: frontend
+  labels:
+    name: frontend
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  replicas: {{.Values.replicas}}
+  template:
+    metadata:
+      labels:
+        name: frontend
+        cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+    spec:
+      containers:
+      - name: frontend
+        image: {{.Values.repo}}/reportnet-frontend-service:3.0{{.Values.tagSufix}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        env:
+        - name: BACKEND
+          value: "{{.Values.backend}}"
+        - name: EULOGIN
+          value: "{{.Values.eulogin}}"
+        - name: KEYCLOAK
+          value: "{{.Values.keycloak}}"
+        - name: WEBSOCKET_URL
+          value: "{{.Values.websocket}}"
+
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

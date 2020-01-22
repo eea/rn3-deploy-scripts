@@ -1,0 +1,30 @@
+# Default values for reportnet.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Specific Values for Dataset
+
+# Environment Variables
+consul:
+  server: consul
+  port: 8500
+
+kafka:
+  bootstrap: bootstrap-kafka
+  port: 9092
+
+metabase:
+    url: jdbc:postgresql://rn3-pg-helm:5432/metabase
+    user: testuser
+    password: password
+zipkin:
+    ip: zipkin-ui
+    port: 9411
+    
+redis:
+    ip: redis-master
+    port: 6379
+tagSufix: 
+replicas: 3
+repo: eeacms
+# Other Variables

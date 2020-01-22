@@ -1,0 +1,19 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: keycloak
+  labels:
+    name: keycloak
+    namespace: {{.Release.Namespace}}
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 32290
+  selector:
+    name: keycloak
+  type: NodePort
+  sessionAffinity: None

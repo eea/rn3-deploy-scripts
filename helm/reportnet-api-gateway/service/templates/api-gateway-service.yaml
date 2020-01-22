@@ -1,0 +1,19 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: api-gateway
+  labels:
+    name: api-gateway
+    namespace: {{.Release.Namespace}}
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  ports:
+  - protocol: TCP
+    port: 8010
+    targetPort: 8010
+    nodePort: {{.Values.AgPort}}
+  selector:
+    name: api-gateway
+  type: NodePort
+  sessionAffinity: None

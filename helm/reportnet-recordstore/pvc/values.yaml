@@ -1,0 +1,10 @@
+# Default values for reportnet.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Specific Values for Recordstore PVC
+
+# Environment Variables
+
+storageClassName: rook-ceph-block
+# Other Variables

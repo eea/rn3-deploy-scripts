@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api-gateway-config
+spec:
+  containers:
+    - name: api-gateway-config
+      image: radial/busyboxplus:curl
+      command: [ "/bin/sh","-c", "-f"]
+      args: ["cat /etc/config/keys | while read line || [ -n \"$line\" ]; do echo processing line $line;key=$(echo $line | cut -f 1 -d =);value=$(echo $line | cut -f 2 -d =);  curl -X PUT -d \"$value\" http://{{.Values.consul.server}}:{{.Values.consul.port}}/v1/kv/$key?dc=dc1; done"]
+      volumeMounts:
+      - name: config-volume
+        mountPath: /etc/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: api-gateway-consul-configmap
+        items:
+        - key: api-gateway.properties
+          path: keys
+  restartPolicy: Never
+  

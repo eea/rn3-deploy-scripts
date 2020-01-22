@@ -1,0 +1,24 @@
+# Default values for reportnet.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Specific Values for Api Gateway
+
+# Environment Variables
+consul:
+  server: consul
+  port: 8500
+
+kafka:
+  bootstrap: bootstrap-kafka
+  port: 9092
+zipkin:
+    ip: zipkin-ui
+    port: 9411
+
+AgPort: 32447
+
+tagSufix: 
+replicas: 1
+repo: eeacms
+# Other Variables

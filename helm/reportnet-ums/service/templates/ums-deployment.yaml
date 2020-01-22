@@ -1,0 +1,63 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: ums
+  labels:
+    name: ums
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  replicas: {{.Values.replicas}}
+  template:
+    metadata:
+      labels:
+        name: ums
+        cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+    spec:
+      containers:
+      - name: ums
+        image: {{.Values.repo}}/user-management-service:3.0{{.Values.tagSufix}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9010
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: 9010
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 9010
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        env:
+        - name: CONSUL_HOST
+          value: "{{.Values.consul.server}}"
+        - name: CONSUL_PORT
+          value: "{{.Values.consul.port}}"
+        - name: KAFKA_BOOTSTRAP_URL
+          value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          value: "{{.Values.keycloak.password}}"
+        - name: KEYCLOAK_ADMIN_USER
+          value: "{{.Values.keycloak.user}}"
+        - name: KEYCLOAK_CLIENT_ID
+          value: "{{.Values.keycloak.clientId}}"
+        - name: KEYCLOAK_HOST
+          value: "{{.Values.keycloak.host}}"          
+        - name: KEYCLOAK_REAM_NAME
+          value: "{{.Values.keycloak.realm}}"          
+        - name: ZIPKIN_URL
+          value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+        - name: REDIS_HOST
+          value: "{{.Values.redis.ip}}"
+        - name: REDIS_PORT
+          value: "{{.Values.redis.port}}"
+        
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

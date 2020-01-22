@@ -1,0 +1,64 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: validation
+  labels:
+    name: validation
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  replicas: {{.Values.replicas}}
+  template:
+    metadata:
+      labels:
+        name: validation
+        cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+    spec:
+      containers:
+      - name: api-gateway
+        image: {{.Values.repo}}/validation-service:1.0{{.Values.tagSufix}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8015
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: 8015
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8015
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        env:
+        - name: CONSUL_HOST
+          value: "{{.Values.consul.server}}"
+        - name: CONSUL_PORT
+          value: "{{.Values.consul.port}}"
+        - name: KAFKA_BOOTSTRAP_URL
+          value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
+        - name: MONGO_DB_HOST
+          value: "{{.Values.mongo.host}}"
+        - name: MONGO_DB_PORT
+          value: "{{.Values.mongo.port}}"
+        - name: METABASE_CONNECTION_URL
+          value: "{{.Values.metabase.url}}"
+        - name: METABASE_CONNECTION_USER
+          value: "{{.Values.metabase.user}}"
+        - name: METABASE_CONNECTION_PASSWORD
+          value: "{{.Values.metabase.password}}"         
+        - name: ZIPKIN_URL
+          value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+        - name: REDIS_HOST
+          value: "{{.Values.redis.ip}}"
+        - name: REDIS_PORT
+          value: "{{.Values.redis.port}}"
+          
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

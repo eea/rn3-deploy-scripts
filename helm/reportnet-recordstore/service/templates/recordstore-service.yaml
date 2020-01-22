@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: recordstore
+  labels:
+    name: recordstore
+    namespace: {{.Release.Namespace}}
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  ports:
+  - protocol: TCP
+    port: 8090
+    targetPort: 8090
+  selector:
+    name: recordstore
+  type: ClusterIP
+  sessionAffinity: None

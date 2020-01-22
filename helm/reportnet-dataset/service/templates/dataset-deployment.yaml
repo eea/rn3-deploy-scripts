@@ -1,0 +1,59 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: dataset
+  labels:
+    name: dataset
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  replicas: {{.Values.replicas}}
+  template:
+    metadata:
+      labels:
+        name: dataset
+        cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+    spec:
+      containers:
+      - name: dataset
+        image: {{.Values.repo}}/dataset-service:1.0{{.Values.tagSufix}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8030
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: 8030
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8030
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        env:
+        - name: CONSUL_HOST
+          value: "{{.Values.consul.server}}"
+        - name: CONSUL_PORT
+          value: "{{.Values.consul.port}}"
+        - name: KAFKA_BOOTSTRAP_URL
+          value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
+        - name: METABASE_CONNECTION_URL
+          value: "{{.Values.metabase.url}}"
+        - name: METABASE_CONNECTION_USER
+          value: "{{.Values.metabase.user}}"
+        - name: METABASE_CONNECTION_PASSWORD
+          value: "{{.Values.metabase.password}}"
+        - name: ZIPKIN_URL
+          value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+        - name: REDIS_HOST
+          value: "{{.Values.redis.ip}}"
+        - name: REDIS_PORT
+          value: "{{.Values.redis.port}}"
+
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
