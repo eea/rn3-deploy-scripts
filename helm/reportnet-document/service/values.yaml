@@ -15,9 +15,11 @@ kafka:
 zipkin:
     ip: zipkin-ui
     port: 9411
+
 mongo:
-  host: mongo-mongodb
+  host: mongo-mongodb-replicaset
   port: 27017
+
 redis:
     ip: redis-master
     port: 6379

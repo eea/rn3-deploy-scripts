@@ -6,5 +6,7 @@
 
 # Environment Variables
 
-
 # Other Variables
+tagSufix: 
+replicas: 1
+repo: eeacms

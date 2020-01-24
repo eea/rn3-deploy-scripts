@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
       - name: keycloak
-        image: k8s-swi001:5000/keycloak-eulogin:3.0
-        command: [ "/bin/sh","-c"]
-        args: ["/opt/jboss/keycloak/bin/add-user-keycloak.sh -r admin -u admin -p admin","/opt/jboss/keycloak/bin/standalone.sh"]
+        image: {{.Values.repo}}/keycloak-eulogin:3.0
+#        command: [ "/bin/sh","-c"]
+#        args: ["/opt/jboss/keycloak/bin/add-user-keycloak.sh -r admin -u admin -p admin","/opt/jboss/keycloak/bin/standalone.sh"]
         imagePullPolicy: "Always"
         env:
         - name: KEYCLOAK_USER
@@ -36,3 +36,5 @@ spec:
           httpGet:
             path: /auth/realms/master
             port: 8080
+          failureThreshold: 3
+          periodSeconds: 60

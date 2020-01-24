@@ -1,6 +1,6 @@
 apiVersion: v2
 name: reportnet-e2e
-description: A Helm chart Reportnet E2E General Properties
+description: A Helm chart Reportnet E2E
 
 # A chart can be either an 'application' or a 'library' chart.
 #

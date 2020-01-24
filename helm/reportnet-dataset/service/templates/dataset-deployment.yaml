@@ -37,6 +37,8 @@ spec:
           value: "{{.Values.consul.port}}"
         - name: KAFKA_BOOTSTRAP_URL
           value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
+        - name: MONGO_DB_HOST
+          value: "{{.Values.mongo.host}}"
         - name: METABASE_CONNECTION_URL
           value: "{{.Values.metabase.url}}"
         - name: METABASE_CONNECTION_USER

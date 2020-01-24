@@ -19,7 +19,7 @@ metabase:
     password: password
 
 mongo:
-  host: mongo-mongodb
+  host: mongo-mongodb-replicaset
   port: 27017
 
 zipkin:

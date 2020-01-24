@@ -17,6 +17,11 @@ metabase:
     url: jdbc:postgresql://rn3-pg-helm:5432/metabase
     user: testuser
     password: password
+
+mongo:
+  host: mongo-mongodb-replicaset
+  port: 27017
+
 zipkin:
     ip: zipkin-ui
     port: 9411
