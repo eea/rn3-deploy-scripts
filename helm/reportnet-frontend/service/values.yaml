@@ -5,7 +5,7 @@
 # Specific Values for Api Gateway
 
 # Environment Variables
-backend: http://rn3test.eionet.europa.eu
+backend: https://rn3api.eionet.europa.eu
 
 frontendPort: 30888
 
@@ -13,7 +13,7 @@ keycloak: true
 
 eulogin: https://rn3auth.eionet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet&redirect_uri=https%3A%2F%2Frn3test.eionet.europa.eu%2Feulogin%2F&response_mode=fragment&response_type=code&scope=openid
 
-websocket: ws://rn3beta-backend.altia.es/communication/reportnet-websocket
+websocket: wss://rn3api.eionet.europa.eu/communication/reportnet-websocket
 
 tagSufix: 
 replicas: 1
