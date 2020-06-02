@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: ums
-        image: {{.Values.repo}}/user-management-service:3.0{{.Values.tagSufix}}
+        image: {{.Values.repo}}/user-management-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 9010
@@ -53,6 +53,10 @@ spec:
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
           value: "{{.Values.redis.port}}"
+        - name: REDIS_SENTINEL_MASTER
+          value: "{{.Values.redis.sentinel}}"
+        - name: REDIS_SENTINEL_NODES
+          value: "{{.Values.redis.nodes}}"  
         
       restartPolicy: Always
       dnsPolicy: ClusterFirst

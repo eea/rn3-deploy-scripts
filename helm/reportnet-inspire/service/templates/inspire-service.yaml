@@ -11,6 +11,7 @@ spec:
   - protocol: TCP
     port: 8050
     targetPort: 8050
+    nodePort: 0
   selector:
     name: inspire
   type: ClusterIP

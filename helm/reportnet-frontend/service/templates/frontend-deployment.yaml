@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: {{.Values.repo}}/reportnet-frontend-service:3.0{{.Values.tagSufix}}
+        image: {{.Values.repo}}/reportnet-frontend-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 80

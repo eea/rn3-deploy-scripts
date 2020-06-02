@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: document
-        image: {{.Values.repo}}/document-container-service:3.0{{.Values.tagSufix}}
+        image: {{.Values.repo}}/document-container-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 9040
@@ -37,17 +37,23 @@ spec:
           value: "{{.Values.consul.port}}"
         - name: KAFKA_BOOTSTRAP_URL
           value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
-        - name: MONGO_DB_HOST
-          value: "{{.Values.mongo.host}}"
-        - name: MONGO_DB_PORT
-          value: "{{.Values.mongo.port}}"
         - name: ZIPKIN_URL
           value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
         - name: REDIS_HOST
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
           value: "{{.Values.redis.port}}"
-         
+        - name: MONGO_HOSTS
+          value: "{{.Values.mongo.hosts}}"
+        - name: "MONGO_DB_HOST"
+          value: "{{.Values.mongo.host}}"
+        - name: "MONGO_DB_PORT"
+          value: "{{.Values.mongo.port}}"
+        - name: REDIS_SENTINEL_MASTER
+          value: "{{.Values.redis.sentinel}}"
+        - name: REDIS_SENTINEL_NODES
+          value: "{{.Values.redis.nodes}}"  
+          
       restartPolicy: Always
       dnsPolicy: ClusterFirst
   strategy:

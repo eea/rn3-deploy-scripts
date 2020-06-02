@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: dataset
-        image: {{.Values.repo}}/dataset-service:1.0{{.Values.tagSufix}}
+        image: {{.Values.repo}}/dataset-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 8030
@@ -37,20 +37,33 @@ spec:
           value: "{{.Values.consul.port}}"
         - name: KAFKA_BOOTSTRAP_URL
           value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
-        - name: MONGO_DB_HOST
-          value: "{{.Values.mongo.host}}"
         - name: METABASE_CONNECTION_URL
           value: "{{.Values.metabase.url}}"
         - name: METABASE_CONNECTION_USER
           value: "{{.Values.metabase.user}}"
         - name: METABASE_CONNECTION_PASSWORD
           value: "{{.Values.metabase.password}}"
+        - name: DATASETS_USERNAME
+          value: "{{.Values.datasets.user}}"
+        - name: DATASETS_PASSWORD
+          value: "{{.Values.datasets.password}}"  
         - name: ZIPKIN_URL
           value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
         - name: REDIS_HOST
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
           value: "{{.Values.redis.port}}"
+        - name: MONGO_HOSTS
+          value: "{{.Values.mongo.hosts}}"
+        - name: "MONGO_DB_HOST"
+          value: "{{.Values.mongo.host}}"
+        - name: "MONGO_DB_PORT"
+          value: "{{.Values.mongo.port}}"
+        - name: REDIS_SENTINEL_MASTER
+          value: "{{.Values.redis.sentinel}}"
+        - name: REDIS_SENTINEL_NODES
+          value: "{{.Values.redis.nodes}}"  
+                            
 
       restartPolicy: Always
       dnsPolicy: ClusterFirst

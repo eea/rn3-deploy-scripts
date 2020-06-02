@@ -10,26 +10,32 @@ consul:
   port: 8500
 
 kafka:
-  bootstrap: bootstrap-kafka
+  bootstrap: bootstrap-kafka.reportnet.svc.cluster.local
   port: 9092
 
 metabase:
-    url: jdbc:postgresql://rn3-pg-helm:5432/metabase
-    user: testuser
+    url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase
+    user: dataset
     password: password
-
-mongo:
-  host: mongo-mongodb-replicaset
-  port: 27017
-
+datasets:
+    user: dataset
+    password: password
 zipkin:
     ip: zipkin-ui
     port: 9411
-    
+
+mongo:
+  host: mongo-mongodb
+  port: 27017
+  hosts: mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017/?readPreference=primary&retryWrites=true
+
 redis:
-    ip: redis-master
+    ip: redis
     port: 6379
+    sentinel: mymaster
+    nodes: redis:26379
 tagSufix: 
 replicas: 3
+version: 1.0.0
 repo: eeacms
 # Other Variables

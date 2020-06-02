@@ -10,7 +10,7 @@ consul:
   port: 8500
 
 kafka:
-  bootstrap: bootstrap-kafka
+  bootstrap: bootstrap-kafka.reportnet.svc.cluster.local
   port: 9092
 zipkin:
     ip: zipkin-ui
@@ -18,7 +18,13 @@ zipkin:
 
 AgPort: 32447
 
+redis:
+    ip: redis
+    port: 6379
+    sentinel: mymaster
+    nodes: redis:26379
 tagSufix: 
 replicas: 1
 repo: eeacms
+version: 1.0.0
 # Other Variables

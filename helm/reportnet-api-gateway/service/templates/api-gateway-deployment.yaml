@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: {{.Values.repo}}/api-gateway:1.0{{.Values.tagSufix}}
+        image: {{.Values.repo}}/api-gateway:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 8010
@@ -40,6 +40,14 @@ spec:
           value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
         - name: ZIPKIN_URL
           value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+        - name: REDIS_HOST
+          value: "{{.Values.redis.ip}}"
+        - name: REDIS_PORT
+          value: "{{.Values.redis.port}}"
+        - name: REDIS_SENTINEL_MASTER
+          value: "{{.Values.redis.sentinel}}"
+        - name: REDIS_SENTINEL_NODES
+          value: "{{.Values.redis.nodes}}"  
       restartPolicy: Always
       dnsPolicy: ClusterFirst
   strategy:

@@ -17,5 +17,6 @@ websocket: wss://rn3api.eionet.europa.eu/communication/reportnet-websocket
 
 tagSufix: 
 replicas: 1
+version: 1.0.0
 repo: eeacms
 # Other Variables

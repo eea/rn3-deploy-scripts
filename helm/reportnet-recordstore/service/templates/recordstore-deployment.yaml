@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: recordstore
-        image: {{.Values.repo}}/recordstore-service:3.0{{.Values.tagSufix}}
+        image: {{.Values.repo}}/recordstore-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 8090
@@ -51,12 +51,27 @@ spec:
           value: "{{.Values.postgres.password}}"
         - name: METABASE_CONNECTION_URL
           value: "{{.Values.postgres.metabase.url}}"
+        - name: DATASETS_USERNAME
+          value: "{{.Values.datasets.user}}"
+        - name: DATASETS_PASSWORD
+          value: "{{.Values.datasets.password}}"  
         - name: ZIPKIN_URL
           value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
         - name: REDIS_HOST
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
           value: "{{.Values.redis.port}}"
+        - name: REDIS_SENTINEL_MASTER
+          value: "{{.Values.redis.sentinel}}"
+        - name: REDIS_SENTINEL_NODES
+          value: "{{.Values.redis.nodes}}"  
+        - name: DATASET_CREATION_NOTIFICATION_MS
+          value: "{{.Values.dataset.creation.notification.ms}}"
+        - name: RESTORE_SNAPSHOT_FILE_BUFER
+          value: "{{.Values.snapshot.bufferSize}}"  
+        - name: DATASET_USERS
+          value: "{{.Values.dataset.users}}"  
+
 
         volumeMounts:
         - mountPath: "/reportnet3-data/snapshots"

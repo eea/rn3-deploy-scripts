@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: inspire
-        image: {{.Values.repo}}/inspire-harvester:3.0{{.Values.tagSufix}}
+        image: {{.Values.repo}}/inspire-harvester:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 8050

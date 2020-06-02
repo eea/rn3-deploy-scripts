@@ -11,8 +11,8 @@ spec:
   - protocol: TCP
     port: 8030
     targetPort: 8030
-    nodePort: 32302
+    nodePort: 0
   selector:
     name: dataset
-  type: NodePort
+  type: ClusterIP
   sessionAffinity: None

@@ -15,8 +15,8 @@ spec:
         cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
     spec:
       containers:
-      - name: api-gateway
-        image: {{.Values.repo}}/validation-service:1.0{{.Values.tagSufix}}
+      - name: validation
+        image: {{.Values.repo}}/validation-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 8015
@@ -47,13 +47,35 @@ spec:
         - name: METABASE_CONNECTION_USER
           value: "{{.Values.metabase.user}}"
         - name: METABASE_CONNECTION_PASSWORD
-          value: "{{.Values.metabase.password}}"         
+          value: "{{.Values.metabase.password}}"  
+        - name: DATASETS_USERNAME
+          value: "{{.Values.datasets.user}}"
+        - name: DATASETS_PASSWORD
+          value: "{{.Values.datasets.password}}"  
         - name: ZIPKIN_URL
           value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
         - name: REDIS_HOST
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
           value: "{{.Values.redis.port}}"
+        - name: MONGO_HOSTS
+          value: "{{.Values.mongo.hosts}}"
+        - name: "MONGO_DB_HOST"
+          value: "{{.Values.mongo.host}}"
+        - name: "MONGO_DB_PORT"
+          value: "{{.Values.mongo.port}}"  
+        - name: REDIS_SENTINEL_MASTER
+          value: "{{.Values.redis.sentinel}}"
+        - name: REDIS_SENTINEL_NODES
+          value: "{{.Values.redis.nodes}}"  
+        - name: VALIDATION_FIELD_BATCH_SIZE
+          value: "{{.Values.validation.fieldBatchSize}}"  
+        - name: VALIDATION_RECORD_BATCH_SIZE
+          value: "{{.Values.validation.recordBatchSize}}"
+        - name: VALIDATION_TASKS_RELEASE_TAX
+          value: "{{.Values.validation.tasks.release.tax}}"
+        - name: VALIDATION_TASKS_INITIAL_TAX
+          value: "{{.Values.validation.tasks.initial.tax}}"
           
       restartPolicy: Always
       dnsPolicy: ClusterFirst

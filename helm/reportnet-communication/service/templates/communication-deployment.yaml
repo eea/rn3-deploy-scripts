@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: communication
-        image: {{.Values.repo}}/communication-service:3.0{{.Values.tagSufix}}
+        image: {{.Values.repo}}/communication-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 9020
@@ -43,7 +43,11 @@ spec:
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
           value: "{{.Values.redis.port}}"
-
+        - name: REDIS_SENTINEL_MASTER
+          value: "{{.Values.redis.sentinel}}"
+        - name: REDIS_SENTINEL_NODES
+          value: "{{.Values.redis.nodes}}"  
+ 
       restartPolicy: Always
       dnsPolicy: ClusterFirst
   strategy:

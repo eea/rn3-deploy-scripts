@@ -10,20 +10,22 @@ consul:
   port: 8500
 
 kafka:
-  bootstrap: bootstrap-kafka
+  bootstrap: bootstrap-kafka.reportnet.svc.cluster.local
   port: 9092
 zipkin:
     ip: zipkin-ui
     port: 9411
-
 mongo:
-  host: mongo-mongodb-replicaset
+  host: mongo-mongodb
   port: 27017
-
+  hosts: mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017/?readPreference=primary&retryWrites=true
 redis:
-    ip: redis-master
+    ip: redis
     port: 6379
+    sentinel: mymaster
+    nodes: redis:26379
 tagSufix: 
 replicas: 1
+version: 1.0.0
 repo: eeacms
 # Other Variables

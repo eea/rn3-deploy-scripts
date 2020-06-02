@@ -11,6 +11,7 @@ spec:
   - protocol: TCP
     port: 8090
     targetPort: 8090
+    nodePort: 0
   selector:
     name: recordstore
   type: ClusterIP

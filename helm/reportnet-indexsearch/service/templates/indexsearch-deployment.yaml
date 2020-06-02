@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: indexsearch
-        image: {{.Values.repo}}/indexsearch-service:3.0{{.Values.tagSufix}}
+        image: {{.Values.repo}}/indexsearch-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 9030

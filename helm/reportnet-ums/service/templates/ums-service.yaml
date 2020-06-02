@@ -11,7 +11,7 @@ spec:
   - protocol: TCP
     port: 9010
     targetPort: 9010
-    
+    nodePort: 0
   selector:
     name: ums
   type: ClusterIP

@@ -11,8 +11,8 @@ spec:
   - protocol: TCP
     port: 9040
     targetPort: 9040
-    nodePort: 32240
+    nodePort: 0
   selector:
     name: document
-  type: NodePort
+  type: ClusterIP
   sessionAffinity: None

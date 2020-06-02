@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: dataflow
-        image: {{.Values.repo}}/dataflow-service:1.0{{.Values.tagSufix}}
+        image: {{.Values.repo}}/dataflow-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 8020
@@ -49,7 +49,11 @@ spec:
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
           value: "{{.Values.redis.port}}"
-
+        - name: REDIS_SENTINEL_MASTER
+          value: "{{.Values.redis.sentinel}}"
+        - name: REDIS_SENTINEL_NODES
+          value: "{{.Values.redis.nodes}}"  
+ 
       restartPolicy: Always
       dnsPolicy: ClusterFirst
   strategy:
