@@ -1,0 +1,59 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: rod
+  labels:
+    name: rod
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  replicas: {{.Values.replicas}}
+  template:
+    metadata:
+      labels:
+        name: rod
+        cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+    spec:
+      containers:
+      - name: rod
+        image: {{.Values.repo}}/rod-service:{{.Values.version}}{{.Values.tagSufix}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9050
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: 9050
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 9050
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        env:
+        - name: CONSUL_HOST
+          value: "{{.Values.consul.server}}"
+        - name: CONSUL_PORT
+          value: "{{.Values.consul.port}}"
+        - name: KAFKA_BOOTSTRAP_URL
+          value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
+        - name: ZIPKIN_URL
+          value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+        - name: REDIS_HOST
+          value: "{{.Values.redis.ip}}"
+        - name: REDIS_PORT
+          value: "{{.Values.redis.port}}"
+        - name: REDIS_SENTINEL_MASTER
+          value: "{{.Values.redis.sentinel}}"
+        - name: REDIS_SENTINEL_NODES
+          value: "{{.Values.redis.nodes}}"  
+     
+          
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

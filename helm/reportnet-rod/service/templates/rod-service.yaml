@@ -1,0 +1,18 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: rod
+  labels:
+    name: rod
+    namespace: {{.Release.Namespace}}
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  ports:
+  - protocol: TCP
+    port: 8015
+    targetPort: 8015
+    nodePort: 0
+  selector:
+    name: rod
+  type: ClusterIP
+  sessionAffinity: None
