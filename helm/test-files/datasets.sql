@@ -1,11 +1,4 @@
-CREATE DATABASE datasets
-    WITH 
-    OWNER = testuser
-    ENCODING = 'UTF8'
-    TEMPLATE = template0
-    TABLESPACE = pg_default
-    CONNECTION LIMIT = -1;
-\c datasets
+
 
 CREATE schema dataset_1 AUTHORIZATION testuser;
 CREATE TABLE dataset_1.DATASET_VALUE (ID bigint, ID_DATASET_SCHEMA text, PRIMARY key (ID))  TABLESPACE pg_default;

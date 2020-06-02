@@ -1,21 +1,11 @@
-CREATE DATABASE metabase
-    WITH
-    OWNER = testuser
-    ENCODING = 'UTF8'
-    TEMPLATE = template0
-    TABLESPACE = pg_default
-    CONNECTION LIMIT = -1;
 
- \c metabase
---TABLES
+-- Initializing metabase structure historified as flyway will do
 
-DROP SCHEMA public cascade;
-CREATE SCHEMA public;
-commit;
+-- Flyway V1
 
 --TABLES
 
-CREATE TABLE public.dataflow (
+CREATE  TABLE IF NOT EXISTS public.dataflow (
 	id bigserial NOT NULL,
 	description varchar(255) NULL,
 	"name" varchar(255) NULL,
@@ -25,7 +15,7 @@ CREATE TABLE public.dataflow (
 	CONSTRAINT dataflow_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE public.dataset (
+CREATE TABLE IF NOT EXISTS public.dataset (
 	id bigserial NOT NULL,
 	date_creation timestamp NULL,
 	DATASET_NAME varchar(255) NULL,
@@ -38,7 +28,7 @@ CREATE TABLE public.dataset (
 	CONSTRAINT dataset_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE public.contributor (
+CREATE TABLE IF NOT EXISTS public.contributor (
 	id bigserial NOT NULL,
 	email varchar(255) NULL,
 	user_id varchar(255) NULL,
@@ -47,21 +37,21 @@ CREATE TABLE public.contributor (
 	CONSTRAINT dataflow_contributor_fkey FOREIGN KEY (dataflow_id) REFERENCES dataflow(id)
 );
 
-CREATE TABLE public.data_collection (
+CREATE TABLE IF NOT EXISTS public.data_collection (
 	due_date timestamp NULL,
 	id bigserial NOT NULL,
 	CONSTRAINT data_collection_pkey PRIMARY KEY (id),
 	CONSTRAINT dataset_data_collection_fkey FOREIGN KEY (id) REFERENCES dataset(id)
 );
 
-CREATE TABLE public.design_dataset (
+CREATE TABLE IF NOT EXISTS public.design_dataset (
 	"type" varchar(255) NULL,
 	id serial NOT NULL,
 	CONSTRAINT design_dataset_pkey PRIMARY KEY (id),
 	CONSTRAINT dataset_design_fkey FOREIGN KEY (id) REFERENCES dataset(id)
 );
 
-CREATE TABLE public."document" (
+CREATE TABLE IF NOT EXISTS public."document" (
 	id bigserial NOT NULL,
 	"language" varchar(255) NULL,
 	"name" varchar(255) NULL,
@@ -74,7 +64,7 @@ CREATE TABLE public."document" (
 	CONSTRAINT document_dataflow_fkey FOREIGN KEY (dataflow_id) REFERENCES dataflow(id)
 );
 
-CREATE TABLE public.eu_dataset (
+CREATE TABLE IF NOT EXISTS public.eu_dataset (
 	"name" varchar(255) NULL,
 	visible bool NULL,
 	id bigserial NOT NULL,
@@ -82,7 +72,7 @@ CREATE TABLE public.eu_dataset (
 	CONSTRAINT eu_dataset_dataset_fkey FOREIGN KEY (id) REFERENCES dataset(id)
 );
 
-CREATE TABLE public.partition_dataset (
+CREATE TABLE IF NOT EXISTS public.partition_dataset (
 	id bigserial NOT NULL,
 	user_name varchar(255) NULL,
 	id_dataset serial NOT NULL,
@@ -90,13 +80,13 @@ CREATE TABLE public.partition_dataset (
 	CONSTRAINT partition_dataset_dataset_fkey FOREIGN KEY (id_dataset) REFERENCES dataset(id)
 );
 
-CREATE TABLE public.reporting_dataset (
+CREATE TABLE IF NOT EXISTS public.reporting_dataset (
 	id bigserial NOT NULL,
 	CONSTRAINT reporting_dataset_pkey PRIMARY KEY (id),
 	CONSTRAINT reporting_dataset_dataset_fkey FOREIGN KEY (id) REFERENCES dataset(id)
 );
 
-CREATE TABLE public."snapshot" (
+CREATE TABLE IF NOT EXISTS public."snapshot" (
 	datacollection_id int8 NULL,
 	"description" varchar(255) NULL,
 	REPORTING_DATASET_ID int8 null,
@@ -107,7 +97,7 @@ CREATE TABLE public."snapshot" (
 	CONSTRAINT snapshot_dataset_fkey FOREIGN KEY (id) REFERENCES dataset(id)
 );
 
-CREATE TABLE public.submission_agreement (
+CREATE TABLE IF NOT EXISTS public.submission_agreement (
 	id bigserial NOT NULL,
 	description varchar(255) NULL,
 	"name" varchar(255) NULL,
@@ -116,24 +106,9 @@ CREATE TABLE public.submission_agreement (
 	CONSTRAINT submission_agreement_dataflow_fkey FOREIGN KEY (dataflow_id) REFERENCES dataflow(id)
 );
 
-CREATE TABLE public.table_collection (
-	id bigserial NOT NULL,
-	dataflow_id int8 NULL,
-	dataset_id int8 NULL,
-	table_name varchar(255) NULL,
-	CONSTRAINT table_collection_pkey PRIMARY KEY (id)
-);
 
-CREATE TABLE public.table_headers_collection (
-	id bigserial NOT NULL,
-	header_name varchar(255) NULL,
-	header_type varchar(255) NULL,
-	id_table serial NOT NULL,
-	CONSTRAINT table_headers_collection_pkey PRIMARY KEY (id),
-	CONSTRAINT table_headers_collection_table_collection_fkey FOREIGN KEY (id_table) REFERENCES table_collection(id)
-);
 
-CREATE TABLE public.weblink (
+CREATE TABLE IF NOT EXISTS public.weblink (
 	id bigserial NOT NULL,
 	description varchar(255) NULL,
 	url varchar(255) NULL,
@@ -142,7 +117,7 @@ CREATE TABLE public.weblink (
 	CONSTRAINT weblink_dataflow_fkey FOREIGN KEY (dataflow_id) REFERENCES dataflow(id)
 );
 
-CREATE TABLE public.USER_REQUEST (
+CREATE TABLE IF NOT EXISTS public.USER_REQUEST (
 	id bigserial NOT NULL,
 	USER_REQUESTER varchar(255) NULL,
 	USER_REQUESTED varchar(255) NULL,
@@ -151,7 +126,7 @@ CREATE TABLE public.USER_REQUEST (
 	
 );
 
-CREATE TABLE public.dataflow_user_request (
+CREATE TABLE IF NOT EXISTS public.dataflow_user_request (
 	dataflow_id bigserial NOT NULL,
 	user_request_id bigserial NOT NULL,
 	CONSTRAINT dataflow_user_request_pkey PRIMARY KEY (dataflow_id, user_request_id),
@@ -159,7 +134,7 @@ CREATE TABLE public.dataflow_user_request (
 	CONSTRAINT user_request_DATAFLOW_pkey FOREIGN KEY (dataflow_id) REFERENCES dataflow(id)
 );
 
-CREATE TABLE public.lock (
+CREATE TABLE IF NOT EXISTS public.lock (
 	id int4 NOT NULL,
 	create_date timestamp NULL,
 	created_by varchar NULL,
@@ -168,7 +143,7 @@ CREATE TABLE public.lock (
 	CONSTRAINT lock_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE public."snapshot_schema" (
+CREATE TABLE IF NOT EXISTS public."snapshot_schema" (
 	id bigserial NOT null,
 	"description" varchar(255) NULL,
 	DESIGN_DATASET_ID int8 null,
@@ -176,7 +151,7 @@ CREATE TABLE public."snapshot_schema" (
 	CONSTRAINT snapshot_schema_dataset_fkey FOREIGN KEY (id) REFERENCES dataset(id)
 );
 
-CREATE TABLE public."statistics" (
+CREATE TABLE IF NOT EXISTS public."statistics" (
 	id bigserial NOT NULL,
 	id_dataset int8 NULL,
 	id_table_schema text NULL,
@@ -185,8 +160,8 @@ CREATE TABLE public."statistics" (
 	CONSTRAINT statistics_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE public.data_provider (
-	id bigserial NOT NULL,
+CREATE TABLE IF NOT EXISTS public.data_provider (
+	id int8 NOT NULL,
 	"label" varchar(255) NULL,
 	"type" varchar(255) NULL,
 	code varchar NULL,
@@ -194,8 +169,8 @@ CREATE TABLE public.data_provider (
 	CONSTRAINT representative_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE public.representative (
-	id bigserial NOT NULL,
+CREATE TABLE IF NOT EXISTS public.representative (
+	id int8 NOT NULL,
 	data_provider_id int8 NULL,
 	dataflow_id int8 NULL,
 	user_id varchar(255) NULL,
@@ -204,14 +179,14 @@ CREATE TABLE public.representative (
 	CONSTRAINT dataflow_id FOREIGN KEY (dataflow_id) REFERENCES dataflow(id)
 );
 
-CREATE TABLE public.codelist_category (
+CREATE TABLE IF NOT EXISTS public.codelist_category (
 	id bigserial NOT NULL,
 	description varchar(255) NULL,
 	short_code varchar(255) NULL,
 	CONSTRAINT codelist_category_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE public.codelist (
+CREATE TABLE IF NOT EXISTS public.codelist (
 	id bigserial NOT NULL,
 	description varchar(255) NULL,
 	"name" varchar(255) NULL,
@@ -221,7 +196,7 @@ CREATE TABLE public.codelist (
 	CONSTRAINT codelist_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE public.codelist_item (
+CREATE TABLE IF NOT EXISTS public.codelist_item (
 	id bigserial NOT NULL,
 	definition varchar(255) NULL,
 	"label" varchar(255) NULL,
@@ -231,6 +206,7 @@ CREATE TABLE public.codelist_item (
 	CONSTRAINT codelist_fk FOREIGN KEY (id_codelist) REFERENCES codelist(id)
 );
 
+--GRANTS
 
 GRANT USAGE ON SCHEMA public TO testuser ;
 GRANT USAGE ON SCHEMA public TO testuser ;
@@ -260,10 +236,6 @@ ALTER TABLE public."snapshot" OWNER TO testuser;
 GRANT ALL ON TABLE public."snapshot" TO testuser;
 ALTER TABLE public.submission_agreement OWNER TO testuser;
 GRANT ALL ON TABLE public.submission_agreement TO testuser;
-ALTER TABLE public.table_collection OWNER TO testuser;
-GRANT ALL ON TABLE public.table_collection TO testuser;
-ALTER TABLE public.table_headers_collection OWNER TO testuser;
-GRANT ALL ON TABLE public.table_headers_collection TO testuser;
 ALTER TABLE public.weblink OWNER TO testuser;
 GRANT ALL ON TABLE public.weblink TO testuser;
 ALTER TABLE public.USER_REQUEST OWNER TO testuser;
@@ -280,12 +252,100 @@ ALTER TABLE public.representative OWNER TO testuser;
 GRANT ALL ON TABLE public.representative TO testuser;
 ALTER TABLE public.data_provider OWNER TO testuser;
 GRANT ALL ON TABLE public.data_provider TO testuser;
+ALTER TABLE public.codelist OWNER TO testuser;
+GRANT ALL ON TABLE public.codelist TO testuser;
+ALTER TABLE public.codelist_category OWNER TO testuser;
+GRANT ALL ON TABLE public.codelist_category TO testuser;
+ALTER TABLE public.codelist_item OWNER TO testuser;
+GRANT ALL ON TABLE public.codelist_item TO testuser;
 
 --INDEXES--
-CREATE INDEX INDX_ISRELEASED ON SNAPSHOT (release);
-CREATE INDEX INDX_REPORTING_DS_ID ON SNAPSHOT (reporting_dataset_id);
+CREATE INDEX IF NOT EXISTS INDX_ISRELEASED ON SNAPSHOT (release);
+CREATE INDEX IF NOT EXISTS INDX_REPORTING_DS_ID ON SNAPSHOT (reporting_dataset_id);
 
-CREATE INDEX statistics_id_dataset_idx ON public.statistics (id_dataset);
+CREATE INDEX IF NOT EXISTS statistics_id_dataset_idx ON public.statistics (id_dataset);
+
+-- Flyway V2
+ALTER TABLE public.codelist ALTER COLUMN id_category DROP NOT NULL;
+
+-- Flyway V3
+ALTER TABLE public.representative ADD COLUMN IF NOT EXISTS receipt_downloaded bool NOT NULL DEFAULT false;
+ALTER TABLE public.representative ADD COLUMN IF NOT EXISTS receipt_outdated bool NOT NULL DEFAULT false;
+
+-- Flyway V4
+ALTER TABLE public."snapshot" ADD COLUMN IF NOT EXISTS "blocked" bool NULL;
+ALTER TABLE public."snapshot" ADD COLUMN IF NOT EXISTS "date_released" timestamp NULL;
+
+-- Flyway V5
+ALTER TABLE public.data_collection DROP CONSTRAINT dataset_data_collection_fkey;
+ALTER TABLE public.data_collection ADD CONSTRAINT dataset_data_collection_fkey FOREIGN KEY (id) REFERENCES dataset(id) ON DELETE CASCADE;
+
+ALTER TABLE public.partition_dataset DROP CONSTRAINT partition_dataset_dataset_fkey;
+ALTER TABLE public.partition_dataset ADD CONSTRAINT partition_dataset_dataset_fkey FOREIGN KEY (id_dataset) REFERENCES dataset(id) ON DELETE CASCADE;
+
+ALTER TABLE public.reporting_dataset DROP CONSTRAINT reporting_dataset_dataset_fkey;
+ALTER TABLE public.reporting_dataset ADD CONSTRAINT reporting_dataset_dataset_fkey FOREIGN KEY (id) REFERENCES dataset(id) ON DELETE CASCADE;
+
+ALTER TABLE public.design_dataset DROP CONSTRAINT dataset_design_fkey;
+ALTER TABLE public.design_dataset ADD CONSTRAINT dataset_design_fkey FOREIGN KEY (id) REFERENCES dataset(id) ON DELETE CASCADE;
+
+-- Flyway V6
+CREATE TABLE IF NOT EXISTS public.FOREIGN_RELATIONS (
+	ID bigserial not null, 
+	ID_PK varchar(255), 
+	DATASET_ID_DESTINATION bigint, 
+	DATASET_ID_ORIGIN bigint, 
+	id_fk_origin varchar NULL,
+	CONSTRAINT foreign_relations_pkey PRIMARY KEY (id),
+	CONSTRAINT foreign_relations_destination_fkey FOREIGN KEY (dataset_id_destination) REFERENCES dataset(id) ON DELETE CASCADE,
+	CONSTRAINT foreign_relations_origin_fkey FOREIGN KEY (dataset_id_origin) REFERENCES dataset(id) ON DELETE CASCADE
+);
+
+-- Flyway V7
+DROP TABLE IF EXISTS public.CODELIST_ITEM;
+DROP TABLE IF EXISTS public.CODELIST;
+DROP TABLE IF EXISTS public.CODELIST_CATEGORY;
+
+-- Flyway V8
+ALTER TABLE public.representative ADD COLUMN IF NOT EXISTS has_datasets bool NOT NULL DEFAULT true;
+
+-- Flyway V9
+ALTER TABLE public."document" DROP CONSTRAINT IF EXISTS document_dataflow_fkey;
+ALTER TABLE public."document" ADD CONSTRAINT document_dataflow_fkey FOREIGN KEY (dataflow_id) REFERENCES dataflow(id) ON DELETE CASCADE;
+
+ALTER TABLE public.contributor DROP CONSTRAINT IF EXISTS dataflow_contributor_fkey;
+ALTER TABLE public.contributor ADD CONSTRAINT dataflow_contributor_fkey FOREIGN KEY (dataflow_id) REFERENCES dataflow(id) ON DELETE CASCADE;
+
+ALTER TABLE public.weblink DROP CONSTRAINT IF EXISTS weblink_dataflow_fkey;
+ALTER TABLE public.weblink ADD CONSTRAINT weblink_dataflow_fkey FOREIGN KEY (dataflow_id) REFERENCES dataflow(id) ON DELETE CASCADE;
+
+ALTER TABLE public.representative DROP CONSTRAINT IF EXISTS  dataflow_id;
+ALTER TABLE public.representative DROP CONSTRAINT IF EXISTS  dataflow_fk;
+ALTER TABLE public.representative ADD CONSTRAINT dataflow_fk FOREIGN KEY (dataflow_id) REFERENCES dataflow(id) ON DELETE CASCADE;
+
+ALTER TABLE public.dataflow_user_request DROP CONSTRAINT IF EXISTS user_request_dataflow_pkey;
+ALTER TABLE public.dataflow_user_request ADD CONSTRAINT user_request_dataflow_pkey FOREIGN KEY (dataflow_id) REFERENCES dataflow(id) ON DELETE CASCADE;
+
+-- Flyway V10
+ALTER TABLE public.dataflow ADD COLUMN IF NOT EXISTS obligation_id int4 NULL;
+
+-- Flyway V11
+ALTER TABLE public.partition_dataset DROP CONSTRAINT IF EXISTS partition_dataset_dataset_fkey;
+ALTER TABLE public.partition_dataset ADD CONSTRAINT partition_dataset_dataset_fkey FOREIGN KEY (id_dataset) REFERENCES dataset(id) ON DELETE CASCADE;
+
+ALTER TABLE public.design_dataset DROP CONSTRAINT IF EXISTS dataset_design_fkey;
+ALTER TABLE public.design_dataset ADD CONSTRAINT dataset_design_fkey FOREIGN KEY (id) REFERENCES dataset(id) ON DELETE CASCADE;
+
+-- Flyway V12
+create sequence if not exists representative_id_seq INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	CACHE 1
+	NO CYCLE;
+
+-- Flyway V13
+ALTER TABLE public.data_provider DROP CONSTRAINT IF EXISTS unique_data_provider;
+ALTER TABLE public.data_provider ADD CONSTRAINT unique_data_provider UNIQUE ("type",code);
 
 
 
