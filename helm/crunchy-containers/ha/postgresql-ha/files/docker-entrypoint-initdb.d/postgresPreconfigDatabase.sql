@@ -19,6 +19,9 @@ CREATE USER dataflow WITH PASSWORD 'password';
 CREATE USER recordstore WITH PASSWORD 'password';
 CREATE USER validation WITH PASSWORD 'password';
 
+DROP DATABASE IF EXISTS datasets;
+DROP DATABASE IF EXISTS metabase;
+DROP DATABASE IF EXISTS keycloak;
 
 CREATE DATABASE datasets
     WITH 
