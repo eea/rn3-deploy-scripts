@@ -1,5 +1,6 @@
+---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: dataset
   labels:
@@ -7,12 +8,18 @@ metadata:
     cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
 spec:
   replicas: {{.Values.replicas}}
+  selector:
+        matchLabels:
+          name: dataset
   template:
     metadata:
       labels:
         name: dataset
         cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
     spec:
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      
       containers:
       - name: dataset
         image: {{.Values.repo}}/dataset-service:{{.Values.version}}{{.Values.tagSufix}}
@@ -23,12 +30,12 @@ spec:
         readinessProbe:
           tcpSocket:
             port: 8030
-          initialDelaySeconds: 20
+          initialDelaySeconds: 80
           periodSeconds: 10
         livenessProbe:
           tcpSocket:
             port: 8030
-          initialDelaySeconds: 15
+          initialDelaySeconds: 65
           periodSeconds: 20
         env:
         - name: CONSUL_HOST
@@ -65,8 +72,6 @@ spec:
           value: "{{.Values.redis.nodes}}"  
                             
 
-      restartPolicy: Always
-      dnsPolicy: ClusterFirst
   strategy:
     type: RollingUpdate
     rollingUpdate:

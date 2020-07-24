@@ -9,8 +9,8 @@ metadata:
 spec:
   ports:
   - protocol: TCP
-    port: 8015
-    targetPort: 8015
+    port: 9050
+    targetPort: 9050
     nodePort: 0
   selector:
     name: rod

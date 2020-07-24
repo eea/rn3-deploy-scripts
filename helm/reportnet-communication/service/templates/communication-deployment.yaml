@@ -1,5 +1,6 @@
+---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: communication
   labels:
@@ -7,12 +8,18 @@ metadata:
     cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
 spec:
   replicas: {{.Values.replicas}}
+  selector:
+        matchLabels:
+          name: communication
   template:
     metadata:
       labels:
         name: communication
         cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
     spec:
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      
       containers:
       - name: communication
         image: {{.Values.repo}}/communication-service:{{.Values.version}}{{.Values.tagSufix}}
@@ -47,9 +54,7 @@ spec:
           value: "{{.Values.redis.sentinel}}"
         - name: REDIS_SENTINEL_NODES
           value: "{{.Values.redis.nodes}}"  
- 
-      restartPolicy: Always
-      dnsPolicy: ClusterFirst
+
   strategy:
     type: RollingUpdate
     rollingUpdate:

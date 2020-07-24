@@ -8,8 +8,4 @@
 reportnet:
   server: reportnet3.altia.es
 
-git:
-  username:
-  password:
-
 # Other Variables

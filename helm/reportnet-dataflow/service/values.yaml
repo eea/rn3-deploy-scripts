@@ -10,7 +10,7 @@ consul:
   port: 8500
 
 kafka:
-  bootstrap: bootstrap-kafka.reportnet.svc.cluster.local
+  bootstrap: bootstrap-kafka
   port: 9092
 
 metabase:
@@ -27,6 +27,11 @@ redis:
     port: 6379
     sentinel: mymaster
     nodes: redis:26379
+fme:
+    integration:
+        callback:
+            urlbase: https://rn3api.eionet.europa.eu
+
 tagSufix: 
 replicas: 1
 version: 1.0.0

@@ -5,7 +5,18 @@ metadata:
 spec:
   containers:
     - name: test-e2e-container
-      image: k8s-swi001:5000/altia-e2e-test-framework:1.2
-      command: [ "/bin/sh" ]
-      args: [ "-c", "git clone https://{{.Values.git.username}}:{{.Values.git.password}}@stash-oami.altia.es/scm/rn3/altia_e2e_test_framework.git master && cd master && npm install --save-dev && sed -i -e 's/\\(\"default\": \"\\).*/\\1{{.Values.reportnet.server}}\"/' cypress.json && npm run cypress:report && read" ]
+      image: k8s-swi001:5000/altia-e2e-test-framework:1.0
+      command: [ "/bin/sh","-c"]
+      args: ["cd /home/node/e2e && cp /usr/local/lib/node_modules . && sed -i -e "s/reportnet3.altia.es/{{.Values.reportnet.server}}/" cypress.json && cypress run --reporter mochawesome"]
+      volumeMounts:
+      - name: e2e-volume
+        mountPath: /home/node/e2e
+  volumes:
+    - name: e2e-volume
+      configMap:
+        name: application-e2e-configmap
+        items:
+        - key: application.properties
+          path: keys
   restartPolicy: Never
+  

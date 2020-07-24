@@ -11,5 +11,5 @@ spec:
   volumeMode: Filesystem
   resources:
     requests:
-      storage: 10Gi
+      storage: {{.Values.pvc.size}}
   storageClassName: {{.Values.storageClassName}}

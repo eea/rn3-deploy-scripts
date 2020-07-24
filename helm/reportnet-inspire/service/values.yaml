@@ -10,14 +10,16 @@ consul:
   port: 8500
 
 kafka:
-  bootstrap: bootstrap-kafka.reportnet.svc.cluster.local
+  bootstrap: bootstrap-kafka
   port: 9092
 zipkin:
     ip: zipkin-ui
     port: 9411
 redis:
-    ip: kvm-rkube-01.pdmz.eea
-    port: 32275
+    ip: redis
+    port: 6379
+    sentinel: mymaster
+    nodes: redis:26379
 tagSufix: 
 replicas: 1
 version: 1.0.0

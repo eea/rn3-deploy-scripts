@@ -6,5 +6,8 @@
 
 # Environment Variables
 
-storageClassName: rook-ceph-block
+
 # Other Variables
+storageClassName: 
+pvc:
+    size: 10Gi
