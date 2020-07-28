@@ -30,17 +30,21 @@ validation:
     recordBatchSize: 15000
     tasks:
         release:
-            tax: 1
+            tax: 2
         initial:
-            tax: 1
+            tax: 2
 zipkin:
     ip: zipkin-ui
     port: 9411
+    schema: https
 redis:
     ip: redis
     port: 6379
     sentinel: mymaster
     nodes: redis:26379
+sentry:
+    dsn: https://f1057cea7e954e1a8e11d76bab0a53fd@sentry.eea.europa.eu/46
+
 tagSufix: 
 replicas: 4
 version: 1.0.0

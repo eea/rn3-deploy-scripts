@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-zipkin-collector
@@ -9,6 +9,10 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.collector.replicaCount }}
+  selector:
+        matchLabels:
+            app: zipkin-collector
+            release: {{ .Release.Name }}
   strategy:
     rollingUpdate:
       maxUnavailable: 0

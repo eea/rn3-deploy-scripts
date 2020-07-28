@@ -62,6 +62,8 @@ spec:
           value: "{{.Values.redis.nodes}}"
         - name: R3_CALLBACK_URL
           value: "{{.Values.fme.integration.callback.urlbase}}"        
+        - name: SENTRY_DSN
+          value: "{{.Values.sentry.dsn}}"
  
       
   strategy:

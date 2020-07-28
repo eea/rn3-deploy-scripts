@@ -12,7 +12,7 @@ spec:
   - protocol: TCP
     port: 9020
     targetPort: 9020
-    nodePort: {{.Values.communication.port}}
+    nodePort: 32401
   selector:
     name: communication
   type: NodePort
