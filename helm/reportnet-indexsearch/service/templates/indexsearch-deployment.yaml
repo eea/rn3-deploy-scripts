@@ -49,11 +49,13 @@ spec:
         - name: ELASTIC_SEARCH_PORT
           value: "{{.Values.elastic_search.port}}"
         - name: ZIPKIN_URL
-          value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+          value: "{{.Values.zipkin.schema}}://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
         - name: REDIS_HOST
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
           value: "{{.Values.redis.port}}"
+        - name: SENTRY_DSN
+          value: "{{.Values.sentry.dsn}}"
           
 
   strategy:
