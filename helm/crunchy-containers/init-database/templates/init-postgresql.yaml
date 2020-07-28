@@ -13,7 +13,7 @@ spec:
         env:
         - name: PGPASSWORD
           value: password
-        command: ["psql", "-f", "/etc/data-volume/Init_Metabase_BD.sql", "postgres", "-U", "postgres", "-h", "rn3-pg-helm-pgpool"]
+        command: ["psql", "-f", "/etc/data-volume/Init_Metabase_BD.sql", "postgres", "-U", "postgres", "-h", "rn3-pg-helm"]
         volumeMounts:
         - name: data-volume
           mountPath: /etc/data-volume

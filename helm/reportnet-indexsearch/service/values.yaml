@@ -19,11 +19,15 @@ elastic_search:
 zipkin:
     ip: zipkin-ui
     port: 9411
+    schema: https
 redis:
     ip: redis
     port: 6379
     sentinel: mymaster
     nodes: redis:26379
+
+sentry:
+    dsn: https://f1057cea7e954e1a8e11d76bab0a53fd@sentry.eea.europa.eu/46
 tagSufix: 
 replicas: 1
 version: 1.0.0

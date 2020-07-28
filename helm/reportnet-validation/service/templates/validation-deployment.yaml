@@ -59,7 +59,7 @@ spec:
         - name: DATASETS_PASSWORD
           value: "{{.Values.datasets.password}}"  
         - name: ZIPKIN_URL
-          value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+          value: "{{.Values.zipkin.schema}}://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
         - name: REDIS_HOST
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
@@ -82,6 +82,8 @@ spec:
           value: "{{.Values.validation.tasks.release.tax}}"
         - name: VALIDATION_TASKS_INITIAL_TAX
           value: "{{.Values.validation.tasks.initial.tax}}"
+        - name: SENTRY_DSN
+          value: "{{.Values.sentry.dsn}}"
           
 
   strategy:

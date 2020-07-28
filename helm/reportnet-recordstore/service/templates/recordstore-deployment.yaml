@@ -63,7 +63,7 @@ spec:
         - name: DATASETS_PASSWORD
           value: "{{.Values.datasets.password}}"  
         - name: ZIPKIN_URL
-          value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+          value: "{{.Values.zipkin.schema}}://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
         - name: REDIS_HOST
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
@@ -78,6 +78,8 @@ spec:
           value: "{{.Values.snapshot.bufferSize}}"  
         - name: DATASET_USERS
           value: "{{.Values.dataset.users}}"  
+        - name: SENTRY_DSN
+          value: "{{.Values.sentry.dsn}}"
 
 
         volumeMounts:
