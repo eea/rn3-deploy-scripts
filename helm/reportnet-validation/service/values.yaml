@@ -44,7 +44,8 @@ redis:
     nodes: redis:26379
 sentry:
     dsn: https://f1057cea7e954e1a8e11d76bab0a53fd@sentry.eea.europa.eu/46
-
+    environment: test
+         
 tagSufix: 
 replicas: 4
 version: 1.0.0
