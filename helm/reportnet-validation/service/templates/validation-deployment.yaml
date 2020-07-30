@@ -84,7 +84,10 @@ spec:
           value: "{{.Values.validation.tasks.initial.tax}}"
         - name: SENTRY_DSN
           value: "{{.Values.sentry.dsn}}"
-          
+        - name: SENTRY_ENVIRONMENT
+          value: "{{.Values.sentry.environment}}"
+        - name: SENTRY_RELEASE
+          value: "{{.Values.version}}"
 
   strategy:
     type: RollingUpdate
