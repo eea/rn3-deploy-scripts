@@ -56,7 +56,10 @@ spec:
           value: "{{.Values.redis.nodes}}"  
         - name: SENTRY_DSN
           value: "{{.Values.sentry.dsn}}"
-           
+        - name: SENTRY_ENVIRONMENT
+          value: "{{.Values.sentry.environment}}"
+        - name: SENTRY_RELEASE
+          value: "{{.Values.version}}"           
   strategy:
     type: RollingUpdate
     rollingUpdate:
