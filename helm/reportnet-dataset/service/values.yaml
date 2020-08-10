@@ -23,7 +23,7 @@ datasets:
 zipkin:
     ip: zipkin-ui
     port: 9411
-    schema: https
+    schema: http
 mongo:
   host: mongo-mongodb
   port: 27017

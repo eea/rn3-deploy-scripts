@@ -15,7 +15,7 @@ kafka:
 zipkin:
     ip: zipkin-ui
     port: 9411
-    schema: https
+    schema: http
 redis:
     ip: redis
     port: 6379

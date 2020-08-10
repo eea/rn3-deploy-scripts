@@ -21,7 +21,7 @@ metabase:
 zipkin:
     ip: zipkin-ui
     port: 9411
-
+    schema: http
 redis:
     ip: redis
     port: 6379
