@@ -68,7 +68,10 @@ spec:
           value: "{{.Values.sentry.environment}}"
         - name: SENTRY_RELEASE
           value: "{{.Values.version}}" 
-      
+        - name: FME_TOPIC_FAILURE
+          value: "{{.Values.fme.topic.failure}}"     
+        - name: FME_TOPIC_SUCCESS
+          value: "{{.Values.fme.topic.success}}"           
   strategy:
     type: RollingUpdate
     rollingUpdate:
