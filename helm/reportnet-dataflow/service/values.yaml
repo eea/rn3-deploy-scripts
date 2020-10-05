@@ -32,9 +32,8 @@ sentry:
     environment: test
         
 fme:
-    topic:
-        success: Reportnet3_Test_Topic
-        failure: Reportnet3_Test_Topic
+    topic: Reportnet3_Test_Topic
+
     integration:
         callback:
             urlbase: https://rn3api.eionet.europa.eu
