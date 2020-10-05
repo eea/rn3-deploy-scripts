@@ -30,12 +30,12 @@ spec:
         readinessProbe:
           tcpSocket:
             port: 8020
-          initialDelaySeconds: 20
+          initialDelaySeconds: 30
           periodSeconds: 10
         livenessProbe:
           tcpSocket:
             port: 8020
-          initialDelaySeconds: 15
+          initialDelaySeconds: 25
           periodSeconds: 20
         env:
         - name: CONSUL_HOST
@@ -68,10 +68,8 @@ spec:
           value: "{{.Values.sentry.environment}}"
         - name: SENTRY_RELEASE
           value: "{{.Values.version}}" 
-        - name: FME_TOPIC_FAILURE
-          value: "{{.Values.fme.topic.failure}}"     
-        - name: FME_TOPIC_SUCCESS
-          value: "{{.Values.fme.topic.success}}"           
+        - name: FME_TOPIC
+          value: "{{.Values.fme.topic}}"     
   strategy:
     type: RollingUpdate
     rollingUpdate:
