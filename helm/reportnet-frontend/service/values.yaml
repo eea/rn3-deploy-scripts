@@ -11,6 +11,9 @@ frontendPort: 30888
 
 keycloak: true
 
+documentationFolder: prod
+
+
 eulogin: https://rn3auth.eionet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet&redirect_uri=https%3A%2F%2Frn3test.eionet.europa.eu%2Feulogin%2F&response_mode=fragment&response_type=code&scope=openid
 
 websocket: wss://rn3api.eionet.europa.eu/communication/reportnet-websocket
