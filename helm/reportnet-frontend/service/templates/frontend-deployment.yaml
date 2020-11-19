@@ -47,6 +47,9 @@ spec:
           value: "{{.Values.keycloak}}"
         - name: WEBSOCKET_URL
           value: "{{.Values.websocket}}"
+        - name: DOCUMENTATION_FOLDER
+          value: "{{.Values.documentationFolder}}"
+
 
       
   strategy:
