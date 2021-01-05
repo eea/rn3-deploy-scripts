@@ -34,6 +34,8 @@ redis:
     port: 6379
     sentinel: mymaster
     nodes: redis:26379
+file:
+    path: /reportnet3-data/input
 
 sentry:
     dsn: https://f1057cea7e954e1a8e11d76bab0a53fd@sentry.eea.europa.eu/46
