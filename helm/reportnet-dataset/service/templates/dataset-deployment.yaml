@@ -77,23 +77,17 @@ spec:
         - name: SENTRY_RELEASE
           value: "{{.Values.version}}"
         - name: DATASET_PATH
-          value: "{{.Values.file.path}}"                                   
+          value: "/reportnet3-data/input"                                   
+
         
         volumeMounts:
-        - mountPath: "{{.Values.file.path}}"
+        - mountPath: "/reportnet3-data/input"
           name: load-data  
       volumes:
       - name: load-data
         persistentVolumeClaim:
             claimName: reportnet3-data
-                            
-        volumeMounts:
-        - mountPath: "{{.Values.file.path}}"
-          name: load-data  
-      volumes:
-      - name: load-data
-        persistentVolumeClaim:
-            claimName: reportnet3-data
+       
   strategy:
     type: RollingUpdate
     rollingUpdate:
