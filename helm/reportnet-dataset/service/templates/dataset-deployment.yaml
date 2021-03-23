@@ -81,13 +81,13 @@ spec:
 
         
         volumeMounts:
-        - mountPath: "/reportnet3-data/input"
+        - mountPath: "{{.Values.file.path}}"
           name: load-data  
       volumes:
       - name: load-data
         persistentVolumeClaim:
             claimName: reportnet3-data
-       
+
   strategy:
     type: RollingUpdate
     rollingUpdate:
