@@ -87,7 +87,6 @@ spec:
         persistentVolumeClaim:
             claimName: reportnet3-data
                             
-        
   strategy:
     type: RollingUpdate
     rollingUpdate:
