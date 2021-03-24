@@ -81,7 +81,7 @@ spec:
 
         
         volumeMounts:
-        - mountPath: "{{.Values.file.path}}"
+        - mountPath: "/reportnet3-data/input"
           name: load-data  
       volumes:
       - name: load-data
