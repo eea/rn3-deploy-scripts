@@ -1,7 +1,7 @@
 #!/bin/bash
-echo 'testuser:md599e8713364988502fa6189781bcf648f' >> /opt/bitnami/pgpool/conf/pool_passwd
-echo 'dataflow:md5928cb8f47a17c110ec3836fcbabc976b' >> /opt/bitnami/pgpool/conf/pool_passwd
-echo 'dataset:md5b48e53545a60e28f455b798e47fd3bdb' >> /opt/bitnami/pgpool/conf/pool_passwd
-echo 'validation:md51ca3e86a924c07264cf43c0f2f00ad5c' >> /opt/bitnami/pgpool/conf/pool_passwd
-echo 'recordstore:md5756b7ae2393844e708eba18629818472' >> /opt/bitnami/pgpool/conf/pool_passwd
+echo 'testuser:md5cdc0ba8c75f2cc98122838c15c470a0d' >> /opt/bitnami/pgpool/conf/pool_passwd
+echo 'dataflow:md554b98b73cfe60e759ef332490d7b7371' >> /opt/bitnami/pgpool/conf/pool_passwd
+echo 'dataset:md5230a13dcd5e8f72ce9ce047e5c69906d' >> /opt/bitnami/pgpool/conf/pool_passwd
+echo 'validation:md5b6e17a172ec57d0cdc9a14553410b8ef' >> /opt/bitnami/pgpool/conf/pool_passwd
+echo 'recordstore:md5e2a1ff8ce8fe36ca27f6f2212fe025da' >> /opt/bitnami/pgpool/conf/pool_passwd
 sed -i 's/client_idle_limit = 0/client_idle_limit = 1200/g' /opt/bitnami/pgpool/conf/pgpool.conf
