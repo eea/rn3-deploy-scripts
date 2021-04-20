@@ -13,11 +13,11 @@ ALTER SYSTEM SET synchronous_commit='remote_apply';
 CREATE extension if not exists postgis;
 CREATE extension if not exists fuzzystrmatch;
 CREATE EXTENSION if not exists postgis_tiger_geocoder;
-CREATE USER testuser WITH PASSWORD 'password';
-CREATE USER dataset WITH PASSWORD 'password';
-CREATE USER dataflow WITH PASSWORD 'password';
-CREATE USER recordstore WITH PASSWORD 'password';
-CREATE USER validation WITH PASSWORD 'password';
+CREATE USER testuser WITH PASSWORD '53p057n373.0!';
+CREATE USER dataset WITH PASSWORD '53p057n373.0!';
+CREATE USER dataflow WITH PASSWORD '53p057n373.0!';
+CREATE USER recordstore WITH PASSWORD '53p057n373.0!';
+CREATE USER validation WITH PASSWORD '53p057n373.0!';
 
 DROP DATABASE IF EXISTS datasets;
 DROP DATABASE IF EXISTS metabase;
