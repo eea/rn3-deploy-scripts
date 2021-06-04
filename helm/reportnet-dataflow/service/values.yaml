@@ -32,7 +32,7 @@ sentry:
     environment: test
         
 fme:
-    topic: Reportnet3_Topic
+    topic: Reportnet3_Hotfixes_Topic
 
     integration:
         callback:
