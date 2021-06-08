@@ -157,7 +157,7 @@ pipeline {
 					'''
 					sleep(20)
 					sh '''
-						helm uninstall dataset-preconfig  -n $TARGET_ENV
+						helm uninstall dataset-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
 						helm upgrade dataset $WORKSPACE/helm/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$VERSION,replicas=1,sentry.environment=$SENTRY_ENV
