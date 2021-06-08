@@ -48,7 +48,7 @@ pipeline {
 		    
             steps {
                 sh '''
-                    mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=kvm-rn3dev-04.pdmz.eea:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+                    mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
                 '''
 	          }
         }
