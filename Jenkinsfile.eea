@@ -17,10 +17,11 @@ pipeline {
 			
 			steps {
 				script {
-					sh 'ls -lrt'
-					sh 'hostname'
-					sh 'pwd'
+					
 					withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+						sh 'ls -lrt'
+						sh 'hostname'
+						sh 'pwd'
 					 env.KUBECONFIG = sh script: 'echo ${FILE}', returnStdout: true
 					}
 					env.TARGET_ENV="reportnet"
