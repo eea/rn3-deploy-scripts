@@ -68,7 +68,7 @@ pipeline {
 					sh 'hostname'
 					
 				sh '''
-					kubectl -n $TARGET_ENV --kubeconfig=$KUBECONFIG scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
+					kubectl -n $TARGET_ENV  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
                 '''
 			}
 		}
