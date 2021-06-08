@@ -121,7 +121,7 @@ pipeline {
 					'''
 					sleep(20)
 					sh '''
-						helm uninstall recordstore-preconfig  -n $TARGET_ENV
+						helm uninstall recordstore-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					/*sh '''
 						helm upgrade recordstore-persistence $WORKSPACE/helm/reportnet-recordstore/pvc -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set repo=k8s-swi001:5000,tagSufix=_sandbox
