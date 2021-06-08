@@ -22,8 +22,9 @@ pipeline {
 						sh 'ls -lrt'
 						sh 'hostname'
 						sh 'pwd'
-						sh 'echo FILE VALUE IS ${FILE}'
-					 env.KUBECONFIG = sh script: 'echo ${FILE}', returnStdout: true
+						sh 'echo ${FILE} > ~/.kube/config'
+					 //env.KUBECONFIG = sh script: 'echo ${FILE}', returnStdout: true
+					 env.KUBECONFIG="~/.kube/config"
 					}
 					env.TARGET_ENV="reportnet"
 					env.REPORTNET_BACKEND="https://dev-api.reportnet.europa.eu"
