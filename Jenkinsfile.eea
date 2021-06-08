@@ -1,10 +1,10 @@
 pipeline {
 
     agent { node { label 'kubectl' } }
-    tools {
+   /* tools {
         maven 'maven3'
 
-    }
+    }*/
 
     
     stages {
@@ -19,7 +19,7 @@ pipeline {
 				script {
 					
 					withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
-					env.KUBECONFIG=$FILE
+					 env.KUBECONFIG=$FILE
 					}
 					env.TARGET_ENV="reportnet"
 					env.REPORTNET_BACKEND="https://dev-api.reportnet.europa.eu"
