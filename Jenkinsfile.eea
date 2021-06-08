@@ -22,9 +22,10 @@ pipeline {
 						sh 'ls -lrt'
 						sh 'hostname'
 						sh 'pwd'
-						sh 'echo ${FILE} > ~/.kube/config'
+						sh 'echo ${FILE} > /var/jenkins_home/worker/workspace/reportnet_rn3-deploy-scripts_dev/config'
 					 //env.KUBECONFIG = sh script: 'echo ${FILE}', returnStdout: true
-					 env.KUBECONFIG="~/.kube/config"
+					 env.KUBECONFIG="/var/jenkins_home/worker/workspace/reportnet_rn3-deploy-scripts_dev/config"
+					 sh 'cat /var/jenkins_home/worker/workspace/reportnet_rn3-deploy-scripts_dev/config'
 					}
 					env.TARGET_ENV="reportnet"
 					env.REPORTNET_BACKEND="https://dev-api.reportnet.europa.eu"
@@ -68,7 +69,7 @@ pipeline {
 					sh 'hostname'
 					
 				sh '''
-					kubectl -n $TARGET_ENV  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
+					kubectl -n $TARGET_ENV --kubeconfig=$KUBECONFIG  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
                 '''
 			}
 		}
