@@ -46,12 +46,14 @@ pipeline {
         }
         
 		stage('Update Database') {
-		    echo 'mvn will come in short'
-            /*steps {
-                sh '''
+		    
+            steps {
+			echo 'mvn will come in short'
+             /*   sh '''
                     mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=1kvm-rn3dev-04.pdmz.eea:31293 -DPOSTGRES_USER=53p057n373.0! -DPOSTGRES_PASS=password flyway:migrate
                 '''
-	          }*/
+				*/
+	          }
         }
 		stage('Scaling down services'){
 		
