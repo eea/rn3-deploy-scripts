@@ -18,7 +18,7 @@ pipeline {
 			steps {
 				script {
 					
-					withCredentials([file(credentialsId: 'kubectl-config-dev', variable 'FILE')]) {
+					withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
 					env.KUBECONFIG=$FILE
 					}
 					env.TARGET_ENV="reportnet"
