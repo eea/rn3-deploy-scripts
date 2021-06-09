@@ -20,7 +20,7 @@ pipeline {
 					
 					
 					env.TARGET_ENV="reportnet"
-					env.REPORTNET_BACKEND="https://rn3staging.eionet.europa.eu/"
+					env.REPORTNET_BACKEND="https://rn3staging.eionet.europa.eu"
 					env.EULOGIN="https://rn3staging-auth.eionet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Frn3staging.eionet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://rn3staging.eionet.europa.eu/communication/reportnet-websocket"
 					env.REPO="eeacms"
