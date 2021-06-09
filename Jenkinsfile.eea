@@ -28,8 +28,8 @@ pipeline {
 					env.KEYCLOAK="true"
 					env.VERSION="v3.0.3.2"
 					
-					env.REDIRECT_URI="http://rn3staging.eionet.europa.eu/eulogin/"
-					env.R3_CALLBACK_URL="http://rn3staging-api.eionet.europa.eu"
+					env.REDIRECT_URI="https://rn3staging.eionet.europa.eu/eulogin/"
+					env.R3_CALLBACK_URL="https://rn3staging-api.eionet.europa.eu"
 					env.FME_TOPIC="Reportnet3_Staging_Topic"
 					env.ENVIRONMENT="kubectl-config-staging"
 					
