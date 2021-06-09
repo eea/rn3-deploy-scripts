@@ -56,7 +56,7 @@ pipeline {
 		
 			steps {
 					
-				withCredentials([file(credentialsId: $ENVIRONMENT, variable: 'FILE')]) {
+				withCredentials([file(credentialsId: ${ENVIRONMENT}, variable: 'FILE')]) {
 					
 					sh '''
 						kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
