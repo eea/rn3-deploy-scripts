@@ -17,9 +17,7 @@ pipeline {
 			
 			steps {
 				script {
-					withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
-					}
-					
+										
 					env.TARGET_ENV="reportnet"
 					env.REPORTNET_BACKEND="https://dev-api.reportnet.europa.eu"
 					env.EULOGIN="https://dev-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fdev.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
@@ -32,7 +30,7 @@ pipeline {
 					env.REDIRECT_URI="http://dev.reportnet.europa.eu/eulogin/"
 					env.R3_CALLBACK_URL="http://dev-api.reportnet.europa.eu"
 					env.FME_TOPIC="Reportnet3_Dev_Topic"
-					
+					env.ENVIRONMENT="kubectl-config-dev"
 					
 				}
 			}
@@ -56,7 +54,7 @@ pipeline {
 		
 			steps {
 					
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					
 					sh '''
 						kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
@@ -66,7 +64,7 @@ pipeline {
 		}
         stage('Configure Common Application properties') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
 						helm install application-config $WORKSPACE/helm/application-config -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -79,7 +77,7 @@ pipeline {
         }
         stage('Deploy API Gateway') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
 						helm install api-gateway-preconfig $WORKSPACE/helm/reportnet-api-gateway/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -96,7 +94,7 @@ pipeline {
         }
 		stage('Deploy Dataflow') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
 						helm install dataflow-preconfig $WORKSPACE/helm/reportnet-dataflow/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -113,7 +111,7 @@ pipeline {
         }
 		stage('Deploy Recordstore') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
 						helm install recordstore-preconfig $WORKSPACE/helm/reportnet-recordstore/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -133,7 +131,7 @@ pipeline {
         }
         stage('Deploy Validation') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
 						helm install validation-preconfig $WORKSPACE/helm/reportnet-validation/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -151,7 +149,7 @@ pipeline {
 		stage('Deploy Dataset') {
 		
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
 						helm install dataset-preconfig $WORKSPACE/helm/reportnet-dataset/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -167,7 +165,7 @@ pipeline {
         }
 		stage('Deploy User Management') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
 						helm install ums-preconfig $WORKSPACE/helm/reportnet-ums/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -183,7 +181,7 @@ pipeline {
         }
 		stage('Deploy Document Container') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
 						helm install document-preconfig $WORKSPACE/helm/reportnet-document/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -199,7 +197,7 @@ pipeline {
         }
 		stage('Deploy Communication') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
 						helm install communication-preconfig $WORKSPACE/helm/reportnet-communication/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -215,7 +213,7 @@ pipeline {
         }
 		stage('Deploy Collaboration') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
 						helm install collaboration-preconfig $WORKSPACE/helm/reportnet-collaboration/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
 					'''
@@ -231,7 +229,7 @@ pipeline {
         }
 		/*stage('Deploy Indexsearch') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
 						helm install indexsearch-preconfig $WORKSPACE/helm/reportnet-indexsearch/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
 					'''
@@ -247,7 +245,7 @@ pipeline {
         }*/
 		stage('Deploy ReportNet Frontend') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 				   sh '''
 						helm upgrade frontend $WORKSPACE/helm/reportnet-frontend/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,backend=$REPORTNET_BACKEND,keycloak=$KEYCLOAK,websocket=$WEB_SOCKET,eulogin=$EULOGIN,sentry.environment=$SENTRY_ENV
 					'''
@@ -258,7 +256,7 @@ pipeline {
 		
 		stage('Deploy Rod') {
             steps {
-				withCredentials([file(credentialsId: 'kubectl-config-dev', variable: 'FILE')]) {
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 				  sh '''
 						helm install rod-preconfig $WORKSPACE/helm/reportnet-rod/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
