@@ -27,8 +27,8 @@ pipeline {
 					env.KEYCLOAK="true"
 					env.VERSION="v3.0.3.2"
 					
-					env.REDIRECT_URI="http://dev.reportnet.europa.eu/eulogin/"
-					env.R3_CALLBACK_URL="http://dev-api.reportnet.europa.eu"
+					env.REDIRECT_URI="https://dev.reportnet.europa.eu/eulogin/"
+					env.R3_CALLBACK_URL="https://dev-api.reportnet.europa.eu"
 					env.FME_TOPIC="Reportnet3_Dev_Topic"
 					env.ENVIRONMENT="kubectl-config-dev"
 					
