@@ -23,7 +23,7 @@ pipeline {
 					env.TARGET_ENV="reportnet"
 					env.REPORTNET_BACKEND="https://dev-api.reportnet.europa.eu"
 					env.EULOGIN="https://dev-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fdev.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
-					env.WEB_SOCKET="ws://dev.reportnet.europa.eu/communication/reportnet-websocket"
+					env.WEB_SOCKET="wss://dev.reportnet.europa.eu/communication/reportnet-websocket"
 					env.REPO="eeacms"
 					env.SENTRY_ENV="dev"
 					env.KEYCLOAK="true"
