@@ -17,8 +17,7 @@ pipeline {
 			
 			steps {
 				script {
-					withCredentials([file(credentialsId: $ENVIRONMENT, variable: 'FILE')]) {
-					}
+					
 					
 					env.TARGET_ENV="reportnet"
 					env.REPORTNET_BACKEND="https://rn3staging.eionet.europa.eu/"
@@ -33,6 +32,7 @@ pipeline {
 					env.R3_CALLBACK_URL="http://rn3staging.eionet.europa.eu"
 					env.FME_TOPIC="Reportnet3_Staging_Topic"
 					env.ENVIRONMENT="kubectl-config-staging"
+					
 					
 				}
 			}
