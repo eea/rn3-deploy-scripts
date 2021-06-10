@@ -142,7 +142,7 @@ pipeline {
 						helm uninstall validation-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade validation $WORKSPACE/helm/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,replicas=1,sentry.environment=$SENTRY_ENV
+						helm upgrade validation $WORKSPACE/helm/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,replicas=2,sentry.environment=$SENTRY_ENV
 					'''
 				}
 				
@@ -160,7 +160,7 @@ pipeline {
 						helm uninstall dataset-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade dataset $WORKSPACE/helm/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$VERSION,replicas=1,sentry.environment=$SENTRY_ENV
+						helm upgrade dataset $WORKSPACE/helm/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$VERSION,replicas=2,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
