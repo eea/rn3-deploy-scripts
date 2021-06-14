@@ -26,7 +26,7 @@ pipeline {
 					env.REPO="eeacms"
 					env.SENTRY_ENV="test"
 					env.KEYCLOAK="true"
-					env.VERSION="v3.0.3.2"
+					env.VERSION="v3.0.4.0"
 					
 					env.REDIRECT_URI="https://rn3test.eionet.europa.eu/eulogin/"
 					env.R3_CALLBACK_URL="https://rn3api.eionet.europa.eu"
