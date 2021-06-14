@@ -21,7 +21,8 @@ pipeline {
 			steps {
 				script {
 					
-					sh 'echo "Starting Deployment Pipeline"'                
+					sh 'echo "Starting Deployment Pipeline"'    
+					sh 'build has release ${RELEASE_NAME}'					
 					env.TARGET_ENV="reportnet"
 					env.REPORTNET_BACKEND="https://dev-api.reportnet.europa.eu"
 					env.EULOGIN="https://dev-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fdev.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
@@ -29,7 +30,7 @@ pipeline {
 					env.REPO="eeacms"
 					env.SENTRY_ENV="dev"
 					env.KEYCLOAK="true"
-					env.VERSION=$RELEASE_NAME
+					env.VERSION=sh script: 'echo ${RELEASE_NAME}', returnStdout: true	
 					
 					env.REDIRECT_URI="https://dev.reportnet.europa.eu/eulogin/"
 					env.R3_CALLBACK_URL="https://dev-api.reportnet.europa.eu"
