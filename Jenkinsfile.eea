@@ -41,11 +41,11 @@ pipeline {
 	      }
        
 		stage('Update Database') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}			
 		    
             steps {
                 sh 'echo "Starting $TARGET_ENV building"' 
@@ -55,7 +55,11 @@ pipeline {
 	          }
         }
 		stage('Scaling down services'){
-		
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}		
 			steps {
 					
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
@@ -67,11 +71,11 @@ pipeline {
 			}
 		}
         stage('Configure Common Application properties') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -85,11 +89,11 @@ pipeline {
             }
         }
         stage('Deploy API Gateway') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -107,11 +111,11 @@ pipeline {
             }
         }
 		stage('Deploy Dataflow') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -129,11 +133,11 @@ pipeline {
             }
         }
 		stage('Deploy Recordstore') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -154,11 +158,11 @@ pipeline {
             }
         }
         stage('Deploy Validation') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -176,12 +180,11 @@ pipeline {
             }
         }
 		stage('Deploy Dataset') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
-		
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}		
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -198,11 +201,11 @@ pipeline {
             }
         }
 		stage('Deploy User Management') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -219,11 +222,11 @@ pipeline {
             }
         }
 		stage('Deploy Document Container') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -240,11 +243,11 @@ pipeline {
             }
         }
 		stage('Deploy Communication') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -261,11 +264,11 @@ pipeline {
             }
         }
 		stage('Deploy Collaboration') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -282,6 +285,11 @@ pipeline {
             }
         }
 		/*stage('Deploy Indexsearch') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}		
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -298,11 +306,11 @@ pipeline {
             }
         }*/
 		stage('Deploy ReportNet Frontend') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 				   sh '''
@@ -314,11 +322,11 @@ pipeline {
         }
 		
 		stage('Deploy Rod') {
-	  when {
-            not {
-               environment name: 'RELEASE_NAME', value: ''
-            }
-           }			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+				}
+			}
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 				  sh '''
