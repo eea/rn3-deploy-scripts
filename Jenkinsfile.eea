@@ -30,7 +30,7 @@ pipeline {
 					env.REPO="eeacms"
 					env.SENTRY_ENV="dev"
 					env.KEYCLOAK="true"
-					env.VERSION=$RELEASE_NAME
+					//env.VERSION=$RELEASE_NAME
 					
 					env.REDIRECT_URI="https://dev.reportnet.europa.eu/eulogin/"
 					env.R3_CALLBACK_URL="https://dev-api.reportnet.europa.eu"
@@ -106,7 +106,7 @@ pipeline {
 						helm uninstall api-gateway-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade api-gateway $WORKSPACE/helm/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade api-gateway $WORKSPACE/helm/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				 }
 				
@@ -128,7 +128,7 @@ pipeline {
 						helm uninstall dataflow-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade dataflow $WORKSPACE/helm/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$VERSION,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV
+						helm upgrade dataflow $WORKSPACE/helm/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$RELEASE_NAME,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV
 
 					'''
 				}
@@ -153,7 +153,7 @@ pipeline {
 						helm upgrade recordstore-persistence $WORKSPACE/helm/reportnet-recordstore/pvc -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set repo=k8s-swi001:5000,tagSufix=_sandbox
 					'''*/
 					sh '''
-						helm upgrade recordstore $WORKSPACE/helm/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade recordstore $WORKSPACE/helm/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 					sleep(20)
 				}
@@ -175,7 +175,7 @@ pipeline {
 						helm uninstall validation-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade validation $WORKSPACE/helm/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,replicas=1,sentry.environment=$SENTRY_ENV
+						helm upgrade validation $WORKSPACE/helm/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,replicas=1,sentry.environment=$SENTRY_ENV
 					'''
 				}
 				
@@ -197,7 +197,7 @@ pipeline {
 						helm uninstall dataset-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade dataset $WORKSPACE/helm/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$VERSION,replicas=1,sentry.environment=$SENTRY_ENV
+						helm upgrade dataset $WORKSPACE/helm/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,replicas=1,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
@@ -218,7 +218,7 @@ pipeline {
 						helm uninstall ums-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade ums $WORKSPACE/helm/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade ums $WORKSPACE/helm/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
@@ -239,7 +239,7 @@ pipeline {
 						helm uninstall document-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade document $WORKSPACE/helm/reportnet-document/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade document $WORKSPACE/helm/reportnet-document/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
@@ -260,7 +260,7 @@ pipeline {
 						helm uninstall communication-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade communication $WORKSPACE/helm/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade communication $WORKSPACE/helm/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
@@ -281,7 +281,7 @@ pipeline {
 						helm uninstall collaboration-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade collaboration $WORKSPACE/helm/reportnet-collaboration/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade collaboration $WORKSPACE/helm/reportnet-collaboration/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
@@ -302,7 +302,7 @@ pipeline {
 						helm uninstall indexsearch-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade indexsearch $WORKSPACE/helm/reportnet-indexsearch/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade indexsearch $WORKSPACE/helm/reportnet-indexsearch/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
@@ -316,7 +316,7 @@ pipeline {
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 				   sh '''
-						helm upgrade frontend $WORKSPACE/helm/reportnet-frontend/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,backend=$REPORTNET_BACKEND,keycloak=$KEYCLOAK,websocket=$WEB_SOCKET,eulogin=$EULOGIN,sentry.environment=$SENTRY_ENV
+						helm upgrade frontend $WORKSPACE/helm/reportnet-frontend/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,backend=$REPORTNET_BACKEND,keycloak=$KEYCLOAK,websocket=$WEB_SOCKET,eulogin=$EULOGIN,sentry.environment=$SENTRY_ENV
 					'''
 				}
                 
@@ -339,7 +339,7 @@ pipeline {
 						helm uninstall rod-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade rod $WORKSPACE/helm/reportnet-rod/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade rod $WORKSPACE/helm/reportnet-rod/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}                
             }
