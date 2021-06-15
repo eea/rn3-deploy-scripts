@@ -30,7 +30,6 @@ pipeline {
 					env.REPO="eeacms"
 					env.SENTRY_ENV="dev"
 					env.KEYCLOAK="true"
-					//env.VERSION=$RELEASE_NAME
 					
 					env.REDIRECT_URI="https://dev.reportnet.europa.eu/eulogin/"
 					env.R3_CALLBACK_URL="https://dev-api.reportnet.europa.eu"
