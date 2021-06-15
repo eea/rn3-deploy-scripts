@@ -5,16 +5,19 @@ pipeline {
         maven 'maven3'
 
     }
-
+    
+	parameters {
+		string(defaultValue: '', description: 'Run deploy on release', name: 'RELEASE_NAME')
+	}
     
     stages {
-        stage('Deployment Init') {
-            steps {
-                sh 'echo "Starting Deployment Pipeline"'                
-            }
-        }
+
         stage('Setting Environmental Variables') {
-			
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }						
 			steps {
 				script {
 					
@@ -26,7 +29,6 @@ pipeline {
 					env.REPO="eeacms"
 					env.SENTRY_ENV="staging"
 					env.KEYCLOAK="true"
-					env.VERSION="v3.0.3.2"
 					
 					env.REDIRECT_URI="https://rn3staging.eionet.europa.eu/eulogin/"
 					env.R3_CALLBACK_URL="https://rn3staging-api.eionet.europa.eu"
@@ -38,14 +40,13 @@ pipeline {
 			}
 	      }
        
-		stage('Start environment building') {
-            steps {
-                sh 'echo "Starting $TARGET_ENV building"'                
-            }
-        }
-        
+		
 		stage('Update Database') {
-		    
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }					    
             steps {
                 sh '''
                     mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
@@ -53,7 +54,11 @@ pipeline {
 	          }
         }
 		stage('Scaling down services'){
-		
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }					
 			steps {
 					
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
@@ -65,6 +70,11 @@ pipeline {
 			}
 		}
         stage('Configure Common Application properties') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -78,6 +88,11 @@ pipeline {
             }
         }
         stage('Deploy API Gateway') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -88,13 +103,18 @@ pipeline {
 						helm uninstall api-gateway-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade api-gateway $WORKSPACE/helm/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade api-gateway $WORKSPACE/helm/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				 }
 				
             }
         }
 		stage('Deploy Dataflow') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -105,13 +125,18 @@ pipeline {
 						helm uninstall dataflow-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade dataflow $WORKSPACE/helm/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$VERSION,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV
+						helm upgrade dataflow $WORKSPACE/helm/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$RELEASE_NAME,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV
 
 					'''
 				}
             }
         }
 		stage('Deploy Recordstore') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -125,13 +150,18 @@ pipeline {
 						helm upgrade recordstore-persistence $WORKSPACE/helm/reportnet-recordstore/pvc -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set repo=k8s-swi001:5000,tagSufix=_sandbox
 					'''*/
 					sh '''
-						helm upgrade recordstore $WORKSPACE/helm/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade recordstore $WORKSPACE/helm/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 					sleep(20)
 				}
             }
         }
         stage('Deploy Validation') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -142,14 +172,18 @@ pipeline {
 						helm uninstall validation-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade validation $WORKSPACE/helm/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,replicas=1,sentry.environment=$SENTRY_ENV
+						helm upgrade validation $WORKSPACE/helm/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,replicas=1,sentry.environment=$SENTRY_ENV
 					'''
 				}
 				
             }
         }
 		stage('Deploy Dataset') {
-		
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }					
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -160,12 +194,17 @@ pipeline {
 						helm uninstall dataset-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade dataset $WORKSPACE/helm/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$VERSION,replicas=1,sentry.environment=$SENTRY_ENV
+						helm upgrade dataset $WORKSPACE/helm/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,replicas=1,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
         }
 		stage('Deploy User Management') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -176,12 +215,17 @@ pipeline {
 						helm uninstall ums-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade ums $WORKSPACE/helm/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade ums $WORKSPACE/helm/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
         }
 		stage('Deploy Document Container') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -192,12 +236,17 @@ pipeline {
 						helm uninstall document-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade document $WORKSPACE/helm/reportnet-document/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade document $WORKSPACE/helm/reportnet-document/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
         }
 		stage('Deploy Communication') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -208,12 +257,17 @@ pipeline {
 						helm uninstall communication-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade communication $WORKSPACE/helm/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade communication $WORKSPACE/helm/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
         }
 		stage('Deploy Collaboration') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -224,12 +278,17 @@ pipeline {
 						helm uninstall collaboration-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade collaboration $WORKSPACE/helm/reportnet-collaboration/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade collaboration $WORKSPACE/helm/reportnet-collaboration/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
         }
 		/*stage('Deploy Indexsearch') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -240,16 +299,21 @@ pipeline {
 						helm uninstall indexsearch-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade indexsearch $WORKSPACE/helm/reportnet-indexsearch/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade indexsearch $WORKSPACE/helm/reportnet-indexsearch/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}
             }
         }*/
 		stage('Deploy ReportNet Frontend') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 				   sh '''
-						helm upgrade frontend $WORKSPACE/helm/reportnet-frontend/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,backend=$REPORTNET_BACKEND,keycloak=$KEYCLOAK,websocket=$WEB_SOCKET,eulogin=$EULOGIN,sentry.environment=$SENTRY_ENV
+						helm upgrade frontend $WORKSPACE/helm/reportnet-frontend/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,backend=$REPORTNET_BACKEND,keycloak=$KEYCLOAK,websocket=$WEB_SOCKET,eulogin=$EULOGIN,sentry.environment=$SENTRY_ENV
 					'''
 				}
                 
@@ -257,6 +321,11 @@ pipeline {
         }
 		
 		stage('Deploy Rod') {
+			when {
+				not {
+					environment name: 'RELEASE_NAME', value: ''
+                }
+            }			
             steps {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 				  sh '''
@@ -267,7 +336,7 @@ pipeline {
 						helm uninstall rod-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade rod $WORKSPACE/helm/reportnet-rod/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$VERSION,sentry.environment=$SENTRY_ENV
+						helm upgrade rod $WORKSPACE/helm/reportnet-rod/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
 					'''
 				}                
             }
@@ -276,12 +345,20 @@ pipeline {
         
     }
     post {
-        always {
-            script {
-                    sh 'echo "Building process for $TARGET_ENV finished"'
-                 
-            }
-        }
-        
-    }
+		always {
+		  cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true, deleteDirs: true)
+		  script {
+			def details = """<h1>${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}</h1>
+							 <p>Check console output at <a href="${env.BUILD_URL}/display/redirect">${env.JOB_BASE_NAME} - #${env.BUILD_NUMBER}</a></p>
+						  """
+			emailext(
+			subject: '$DEFAULT_SUBJECT',
+			body: details,
+			attachLog: true,
+			compressLog: true,
+			recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'CulpritsRecipientProvider']]
+			)
+		  }
+		}
+  }
 }
