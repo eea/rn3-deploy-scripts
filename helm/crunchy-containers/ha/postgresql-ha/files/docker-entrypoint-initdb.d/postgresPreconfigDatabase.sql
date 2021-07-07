@@ -10,12 +10,15 @@ ALTER SYSTEM SET max_wal_size = '4GB';
 ALTER SYSTEM SET synchronous_commit='remote_apply';
 
 
+CREATE extension if not exists postgis;
+CREATE extension if not exists fuzzystrmatch;
+CREATE EXTENSION if not exists postgis_tiger_geocoder;
+CREATE USER testuser WITH PASSWORD '53p057n373.0!';
+CREATE USER dataset WITH PASSWORD '53p057n373.0!';
+CREATE USER dataflow WITH PASSWORD '53p057n373.0!';
+CREATE USER recordstore WITH PASSWORD '53p057n373.0!';
+CREATE USER validation WITH PASSWORD '53p057n373.0!';
 
-CREATE USER testuser WITH PASSWORD 'password';
-CREATE USER dataset WITH PASSWORD 'password';
-CREATE USER dataflow WITH PASSWORD 'password';
-CREATE USER recordstore WITH PASSWORD 'password';
-CREATE USER validation WITH PASSWORD 'password';
 
 DROP DATABASE IF EXISTS datasets;
 DROP DATABASE IF EXISTS metabase;
@@ -49,16 +52,8 @@ GRANT ALL PRIVILEGES ON DATABASE metabase TO testuser,dataflow,dataset,recordsto
 GRANT ALL PRIVILEGES ON DATABASE keycloak TO testuser,dataflow,dataset,recordstore,validation;
 
 \c keycloak
-
 GRANT ALL PRIVILEGES ON ALL tables in schema public to testuser,dataflow,dataset,recordstore,validation;
 grant all privileges on all sequences in schema public to testuser,dataflow,dataset,recordstore,validation;
 \c metabase
-CREATE extension if not exists postgis;
-CREATE extension if not exists fuzzystrmatch;
-CREATE EXTENSION if not exists postgis_tiger_geocoder;
 GRANT ALL PRIVILEGES ON ALL tables in schema public to testuser,dataflow,dataset,recordstore,validation;
 grant all privileges on all sequences in schema public to testuser,dataflow,dataset,recordstore,validation;
-\c datasets
-CREATE extension if not exists postgis;
-CREATE extension if not exists fuzzystrmatch;
-CREATE EXTENSION if not exists postgis_tiger_geocoder;
