@@ -51,7 +51,7 @@ pipeline {
 		    
             steps {
                 sh '''
-                    mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.4.175:31944 -DPOSTGRES_PASS=password -DPOSTGRES_USER=postgres flyway:migrate
+                    mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.4.175:31944 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
                 '''
 	          }
         }
