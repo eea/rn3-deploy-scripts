@@ -46,6 +46,12 @@ spec:
           value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
         - name: ZIPKIN_URL
           value: "{{.Values.zipkin.schema}}://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+        - name: MONGO_HOSTS
+          value: "{{.Values.mongo.hosts}}"
+        - name: "MONGO_DB_HOST"
+          value: "{{.Values.mongo.host}}"
+        - name: "MONGO_DB_PORT"
+          value: "{{.Values.mongo.port}}"
         - name: REDIS_HOST
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
