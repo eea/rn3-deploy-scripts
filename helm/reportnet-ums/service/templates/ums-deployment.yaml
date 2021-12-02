@@ -70,6 +70,16 @@ spec:
           value: "{{.Values.sentry.environment}}"
         - name: SENTRY_RELEASE
           value: "{{.Values.version}}"
+        - name: UMS_EXPORT_FILES_PATH
+          value: "{{.Values.file.path}}"            
+            
+        volumeMounts:
+        - mountPath: "{{.Values.file.path}}"
+          name: load-data  
+      volumes:
+      - name: load-data
+        persistentVolumeClaim:
+            claimName: reportnet3-data
 
   strategy:
     type: RollingUpdate
