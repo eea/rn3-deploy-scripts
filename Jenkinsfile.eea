@@ -24,7 +24,7 @@ pipeline {
 					
 					env.TARGET_ENV="reportnet"
 					env.REPORTNET_BACKEND="https://sandbox-api.reportnet.europa.eu"
-					env.EULOGIN="https://rn3staging-auth.eionet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fsandbox.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
+					env.EULOGIN="https://sandbox-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fsandbox.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://sandbox.reportnet.europa.eu/communication/reportnet-websocket"
 					env.REPO="eeacms"
 					env.SENTRY_ENV="staging"
