@@ -28,12 +28,16 @@ spec:
         - containerPort: 8015
           protocol: TCP
         readinessProbe:
-          tcpSocket:
+          httpGet:
+            path: /actuator/health
+            scheme: HTTP
             port: 8015
           initialDelaySeconds: 40
           periodSeconds: 10
         livenessProbe:
-          tcpSocket:
+          httpGet:
+            path: /actuator/health
+            scheme: HTTP
             port: 8015
           initialDelaySeconds: 35
           periodSeconds: 20
