@@ -34,6 +34,8 @@ spec:
             port: 9050
           initialDelaySeconds: 20
           periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
         livenessProbe:
           httpGet:
             path: /actuator/health
@@ -41,6 +43,8 @@ spec:
             port: 9050
           initialDelaySeconds: 15
           periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 5
         env:
         - name: CONSUL_HOST
           value: "{{.Values.consul.server}}"
