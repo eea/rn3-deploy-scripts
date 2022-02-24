@@ -28,15 +28,23 @@ spec:
         - containerPort: 8015
           protocol: TCP
         readinessProbe:
-          tcpSocket:
+          httpGet:
+            path: /actuator/health
+            scheme: HTTP
             port: 8015
           initialDelaySeconds: 40
           periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
         livenessProbe:
-          tcpSocket:
+          httpGet:
+            path: /actuator/health
+            scheme: HTTP
             port: 8015
           initialDelaySeconds: 35
           periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 5
         env:
         - name: CONSUL_HOST
           value: "{{.Values.consul.server}}"
