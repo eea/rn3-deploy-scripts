@@ -175,6 +175,8 @@ spec:
           resources: {{- toYaml .Values.postgresql.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - mountPath: /dev/shm
+              name: dshm
             {{- if or (.Files.Glob "files/repmgr.conf") (.Files.Glob "files/postgresql.conf") (.Files.Glob "files/pg_hba.conf") .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration .Values.postgresql.configurationCM }}
             - name: postgresql-config
               mountPath: /bitnami/repmgr/conf
@@ -254,6 +256,10 @@ spec:
             {{- end }}
         {{- end }}
       volumes:
+        - emptyDir:
+           medium: Memory
+           sizeLimit: 2Gi
+          name: dshm
         {{- if or (.Files.Glob "files/repmgr.conf") (.Files.Glob "files/postgresql.conf") (.Files.Glob "files/pg_hba.conf") .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration .Values.postgresql.configurationCM }}
         - name: postgresql-config
           configMap:
