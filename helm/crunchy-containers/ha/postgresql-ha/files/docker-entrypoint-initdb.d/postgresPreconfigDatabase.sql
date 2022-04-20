@@ -15,6 +15,7 @@ ALTER SYSTEM SET max_worker_processes = '12';
 ALTER SYSTEM SET max_parallel_workers_per_gather = '4';
 ALTER SYSTEM SET max_parallel_workers = '12';
 ALTER SYSTEM SET max_parallel_maintenance_workers = '4';
+ALTER SYSTEM SET idle_in_transaction_session_timeout = '3600s';
 
 CREATE extension if not exists postgis;
 CREATE extension if not exists fuzzystrmatch;
