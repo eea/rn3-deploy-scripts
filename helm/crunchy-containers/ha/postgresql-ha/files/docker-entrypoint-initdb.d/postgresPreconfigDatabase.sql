@@ -8,6 +8,7 @@ ALTER SYSTEM SET effective_io_concurrency = '300';
 ALTER SYSTEM SET min_wal_size = '1GB'; 
 ALTER SYSTEM SET max_wal_size = '4GB'; 
 ALTER SYSTEM SET synchronous_commit='remote_apply';
+ALTER SYSTEM SET idle_in_transaction_session_timeout = '3600s';
 
 
 
