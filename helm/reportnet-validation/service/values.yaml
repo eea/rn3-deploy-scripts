@@ -18,8 +18,8 @@ metabase:
     user: validation
     password: 53p057n373.0!
 datasets:
-    user: validation
-    password: 53p057n373.0!
+    user: postgres
+    password: postgres
 mongo:
   host: mongo-mongodb
   port: 27017
