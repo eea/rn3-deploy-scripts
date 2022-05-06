@@ -37,7 +37,7 @@ dataset:
     creation:
         notification:
             ms: 5000
-    users: recordstore,validation,dataset
+    users: postgres
 
 snapshot:
     bufferSize: 65536
