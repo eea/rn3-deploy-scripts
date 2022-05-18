@@ -15,7 +15,7 @@ kafka:
 
 postgres:
     ip: postgres-cluster-beta.eea-test
-    url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/datasets?reWriteBatchedInserts=true
+    url: jdbc:postgresql://rn3-pg-helm-dataset-pgpool:5432/datasets?reWriteBatchedInserts=true
     metabase: 
         url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase?reWriteBatchedInserts=true
     user: recordstore
