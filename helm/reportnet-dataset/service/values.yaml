@@ -18,8 +18,8 @@ metabase:
     user: dataset
     password: 53p057n373.0!
 datasets:
-    user: dataset
-    password: 53p057n373.0!
+    user: postgres
+    password: postgres
 zipkin:
     ip: zipkin-ui
     port: 9411

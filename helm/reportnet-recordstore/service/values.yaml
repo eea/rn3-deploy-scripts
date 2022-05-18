@@ -21,8 +21,8 @@ postgres:
     user: recordstore
     password: 53p057n373.0!
 datasets:
-    user: recordstore
-    password: 53p057n373.0!
+    user: postgres
+    password: postgres
 zipkin:
     ip: zipkin-ui
     port: 9411
@@ -37,7 +37,7 @@ dataset:
     creation:
         notification:
             ms: 5000
-    users: recordstore,validation,dataset
+    users: postgres
 
 snapshot:
     bufferSize: 65536
