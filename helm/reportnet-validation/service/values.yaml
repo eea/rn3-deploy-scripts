@@ -18,7 +18,7 @@ metabase:
     user: validation
     password: 53p057n373.0!
 datasets:
-    user: validation
+    user: postgres
     password: 53p057n373.0!
 mongo:
   host: mongo-mongodb

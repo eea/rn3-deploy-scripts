@@ -20,6 +20,16 @@ spec:
       restartPolicy: Always
       dnsPolicy: ClusterFirst
       
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: db
+                operator: In
+                values:
+                - "false"      
+      
       containers:
       - name: collaboration
         image: {{.Values.repo}}/collaboration-service:{{.Values.version}}{{.Values.tagSufix}}

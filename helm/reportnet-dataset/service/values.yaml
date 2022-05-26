@@ -18,7 +18,7 @@ metabase:
     user: dataset
     password: 53p057n373.0!
 datasets:
-    user: dataset
+    user: postgres
     password: 53p057n373.0!
 zipkin:
     ip: zipkin-ui

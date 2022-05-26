@@ -15,13 +15,13 @@ kafka:
 
 postgres:
     ip: postgres-cluster-beta.eea-test
-    url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/datasets?reWriteBatchedInserts=true
+    url: jdbc:postgresql://rn3-pg-helm-dataset-pgpool:5432/datasets?reWriteBatchedInserts=true
     metabase: 
         url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase?reWriteBatchedInserts=true
     user: recordstore
     password: 53p057n373.0!
 datasets:
-    user: recordstore
+    user: postgres
     password: 53p057n373.0!
 zipkin:
     ip: zipkin-ui
@@ -37,7 +37,7 @@ dataset:
     creation:
         notification:
             ms: 5000
-    users: recordstore,validation,dataset
+    users: postgres
 
 snapshot:
     bufferSize: 65536
