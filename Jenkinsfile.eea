@@ -123,5 +123,30 @@ pipeline {
  						"""
  					}
  				}
+
+ 		stage('SELECTED BRANCH') {
+ 				when {
+ 					not {
+ 						environment name: 'BRANCH', value: ''
+ 					}
+ 				}
+ 				steps {
+ 						sh """
+ 						echo "selected bramch is" $BRANCH
+ 						"""
+ 					}
+				}
+ 		stage('RELEASE VERSION') {
+ 				when {
+ 					not {
+ 						environment name: 'RELEASE_NAME', value: ''
+ 					}
+ 				}
+ 				steps {
+						sh """
+ 						echo "selected release varsion is " $RELEASE_NAME
+ 						"""
+ 					}
+ 				}
     }
 }
