@@ -104,6 +104,8 @@ pipeline {
 
     parameters {
 			choice(choices: ['PROD', 'STAGING', 'HOTFIX', 'DEV', 'TEST', 'SANDBOX'],name: 'ENVIRONMENT')
+			string(defaultValue: '', description: 'Branch', name: 'BRANCH', trim: true)
+			string(defaultValue: '', description: 'TAG', name: 'TAG', trim: true)
 			string(defaultValue: '', description: 'Run deploy on release', name: 'RELEASE_NAME')
 	}
     
