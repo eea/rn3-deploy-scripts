@@ -6,28 +6,31 @@ pipeline {
 
     }
     
-	parameters([				choice(
-									choices: ['PROD', 'STAGING', 'HOTFIX', 'DEV', 'TEST', 'SANDBOX'], 
-									name: 'ENVIRONMENT'
-								),
-								string(
-									defaultValue: '', 
-									description: 'Branch', 
-									name: 'BRANCH', 
-									trim: true
-								),
-								string(
-									defaultValue: '', 
-									description: 'Run deploy on release', 
-									name: 'RELEASE_NAME', 
-									trim: true
-								),
-								string(
-									defaultValue: '', 
-									description: 'Set Tags', 
-									name: 'TAGS'
-								)
-							])
+	parameters(
+		[
+			choice(
+			choices: ['PROD', 'STAGING', 'HOTFIX', 'DEV', 'TEST', 'SANDBOX'], 
+			name: 'ENVIRONMENT'
+			),
+			string(
+			defaultValue: '', 
+			description: 'Branch', 
+			name: 'BRANCH', 
+			trim: true
+			),
+			string(
+			defaultValue: '', 
+			description: 'Run deploy on release', 
+			name: 'RELEASE_NAME', 
+			trim: true
+			),
+			string(
+			defaultValue: '', 
+			description: 'Set Tags', 
+			name: 'TAGS'
+			)
+		]
+	)
 
         // echo "tags_all: $tags"
 
@@ -37,19 +40,46 @@ pipeline {
     
 
     stages {
+	// stage('Deploy to Production') {
+	// 		when {
+	// 		expression { 
+	// 			return params.ENVIRONMENT == 'PROD'
+	// 			}
+	// 		}
+	// 		steps {
+	// 				sh """
+	// 				echo "deploy to"$ENVIRONMENT
+	// 				"""
+	// 			}
+	// 		}
+	// }
+	// stage('Deploy to STAGING') {
+	// 		when {
+	// 		expression { 
+	// 			return params.ENVIRONMENT == 'STAGING'
+	// 			}
+	// 		}
+	// 		steps {
+	// 				sh """
+	// 				echo "deploy to " $ENVIRONMENT
+	// 				"""
+	// 			}
+	// 		}
+	// }
+
 	stage('Deploy to Production') {
 			when {
-			expression { 
-				return params.ENVIRONMENT == 'PROD'
+				not {
+					environment name: 'ENVIRONMENT', value: ''
 				}
 			}
-			steps {
-					sh """
-					echo "deploy to production"
-					"""
-				}
-			}
-	}
+	 		steps {
+	 				sh """
+	 				echo "deploy to" $ENVIRONMENT
+	 				"""
+	 			}
+	 		}
+	 }
 
 	stage('SELECTED BRANCH') {
 			when {
