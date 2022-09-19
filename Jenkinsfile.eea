@@ -93,7 +93,7 @@ pipeline {
 					"""
 				}
 			}
-	}
+
 	stage('RELEASE VERSION') {
 			when {
 				not {
