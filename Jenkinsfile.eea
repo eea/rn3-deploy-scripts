@@ -103,10 +103,9 @@ pipeline {
     }
 
     parameters {
-			choice(choices: ['PROD', 'STAGING', 'HOTFIX', 'DEV', 'TEST', 'SANDBOX'],name: 'ENVIRONMENT')
-			string(defaultValue: '', description: 'Branch', name: 'BRANCH', trim: true)
-			string(defaultValue: '', description: 'TAG', name: 'TAG', trim: true)
-			string(defaultValue: '', description: 'Run deploy on release', name: 'RELEASE_NAME')
+			choice(choices: ['PROD', 'STAGING', 'HOTFIX', 'DEV', 'TEST', 'SANDBOX'],description:'Select the target Environment', name: 'ENV')
+			string(defaultValue: 'DEV', description: 'Set the branch', name: 'Branch', trim: true)
+			string(defaultValue: '', description: 'Set the version to be deployed', name: 'Version')
 	}
     
     stages {
@@ -134,19 +133,19 @@ pipeline {
  				}
  				steps {
  						sh """
- 						echo "selected bramch is" $BRANCH
+ 						echo "selected branch is" $BRANCH
  						"""
  					}
 				}
  		stage('RELEASE VERSION') {
  				when {
  					not {
- 						environment name: 'RELEASE_NAME', value: ''
+ 						environment name: 'Version', value: ''
  					}
  				}
  				steps {
 						sh """
- 						echo "selected release varsion is " $RELEASE_NAME
+ 						echo "selected release version is " $Version
  						"""
  					}
  				}
