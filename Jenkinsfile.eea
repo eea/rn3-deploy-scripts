@@ -9,6 +9,34 @@ pipeline {
 	parameters {
 		string(defaultValue: '', description: 'Run deploy on release', name: 'RELEASE_NAME')
 	}
+	parameters([				choice(
+									choices: ['MASTER', 'STAGING', 'HOTFIX', 'DEVELOP', 'TEST', 'DEV'], 
+									name: 'ENVIRONMENT'
+								),
+								string(
+									defaultValue: '', 
+									description: 'Branch', 
+									name: 'BRANCH', 
+									trim: true
+								),
+								string(
+									defaultValue: '', 
+									description: 'Release Version', 
+									name: 'RELEASE_NAME', 
+									trim: true
+								),
+								string(
+									defaultValue: '', 
+									description: 'Set Tags', 
+									name: 'TAGS'
+								)
+							])
+
+        // echo "tags_all: $tags"
+
+        // def myParamObject = new JsonSlurper().parseText( tags_all )
+        // for( def elem in tags_allObject ) {
+        //     echo "$elem"	
     
     stages {
 
