@@ -67,45 +67,44 @@ pipeline {
 	// 		}
 	// }
 
-	stage('Deploy to Production') {
-			when {
-				not {
-					environment name: 'ENVIRONMENT', value: ''
+		stage('Deploy to Production') {
+				when {
+					not {
+						environment name: 'ENVIRONMENT', value: ''
+					}
 				}
-			}
-	 		steps {
-	 				sh """
-	 				echo "deploy to" $ENVIRONMENT
-	 				"""
-	 			}
-	 		}
-	 }
+				steps {
+						sh """
+						echo "deploy to" $ENVIRONMENT
+						"""
+					}
+				}
 
-	stage('SELECTED BRANCH') {
-			when {
-				not {
-					environment name: 'BRANCH', value: ''
+		stage('SELECTED BRANCH') {
+				when {
+					not {
+						environment name: 'BRANCH', value: ''
+					}
 				}
-			}
-			steps {
-					sh """
-					echo "selected bramch is" $BRANCH
-					"""
+				steps {
+						sh """
+						echo "selected bramch is" $BRANCH
+						"""
+					}
 				}
-			}
 
-	stage('RELEASE VERSION') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
+		stage('RELEASE VERSION') {
+				when {
+					not {
+						environment name: 'RELEASE_NAME', value: ''
+					}
 				}
-			}
-			steps {
-					sh """
-					echo "selected release varsion is " $RELEASE_NAME
-					"""
+				steps {
+						sh """
+						echo "selected release varsion is " $RELEASE_NAME
+						"""
+					}
 				}
-			}
 
 
 
