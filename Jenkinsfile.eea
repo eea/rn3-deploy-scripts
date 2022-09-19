@@ -103,13 +103,8 @@ pipeline {
     }
 
     parameters {
-		[
-		choice(
-		choices: ['PROD', 'STAGING', 'HOTFIX', 'DEV', 'TEST', 'SANDBOX'], 
-		name: 'ENVIRONMENT'
-		),
-		string(defaultValue: '', description: 'Run deploy on release', name: 'RELEASE_NAME')
-		]
+			choice(choices: ['PROD', 'STAGING', 'HOTFIX', 'DEV', 'TEST', 'SANDBOX'],name: 'ENVIRONMENT'),
+			string(defaultValue: '', description: 'Run deploy on release', name: 'RELEASE_NAME')
 	}
     
     stages {
