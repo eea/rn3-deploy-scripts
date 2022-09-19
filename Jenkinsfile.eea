@@ -6,11 +6,11 @@ pipeline {
 
     }
     
-	parameters {
-		string(defaultValue: '', description: 'Run deploy on release', name: 'RELEASE_NAME')
-	}
+	#parameters {
+	#	string(defaultValue: '', description: 'Run deploy on release', name: 'RELEASE_NAME')
+	#}
 	parameters([				choice(
-									choices: ['MASTER', 'STAGING', 'HOTFIX', 'DEVELOP', 'TEST', 'DEV'], 
+									choices: ['prod', 'staging', 'hotfix', 'dev', 'test', 'sandbox'], 
 									name: 'ENVIRONMENT'
 								),
 								string(
@@ -21,7 +21,7 @@ pipeline {
 								),
 								string(
 									defaultValue: '', 
-									description: 'Release Version', 
+									description: 'Run deploy on release', 
 									name: 'RELEASE_NAME', 
 									trim: true
 								),
