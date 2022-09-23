@@ -9,25 +9,203 @@ pipeline {
     parameters {
 			choice(choices: ['PROD', 'STAGING', 'HOTFIX', 'DEV', 'TEST', 'SANDBOX'],description:'Select the target Environment', name: 'ENV')
 			string(defaultValue: 'dev', description: 'Set the branch', name: 'Branch', trim: true)
-			string(defaultValue: '', description: 'Set the version to be deployed', name: 'Version')
+			string(defaultValue: '', description: 'Set the version to be deployed', name: 'Version', trim: true)
 	}
     
     stages {
 
-
-
+        stage('Setting Default Environmental Variables') {
+			
+			steps {
+				script {
+					
+					
+					env.TARGET_ENV="reportnet"
+					env.REPORTNET_BACKEND="https://api.reportnet.europa.eu"
+					env.EULOGIN="https://auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Freportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
+					env.WEB_SOCKET="wss://reportnet.europa.eu/communication/reportnet-websocket"
+					env.REPO="eeacms"
+					//env.SENTRY_ENV="production"
+					env.KEYCLOAK="true"
+					
+					env.REDIRECT_URI="https://reportnet.europa.eu/eulogin/"
+					env.R3_CALLBACK_URL="https://api.reportnet.europa.eu"
+					env.FME_TOPIC="Reportnet3_Topic"
+					//env.ENVIRONMENT="kubectl-config-prod"
+					
+					
+				}
+			}
+	      }
  		stage('Deploy to Production') {
  				when {
- 					not {
- 						environment name: 'ENV', value: ''
+ 					{
+ 						environment name: 'ENV', value: 'PROD'
  					}
  				}
  				steps {
  						sh """
- 						echo "deploy to" $ENV
+ 						echo "deploy to " $ENV
  						"""
+						//Set Environment to prod
+						echo "Setting environment specific variables to " $ENV
+						env.SENTRY_ENV="production"
+						env.ENVIRONMENT="kubectl-config-prod"
+
+					echo "Update Database of " $ENV
+					sh '''
+						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+					'''
+
+					echo "Scaling down services of " $ENV
+					withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+						
+						sh '''
+							kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
+						'''
+					}
+
+					echo "Configure Common Application properties for " $ENV
+					withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+						sh '''
+							helm install application-config $WORKSPACE/helm/env/$ENV/application-config -n $TARGET_ENV --kubeconfig=${FILE}
+						'''
+						sleep(20)
+						sh '''
+							helm uninstall application-config  -n $TARGET_ENV --kubeconfig=${FILE}
+						'''
+					}
+
+
+
+
+
+
+
  					}
  				}
+ 		stage('Deploy to STAGING') {
+ 				when {
+ 					{
+ 						environment name: 'ENV', value: 'STAGING'
+ 					}
+ 				}
+ 				steps {
+ 						sh """
+ 						echo "deploy to " $ENV
+ 						"""
+						//Set Environment to prod
+						env.SENTRY_ENV="staging"
+						env.ENVIRONMENT="kubectl-config-staging"
+
+					echo "Update Database of " $ENV
+					sh '''
+						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+					'''
+ 					}
+ 				}
+ 		stage('Deploy to HOTFIX') {
+ 				when {
+ 					{
+ 						environment name: 'ENV', value: 'HOTFIX'
+ 					}
+ 				}
+ 				steps {
+ 						sh """
+ 						echo "deploy to " $ENV
+ 						"""
+						//Set Environment to prod
+						env.SENTRY_ENV="hotfix"
+						env.ENVIRONMENT="kubectl-config-hotfix"
+
+					echo "Update Database of " $ENV
+					sh '''
+						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+					'''
+
+
+ 					}
+ 				}
+
+ 		stage('Deploy to DEV') {
+ 				when {
+ 					{
+ 						environment name: 'ENV', value: 'DEV'
+ 					}
+ 				}
+ 				steps {
+ 						sh """
+ 						echo "deploy to " $ENV
+ 						"""
+						//Set Environment to prod
+						env.SENTRY_ENV="dev"
+						env.ENVIRONMENT="kubectl-config-dev"
+
+					echo "Update Database of " $ENV
+					sh '''
+						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+					'''
+
+
+
+ 					}
+ 				}
+
+ 		stage('Deploy to TEST') {
+ 				when {
+ 					{
+ 						environment name: 'ENV', value: 'TEST'
+ 					}
+ 				}
+ 				steps {
+ 						sh """
+ 						echo "deploy to " $ENV
+ 						"""
+						//Set Environment to prod
+						env.SENTRY_ENV="test"
+						env.ENVIRONMENT="kubectl-config-test"
+
+					echo "Update Database of " $ENV
+					sh '''
+						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+					'''
+
+
+
+ 					}
+ 				}
+
+		stage('Deploy to SANDBOX') {
+ 				when {
+ 					{
+ 						environment name: 'ENV', value: 'SANDBOX'
+ 					}
+ 				}
+ 				steps {
+ 						sh """
+ 						echo "deploy to " $ENV
+ 						"""
+						//Set Environment to prod
+						env.SENTRY_ENV="sandbox"
+						env.ENVIRONMENT="kubectl-config-sandbox"
+
+					echo "Update Database of " $ENV
+					sh '''
+						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+					'''
+
+
+
+
+ 					}
+ 				}
+
+
+
+
+
+
+
 
  		stage('SELECTED BRANCH') {
  				when {

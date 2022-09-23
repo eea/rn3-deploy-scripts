@@ -1,0 +1,19 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: communication
+  labels:
+    name: communication
+    namespace: {{.Release.Namespace}}
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  ports:
+  - protocol: TCP
+    port: 9020
+    targetPort: 9020
+    nodePort: 32401
+  selector:
+    name: communication
+  type: NodePort
+  sessionAffinity: None

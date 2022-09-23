@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: reportnet-e2e
+  labels:
+    name: reportnet-e2e
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+data:
+  application.properties: |-
+{{ .Files.Get "files/application.properties" | indent 4 }}

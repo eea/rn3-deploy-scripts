@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-consul-configmap
+  labels:
+    name: application-consul-configmap
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+data:
+  application.properties: |-
+{{ .Files.Get "files/application.properties" | indent 4 }}

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dataflow-consul-configmap
+  labels:
+    name: dataflow-consul-configmap
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+data:
+  dataflow-service.properties: |-
+{{ .Files.Get "files/dataflow-service.properties" | indent 4 }}

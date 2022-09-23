@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: validation-consul-configmap
+  labels:
+    name: validation-consul-configmap
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+data:
+  validation-service.properties: |-
+{{ .Files.Get "files/validation-service.properties" | indent 4 }}
