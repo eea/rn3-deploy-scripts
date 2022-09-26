@@ -36,11 +36,10 @@ pipeline {
 					
 				}
 			}
+		}
  		stage('Deploy to Production') {
  				when {
- 					{
- 						environment name: 'ENV', value: 'PROD'
- 					}
+					environment name: 'ENV', value: 'PROD'
  				}
  				steps {
  						sh """
@@ -76,6 +75,7 @@ pipeline {
 						}
 					}
   				}
+		}
  		stage('Deploy to STAGING') {
  				when {
  					{
@@ -95,7 +95,7 @@ pipeline {
 						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
  					}
- 				}
+ 		}
  		stage('Deploy to HOTFIX') {
  				when {
  					{
@@ -117,8 +117,7 @@ pipeline {
 
 
  					}
- 				}
-
+ 		}
  		stage('Deploy to DEV') {
  				when {
  					{
@@ -141,9 +140,8 @@ pipeline {
 
 
  					}
- 				}
-
- 		stage('Deploy to TEST') {
+ 		}
+		stage('Deploy to TEST') {
  				when {
  					{
  						environment name: 'ENV', value: 'TEST'
@@ -165,8 +163,7 @@ pipeline {
 
 
  					}
- 				}
-
+ 		}
 		stage('Deploy to SANDBOX') {
  				when {
  					{
@@ -210,7 +207,7 @@ pipeline {
  						echo "selected branch is" $BRANCH
  						"""
  					}
-				}
+		}
  		stage('RELEASE VERSION') {
  				when {
  					not {
@@ -222,6 +219,6 @@ pipeline {
  						echo "selected release version is " $Version
  						"""
  					}
- 				}
+ 		}
     }
 }
