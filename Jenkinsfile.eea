@@ -71,7 +71,7 @@ pipeline {
 							}
 
 						
-							echo "Configure Common Application properties for " params.ENV
+							echo "Configure Common Application properties for " ${params.ENV}
 							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 								sh '''
 									helm install application-config $WORKSPACE/helm/env/${params.ENV}/application-config -n $TARGET_ENV --kubeconfig=${FILE}
