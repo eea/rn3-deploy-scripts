@@ -1,0 +1,67 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: frontend
+  labels:
+    name: frontend
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  replicas: {{.Values.replicas}}
+  selector:
+        matchLabels:
+          name: frontend
+
+  template:
+    metadata:
+      labels:
+        name: frontend
+        cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+    spec:
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      
+      containers:
+      - name: frontend
+        image: {{.Values.repo}}/reportnet-frontend-service:{{.Values.version}}{{.Values.tagSufix}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            scheme: HTTP
+            port: 80
+          initialDelaySeconds: 80
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            scheme: HTTP
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 5
+        env:
+        - name: BACKEND
+          value: "{{.Values.backend}}"
+        - name: EULOGIN
+          value: "{{.Values.eulogin}}"
+        - name: KEYCLOAK
+          value: "{{.Values.keycloak}}"
+        - name: WEBSOCKET_URL
+          value: "{{.Values.websocket}}"
+        - name: DOCUMENTATION_FOLDER
+          value: "{{.Values.documentationFolder}}"
+
+
+      
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

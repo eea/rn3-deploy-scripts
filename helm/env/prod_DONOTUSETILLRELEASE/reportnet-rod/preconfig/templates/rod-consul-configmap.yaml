@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rod-consul-configmap
+  labels:
+    name: rod-consul-configmap
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+data:
+  rod-service.properties: |-
+{{ .Files.Get "files/rod-service.properties" | indent 4 }}
