@@ -47,13 +47,17 @@ pipeline {
 						echo "ENV: ${params.Env}"
 						echo "BRANCH: ${params.Brn}"
 						echo "VERSION: ${params.Ver}"
-	 					env.SENTRY_ENV="production"
-	 					env.ENVIRONMENT="kubectl-config-prod" 
-						env.DEPLOYMENT_ENV="prod"
-						env.DEPLOYMENT_Brn="${params.Brn}"
-						env.DEPLOYMENT_Var="${params.Ver}"
 
-	 					script { 						
+
+	 					script { 	
+							env.SENTRY_ENV="production"
+							env.ENVIRONMENT="kubectl-config-prod" 
+							env.DEPLOYMENT_ENV="prod"
+							env.DEPLOYMENT_BRN="${params.Brn}"
+							env.DEPLOYMENT_VAR="${params.Ver}"
+
+
+
 	 						echo "deploy to  ${params.Env}"
 	 						//Set Environment to prod
 	 						echo "Setting environment specific variables to ${params.Env}"
