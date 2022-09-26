@@ -1,1 +1,0 @@
-export { CheckboxFilter } from './CheckboxFilter';

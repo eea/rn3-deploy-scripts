@@ -1,1 +1,0 @@
-export { TooltipButton } from './TooltipButton';

@@ -1,1 +1,0 @@
-export { WebformRecord } from './WebformRecord';

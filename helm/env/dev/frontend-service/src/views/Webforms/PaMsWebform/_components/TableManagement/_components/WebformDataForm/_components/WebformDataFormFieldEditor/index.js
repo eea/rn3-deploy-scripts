@@ -1,1 +1,0 @@
-export { WebformDataFormFieldEditor } from './WebformDataFormFieldEditor';

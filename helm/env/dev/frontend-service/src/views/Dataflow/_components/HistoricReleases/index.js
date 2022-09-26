@@ -1,1 +1,0 @@
-export { HistoricReleases } from './HistoricReleases';

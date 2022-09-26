@@ -1,1 +1,0 @@
-export { SystemNotificationsCreateForm } from './SystemNotificationsCreateForm';

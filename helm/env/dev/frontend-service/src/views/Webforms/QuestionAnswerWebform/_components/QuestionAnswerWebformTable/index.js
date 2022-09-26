@@ -1,1 +1,0 @@
-export { QuestionAnswerWebformTable } from './QuestionAnswerWebformTable';

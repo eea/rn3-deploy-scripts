@@ -1,1 +1,0 @@
-export { StepProgressBar } from './StepProgressBar';

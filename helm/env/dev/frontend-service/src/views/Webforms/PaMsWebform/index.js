@@ -1,1 +1,0 @@
-export { PaMsWebform } from './PaMsWebform';

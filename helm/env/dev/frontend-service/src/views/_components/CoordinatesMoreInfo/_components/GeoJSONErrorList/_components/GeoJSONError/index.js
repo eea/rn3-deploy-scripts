@@ -1,1 +1,0 @@
-export { GeoJSONError } from './GeoJSONError';

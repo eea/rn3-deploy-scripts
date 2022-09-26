@@ -1,1 +1,0 @@
-export { LastPageLink } from './LastPageLink';

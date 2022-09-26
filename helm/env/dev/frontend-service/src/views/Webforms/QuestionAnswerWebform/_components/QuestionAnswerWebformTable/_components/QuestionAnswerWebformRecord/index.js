@@ -1,1 +1,0 @@
-export { QuestionAnswerWebformRecord } from './QuestionAnswerWebformRecord';

@@ -1,5 +1,0 @@
-server:
-  port: 8015
-spring:
-  application:
-    name: validation

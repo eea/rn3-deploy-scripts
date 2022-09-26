@@ -1,1 +1,0 @@
-export { PrivacyStatement } from './PrivacyStatement';

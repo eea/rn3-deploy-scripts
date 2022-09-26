@@ -1,1 +1,0 @@
-export { GlobalNotifications } from './GlobalNotifications';

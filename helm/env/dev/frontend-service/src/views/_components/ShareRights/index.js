@@ -1,1 +1,0 @@
-export { ShareRights } from './ShareRights';

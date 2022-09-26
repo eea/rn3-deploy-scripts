@@ -1,7 +1,0 @@
-{
-  "levels": [
-    { "label": "INFO", "value": "INFO" },
-    { "label": "SUCCESS", "value": "SUCCESS" },
-    { "label": "ERROR", "value": "ERROR" }
-  ]
-}

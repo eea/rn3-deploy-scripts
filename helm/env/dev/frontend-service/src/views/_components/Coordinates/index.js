@@ -1,1 +1,0 @@
-export { Coordinates } from './Coordinates';

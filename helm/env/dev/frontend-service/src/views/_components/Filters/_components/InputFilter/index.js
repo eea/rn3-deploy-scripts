@@ -1,1 +1,0 @@
-export { InputFilter } from './InputFilter';

@@ -1,0 +1,96 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: dataflow
+  labels:
+    name: dataflow
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  replicas: {{.Values.replicas}}
+  selector:
+        matchLabels:
+          name: dataflow
+  template:
+    metadata:
+      labels:
+        name: dataflow
+        cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+    spec:
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      
+      containers:
+      - name: dataflow
+        image: {{.Values.repo}}/dataflow-service:{{.Values.version}}{{.Values.tagSufix}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8020
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            scheme: HTTP
+            port: 8020
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            scheme: HTTP
+            port: 8020
+          initialDelaySeconds: 25
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 5
+        env:
+        - name: CONSUL_HOST
+          value: "{{.Values.consul.server}}"
+        - name: CONSUL_PORT
+          value: "{{.Values.consul.port}}"
+        - name: KAFKA_BOOTSTRAP_URL
+          value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
+        - name: METABASE_CONNECTION_URL
+          value: "{{.Values.metabase.url}}"
+        - name: METABASE_CONNECTION_USER
+          value: "{{.Values.metabase.user}}"
+        - name: METABASE_CONNECTION_PASSWORD
+          value: "{{.Values.metabase.password}}"
+        - name: ZIPKIN_URL
+          value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+        - name: REDIS_HOST
+          value: "{{.Values.redis.ip}}"
+        - name: REDIS_PORT
+          value: "{{.Values.redis.port}}"
+        - name: REDIS_SENTINEL_MASTER
+          value: "{{.Values.redis.sentinel}}"
+        - name: REDIS_SENTINEL_NODES
+          value: "{{.Values.redis.nodes}}"
+        - name: R3_CALLBACK_URL
+          value: "{{.Values.fme.integration.callback.urlbase}}"        
+        - name: SENTRY_DSN
+          value: "{{.Values.sentry.dsn}}"
+        - name: SENTRY_ENVIRONMENT
+          value: "{{.Values.sentry.environment}}"
+        - name: SENTRY_RELEASE
+          value: "{{.Values.version}}" 
+        - name: FME_TOPIC
+          value: "{{.Values.fme.topic}}" 
+        - name: DATAFLOW_EXPORT_SCHEMA_INFORMATION_PATH
+          value: "{{.Values.file.path}}"   
+
+        volumeMounts:
+        - mountPath: "{{.Values.file.path}}"
+          name: load-data  
+      volumes:
+      - name: load-data
+        persistentVolumeClaim:
+            claimName: reportnet3-data
+            
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

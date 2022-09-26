@@ -1,1 +1,0 @@
-export { GlobalLoading } from './GlobalLoading';

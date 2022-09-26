@@ -1,1 +1,0 @@
-export { ShowValidationsList } from './ShowValidationsList';

@@ -1,1 +1,0 @@
-export { PublicFrontpage } from './PublicFrontpage';

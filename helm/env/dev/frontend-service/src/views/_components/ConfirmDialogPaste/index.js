@@ -1,1 +1,0 @@
-export { ConfirmDialogPaste } from './ConfirmDialogPaste';

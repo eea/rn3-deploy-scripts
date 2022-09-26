@@ -1,1 +1,0 @@
-export { CurrentPageReport } from './CurrentPageReport';

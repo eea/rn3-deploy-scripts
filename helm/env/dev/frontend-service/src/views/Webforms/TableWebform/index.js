@@ -1,1 +1,0 @@
-export { TableWebform } from './TableWebform';

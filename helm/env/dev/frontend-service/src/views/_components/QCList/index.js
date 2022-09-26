@@ -1,1 +1,0 @@
-export { QCList } from './QCList';

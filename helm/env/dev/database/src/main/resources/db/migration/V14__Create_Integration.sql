@@ -22,7 +22,9 @@ CREATE TABLE IF NOT EXISTS public.integration_operation_parameters (
 	CONSTRAINT integration_operation_parameter_fk FOREIGN KEY (integration_id) REFERENCES integration(id) ON DELETE CASCADE
 );
 
+
+
 GRANT ALL ON TABLE public.integration TO testuser,dataflow,dataset,validation,recordstore;
 GRANT ALL ON TABLE public.integration_operation_parameters TO testuser,dataflow,dataset,validation,recordstore;
-GRANT ALL ON SEQUENCE integration_id_seq TO testuser,dataflow,dataset,validation,recordstore;
-GRANT ALL ON SEQUENCE integration_operation_parameters_id_seq TO testuser,dataflow,dataset,validation,recordstore;
+grant all on sequence integration_id_seq TO testuser,dataflow,dataset,validation,recordstore;
+grant all on sequence integration_operation_parameters_id_seq TO testuser,dataflow,dataset,validation,recordstore;

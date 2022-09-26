@@ -1,1 +1,0 @@
-export { TableManagement } from './TableManagement';

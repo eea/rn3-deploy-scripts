@@ -1,1 +1,0 @@
-export { ManageIntegrations } from './ManageIntegrations';

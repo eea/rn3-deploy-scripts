@@ -1,1 +1,0 @@
-export { DatasetSchemaTable } from './DatasetSchemaTable';

@@ -1,1 +1,0 @@
-export { GeoJSONList } from './GeoJSONList';

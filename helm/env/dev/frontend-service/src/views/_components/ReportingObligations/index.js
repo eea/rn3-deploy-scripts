@@ -1,1 +1,0 @@
-export { ReportingObligations } from './ReportingObligations';

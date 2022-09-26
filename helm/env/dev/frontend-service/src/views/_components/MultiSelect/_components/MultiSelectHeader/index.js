@@ -1,1 +1,0 @@
-export { MultiSelectHeader } from './MultiSelectHeader';

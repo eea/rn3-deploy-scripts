@@ -1,1 +1,0 @@
-export { TabMenu } from './TabMenu';

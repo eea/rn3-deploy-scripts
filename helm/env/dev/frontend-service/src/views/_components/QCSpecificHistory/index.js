@@ -1,1 +1,0 @@
-export { QCSpecificHistory } from './QCSpecificHistory';

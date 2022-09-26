@@ -1,1 +1,0 @@
-export { PrevPageLink } from './PrevPageLink';
