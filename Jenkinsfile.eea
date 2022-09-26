@@ -42,27 +42,34 @@ pipeline {
 					environment name: 'ENV', value: 'PROD'
  				}
  				steps {
- 						sh """
+
+					step{ 						
+						sh """
  						echo "deploy to " $ENV
  						"""
 						//Set Environment to prod
 						echo "Setting environment specific variables to " $ENV
 						env.SENTRY_ENV="production"
 						env.ENVIRONMENT="kubectl-config-prod"
+					}
 
+					step{ 	
 						echo "Update Database of " $ENV
 						sh '''
 							mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 						'''
-
+					}
+					step{ 
 						echo "Scaling down services of " $ENV
 						withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 							
 							sh '''
 								kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
 							'''
-					
+						}
+					}
 
+					step{ 
 						echo "Configure Common Application properties for " $ENV
 						withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 							sh '''
@@ -76,131 +83,5 @@ pipeline {
 					}
   				}
 		}
- 		stage('Deploy to STAGING') {
- 				when {
- 						environment name: 'ENV', value: 'STAGING'
- 				}
- 				steps {
- 						sh """
- 						echo "deploy to " $ENV
- 						"""
-						//Set Environment to prod
-						env.SENTRY_ENV="staging"
-						env.ENVIRONMENT="kubectl-config-staging"
-
-						echo "Update Database of " $ENV
-						sh '''
-							mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
-						'''
- 					}
- 		}
- 		stage('Deploy to HOTFIX') {
- 				when {
- 						environment name: 'ENV', value: 'HOTFIX'
- 				}
- 				steps {
- 						sh """
- 						echo "deploy to " $ENV
- 						"""
-						//Set Environment to prod
-						env.SENTRY_ENV="hotfix"
-						env.ENVIRONMENT="kubectl-config-hotfix"
-
-					echo "Update Database of " $ENV
-					sh '''
-						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
-					'''
-
-
- 					}
- 		}
- 		stage('Deploy to DEV') {
- 				when {
- 						environment name: 'ENV', value: 'DEV'
- 				}
- 				steps {
- 						sh """
- 						echo "deploy to " $ENV
- 						"""
-						//Set Environment to prod
-						env.SENTRY_ENV="dev"
-						env.ENVIRONMENT="kubectl-config-dev"
-
-					echo "Update Database of " $ENV
-					sh '''
-						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
-					'''
-
-
-
- 					}
- 		}
-		stage('Deploy to TEST') {
- 				when {
- 						environment name: 'ENV', value: 'TEST'
- 				}
- 				steps {
- 						sh """
- 						echo "deploy to " $ENV
- 						"""
-						//Set Environment to prod
-						env.SENTRY_ENV="test"
-						env.ENVIRONMENT="kubectl-config-test"
-
-					echo "Update Database of " $ENV
-					sh '''
-						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
-					'''
-
-
-
- 					}
- 		}
-		stage('Deploy to SANDBOX') {
- 				when {
- 						environment name: 'ENV', value: 'SANDBOX'
- 				}
- 				steps {
- 						sh """
- 						echo "deploy to " $ENV
- 						"""
-						//Set Environment to prod
-						env.SENTRY_ENV="sandbox"
-						env.ENVIRONMENT="kubectl-config-sandbox"
-
-					echo "Update Database of " $ENV
-					sh '''
-						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
-					'''
-
-
-
-
- 					}
- 		}
- 		stage('SELECTED BRANCH') {
- 				when {
- 					not {
- 						environment name: 'BRANCH', value: ''
- 					}
- 				}
- 				steps {
- 						sh """
- 						echo "selected branch is" $BRANCH
- 						"""
- 					}
-		}
- 		stage('RELEASE VERSION') {
- 				when {
- 					not {
- 						environment name: 'Version', value: ''
- 					}
- 				}
- 				steps {
-						sh """
- 						echo "selected release version is " $Version
- 						"""
- 					}
- 		}
     }
 }
