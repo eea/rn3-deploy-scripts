@@ -44,11 +44,11 @@ pipeline {
 				}
 			}
             steps {
-                echo "ENV ${params.ENV}"
+                echo "ENV:" $ENV
 
-                echo "BRANCH: ${params.Branch}"
+                echo "BRANCH:" $Branch
 
-                echo "Version: ${params.Version}"
+                echo "Version:" $Version
 
             }
         }
