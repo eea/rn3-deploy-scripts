@@ -1,1 +1,0 @@
-GRANT ALL ON sequence public.temp_user_id_seq TO testuser, dataflow, dataset, recordstore, validation;

@@ -1,1 +1,0 @@
-ALTER TABLE public."snapshot" ADD enabled bool NOT NULL DEFAULT true;
