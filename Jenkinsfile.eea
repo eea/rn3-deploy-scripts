@@ -78,9 +78,7 @@ pipeline {
 		}
  		stage('Deploy to STAGING') {
  				when {
- 					{
  						environment name: 'ENV', value: 'STAGING'
- 					}
  				}
  				steps {
  						sh """
@@ -90,17 +88,15 @@ pipeline {
 						env.SENTRY_ENV="staging"
 						env.ENVIRONMENT="kubectl-config-staging"
 
-					echo "Update Database of " $ENV
-					sh '''
-						mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
-					'''
+						echo "Update Database of " $ENV
+						sh '''
+							mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						'''
  					}
  		}
  		stage('Deploy to HOTFIX') {
  				when {
- 					{
  						environment name: 'ENV', value: 'HOTFIX'
- 					}
  				}
  				steps {
  						sh """
@@ -187,15 +183,7 @@ pipeline {
 
 
  					}
- 				}
-
-
-
-
-
-
-
-
+ 		}
  		stage('SELECTED BRANCH') {
  				when {
  					not {
