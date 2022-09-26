@@ -45,7 +45,7 @@ pipeline {
 			}
 
  				steps {
- 					step {
+ 					
 						script { 						
 							sh """
 							echo "deploy to " params.ENV
@@ -82,7 +82,7 @@ pipeline {
 								'''
 							}
 						}
-					}
+					
   				}
 		}
     }
