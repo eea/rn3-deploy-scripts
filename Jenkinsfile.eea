@@ -31,9 +31,8 @@ pipeline {
 
 
 //
-// ############################## SETUP ENVIRONMENT VARIABLES ##############################
+//###################################### SETUP ENVIRONMENT VARIABLES ######################################
 //
-
 
 //############################## ****** DEVELOPMENT ******  ######################################
  		stage('Deploy to DEV') {
@@ -69,9 +68,6 @@ pipeline {
 				}
 			}
 		}
-	
-
-
 //############################## ****** TEST ******  ######################################
  		stage('Deploy to TEST') {
 			when {				
@@ -106,8 +102,6 @@ pipeline {
 				}
 			}
 		}
-	
-
 //############################## ****** STAGING  ******  ######################################	
  		stage('Deploy to STAGING') {
 			when {				
@@ -141,9 +135,6 @@ pipeline {
 				}
 			}
 		}
-				
-
-
 //############################## ****** HOTFIX  ******  ######################################	
  		stage('Deploy to HOTFIX') {
 			when {				
@@ -178,7 +169,6 @@ pipeline {
 				}
 			}
 		}
-
 //############################## ****** PRODUCTION ******  ######################################
  		stage('Deploy to PRODUCTION') {
 			when {				
@@ -214,176 +204,169 @@ pipeline {
 			}
 		}
 
-
-
-// SETUP COMMON STEPS  
-
+//######################################  SETUP COMMON STEPS  ######################################
  		stage('Common Steps') {
-            			steps {
-
-
-	 						echo "Scaling down services of ${params.Env}"
-	 						withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-	 							sh '''
-	 								kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
-	 							'''
-	 						}
-	 						echo "Configure Common Application properties for ${params.Env}"
-	 						withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-	 							sh '''
-	 								helm install application-config $WORKSPACE/helm/env/$DEPLOYMENT_ENV/application-config -n $TARGET_ENV --kubeconfig=${FILE}
-	 							'''
-	 							sleep(20)
-	 							sh '''
-	 								helm uninstall application-config  -n $TARGET_ENV --kubeconfig=${FILE}
-	 							'''
-	 						}
-	 						echo "Deploy API Gateway of ${params.Env}"
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-								sh '''
-									helm install api-gateway-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-api-gateway/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sleep(20)
-								sh '''
-									helm uninstall api-gateway-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sh '''
-									helm upgrade api-gateway $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
-								'''
-							}
-	 						echo "Deploy Dataflow of ${params.Env}"
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-								sh '''
-									helm install dataflow-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataflow/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sleep(20)
-								sh '''
-									helm uninstall dataflow-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sh '''
-									helm upgrade dataflow $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$RELEASE_NAME,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV,replicas=3
-									'''
-								}
-							}
-	 						echo "Deploy Recordstore of ${params.Env}"
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-								sh '''
-									helm install recordstore-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-recordstore/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sleep(20)
-								sh '''
-									helm uninstall recordstore-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								/*sh '''
-									helm upgrade recordstore-persistence $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-recordstore/pvc -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set repo=k8s-swi001:5000,tagSufix=_sandbox
-								'''*/
-								sh '''
-									helm upgrade recordstore $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=2
-								'''
-								sleep(20)
-							}
-	 						echo "Deploy Validation on ${params.Env}"
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-								sh '''
-									helm install validation-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-validation/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sleep(20)
-								sh '''
-									helm uninstall validation-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sh '''
-									helm upgrade validation $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,replicas=4,sentry.environment=$SENTRY_ENV
-								'''
-							}
-	 						echo "Deploy User Management of ${params.Env}"
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-								sh '''
-									helm install ums-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-ums/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sleep(20)
-								sh '''
-									helm uninstall ums-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sh '''
-									helm upgrade ums $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=2
-								'''
-							}
-	 						echo "Deploy Document Container on ${params.Env}"
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-								sh '''
-									helm install document-preconfig$WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-document/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sleep(20)
-								sh '''
-									helm uninstall document-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sh '''
-									helm upgrade document $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-document/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
-								'''
-							}
-	 						echo "Deploy Communication for ${params.Env}"
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-								sh '''
-									helm install communication-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-communication/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sleep(20)
-								sh '''
-									helm uninstall communication-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sh '''
-									helm upgrade communication $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
-								'''
-							}
-	 						echo "Deploy Collaboration of ${params.Env}"
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-								sh '''
-									helm install collaboration-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/env/$DEPLOYMENT_ENV/reportnet-collaboration/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
-								'''
-								sleep(20)
-								sh '''
-									helm uninstall collaboration-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sh '''
-									helm upgrade collaboration $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-collaboration/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
-								'''
-							}
-
-	 						/*echo "Deploy Indexsearch for ${params.Env}"
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-								sh '''
-									helm install indexsearch-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-indexsearch/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
-								'''
-								sleep(20)
-								sh '''
-									helm uninstall indexsearch-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sh '''
-									helm upgrade indexsearch $$WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-indexsearch/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
-								'''
-							}*/
-	 						echo "Deploy ReportNet Frontend for ${params.Env}"
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-							sh '''
-									helm upgrade frontend $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-frontend/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,backend=$REPORTNET_BACKEND,keycloak=$KEYCLOAK,websocket=$WEB_SOCKET,eulogin=$EULOGIN,sentry.environment=$SENTRY_ENV
-								'''
-							}
-	 						echo "Deploy Rod for ${params.Env}"
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-							sh '''
-									helm install rod-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-rod/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sleep(20)
-								sh '''
-									helm uninstall rod-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sh '''
-									helm upgrade rod $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-rod/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
-								'''
-							} 
-	 					}
- 	 		}
+            steps {
+	 			echo "Scaling down services of ${params.Env}"
+	 			withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+	 				sh '''
+	 					kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
+	 				'''
+	 			}
+	 			echo "Configure Common Application properties for ${params.Env}"
+	 			withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+	 				sh '''
+	 					helm install application-config $WORKSPACE/helm/env/$DEPLOYMENT_ENV/application-config -n $TARGET_ENV --kubeconfig=${FILE}
+	 				'''
+	 				sleep(20)
+	 				sh '''
+	 					helm uninstall application-config  -n $TARGET_ENV --kubeconfig=${FILE}
+	 				'''
+	 			}
+	 			echo "Deploy API Gateway of ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm install api-gateway-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-api-gateway/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					sh '''
+						helm uninstall api-gateway-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sh '''
+						helm upgrade api-gateway $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
+					'''
+					}
+	 			echo "Deploy Dataflow of ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm install dataflow-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataflow/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					sh '''
+						helm uninstall dataflow-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sh '''
+					helm upgrade dataflow $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$RELEASE_NAME,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV,replicas=3
+					'''
+					}
+				
+	 			echo "Deploy Recordstore of ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm install recordstore-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-recordstore/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					sh '''
+						helm uninstall recordstore-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					/*sh '''
+						helm upgrade recordstore-persistence $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-recordstore/pvc -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set repo=k8s-swi001:5000,tagSufix=_sandbox
+					'''*/
+					sh '''
+						helm upgrade recordstore $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=2
+					'''
+					sleep(20)
+				}
+	 			echo "Deploy Validation on ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm install validation-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-validation/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					sh '''
+						helm uninstall validation-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sh '''
+						helm upgrade validation $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,replicas=4,sentry.environment=$SENTRY_ENV
+					'''
+				}
+	 			echo "Deploy User Management of ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm install ums-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-ums/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					sh '''
+						helm uninstall ums-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sh '''
+						helm upgrade ums $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=2
+					'''
+				}
+	 			echo "Deploy Document Container on ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm install document-preconfig$WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-document/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					sh '''
+						helm uninstall document-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sh '''
+						helm upgrade document $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-document/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
+					'''
+				}
+	 			echo "Deploy Communication for ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm install communication-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-communication/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					sh '''
+						helm uninstall communication-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sh '''
+						helm upgrade communication $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
+					'''
+				}
+	 			echo "Deploy Collaboration of ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm install collaboration-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/env/$DEPLOYMENT_ENV/reportnet-collaboration/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					sh '''
+						helm uninstall collaboration-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sh '''
+						helm upgrade collaboration $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-collaboration/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
+					'''
+				}
+				/*echo "Deploy Indexsearch for ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm install indexsearch-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-indexsearch/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					sh '''
+						helm uninstall indexsearch-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sh '''
+						helm upgrade indexsearch $$WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-indexsearch/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
+					'''
+				}*/
+	 			echo "Deploy ReportNet Frontend for ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm upgrade frontend $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-frontend/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,backend=$REPORTNET_BACKEND,keycloak=$KEYCLOAK,websocket=$WEB_SOCKET,eulogin=$EULOGIN,sentry.environment=$SENTRY_ENV
+					'''
+				}
+	 			echo "Deploy Rod for ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm install rod-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-rod/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					sh '''
+						helm uninstall rod-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sh '''
+						helm upgrade rod $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-rod/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
+					'''
+				} 
+	 		}
 	 	}
- 	}
+ 	
     post {
 		always {
 		  cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true, deleteDirs: true)
