@@ -7,58 +7,221 @@ pipeline {
     }
 
     parameters {
-			choice(defaultValue: 'DEV',choices: ['PROD', 'STAGING', 'HOTFIX', 'DEV', 'TEST', 'SANDBOX'],description:'Select the target Environment', name: 'Env')
+			choice(defaultValue: 'DEV',choices: ['DEV','TEST','STAGING','HOTFIX','PROD'],description:'Select the target Environment', name: 'Env')
 			string(defaultValue: 'dev', description: 'Set the branch', name: 'Brn', trim: true)
 			string(defaultValue: 'v0.0.1-rc1-dev', description: 'Set the version to be deployed', name: 'Ver', trim: true)
 	}
     
     stages {
-
+        stage('Deployment Init') {
+            steps {
+                sh 'echo "Starting Deployment Pipeline"'                
+            }
+        }
         stage('Setting Default Environmental Variables') {
 			
 			steps {
 				script {
 					env.TARGET_ENV="reportnet"
-					env.REPORTNET_BACKEND="https://api.reportnet.europa.eu"
-					env.EULOGIN="https://auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Freportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
-					env.WEB_SOCKET="wss://reportnet.europa.eu/communication/reportnet-websocket"
 					env.REPO="eeacms"
 					env.KEYCLOAK="true"
-					env.REDIRECT_URI="https://reportnet.europa.eu/eulogin/"
-					env.R3_CALLBACK_URL="https://api.reportnet.europa.eu"
-					env.FME_TOPIC="Reportnet3_Topic"
 				}
 			}
 		}
 
+
+//
+// ############################## SETUP ENVIRONMENT VARIABLES ##############################
+//
+
+
+//############################## ****** DEVELOPMENT ******  ######################################
  		stage('Deploy to DEV') {
 			when {				
 				expression { params.Env == "DEV" }
 				}
-
             steps {
-						echo "ENV: ${params.Env}"
-						echo "BRANCH: ${params.Brn}"
-						echo "VERSION: ${params.Ver}"
+				echo "ENV: ${params.Env}"
+				echo "BRANCH: ${params.Brn}"
+				echo "VERSION: ${params.Ver}"
+				script { 	
+					echo "deploy to  ${params.Env}"
+ 					//Set Environment to dev
+ 					echo "Setting environment specific variables to ${params.Env}"
+					sh 'echo "Setting Environment Variables and Starting Deployment Pipeline for ${params.Brn}"'    
+					//env.TARGET_ENV="reportnet"
+					env.REPORTNET_BACKEND="https://dev-api.reportnet.europa.eu"
+					env.EULOGIN="https://dev-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fdev.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
+					env.WEB_SOCKET="wss://dev.reportnet.europa.eu/communication/reportnet-websocket"
+					env.REDIRECT_URI="https://dev.reportnet.europa.eu/eulogin/"
+					env.R3_CALLBACK_URL="https://dev-api.reportnet.europa.eu"
+					env.FME_TOPIC="Reportnet3_Dev_Topic"
+					env.ENVIRONMENT="kubectl-config-dev"
+					env.SENTRY_ENV="dev"
+					env.DEPLOYMENT_ENV="dev"
+					env.DEPLOYMENT_BRN="${params.Brn}"
+					env.DEPLOYMENT_VAR="${params.Ver}"
+ 					echo "Update Database of ${params.Env}"
+					sh 'echo "Starting $TARGET_ENV building"' 
+					sh '''
+						mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+					'''
+				}
+			}
+		}
+	
 
 
-	 					script { 	
-							env.SENTRY_ENV="dev"
-							env.ENVIRONMENT="kubectl-config-dev" 
-							env.DEPLOYMENT_ENV="dev"
-							env.DEPLOYMENT_BRN="${params.Brn}"
-							env.DEPLOYMENT_VAR="${params.Ver}"
+//############################## ****** TEST ******  ######################################
+ 		stage('Deploy to TEST') {
+			when {				
+				expression { params.Env == "TEST" }
+				}
+            steps {
+				echo "ENV: ${params.Env}"
+				echo "BRANCH: ${params.Brn}"
+				echo "VERSION: ${params.Ver}"
+				script { 	
+					echo "deploy to  ${params.Env}"
+ 					//Set Environment to dev
+ 					echo "Setting environment specific variables to ${params.Env}"
+					sh 'echo "Setting Environment Variables and Starting Deployment Pipeline for ${params.Brn}"'    
+					env.REPORTNET_BACKEND="https://test-api.reportnet.europa.eu"
+					env.EULOGIN="https://test-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Ftest.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
+					env.WEB_SOCKET="wss://test.reportnet.europa.eu/communication/reportnet-websocket"
+					env.SENTRY_ENV="test"
+					env.REDIRECT_URI="https://test.reportnet.europa.eu/eulogin/"
+					env.R3_CALLBACK_URL="https://test-api.reportnet.europa.eu"
+					env.FME_TOPIC="Reportnet3_Test_Topic"
+					env.ENVIRONMENT="kubectl-config-test"
+
+					env.DEPLOYMENT_ENV="test"
+					env.DEPLOYMENT_BRN="${params.Brn}"
+					env.DEPLOYMENT_VAR="${params.Ver}"
+ 					echo "Update Database of ${params.Env}"
+					sh 'echo "Starting $TARGET_ENV building"' 
+					sh '''
+						mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.4.175:30585 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+					'''
+				}
+			}
+		}
+	
+
+//############################## ****** STAGING  ******  ######################################	
+ 		stage('Deploy to STAGING') {
+			when {				
+				expression { params.Env == "STAGING" }
+				}
+            steps {
+				echo "ENV: ${params.Env}"
+				echo "BRANCH: ${params.Brn}"
+				echo "VERSION: ${params.Ver}"
+				script { 	
+					echo "deploy to  ${params.Env}"
+ 					//Set Environment to dev
+ 					echo "Setting environment specific variables to ${params.Env}"
+					sh 'echo "Setting Environment Variables and Starting Deployment Pipeline for ${params.Brn}"'    
+					env.REPORTNET_BACKEND="https://sandbox-api.reportnet.europa.eu"
+					env.EULOGIN="https://sandbox-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fsandbox.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
+					env.WEB_SOCKET="wss://sandbox.reportnet.europa.eu/communication/reportnet-websocket"
+					env.SENTRY_ENV="staging"
+					env.REDIRECT_URI="https://sandbox.reportnet.europa.eu/eulogin/"
+					env.R3_CALLBACK_URL="https://sandbox-api.reportnet.europa.eu"
+					env.FME_TOPIC="Reportnet3_Staging_Topic"
+					env.ENVIRONMENT="kubectl-config-staging"
+			    
+					env.DEPLOYMENT_ENV="hotfix"
+					env.DEPLOYMENT_BRN="${params.Brn}"
+					env.DEPLOYMENT_VAR="${params.Ver}"
+ 					echo "Update Database of ${params.Env}"
+					sh '''
+						mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+					'''
+				}
+			}
+		}
+				
+
+
+//############################## ****** HOTFIX  ******  ######################################	
+ 		stage('Deploy to HOTFIX') {
+			when {				
+				expression { params.Env == "HOTFIX" }
+				}
+            steps {
+				echo "ENV: ${params.Env}"
+				echo "BRANCH: ${params.Brn}"
+				echo "VERSION: ${params.Ver}"
+				script { 	
+					echo "deploy to  ${params.Env}"
+ 					//Set Environment to dev
+ 					echo "Setting environment specific variables to ${params.Env}"
+					sh 'echo "Setting Environment Variables and Starting Deployment Pipeline for ${params.Brn}"'    
+					env.REPORTNET_BACKEND="https://hotfixes-api.reportnet.europa.eu"
+					env.EULOGIN="https://hotfixes-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fhotfixes.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
+					env.WEB_SOCKET="wss://hotfixes.reportnet.europa.eu/communication/reportnet-websocket"
+					env.SENTRY_ENV="hotfix"
+					env.REDIRECT_URI="https://hotfixes.reportnet.europa.eu/eulogin/"
+					env.R3_CALLBACK_URL="https://hotfixes-api.reportnet.europa.eu"
+					env.FME_TOPIC="Reportnet3_Hotfixes_Topic"
+					env.ENVIRONMENT="kubectl-config-hotfix"
+
+					env.DEPLOYMENT_ENV="hotfix"
+					env.DEPLOYMENT_BRN="${params.Brn}"
+					env.DEPLOYMENT_VAR="${params.Ver}"
+ 					echo "Update Database of ${params.Env}"
+					sh 'echo "Starting $TARGET_ENV building"'
+ 					sh '''
+ 	                  mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.5.70:31456 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+ 					'''
+				}
+			}
+		}
+
+//############################## ****** PRODUCTION ******  ######################################
+ 		stage('Deploy to PRODUCTION') {
+			when {				
+				expression { params.Env == "PROD" }
+				}
+            steps {
+				echo "ENV: ${params.Env}"
+				echo "BRANCH: ${params.Brn}"
+				echo "VERSION: ${params.Ver}"
+				script { 	
+					echo "deploy to  ${params.Env}"
+ 					//Set Environment to dev
+ 					echo "Setting environment specific variables to ${params.Env}"
+					sh 'echo "Setting Environment Variables and Starting Deployment Pipeline for ${params.Brn}"'    
+					env.REPORTNET_BACKEND="https://api.reportnet.europa.eu"
+					env.EULOGIN="https://auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Freportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
+					env.WEB_SOCKET="wss://reportnet.europa.eu/communication/reportnet-websocket"
+					env.SENTRY_ENV="production"
+					env.REDIRECT_URI="https://reportnet.europa.eu/eulogin/"
+					env.R3_CALLBACK_URL="https://api.reportnet.europa.eu"
+					env.FME_TOPIC="Reportnet3_Topic"
+					env.ENVIRONMENT="kubectl-config-prod"
+
+					env.DEPLOYMENT_ENV="prod"
+					env.DEPLOYMENT_BRN="${params.Brn}"
+					env.DEPLOYMENT_VAR="${params.Ver}"
+ 					echo "Update Database of ${params.Env}"
+					sh 'echo "Starting $TARGET_ENV building"' 
+					sh '''
+						mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+					'''
+				}
+			}
+		}
 
 
 
-	 						echo "deploy to  ${params.Env}"
-	 						//Set Environment to prod
-	 						echo "Setting environment specific variables to ${params.Env}"
+// SETUP COMMON STEPS  
 
-	 						echo "Update Database of ${params.Env}"
-	 						sh '''
-	 							mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
-	 						'''
+ 		stage('Common Steps') {
+            			steps {
+
+
 	 						echo "Scaling down services of ${params.Env}"
 	 						withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 	 							sh '''
