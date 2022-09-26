@@ -63,7 +63,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/env/$DEPLOYMENT_ENV/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 				}
 			}
@@ -97,7 +97,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.4.175:30585 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/env/$DEPLOYMENT_ENV/database -DPOSTGRES_SERVER=10.50.4.175:30585 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 				}
 			}
@@ -130,7 +130,7 @@ pipeline {
 					env.DEPLOYMENT_VAR="${params.Ver}"
  					echo "Update Database of ${params.Env}"
 					sh '''
-						mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/env/$DEPLOYMENT_ENV/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 				}
 			}
@@ -164,7 +164,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"'
  					sh '''
- 	                  mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.5.70:31456 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+ 	                  mvn -f $WORKSPACE/helm/env/$DEPLOYMENT_ENV/database -DPOSTGRES_SERVER=10.50.5.70:31456 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
  					'''
 				}
 			}
@@ -172,7 +172,7 @@ pipeline {
 //############################## ****** PRODUCTION ******  ######################################
  		stage('Deploy to PRODUCTION') {
 			when {				
-				expression { params.Env == "PROD" }
+				expression { params.Env == "PROD_RENAME-BACK-TO-PROD-WHEN-IN-PRODUCTION" }
 				}
             steps {
 				echo "ENV: ${params.Env}"
@@ -198,7 +198,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/env/$DEPLOYMENT_ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 				}
 			}
@@ -296,7 +296,7 @@ pipeline {
 	 			echo "Deploy Document Container on ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install document-preconfig$WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-document/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install document-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-document/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
@@ -367,7 +367,7 @@ pipeline {
 	 		}
 	 	}
 	}
-	post {
+	/*post {
 		always {
 			cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true, deleteDirs: true)
 			script {
@@ -383,5 +383,5 @@ pipeline {
 				)
 			}
 		}
-	}
+	}*/
 }
