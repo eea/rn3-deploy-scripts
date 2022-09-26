@@ -1,0 +1,40 @@
+# Default values for reportnet.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Specific Values for Dataflow
+
+# Environment Variables
+consul:
+  server: consul
+  port: 8500
+
+kafka:
+  bootstrap: bootstrap-kafka
+  port: 9092
+    
+metabase:
+    url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase
+    user: dataflow
+    password: 53p057n373.0!
+  
+zipkin:
+    ip: zipkin-ui
+    port: 9411
+
+redis:
+    ip: redis
+    port: 6379
+    sentinel: mymaster
+    nodes: redis:26379
+
+sentry:
+    dsn: https://f1057cea7e954e1a8e11d76bab0a53fd@sentry.eea.europa.eu/46
+    environment: test
+
+
+tagSufix: 
+replicas: 1
+version: 1.0.0
+repo: eeacms
+# Other Variables
