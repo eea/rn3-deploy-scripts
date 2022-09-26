@@ -47,7 +47,7 @@ pipeline {
 
                 echo "BRANCH: ${params.Brn}"
 
-                echo "Version: ${params.Ver}"
+                echo "VERSION: ${params.Ver}"
 
             }
         }
