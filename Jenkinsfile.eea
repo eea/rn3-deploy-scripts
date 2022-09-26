@@ -38,29 +38,29 @@ pipeline {
 			}
 		}
  		stage('Deploy to Production') {
- 				when {
-					environment name: 'ENV', value: 'PROD'
- 				}
+			expression { 
+				params.ENV == "PROD"
+			}
  				steps {
 
 					script { 						
 						sh """
- 						echo "deploy to " $ENV
+ 						echo "deploy to " params.ENV
  						"""
 						//Set Environment to prod
-						echo "Setting environment specific variables to " $ENV
+						echo "Setting environment specific variables to " params.ENV
 						env.SENTRY_ENV="production"
 						env.ENVIRONMENT="kubectl-config-prod"
 					}
 
 					script { 	
-						echo "Update Database of " $ENV
+						echo "Update Database of " params.ENV
 						sh '''
-							mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+							mvn -f $WORKSPACE/helm/env/params.ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 						'''
 					}
 					script {
-						echo "Scaling down services of " $ENV
+						echo "Scaling down services of " params.ENV
 						withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 							
 							sh '''
@@ -70,10 +70,10 @@ pipeline {
 					}
 
 					script {
-						echo "Configure Common Application properties for " $ENV
+						echo "Configure Common Application properties for " params.ENV
 						withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 							sh '''
-								helm install application-config $WORKSPACE/helm/env/$ENV/application-config -n $TARGET_ENV --kubeconfig=${FILE}
+								helm install application-config $WORKSPACE/helm/env/params.ENV/application-config -n $TARGET_ENV --kubeconfig=${FILE}
 							'''
 							sleep(20)
 							sh '''
