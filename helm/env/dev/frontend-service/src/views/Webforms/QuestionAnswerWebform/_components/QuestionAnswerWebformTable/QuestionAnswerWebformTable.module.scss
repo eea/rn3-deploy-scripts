@@ -1,0 +1,11 @@
+.content {
+  background: var(--webform-table-bg);
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  color: var(--general-text-color);
+
+  .titleWrapper {
+    align-items: center;
+    display: flex;
+  }
+}

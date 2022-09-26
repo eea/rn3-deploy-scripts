@@ -1,0 +1,654 @@
+@import '_styles/mixins';
+
+/* Default css for options from MultiSelect when nestedOptions hasn't category */
+.statusBox {
+  border-radius: 3px;
+  color: var(--main-font-color);
+  font-size: 0.833rem;
+  font-weight: 600;
+  padding: 4px;
+}
+
+.label {
+  clip: auto;
+  height: auto;
+  overflow: visible;
+  width: 90%;
+}
+
+.icon {
+  background-color: transparent;
+  border: none;
+  color: var(--button-secondary-transparent-color-hover);
+  cursor: pointer;
+  font-size: 16pt !important;
+  height: 1.6em !important;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1 !important;
+  }
+
+  &:enabled:focus {
+    box-shadow: 0 0 0 0 var(--c-white-color) !important;
+    outline: none;
+  }
+
+  &:enabled:active,
+  &:enabled:hover {
+    background-color: transparent !important;
+    border-color: transparent !important;
+  }
+}
+
+.cancelIcon {
+  font-size: 12pt !important;
+  height: 2.1rem !important;
+}
+
+.iconActive {
+  color: var(--filter-sort-icon-color) !important;
+}
+
+.block {
+  display: flex;
+  align-items: flex-end;
+  color: var(--font-filters);
+  height: 2rem;
+  font-size: 0.8333rem;
+
+  .checkbox {
+    margin: 0 1rem;
+  }
+
+  .labelCheckbox {
+    width: 52% !important;
+  }
+
+  .label {
+    clip: auto;
+    height: auto;
+    overflow: visible;
+    width: 90%;
+  }
+
+  .inputFilter {
+    background: transparent;
+    border: 0px;
+    border-radius: 0px;
+    width: 100% !important;
+
+    &:focus,
+    &:enabled:focus {
+      box-shadow: 0 0 0 0 var(--c-blue-120) !important;
+    }
+  }
+  .inputFilter::placeholder {
+    font-style: normal;
+    font-size: 0.8333rem;
+  }
+
+  .selectHeader {
+    border-radius: 3px;
+    color: var(--font-filters);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 4px;
+  }
+  .labelDown {
+    font-size: 0.8333rem !important;
+    top: 50% !important;
+    color: var(--font-filters);
+  }
+}
+
+.filterButton,
+.resetButton {
+  margin-bottom: auto;
+}
+
+.filterButton {
+  margin-right: 10px;
+  margin-left: auto;
+}
+
+.sortButtonSize {
+  font-size: 0.12rem;
+  height: 1.6em !important;
+  width: 3.1rem !important;
+}
+
+.sortButton {
+  @extend .sortButtonSize;
+  background-color: transparent;
+  border: none;
+  color: var(--button-secondary-transparent-color-hover);
+  cursor: pointer;
+  font-size: 16pt !important;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1 !important;
+  }
+
+  &:enabled:focus {
+    box-shadow: 0 0 0 0 var(--c-white-color) !important;
+    outline: none;
+  }
+
+  &:enabled:active,
+  &:enabled:hover {
+    background-color: transparent !important;
+    border-color: transparent !important;
+  }
+}
+
+.dataflowsFilters > div {
+  margin-bottom: 0.4rem;
+  width: 20% !important;
+  height: 2.5em;
+}
+
+.dataflowsFilters > div > div > label,
+.dataflowsFilters > div > div > div > label {
+  color: var(--font-filters) !important;
+}
+
+.dataflowsFilters > .buttonWrapper {
+  margin-left: auto;
+  margin-bottom: 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  width: auto !important;
+}
+
+.dataflowsFilters > div:nth-child(6) {
+  padding-left: 2.5em;
+}
+
+.publicDataflows {
+  div:nth-child(6),
+  div:nth-child(7) {
+    margin-bottom: 0 !important;
+  }
+}
+
+.default,
+.dataflowsFilters,
+.publicDataflows {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin: 2rem 0;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 1em 0;
+
+  @include for-phone-only {
+    justify-content: flex-start;
+    .block {
+      margin-bottom: 1.5rem;
+      width: 100% !important;
+    }
+  }
+
+  @include for-tablet-portrait-up {
+    .block,
+    .inputCheckbox {
+      width: 50% !important;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  @include for-desktop-up {
+    .block,
+    .inputCheckbox {
+      width: 25% !important;
+    }
+  }
+
+  @include for-big-desktop-up {
+    .block,
+    .inputCheckbox {
+      width: 25% !important;
+      margin-bottom: 1.5rem;
+    }
+  }
+}
+
+.publicCountryInformationFilters {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin: 2rem 0;
+  width: 100%;
+  flex-wrap: wrap;
+
+  > div {
+    width: 25% !important;
+    height: 3em;
+    padding-right: 1em;
+    margin-bottom: 1.5rem;
+  }
+
+  .buttonWrapper {
+    display: flex;
+    margin-bottom: 0 !important;
+  }
+
+  @include for-phone-only {
+    justify-content: flex-start;
+    .block {
+      margin-bottom: 1.5rem;
+      width: 100% !important;
+    }
+  }
+
+  @include for-tablet-portrait-up {
+    .block,
+    .inputCheckbox {
+      width: 50% !important;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  @include for-desktop-up {
+    .block,
+    .inputCheckbox {
+      width: 25% !important;
+    }
+  }
+
+  @include for-big-desktop-up {
+    .block,
+    .inputCheckbox {
+      width: 25% !important;
+      margin-bottom: 1.5rem;
+    }
+  }
+}
+
+.searchInput {
+  background: transparent !important;
+  border: 0px !important;
+  border-radius: 0 !important;
+
+  &:focus,
+  &:enabled:focus {
+    box-shadow: 0 0 0 0 var(--c-blue-120) !important;
+    border-color: var(--general-border-color) !important;
+  }
+
+  &:hover {
+    border-color: var(--general-border-color) !important;
+  }
+}
+
+.buttonsContainer {
+  margin-left: auto;
+  .resetButton {
+    margin: 0;
+    margin-left: 10px;
+  }
+  .filterButton {
+    margin-left: auto;
+    margin-top: 0;
+  }
+}
+
+.qcList {
+  display: grid;
+  grid-row-gap: 2.5rem;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  margin: 1rem 0;
+  width: 100%;
+
+  .label {
+    height: auto;
+  }
+
+  .resetButton {
+    grid-column: 5;
+    grid-row: 1 / span 2;
+    margin: auto;
+  }
+
+  .searchInput {
+    background: transparent;
+    border: 0px;
+    border-radius: 0;
+    width: 100%;
+    padding-top: 30px !important;
+
+    &:focus,
+    &:enabled:focus {
+      box-shadow: 0 0 0 0 var(--c-blue-120);
+    }
+
+    &:focus {
+      padding-top: 20px !important;
+    }
+  }
+  .sortButtonSize {
+    display: none;
+  }
+}
+
+.lineItems {
+  display: flex;
+  flex-direction: row;
+  margin: 2rem 0;
+  width: 100% !important;
+  gap: 2em;
+
+  .block {
+    width: 100% !important;
+  }
+
+  .sortButtonSize {
+    display: none;
+  }
+
+  .resetButton {
+    margin-bottom: 0;
+    margin-top: 1.1em;
+  }
+}
+
+.elementFilter {
+  width: 100%;
+  display: flex !important;
+  border-bottom: var(--inputtext-border) !important;
+
+  .searchInput:focus {
+    padding-top: 10px !important;
+  }
+}
+
+.elementFilterSelected {
+  width: 100%;
+  display: flex !important;
+  align-items: flex-end;
+  border-bottom: var(--active-filter-border) !important;
+  box-shadow: var(--active-filter-shadow);
+
+  .searchInput {
+    padding-top: 10px;
+  }
+
+  .elementFilter {
+    display: flex;
+  }
+
+  input {
+    color: var(--inputtext-color);
+  }
+}
+
+.dropdownFilter {
+  border-bottom: var(--inputtext-border) !important;
+  border-left: 0 !important;
+  border-radius: 0 !important;
+  border-right: 0 !important;
+  border-top: 0 !important;
+  color: var(--font-filters) !important;
+  font-size: 10pt !important;
+  height: 2.1rem;
+  padding-left: 0em;
+  width: 90% !important;
+
+  > label {
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    text-overflow: ellipsis;
+    top: 0;
+    white-space: nowrap;
+    width: 95%;
+  }
+
+  label {
+    color: var(--font-filters);
+  }
+}
+
+.reportingObligations {
+  display: grid;
+  grid-template-columns: repeat(4, 0.25fr);
+  grid-template-rows: auto;
+
+  div > div > label,
+  div > div > div > label {
+    color: var(--font-filters) !important;
+  }
+
+  .block:first-child {
+    grid-column: 1 / span 5;
+    width: 30%;
+    margin-bottom: 1.5rem;
+  }
+
+  .buttonWrapper {
+    align-items: center;
+    display: flex;
+  }
+
+  > div:nth-child(n + 2):nth-child(-n + 5) {
+    width: 95% !important;
+  }
+
+  .buttonWrapper {
+    margin-top: 0.5em;
+  }
+
+  > .block {
+    height: 4em !important;
+  }
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  grid-row: 2;
+  grid-column: 5;
+}
+
+.cloneSchemas,
+.manualAcceptanceDatasets,
+.historicReleases {
+  @extend .lineItems;
+}
+
+.showValidations {
+  @extend .lineItems;
+
+  .buttonWrapper {
+    flex-wrap: nowrap !important;
+    justify-content: center;
+
+    .resetButton {
+      margin-top: 0;
+    }
+  }
+}
+
+.manageNationalCoordinators {
+  display: flex;
+  flex-direction: row;
+
+  div {
+    width: 40%;
+    height: 3em;
+    &:nth-child(2) {
+      align-items: flex-start;
+    }
+  }
+  .buttonWrapper {
+    width: 20% !important;
+    .resetButton {
+      padding-left: 1.5em;
+      margin-top: 0.5em;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .dataflowsFilters > div {
+    width: 100% !important;
+  }
+  .lineItems {
+    flex-direction: column;
+    .resetButton {
+      margin-top: 1em;
+    }
+  }
+
+  .cloneSchemas {
+    display: grid;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(7, 1fr) !important;
+  }
+
+  .qcList {
+    display: flex;
+    flex-direction: column;
+    div {
+      width: 100%;
+    }
+  }
+
+  .manageNationalCoordinators {
+    flex-direction: column;
+    div {
+      width: 100%;
+      .resetButton {
+        padding-left: 0 !important;
+        margin-top: 0 !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .manualAcceptanceDatasets,
+  .historicReleases {
+    display: flex !important;
+    flex-direction: column;
+    .labelCheckbox {
+      width: 30% !important;
+    }
+    .checkbox {
+      margin: 0;
+    }
+    .block {
+      .multiselectFilter,
+      .label {
+        width: 100% !important;
+      }
+    }
+  }
+
+  .historicReleases {
+    .labelCheckbox {
+      width: 100% !important;
+    }
+  }
+
+  .reportingObligations {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+    justify-content: space-between;
+
+    .block {
+      width: 46% !important;
+    }
+
+    .buttonsContainer {
+      grid-row: auto;
+      grid-column: auto;
+      margin-left: 0;
+    }
+
+    .buttonWrapper {
+      margin: 0 0 1em 0;
+    }
+  }
+
+  .publicCountryInformationFilters {
+    > div {
+      width: 100% !important;
+    }
+  }
+}
+
+@media (max-width: 935px) {
+  .qcList {
+    .block:first-child {
+      label {
+        &:last-child {
+          padding-top: 0.5em;
+        }
+      }
+    }
+  }
+
+  .block {
+    label {
+      white-space: nowrap;
+      overflow: hidden !important;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .cloneSchemas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+
+    .block {
+      label {
+        height: 100%;
+      }
+    }
+
+    .resetButton {
+      grid-column: 1;
+    }
+  }
+}
+
+@media (max-width: 979px) {
+  .dataflowsFilters {
+    .buttonWrapper {
+      margin-left: 2.5em !important;
+      margin-right: auto !important;
+    }
+  }
+}
+
+@media (max-width: 1280px) {
+  .historicReleases {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    .resetButton {
+      margin-top: 1em;
+      grid-column: 3;
+    }
+  }
+}
+
+@media (max-width: 1695px) {
+  .qcList {
+    grid-row-gap: 1.5rem;
+  }
+
+  .reportingObligations {
+    .buttonWrapper {
+      margin-top: 1em;
+    }
+  }
+}

@@ -1,1 +1,1 @@
-ALTER TABLE public.dataflow DROP CONSTRAINT IF EXISTS dataflow_fme_user_fkey;
+ALTER TABLE public.dataflow DROP CONSTRAINT dataflow_fme_user_fkey;

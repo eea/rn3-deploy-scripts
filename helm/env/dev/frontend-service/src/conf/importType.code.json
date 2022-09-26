@@ -1,0 +1,8 @@
+{
+  "importDatasetTypes": [
+    {
+      "key": "zipCsvTable",
+      "code": "zip"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 1rem 0;
+  user-select: none;
+
+  .group {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 1.5rem;
+
+    .radioButtonWrapper {
+      border-radius: 8px;
+      padding: 0.5rem;
+      margin-left: 2rem;
+      margin-top: 1px;
+
+      &:hover {
+        background: var(--radioButton-dc-hover-bg);
+      }
+
+      .radioButton {
+        padding-right: 1.8rem;
+      }
+
+      .label {
+        cursor: pointer;
+      }
+    }
+
+    .datasetMessage {
+      width: 48.3vw;
+      margin-top: 0.5rem;
+    }
+  }
+  .message {
+    display: flex;
+    justify-content: center;
+    .isAutomaticReportingDeletionWrapper {
+      display: flex;
+      align-items: center;
+      background-color: var(--growl-warning-bg);
+      padding: 1.5rem;
+      em {
+        color: var(--growl-warning-icon-color);
+        font-size: 2em;
+        margin-right: 0.5rem;
+      }
+      .warningAutomaticReportingDeletionWrapper {
+        color: var(--c-black-rose-500);
+        .warningAutomaticReportingDeletionLabel {
+          font-weight: bold;
+          margin: 0 0.25rem 0 0;
+        }
+      }
+    }
+  }
+}

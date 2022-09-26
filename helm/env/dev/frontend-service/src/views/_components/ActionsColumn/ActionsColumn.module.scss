@@ -1,0 +1,18 @@
+@import '_styles/mixins';
+
+.actionTemplate {
+  display: flex;
+  justify-content: center;
+}
+.editRowButton,
+.deleteRowButton {
+  border: 1px solid var(--general-border-color) !important;
+  @include shadow-0em;
+  margin-left: 3px !important;
+  &:hover:enabled {
+    border-color: var(--button-secondary-border-color-hover) !important;
+  }
+}
+.deleteRowButton {
+  color: var(--errors) !important;
+}

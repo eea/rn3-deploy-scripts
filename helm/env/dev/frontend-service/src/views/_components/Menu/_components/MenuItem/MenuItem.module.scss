@@ -1,0 +1,14 @@
+.menuItemDisabled {
+  color: var(--c-black-300) !important;
+}
+
+.menuItem {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.tooltip {
+  width: max-content;
+}

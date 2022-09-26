@@ -1,0 +1,34 @@
+{
+  "exportTableTypes": [
+    {
+      "key": "exportCsv",
+      "code": "csv"
+    },
+    {
+      "key": "exportFilteredCsv",
+      "code": "csv"
+    },
+    {
+      "key": "exportXlsx",
+      "code": "xlsx"
+    }
+  ],
+  "exportDatasetTypes": [
+    {
+      "key": "exportXlsx",
+      "code": "xlsx"
+    },
+    {
+      "key": "exportXlsxValidations",
+      "code": "xlsx+validations"
+    },
+    {
+      "key": "exportZipAttachments",
+      "code": "zip+xlsx"
+    },
+    {
+      "key": "zipCsvTable",
+      "code": "zip+csv"
+    }
+  ]
+}

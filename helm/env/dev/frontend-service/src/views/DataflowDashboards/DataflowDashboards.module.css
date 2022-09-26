@@ -1,0 +1,36 @@
+.validationChartWrap {
+  margin-bottom: 5rem !important;
+}
+
+.dashboardType {
+  font-size: 1.75rem;
+  color: var(--main-font-color);
+  font-weight: 600;
+}
+
+.chartToolbar {
+  z-index: 2000;
+  font-size: 1rem;
+  font-weight: 600 !important;
+  border: 1px solid var(--general-border-color);
+}
+
+.dashboardsButton:enabled:focus {
+  box-shadow: none !important;
+}
+
+.informationText {
+  margin-top: 1rem;
+  color: var(--main-font-color);
+}
+
+.hide {
+  color: var(--c-corporate-blue) !important;
+}
+.dashboardWarning {
+  display: flex;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--main-font-color);
+}

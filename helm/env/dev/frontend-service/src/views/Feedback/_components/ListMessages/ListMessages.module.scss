@@ -1,0 +1,38 @@
+.lazyLoadingWrapper {
+  position: absolute;
+  left: 45%;
+  top: 45%;
+  display: block;
+  .lazyLoadingSpinner {
+    top: 0 !important;
+  }
+}
+
+.messagesWrapper {
+  border: var(--inputtext-border);
+  width: 100%;
+  height: 45vh;
+  border-radius: 3px;
+  margin-left: 0;
+  overflow-y: scroll;
+  .emptyMessageWrapper {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10rem;
+    span {
+      color: var(--main-font-color);
+      font-style: italic;
+    }
+  }
+  .scrollMessagesWrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+    height: 101%;
+  }
+}
+.messagesWrapperDisabled {
+  pointer-events: none;
+  opacity: 0.4;
+}

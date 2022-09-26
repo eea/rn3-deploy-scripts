@@ -1,0 +1,41 @@
+.historicReleasesWithoutTable {
+  height: 53.5vh;
+}
+
+.checkedValueColumn {
+  text-align: center;
+
+  .icon {
+    color: var(--main-font-color);
+  }
+}
+
+.spinner {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .spinnerPosition {
+    top: 0;
+    left: 0;
+  }
+}
+
+.noFilters {
+  padding-top: 2.5rem;
+}
+
+.historicReleases {
+  height: 50vh;
+}
+
+.noHistoricReleases,
+.emptyFilteredData {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  height: 75%;
+}

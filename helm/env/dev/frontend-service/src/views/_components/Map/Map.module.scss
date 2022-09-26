@@ -1,0 +1,107 @@
+@import '_styles/mixins';
+
+.crsSwitcherSplitButton {
+  width: 25% !important;
+  min-width: 20% !important;
+  margin-left: 3rem;
+  top: 45px;
+  left: 10px;
+  z-index: 9999;
+}
+
+.themeSwitcherSplitButton {
+  width: 20% !important;
+  min-width: 20% !important;
+  margin-right: 1rem;
+  top: 45px;
+  left: 60px;
+  z-index: 9999;
+}
+
+.error {
+  border: var(--inputtext-border-error) !important;
+  box-shadow: var(--inputtext-box-shadow-focus-error) !important;
+}
+
+.mapButtonsBar {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.mapSelectMessage {
+  float: left;
+  font-style: italic;
+}
+
+.marker {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  background: var(--map-marker-color);
+  position: absolute;
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -20px 0 0 -20px;
+}
+.marker:after {
+  content: '';
+  width: 14px;
+  height: 14px;
+  margin: 8px 0 0 8px;
+  background: #e6e6e6;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.newPointError {
+  width: 30rem;
+}
+
+.selectPointButton {
+  width: 20% !important;
+}
+
+.pointLegendWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.pointLegendItem {
+  display: flex;
+  flex-direction: row;
+  margin-top: 3px;
+}
+
+.pointLegendItemInfoLabel label:first-child {
+  font-style: italic;
+}
+
+.pointLegendItemColour {
+  width: 20px;
+  height: 20px;
+  border: 1px solid;
+}
+
+.pointLegendItemColourCurrent {
+  background-color: var(--map-marker-color);
+}
+
+.pointLegendItemColourNew {
+  background-color: var(--map-new-marker-color);
+}
+
+.pointLegendItemLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.pointLegendItemLabel label:first-child {
+  font-weight: bold;
+  margin-left: 3px;
+}

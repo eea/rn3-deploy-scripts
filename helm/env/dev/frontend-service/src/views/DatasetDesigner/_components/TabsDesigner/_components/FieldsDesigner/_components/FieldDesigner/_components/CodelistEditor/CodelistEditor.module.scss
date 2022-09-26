@@ -1,0 +1,16 @@
+.codelistChips {
+  margin-top: 5px;
+  width: 100%;
+}
+.codelistChips li span {
+  white-space: normal;
+  word-wrap: break-word;
+}
+.inputTitleWrapper {
+  margin-bottom: 1rem;
+}
+
+.pasteDiv {
+  padding: 1rem;
+  border: 2px dashed var(--c-gray-25);
+}
