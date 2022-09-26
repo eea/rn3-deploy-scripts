@@ -39,7 +39,7 @@ pipeline {
 		}
  		stage('Deploy to Production') {
 			when {				
-				${params.ENV} ==~ 'PROD'
+				expression { params.Env == "PROD" }
 				}
 			}
             steps {
