@@ -8,8 +8,8 @@ pipeline {
 
     parameters {
 			choice(choices: ['PROD', 'STAGING', 'HOTFIX', 'DEV', 'TEST', 'SANDBOX'],description:'Select the target Environment', name: 'ENV')
-			string(defaultValue: 'dev', description: 'Set the branch', name: 'Branch', trim: true)
-			string(defaultValue: 'v0.0.1-rc1-dev', description: 'Set the version to be deployed', name: 'Version', trim: true)
+			string(defaultValue: 'dev', description: 'Set the branch', name: 'Brn', trim: true)
+			string(defaultValue: 'v0.0.1-rc1-dev', description: 'Set the version to be deployed', name: 'Ver', trim: true)
 	}
     
     stages {
@@ -44,11 +44,11 @@ pipeline {
 				}
 			}
             steps {
-                echo "ENV:" $ENV
+                echo "ENV: $ENV"
 
-                echo "BRANCH:" $Branch
+                echo "BRANCH: $Branch"
 
-                echo "Version:" $Version
+                echo "Version: $Version"
 
             }
         }
