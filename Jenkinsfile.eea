@@ -43,47 +43,45 @@ pipeline {
 				${params.ENV} == 'PROD'
 				}
 			}
+            steps {
+                echo "ENV ${params.ENV}"
 
- 				steps {
+                echo "BRANCH: ${params.Branch}"
+
+                echo "Version: ${params.Version}"
+
+            }
+        }
+	//			steps {
  					
-						script { 						
-							
-							echo "deploy to " $ENV
-							
-							//Set Environment to prod
-							echo "Setting environment specific variables to " $ENV 
-							env.SENTRY_ENV="production"
-							env.ENVIRONMENT="kubectl-config-prod"
-						
-
-							echo "Update Database of " $ENV
-							sh '''
-								mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
-							'''
-
-
-							echo "Scaling down services of " $ENV
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-								
-								sh '''
-									kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
-								'''
-							}
-
-						
-							echo "Configure Common Application properties for " $ENV
-							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-								sh '''
-									helm install application-config $WORKSPACE/helm/env/$ENV/application-config -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-								sleep(20)
-								sh '''
-									helm uninstall application-config  -n $TARGET_ENV --kubeconfig=${FILE}
-								'''
-							}
-						}
-					
-  				}
-		}
+	// 					script { 						
+	// 						echo "deploy to " $ENV
+	// 						Set Environment to prod
+	// 						echo "Setting environment specific variables to " $ENV 
+	// 						env.SENTRY_ENV="production"
+	// 						env.ENVIRONMENT="kubectl-config-prod"
+	// 						echo "Update Database of " $ENV
+	// 						sh '''
+	// 							mvn -f $WORKSPACE/helm/env/$ENV/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+	// 						'''
+	// 						echo "Scaling down services of " $ENV
+	// 						withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+	// 							sh '''
+	// 								kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
+	// 							'''
+	// 						}
+	// 						echo "Configure Common Application properties for " $ENV
+	// 						withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+	// 							sh '''
+	// 								helm install application-config $WORKSPACE/helm/env/$ENV/application-config -n $TARGET_ENV --kubeconfig=${FILE}
+	// 							'''
+	// 							sleep(20)
+	// 							sh '''
+	// 								helm uninstall application-config  -n $TARGET_ENV --kubeconfig=${FILE}
+	// 							'''
+	// 						}
+	// 					}
+ 	// 			}
+	// 	}
     }
 }
