@@ -10,11 +10,10 @@ pipeline {
 			choice(choices: ['SELECT ENVIRONMENT','DEV','TEST','STAGING','HOTFIX','PROD'],description:'Select the target Environment', name: 'Env')
 			string(defaultValue: 'dev', description: 'Set the branch', name: 'Brn', trim: true)
 			string(defaultValue: 'v3.1.5.6-DEV', description: 'Set the version to be deployed', name: 'Ver', trim: true)
-			string(defaultValue: '1', description: 'Dataflow Replicas to be deployed', name: 'DTAFLOWREP', trim: true)
-			string(defaultValue: '1', description: 'Recordstore Replicas to be deployed', name: 'RCDSTRREP', trim: true)
-			string(defaultValue: '1', description: 'Validation Replicas to be deployed', name: 'VLDREP', trim: true)
-			string(defaultValue: '1', description: 'User Management Replicas to be deployed', name: 'USRMGMREP', trim: true)
-
+			string(defaultValue: '1', description: 'Dataflow Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=2)', name: 'Dataflow_replicas', trim: true)
+			string(defaultValue: '1', description: 'Recordstore Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Recordstore_replicas', trim: true)
+			string(defaultValue: '1', description: 'Validation Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Validation_replicas', trim: true)
+			string(defaultValue: '1', description: 'User Management Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=1)', name: 'User_manamgement_replicas', trim: true)
 	}
     
     stages {
@@ -52,7 +51,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables and Starting Deployment Pipeline"'    
+					sh 'echo "Setting Environment Variables for ${params.Env} and Starting Deployment Pipeline "'    
 					//env.TARGET_ENV="reportnet"
 					env.REPORTNET_BACKEND="https://dev-api.reportnet.europa.eu"
 					env.EULOGIN="https://dev-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fdev.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
@@ -65,6 +64,10 @@ pipeline {
 					env.DEPLOYMENT_ENV="dev"
 					env.DEPLOYMENT_BRN="${params.Brn}"
 					env.DEPLOYMENT_VAR="${params.Ver}"
+					env.DTAFLOWREP="${params.Dataflow_replicas}"
+					env.RCDSTRREP="${params.Recordstore_replicas}"
+					env.VLDREP="${params.Validation_replicas}"
+					env.USRMGMREP="${User_manamgement_replicas}"
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
@@ -86,7 +89,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables and Starting Deployment Pipeline"'    
+					sh 'echo "Setting Environment Variables for ${params.Env} and Starting Deployment Pipeline"'    
 					env.REPORTNET_BACKEND="https://test-api.reportnet.europa.eu"
 					env.EULOGIN="https://test-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Ftest.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://test.reportnet.europa.eu/communication/reportnet-websocket"
@@ -95,10 +98,13 @@ pipeline {
 					env.R3_CALLBACK_URL="https://test-api.reportnet.europa.eu"
 					env.FME_TOPIC="Reportnet3_Test_Topic"
 					env.ENVIRONMENT="kubectl-config-test"
-
 					env.DEPLOYMENT_ENV="test"
 					env.DEPLOYMENT_BRN="${params.Brn}"
 					env.DEPLOYMENT_VAR="${params.Ver}"
+					env.DTAFLOWREP="${params.Dataflow_replicas}"
+					env.RCDSTRREP="${params.Recordstore_replicas}"
+					env.VLDREP="${params.Validation_replicas}"
+					env.USRMGMREP="${User_manamgement_replicas}"
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
@@ -120,7 +126,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables and Starting Deployment Pipeline"'    
+					sh 'echo "Setting Environment Variables for ${params.Env} and Starting Deployment Pipeline"'    
 					env.REPORTNET_BACKEND="https://sandbox-api.reportnet.europa.eu"
 					env.EULOGIN="https://sandbox-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fsandbox.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://sandbox.reportnet.europa.eu/communication/reportnet-websocket"
@@ -129,10 +135,13 @@ pipeline {
 					env.R3_CALLBACK_URL="https://sandbox-api.reportnet.europa.eu"
 					env.FME_TOPIC="Reportnet3_Staging_Topic"
 					env.ENVIRONMENT="kubectl-config-staging"
-			    
 					env.DEPLOYMENT_ENV="hotfix"
 					env.DEPLOYMENT_BRN="${params.Brn}"
 					env.DEPLOYMENT_VAR="${params.Ver}"
+					env.DTAFLOWREP="${params.Dataflow_replicas}"
+					env.RCDSTRREP="${params.Recordstore_replicas}"
+					env.VLDREP="${params.Validation_replicas}"
+					env.USRMGMREP="${User_manamgement_replicas}"
  					echo "Update Database of ${params.Env}"
 					sh '''
 						mvn -f $WORKSPACE/helm/env/$DEPLOYMENT_ENV/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
@@ -153,7 +162,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables and Starting Deployment Pipeline"'    
+					sh 'echo "Setting Environment Variables for ${params.Env} and Starting Deployment Pipeline"'    
 					env.REPORTNET_BACKEND="https://hotfixes-api.reportnet.europa.eu"
 					env.EULOGIN="https://hotfixes-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fhotfixes.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://hotfixes.reportnet.europa.eu/communication/reportnet-websocket"
@@ -162,10 +171,13 @@ pipeline {
 					env.R3_CALLBACK_URL="https://hotfixes-api.reportnet.europa.eu"
 					env.FME_TOPIC="Reportnet3_Hotfixes_Topic"
 					env.ENVIRONMENT="kubectl-config-hotfix"
-
 					env.DEPLOYMENT_ENV="hotfix"
 					env.DEPLOYMENT_BRN="${params.Brn}"
 					env.DEPLOYMENT_VAR="${params.Ver}"
+					env.DTAFLOWREP="${params.Dataflow_replicas}"
+					env.RCDSTRREP="${params.Recordstore_replicas}"
+					env.VLDREP="${params.Validation_replicas}"
+					env.USRMGMREP="${User_manamgement_replicas}"
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"'
  					sh '''
@@ -187,7 +199,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables and Starting Deployment Pipeline "'    
+					sh 'echo "Setting Environment Variables for ${params.Env} and Starting Deployment Pipeline "'    
 					env.REPORTNET_BACKEND="https://api.reportnet.europa.eu"
 					env.EULOGIN="https://auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Freportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://reportnet.europa.eu/communication/reportnet-websocket"
@@ -196,10 +208,13 @@ pipeline {
 					env.R3_CALLBACK_URL="https://api.reportnet.europa.eu"
 					env.FME_TOPIC="Reportnet3_Topic"
 					env.ENVIRONMENT="kubectl-config-prod"
-
 					env.DEPLOYMENT_ENV="prod"
 					env.DEPLOYMENT_BRN="${params.Brn}"
 					env.DEPLOYMENT_VAR="${params.Ver}"
+					env.DTAFLOWREP="${params.Dataflow_replicas}"
+					env.RCDSTRREP="${params.Recordstore_replicas}"
+					env.VLDREP="${params.Validation_replicas}"
+					env.USRMGMREP="${User_manamgement_replicas}"
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
