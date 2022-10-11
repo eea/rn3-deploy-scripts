@@ -7,7 +7,7 @@ pipeline {
     }
 
     parameters {
-			choice(choices: ['SELECT ENVIRONMENT','DEV','TEST','STAGING','HOTFIX','PROD'],description:'Select the target Environment', name: 'Env')
+			choice(choices: ['DEV','DEV','TEST','STAGING','HOTFIX','PROD'],description:'Select the target Environment', name: 'Env')
 			string(defaultValue: 'dev', description: 'Set the branch', name: 'Brn', trim: true)
 			string(defaultValue: 'v3.1.5.6-DEV', description: 'Set the version to be deployed', name: 'Ver', trim: true)
 			string(defaultValue: '1', description: 'Dataflow Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=2)', name: 'Dataflow_replicas', trim: true)
@@ -51,7 +51,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables for ${params.Env} and Starting Deployment Pipeline "'    
+					sh 'echo "Setting Environment Variables for $Environment and Starting Deployment Pipeline "'    
 					//env.TARGET_ENV="reportnet"
 					env.REPORTNET_BACKEND="https://dev-api.reportnet.europa.eu"
 					env.EULOGIN="https://dev-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fdev.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
@@ -89,7 +89,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables for ${params.Env} and Starting Deployment Pipeline"'    
+					sh 'echo "Setting Environment Variables for $Environment and Starting Deployment Pipeline"'    
 					env.REPORTNET_BACKEND="https://test-api.reportnet.europa.eu"
 					env.EULOGIN="https://test-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Ftest.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://test.reportnet.europa.eu/communication/reportnet-websocket"
@@ -126,7 +126,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables for ${params.Env} and Starting Deployment Pipeline"'    
+					sh 'echo "Setting Environment Variables for $Environment and Starting Deployment Pipeline"'    
 					env.REPORTNET_BACKEND="https://sandbox-api.reportnet.europa.eu"
 					env.EULOGIN="https://sandbox-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fsandbox.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://sandbox.reportnet.europa.eu/communication/reportnet-websocket"
@@ -162,7 +162,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables for ${params.Env} and Starting Deployment Pipeline"'    
+					sh 'echo "Setting Environment Variables for $Environment and Starting Deployment Pipeline"'    
 					env.REPORTNET_BACKEND="https://hotfixes-api.reportnet.europa.eu"
 					env.EULOGIN="https://hotfixes-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fhotfixes.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://hotfixes.reportnet.europa.eu/communication/reportnet-websocket"
@@ -199,7 +199,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables for ${params.Env} and Starting Deployment Pipeline "'    
+					sh 'echo "Setting Environment Variables for $Environment and Starting Deployment Pipeline "'    
 					env.REPORTNET_BACKEND="https://api.reportnet.europa.eu"
 					env.EULOGIN="https://auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Freportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://reportnet.europa.eu/communication/reportnet-websocket"
@@ -227,6 +227,9 @@ pipeline {
 //######################################  SETUP COMMON STEPS  ######################################
  		stage('Common Steps') {
             steps {
+				echo "ENV: ${params.Env}"
+				echo "BRANCH: ${params.Brn}"
+				echo "VERSION: ${params.Ver}"
 	 			echo "Scaling down services of ${params.Env}"
 	 			withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 	 				sh '''
