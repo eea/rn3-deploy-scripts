@@ -10,6 +10,11 @@ pipeline {
 			choice(choices: ['SELECT ENVIRONMENT','DEV','TEST','STAGING','HOTFIX','PROD'],description:'Select the target Environment', name: 'Env')
 			string(defaultValue: 'DEV', description: 'Set the branch', name: 'Brn', trim: true)
 			string(defaultValue: 'v3.1.5.6-DEV', description: 'Set the version to be deployed', name: 'Ver', trim: true)
+			string(defaultValue: '1', description: 'Dataflow Replicas to be deployed', name: 'DTAFLOWREP', trim: true)
+			string(defaultValue: '1', description: 'Recordstore Replicas to be deployed', name: 'RCDSTRREP', trim: true)
+			string(defaultValue: '1', description: 'Validation Replicas to be deployed', name: 'VLDREP', trim: true)
+			string(defaultValue: '1', description: 'User Management Replicas to be deployed', name: 'USRMGMREP', trim: true)
+
 	}
     
     stages {
@@ -246,7 +251,7 @@ pipeline {
 						helm uninstall dataflow-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-					helm upgrade dataflow $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$Ver,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV,replicas=1
+					helm upgrade dataflow $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$Ver,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV,replicas=$DTAFLOWREP
 					'''
 					}
 				
@@ -263,7 +268,7 @@ pipeline {
 						helm upgrade recordstore-persistence $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-recordstore/pvc -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set repo=k8s-swi001:5000,tagSufix=_sandbox
 					'''*/
 					sh '''
-						helm upgrade recordstore $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=1
+						helm upgrade recordstore $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$RCDSTRREP
 					'''
 					sleep(20)
 				}
@@ -277,7 +282,7 @@ pipeline {
 						helm uninstall validation-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade validation $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,replicas=1,sentry.environment=$SENTRY_ENV
+						helm upgrade validation $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,replicas=$VLDREP,sentry.environment=$SENTRY_ENV
 					'''
 				}
 	 			echo "Deploy User Management of ${params.Env}"
@@ -290,7 +295,7 @@ pipeline {
 						helm uninstall ums-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade ums $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=1
+						helm upgrade ums $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$USRMGMREP
 					'''
 				}
 	 			echo "Deploy Document Container on ${params.Env}"
