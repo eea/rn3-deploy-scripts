@@ -9,7 +9,7 @@ pipeline {
     parameters {
 			choice(choices: ['SELECT ENVIRONMENT','DEV','TEST','STAGING','HOTFIX','PROD'],description:'Select the target Environment', name: 'Env')
 			string(defaultValue: 'dev', description: 'Set the branch', name: 'Brn', trim: true)
-			string(defaultValue: 'v3.1.5.5-dev', description: 'Set the version to be deployed', name: 'Ver', trim: true)
+			string(defaultValue: 'v3.1.5.6-DEV', description: 'Set the version to be deployed', name: 'Ver', trim: true)
 	}
     
     stages {
