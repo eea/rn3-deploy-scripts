@@ -327,7 +327,7 @@ pipeline {
 	 			echo "Deploy Collaboration of ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install collaboration-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/env/$DEPLOYMENT_ENV/reportnet-collaboration/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
+						helm install collaboration-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-collaboration/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
