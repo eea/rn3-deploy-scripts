@@ -282,7 +282,7 @@ pipeline {
 						helm uninstall validation-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade validation $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,replicas=$VLDREP,sentry.environment=$SENTRY_ENV
+						helm upgrade validation $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$VLDREP
 					'''
 				}
 	 			echo "Deploy User Management of ${params.Env}"
