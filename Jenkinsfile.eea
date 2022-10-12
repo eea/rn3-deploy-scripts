@@ -7,13 +7,13 @@ pipeline {
     }
 
     parameters {
-			choice(choices: ['DEV','DEV','TEST','STAGING','HOTFIX','PROD'],description:'Select the target Environment', name: 'Env')
+			choice(choices: ['DEV','TEST','STAGING','HOTFIX','PROD'],description:'Select the target Environment', name: 'Env')
 			string(defaultValue: 'dev', description: 'Set the branch', name: 'Brn', trim: true)
 			string(defaultValue: 'v3.1.5.6-DEV', description: 'Set the version to be deployed', name: 'Ver', trim: true)
 			string(defaultValue: '1', description: 'Dataflow Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=2)', name: 'Dataflow_replicas', trim: true)
 			string(defaultValue: '1', description: 'Recordstore Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Recordstore_replicas', trim: true)
 			string(defaultValue: '1', description: 'Validation Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Validation_replicas', trim: true)
-			string(defaultValue: '1', description: 'User Management Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=1)', name: 'User_manamgement_replicas', trim: true)
+			string(defaultValue: '1', description: 'User Management Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=1)', name: 'User_management_replicas', trim: true)
 	}
     
     stages {
@@ -67,7 +67,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
 					env.VLDREP="${params.Validation_replicas}"
-					env.USRMGMREP="${User_manamgement_replicas}"
+					env.USRMGMREP="${User_management_replicas}"
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
@@ -104,7 +104,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
 					env.VLDREP="${params.Validation_replicas}"
-					env.USRMGMREP="${User_manamgement_replicas}"
+					env.USRMGMREP="${User_management_replicas}"
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
@@ -141,7 +141,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
 					env.VLDREP="${params.Validation_replicas}"
-					env.USRMGMREP="${User_manamgement_replicas}"
+					env.USRMGMREP="${User_management_replicas}"
  					echo "Update Database of ${params.Env}"
 					sh '''
 						mvn -f $WORKSPACE/helm/env/$DEPLOYMENT_ENV/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
@@ -177,7 +177,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
 					env.VLDREP="${params.Validation_replicas}"
-					env.USRMGMREP="${User_manamgement_replicas}"
+					env.USRMGMREP="${User_management_replicas}"
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"'
  					sh '''
@@ -214,7 +214,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
 					env.VLDREP="${params.Validation_replicas}"
-					env.USRMGMREP="${User_manamgement_replicas}"
+					env.USRMGMREP="${User_management_replicas}"
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
