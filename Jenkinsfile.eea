@@ -395,6 +395,9 @@ pipeline {
 						helm upgrade indexsearch $$WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-indexsearch/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
 					'''
 				}*/
+
+
+				
 	 			echo "Deploy ReportNet Frontend for ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
