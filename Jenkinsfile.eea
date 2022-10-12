@@ -298,6 +298,19 @@ pipeline {
 					'''
 					sleep(20)
 				}
+				echo "Deploy Dataset of ${params.Env}"
+				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					sh '''
+						helm install dataset-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataset/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					sh '''
+						helm uninstall dataset-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sh '''
+						helm upgrade dataset $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=$DTASETREP
+					'''
+				}
 	 			echo "Deploy Validation on ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
@@ -363,19 +376,7 @@ pipeline {
 						helm upgrade collaboration $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-collaboration/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
 					'''
 				}
-	 			echo "Deploy Dataset of ${params.Env}"
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install dataset-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataset/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall dataset-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sh '''
-						helm upgrade dataset $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=$DTASETREP
-					'''
-				}
+
 
 
 
