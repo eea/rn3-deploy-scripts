@@ -320,7 +320,7 @@ pipeline {
 						helm uninstall dataset-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade dataset $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=$DTASETREP
+						helm upgrade dataset $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$DTASETREP
 					'''
 				}
 	 			echo "Deploy Validation on ${params.Env}"
