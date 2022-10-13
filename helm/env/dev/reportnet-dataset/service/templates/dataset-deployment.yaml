@@ -20,6 +20,16 @@ spec:
       restartPolicy: Always
       dnsPolicy: ClusterFirst
       
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: db
+                operator: In
+                values:
+                - "false"      
+      
       containers:
       - name: dataset
         image: {{.Values.repo}}/dataset-service:{{.Values.version}}{{.Values.tagSufix}}
@@ -85,16 +95,17 @@ spec:
         - name: SENTRY_RELEASE
           value: "{{.Values.version}}"
         - name: DATASET_PATH
-          value: "{{.Values.file.path}}"                                   
+          value: "/reportnet3-data/input"                                   
+
         
         volumeMounts:
-        - mountPath: "{{.Values.file.path}}"
+        - mountPath: "/reportnet3-data/input"
           name: load-data  
       volumes:
       - name: load-data
         persistentVolumeClaim:
             claimName: reportnet3-data
-                            
+
   strategy:
     type: RollingUpdate
     rollingUpdate:
