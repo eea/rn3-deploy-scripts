@@ -69,11 +69,11 @@ pipeline {
 					env.DEPLOYMENT_BRN="${params.Brn}"
 					env.DEPLOYMENT_VAR="${params.Ver}"
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
-					env.DTASETREP="${DataSet_replicas}"
+					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
 					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
-					env.USRMGMREP="${User_management_replicas}"
+					env.USRMGMREP="${params.User_management_replicas}"
 					
 					
  					echo "Update Database of ${params.Env}"
@@ -110,11 +110,11 @@ pipeline {
 					env.DEPLOYMENT_BRN="${params.Brn}"
 					env.DEPLOYMENT_VAR="${params.Ver}"
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
-					env.DTASETREP="${DataSet_replicas}"
+					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
 					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
-					env.USRMGMREP="${User_management_replicas}"
+					env.USRMGMREP="${params.User_management_replicas}"
 
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
@@ -150,11 +150,11 @@ pipeline {
 					env.DEPLOYMENT_BRN="${params.Brn}"
 					env.DEPLOYMENT_VAR="${params.Ver}"
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
-					env.DTASETREP="${DataSet_replicas}"
+					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
 					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
-					env.USRMGMREP="${User_management_replicas}"
+					env.USRMGMREP="${params.User_management_replicas}"
 
  					echo "Update Database of ${params.Env}"
 					sh '''
@@ -189,11 +189,11 @@ pipeline {
 					env.DEPLOYMENT_BRN="${params.Brn}"
 					env.DEPLOYMENT_VAR="${params.Ver}"
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
-					env.DTASETREP="${DataSet_replicas}"
+					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
 					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
-					env.USRMGMREP="${User_management_replicas}"
+					env.USRMGMREP="${params.User_management_replicas}"
 
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"'
@@ -229,11 +229,11 @@ pipeline {
 					env.DEPLOYMENT_BRN="${params.Brn}"
 					env.DEPLOYMENT_VAR="${params.Ver}"
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
-					env.DTASETREP="${DataSet_replicas}"
+					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
 					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
-					env.USRMGMREP="${User_management_replicas}"
+					env.USRMGMREP="${params.User_management_replicas}"
 
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
