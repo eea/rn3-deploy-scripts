@@ -390,10 +390,10 @@ pipeline {
 				}
 				 echo "Deploy Orchestrator for ${params.Env}"
 				 withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-				 	sh '''
-				 		helm install orchestrator-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-orchestrator/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-				 	'''
-				 	sleep(20)
+				// 	sh '''
+				// 		helm install orchestrator-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-orchestrator/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+				// 	'''
+				// 	sleep(20)
 				 	sh '''
 				 		helm uninstall orchestrator-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 				 	'''
