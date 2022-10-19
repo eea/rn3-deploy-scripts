@@ -70,7 +70,7 @@ spec:
           value= "{{.Values.sentry.environment}}"
         - name= SENTRY_RELEASE
           value= "{{.Values.version}}"
-                              
+
         volumeMounts:
         - mountPath= "{{.Values.file.path}}"
           name= load-data  
