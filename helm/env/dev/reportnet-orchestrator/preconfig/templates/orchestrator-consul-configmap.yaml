@@ -6,5 +6,5 @@ metadata:
     name: orchestrator-consul-configmap
     cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
 data:
-orchestrator-service.properties: |-
-{{ .Files.Get "files/orchestrator-service.properties" | indent 4 }}
+orchestrator.properties: |-
+{{ .Files.Get "files/orchestrator.properties" | indent 4 }}
