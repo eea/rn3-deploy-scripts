@@ -31,18 +31,18 @@ spec:
           protocol: TCP
         readinessProbe:
           httpGet:
-             path: /actuator/health
-             scheme: HTTP
-             port: 8091
+            path: /actuator/health
+            scheme: HTTP
+            port: 8091
           initialDelaySeconds: 40
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 5
         livenessProbe:
           httpGet:
-             path: /actuator/health
-             scheme: HTTP
-             port: 8091
+            path: /actuator/health
+            scheme: HTTP
+            port: 8091
           initialDelaySeconds: 35
           periodSeconds: 20
           successThreshold: 1
@@ -74,10 +74,11 @@ spec:
         volumeMounts:
         - mountPath: "{{.Values.file.path}}"
           name: load-data  
-       volumes:
-       - name: load-data
-         persistentVolumeClaim:
-          claimName: reportnet3-data
+      volumes:
+      - name: load-data
+        persistentVolumeClaim:
+            claimName: reportnet3-data
+
 
   strategy:
     type: RollingUpdate
