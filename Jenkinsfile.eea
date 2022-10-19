@@ -13,7 +13,7 @@ pipeline {
 			string(defaultValue: '1', description: 'Dataflow Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=2)', name: 'Dataflow_replicas', trim: true)
 			string(defaultValue: '1', description: 'DataSet Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=2)', name: 'DataSet_replicas', trim: true)
 			string(defaultValue: '1', description: 'Recordstore Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Recordstore_replicas', trim: true)
-			string(defaultValue: '1', description: 'Orchestrator Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Orchestrator_replicas', trim: true)
+			string(defaultValue: '1', description: 'orchestrator-service Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'orchestrator-service_replicas', trim: true)
 			string(defaultValue: '1', description: 'Validation Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Validation_replicas', trim: true)
 			string(defaultValue: '1', description: 'User Management Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=1)', name: 'User_management_replicas', trim: true)
 	}
@@ -71,7 +71,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
-					env.ORCHREP="${params.Orchestrator_replicas}"	
+					env.ORCHREP="${params.orchestrator-service_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
 					
@@ -112,7 +112,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
-					env.ORCHREP="${params.Orchestrator_replicas}"	
+					env.ORCHREP="${params.orchestrator-service_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
 
@@ -152,7 +152,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
-					env.ORCHREP="${params.Orchestrator_replicas}"	
+					env.ORCHREP="${params.orchestrator-service_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
 
@@ -191,7 +191,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
-					env.ORCHREP="${params.Orchestrator_replicas}"	
+					env.ORCHREP="${params.orchestrator-service_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
 
@@ -231,7 +231,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
-					env.ORCHREP="${params.Orchestrator_replicas}"	
+					env.ORCHREP="${params.orchestrator-service_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
 
@@ -336,17 +336,17 @@ pipeline {
 						helm upgrade validation $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$VLDREP
 					'''
 				}
-				echo "Deploy Orchestrator for ${params.Env}"
+				echo "Deploy orchestrator-service for ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 				 	sh '''
-						helm install orchestrator-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-orchestrator/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install orchestrator-service-preconfig $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-orchestrator-service/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 				 	'''
 				 	sleep(20)
 				 	sh '''
-				 		helm uninstall orchestrator-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+				 		helm uninstall orchestrator-service-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 				 	'''
 				 	sh '''
-				 		helm upgrade orchestrator $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-orchestrator/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=$ORCHREP
+				 		helm upgrade orchestrator-service $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-orchestrator-service/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=$ORCHREP
 				 	'''
 				}
 	 			echo "Deploy User Management of ${params.Env}"

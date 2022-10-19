@@ -1,9 +1,9 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: orchestrator
+  name: orchestrator-service
   labels:
-    name: orchestrator
+    name: orchestrator-service
     namespace: {{.Release.Namespace}}
     cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
 spec:
@@ -13,6 +13,6 @@ spec:
     targetPort: 8091
     
   selector:
-    name: orchestrator
+    name: orchestrator-service
   type: ClusterIP
   sessionAffinity: None

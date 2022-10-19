@@ -2,19 +2,19 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: orchestrator
+  name: orchestrator-service
   labels:
-    name: orchestrator
+    name: orchestrator-service
     cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
 spec:
   replicas: {{.Values.replicas}}
   selector:
         matchLabels:
-          name: orchestrator
+          name: orchestrator-service
   template:
     metadata:
       labels:
-        name: orchestrator
+        name: orchestrator-service
         cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
       annotations:
         prometheus.io/scrape: "true"
@@ -23,8 +23,8 @@ spec:
       dnsPolicy: ClusterFirst
 
       containers:
-      - name: orchestrator
-        image: {{.Values.repo}}/orchestrator:{{.Values.version}}{{.Values.tagSufix}}
+      - name: orchestrator-service
+        image: {{.Values.repo}}/orchestrator-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 8091
