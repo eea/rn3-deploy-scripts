@@ -72,12 +72,12 @@ spec:
           value= "{{.Values.version}}"
                               
         volumeMounts:
-        - mountPath: "{{.Values.file.path}}"
-          name: load-data  
+        - mountPath= "{{.Values.file.path}}"
+          name= load-data  
       volumes:
-      - name: load-data
+      - name= load-data
         persistentVolumeClaim:
-            claimName: reportnet3-data
+            claimName= reportnet3-data
 
 
   strategy:
