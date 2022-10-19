@@ -16,7 +16,7 @@ spec:
       configMap:
         name: orchestrator-consul-configmap
         items:
-        - key: orchestrator-service.properties
+        - key: orchestrator.properties
           path: keys
   restartPolicy: Never
   

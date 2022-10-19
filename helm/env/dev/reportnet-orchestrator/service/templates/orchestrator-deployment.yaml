@@ -24,7 +24,7 @@ spec:
 
       containers:
       - name: orchestrator
-        image: {{.Values.repo}}/orchestrator-service:{{.Values.version}}{{.Values.tagSufix}}
+        image: {{.Values.repo}}/orchestrator:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
         - containerPort: 8091
