@@ -2,19 +2,19 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: validation
+  name: orchestrator
   labels:
-    name: validation
+    name: orchestrator
     cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
 spec:
   replicas: {{.Values.replicas}}
   selector:
         matchLabels:
-          name: validation
+          name: orchestrator
   template:
     metadata:
       labels:
-        name: validation
+        name: orchestrator
         cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
       annotations:
         prometheus.io/scrape: "true"
@@ -23,7 +23,7 @@ spec:
       dnsPolicy: ClusterFirst
 
       containers:
-      - name: validation
+      - name: orchestrator
         image: {{.Values.repo}}/orchestrator-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         ports:
@@ -77,8 +77,7 @@ spec:
       volumes:
       - name: load-data
         persistentVolumeClaim:
-            claimName: reportnet3-data
-
+         claimName: reportnet3-data
 
   strategy:
     type: RollingUpdate
