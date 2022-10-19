@@ -47,7 +47,7 @@ spec:
           periodSeconds= 20
           successThreshold= 1
           timeoutSeconds= 5
-        env:
+        env=
         - name= CONSUL_HOST
           value= "{{.Values.consul.server}}"
         - name= CONSUL_PORT
@@ -75,9 +75,9 @@ spec:
         - mountPath= "{{.Values.file.path}}"
           name= load-data  
       volumes:
-      - name= load-data
-        persistentVolumeClaim=
-            claimName= reportnet3-data
+      - name: load-data
+        persistentVolumeClaim:
+            claimName: reportnet3-data
 
 
   strategy:
