@@ -53,9 +53,9 @@ spec:
         - name= CONSUL_PORT
           value= "{{.Values.consul.port}}"
         - name= KAFKA_BOOTSTRAP_URL
-          value= "{{.Values.kafka.bootstrap}}={{.Values.kafka.port}}"
+          value= "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
         - name= ZIPKIN_URL
-          value= "{{.Values.zipkin.schema}}=//{{.Values.zipkin.ip}}={{.Values.zipkin.port}}"
+          value= "{{.Values.zipkin.schema}}://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
         - name= REDIS_HOST
           value= "{{.Values.redis.ip}}"
         - name= REDIS_PORT
