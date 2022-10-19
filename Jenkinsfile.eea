@@ -13,7 +13,7 @@ pipeline {
 			string(defaultValue: '1', description: 'Dataflow Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=2)', name: 'Dataflow_replicas', trim: true)
 			string(defaultValue: '1', description: 'DataSet Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=2)', name: 'DataSet_replicas', trim: true)
 			string(defaultValue: '1', description: 'Recordstore Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Recordstore_replicas', trim: true)
-			string(defaultValue: '1', description: 'Orchestrator service Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Orchestrator_service_replicas', trim: true)
+			string(defaultValue: '1', description: 'Orchestrator service Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Orchestrator_replicas', trim: true)
 			string(defaultValue: '1', description: 'Validation Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Validation_replicas', trim: true)
 			string(defaultValue: '1', description: 'User Management Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=1)', name: 'User_management_replicas', trim: true)
 	}
@@ -71,7 +71,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
-					env.ORCHREP="${params.Orchestrator_service_replicas}"	
+					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
 					
@@ -112,7 +112,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
-					env.ORCHREP="${params.Orchestrator_service_replicas}"	
+					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
 
@@ -152,7 +152,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
-					env.ORCHREP="${params.Orchestrator_service_replicas}"	
+					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
 
@@ -191,7 +191,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
-					env.ORCHREP="${params.Orchestrator_service_replicas}"	
+					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
 
@@ -231,7 +231,7 @@ pipeline {
 					env.DTAFLOWREP="${params.Dataflow_replicas}"
 					env.DTASETREP="${params.DataSet_replicas}"
 					env.RCDSTRREP="${params.Recordstore_replicas}"
-					env.ORCHREP="${params.Orchestrator_service_replicas}"	
+					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
 
