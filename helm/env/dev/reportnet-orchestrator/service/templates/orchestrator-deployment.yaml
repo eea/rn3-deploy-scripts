@@ -22,8 +22,8 @@ spec:
       restartPolicy: Always
       dnsPolicy: ClusterFirst
 
-    containers:
-        - name: orchestrator
+      containers:
+      - name: orchestrator
             image: {{.Values.repo}}/orchestrator-service:{{.Values.version}}{{.Values.tagSufix}}
             imagePullPolicy: Always
             ports:
