@@ -69,7 +69,7 @@ spec:
         - name: SENTRY_ENVIRONMENT
           value: "{{.Values.sentry.environment}}"
         - name: SENTRY_RELEASE
-          value: "{{.Values.version}}"  
+          value: "{{.Values.version}}"
                             
         volumeMounts:
         - mountPath: "{{.Values.file.path}}"
