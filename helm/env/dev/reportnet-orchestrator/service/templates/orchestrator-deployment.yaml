@@ -2,9 +2,9 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: validation
+  name: orchestrator
   labels:
-    name: validation
+    name: orchestrator
     cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
 spec:
   replicas: {{.Values.replicas}}
@@ -21,7 +21,7 @@ spec:
     spec:
       restartPolicy: Always
       dnsPolicy: ClusterFirst
-      
+
       containers:
       - name: orchestrator
         image: {{.Values.repo}}/orchestrator-service:{{.Values.version}}{{.Values.tagSufix}}
