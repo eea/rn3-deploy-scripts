@@ -54,14 +54,8 @@ spec:
           value: "{{.Values.consul.port}}"
         - name: KAFKA_BOOTSTRAP_URL
           value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
-        - name: METABASE_CONNECTION_URL
-          value: "{{.Values.metabase.url}}"
-        - name: METABASE_CONNECTION_USER
-          value: "{{.Values.metabase.user}}"
-        - name: METABASE_CONNECTION_PASSWORD
-          value: "{{.Values.metabase.password}}"
         - name: ZIPKIN_URL
-          value: "http://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+          value: "{{.Values.zipkin.schema}}://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
         - name: REDIS_HOST
           value: "{{.Values.redis.ip}}"
         - name: REDIS_PORT
@@ -69,19 +63,13 @@ spec:
         - name: REDIS_SENTINEL_MASTER
           value: "{{.Values.redis.sentinel}}"
         - name: REDIS_SENTINEL_NODES
-          value: "{{.Values.redis.nodes}}"
-        - name: R3_CALLBACK_URL
-          value: "{{.Values.fme.integration.callback.urlbase}}"        
+          value: "{{.Values.redis.nodes}}" 
         - name: SENTRY_DSN
           value: "{{.Values.sentry.dsn}}"
         - name: SENTRY_ENVIRONMENT
           value: "{{.Values.sentry.environment}}"
         - name: SENTRY_RELEASE
-          value: "{{.Values.version}}" 
-        - name: FME_TOPIC
-          value: "{{.Values.fme.topic}}" 
-        - name: DATAFLOW_EXPORT_SCHEMA_INFORMATION_PATH
-          value: "{{.Values.file.path}}"   
+          value: "{{.Values.version}}"
 
                             
         volumeMounts:
