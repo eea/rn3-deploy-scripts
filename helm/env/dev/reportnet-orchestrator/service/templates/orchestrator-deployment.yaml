@@ -24,7 +24,7 @@ spec:
 
       containers:
       - name: orchestrator
-        image: {{.Values.repo}}/orchestrator-service:{{.Values.version}}{{.Values.tagSufix}}
+        image: "{{.Values.repo}}/orchestrator-service:{{.Values.version}}{{.Values.tagSufix}}"
         imagePullPolicy: Always
         ports:
         - containerPort: 8091
@@ -51,7 +51,8 @@ spec:
         - name: CONSUL_HOST
           value: "{{.Values.consul.server}}"
         - name: CONSUL_PORT
-          value: "{{.Values.consul.port}}"  
+          value: "{{.Values.consul.port}}"
+
                             
         volumeMounts:
         - mountPath: "{{.Values.file.path}}"
