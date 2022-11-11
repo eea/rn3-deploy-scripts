@@ -70,7 +70,13 @@ spec:
           value: "{{.Values.sentry.environment}}"
         - name: SENTRY_RELEASE
           value: "{{.Values.version}}"  
-                            
+        - name: ORCHESTRATOR_CONNECTION_URL
+          value: "{{.Values.orchestrator.curl}}"
+        - name: ORCHESTRATOR_CONNECTION_USER
+          value: "{{.Values.orchestrator.user}}"
+        - name: ORCHESTRATOR_CONNECTION_PASSWORD
+          value: "{{.Values.orchestrator.pswd}}"
+            
         volumeMounts:
         - mountPath: "{{.Values.file.path}}"
           name: load-data  
