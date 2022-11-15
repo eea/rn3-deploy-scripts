@@ -253,9 +253,14 @@ pipeline {
 	 			echo "Scaling down services of ${params.Env}"
 	 			withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 	 				sh '''
-	 					kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
+	 					
+						kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow document frontend rod ums  collaboration --replicas=0
 	 				'''
 	 			}
+					#kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
+
+
+
 	 			echo "Configure Common Application properties for ${params.Env}"
 	 			withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 	 				sh '''
