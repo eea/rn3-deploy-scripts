@@ -79,13 +79,7 @@ spec:
         - name: FME_TOPIC
           value: "{{.Values.fme.topic}}" 
         - name: DATAFLOW_EXPORT_SCHEMA_INFORMATION_PATH
-          value: "{{.Values.file.path}}"  
-        - name: AXON_CONNECTION_URL
-          value: "{{.Values.axon.url}}"
-        - name: AXON_USERNAME
-          value: "{{.Values.axon.user}}"
-        - name: AXON_CONNECTION_PASSWORD
-          value: "{{.Values.axon.pswd}}"
+          value: "{{.Values.file.path}}"   
 
         volumeMounts:
         - mountPath: "{{.Values.file.path}}"

@@ -40,11 +40,6 @@ fme:
     integration:
         callback:
             urlbase: https://rn3api.eionet.europa.eu
-            
-axon:
-    url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
-    user: postgres
-    pswd: 53p057n373.0! 
 
 tagSufix: 
 replicas: 1
