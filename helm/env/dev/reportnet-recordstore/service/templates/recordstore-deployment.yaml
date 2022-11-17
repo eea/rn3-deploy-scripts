@@ -22,7 +22,7 @@ spec:
 
       containers:
       - name: recordstore
-        image: {{.Values.repo}}/recordstore-service:{{.Values.version}}{{.Values.tagSufix}}
+        image: "{{.Values.repo}}/recordstore-service:{{.Values.version}}{{.Values.tagSufix}}"
         imagePullPolicy: Always
         ports:
         - containerPort: 8090
