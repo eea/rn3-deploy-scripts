@@ -74,7 +74,12 @@ spec:
           value: "{{.Values.sentry.environment}}"
         - name: SENTRY_RELEASE
           value: "{{.Values.version}}" 
-       
+        - name: AXON_CONNECTION_URL
+          value: "{{.Values.axon.url}}"
+        - name: AXON_USERNAME
+          value: "{{.Values.axon.user}}"
+        - name: AXON_CONNECTION_PASSWORD
+          value: "{{.Values.axon.pswd}}"
 
       
   strategy:

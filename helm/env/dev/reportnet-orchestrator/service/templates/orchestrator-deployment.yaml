@@ -76,6 +76,12 @@ spec:
           value: "{{.Values.orchestrator.user}}"
         - name: ORCHESTRATOR_CONNECTION_PASSWORD
           value: "{{.Values.orchestrator.pswd}}"
+        - name: AXON_CONNECTION_URL
+          value: "{{.Values.axon.url}}"
+        - name: AXON_USERNAME
+          value: "{{.Values.axon.user}}"
+        - name: AXON_CONNECTION_PASSWORD
+          value: "{{.Values.axon.pswd}}"
             
         volumeMounts:
         - mountPath: "{{.Values.file.path}}"

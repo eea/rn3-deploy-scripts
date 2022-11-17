@@ -20,7 +20,7 @@ spec:
       restartPolicy: Always
       dnsPolicy: ClusterFirst
       
-      affinity:
+      {% comment %} affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -28,7 +28,7 @@ spec:
               - key: db
                 operator: In
                 values:
-                - "false"      
+                - "false"       {% endcomment %}
 
       containers:
       - name: recordstore
@@ -102,6 +102,12 @@ spec:
           value: "{{.Values.sentry.environment}}"
         - name: SENTRY_RELEASE
           value: "{{.Values.version}}"
+        - name: AXON_CONNECTION_URL
+          value: "{{.Values.axon.url}}"
+        - name: AXON_USERNAME
+          value: "{{.Values.axon.user}}"
+        - name: AXON_CONNECTION_PASSWORD
+          value: "{{.Values.axon.pswd}}"
 
         volumeMounts:
         - mountPath: "/reportnet3-data/snapshots"

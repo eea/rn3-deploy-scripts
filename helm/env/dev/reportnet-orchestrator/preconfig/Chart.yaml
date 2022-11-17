@@ -1,6 +1,6 @@
 apiVersion: v2
 name: reportnet-orchestrator-config
-description: A Helm chart Reportnet Validation microservice
+description: A Helm chart Reportnet Orchestrator microservice
 
 # A chart can be either an 'application' or a 'library' chart.
 #
