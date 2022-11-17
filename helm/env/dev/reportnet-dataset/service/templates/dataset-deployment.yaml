@@ -20,16 +20,6 @@ spec:
       restartPolicy: Always
       dnsPolicy: ClusterFirst
       
-      {% comment %} affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: db
-                operator: In
-                values:
-                - "false"       {% endcomment %}
-      
       containers:
       - name: dataset
         image: {{.Values.repo}}/dataset-service:{{.Values.version}}{{.Values.tagSufix}}
