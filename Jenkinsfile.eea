@@ -10,8 +10,8 @@ pipeline {
 			choice(choices: ['DEV','TEST','STAGING','HOTFIX','PROD'],description:'Select the target Environment', name: 'Env')
 			gitParameter branchFilter: 'origin/(.*)', defaultValue: 'dev', name: 'Brn', type: 'PT_BRANCH'
 			//string(defaultValue: 'dev', description: 'Set the branch', name: 'Brn', trim: true)
-			string(defaultValue: 'v3.1.6-DEV', description: 'Set the version to be deployed', name: 'Ver', trim: true)
-			//string(defaultValue: 'v3.1.6-demoArchV2', description: 'Set the version to be deployed', name: 'Ver', trim: true)
+			//string(defaultValue: 'v3.1.6-DEV', description: 'Set the version to be deployed', name: 'Ver', trim: true)
+			string(defaultValue: 'v3.1.6-demoArchV2', description: 'Set the version to be deployed', name: 'Ver', trim: true)
 			string(defaultValue: 'api-gateway communication dataflow dataset document frontend recordstore rod ums validation orchestrator collaboration', description: 'Set the service to down scale before deployment (api-gateway communication dataflow dataset document frontend recordstore rod ums validation orchestrator collaboration)', name: 'Reset_Services', trim: true)
 			string(defaultValue: '1', description: 'Dataflow Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=2)', name: 'Dataflow_replicas', trim: true)
 			string(defaultValue: '1', description: 'DataSet Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=2)', name: 'DataSet_replicas', trim: true)
@@ -347,7 +347,7 @@ pipeline {
 				 		helm uninstall orchestrator-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 				 	'''
 				 	sh '''
-				 		helm upgrade orchestrator $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-orchestrator/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=$ORCHREP
+				 		helm upgrade orchestrator $WORKSPACE/helm/env/$DEPLOYMENT_ENV/reportnet-orchestrator/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$ORCHREP
 				 	'''
 				}
 	 			echo "Deploy User Management of ${params.Env}"
