@@ -32,7 +32,7 @@ spec:
             path: /actuator/health
             scheme: HTTP
             port: 8015
-          initialDelaySeconds: 60
+          initialDelaySeconds: 200
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 5
@@ -41,7 +41,7 @@ spec:
             path: /actuator/health
             scheme: HTTP
             port: 8015
-          initialDelaySeconds: 60
+          initialDelaySeconds: 210
           periodSeconds: 20
           successThreshold: 1
           timeoutSeconds: 5
