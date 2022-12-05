@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: collaboration-consul-configmap
+  labels:
+    name: collaboration-consul-configmap
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+data:
+  collaboration-service.properties: |-
+{{ .Files.Get "files/collaboration-service.properties" | indent 4 }}

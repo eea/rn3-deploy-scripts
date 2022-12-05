@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: communication-consul-configmap
+  labels:
+    name: communication-consul-configmap
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+data:
+  communication-service.properties: |-
+{{ .Files.Get "files/communication-service.properties" | indent 4 }}
