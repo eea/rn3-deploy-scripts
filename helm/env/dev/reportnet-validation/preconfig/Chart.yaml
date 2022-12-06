@@ -3,7 +3,7 @@ name: reportnet-validation-config
 description: A Helm chart Reportnet Validation microservice
 
 # A chart can be either an 'application' or a 'library' chart.
-#
+#SOTIRIS
 # Application charts are a collection of templates that can be packaged into versioned archives
 # to be deployed.
 #
