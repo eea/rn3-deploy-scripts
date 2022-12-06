@@ -80,7 +80,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/base-code/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 				}
 			}
@@ -120,7 +120,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/base-code/database -DPOSTGRES_SERVER=10.50.4.175:30585 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.4.175:30585 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 				}
 			}
@@ -159,7 +159,7 @@ pipeline {
 
  					echo "Update Database of ${params.Env}"
 					sh '''
-						mvn -f $WORKSPACE/helm/base-code/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 				}
 			}
@@ -199,7 +199,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"'
  					sh '''
- 	                  mvn -f $WORKSPACE/helm/base-code/database -DPOSTGRES_SERVER=10.50.5.70:31456 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+ 	                  mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.70:31456 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
  					'''
 				}
 			}
@@ -239,7 +239,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/base-code/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 				}
 			}
@@ -260,7 +260,7 @@ pipeline {
 	 			echo "Configure Common Application properties for ${params.Env}"
 	 			withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 	 				sh '''
-	 					helm install application-config $WORKSPACE/helm/base-code/application-config -n $TARGET_ENV --kubeconfig=${FILE}
+	 					helm install application-config $WORKSPACE/helm/eaa-deploy/application-config -n $TARGET_ENV --kubeconfig=${FILE}
 	 				'''
 	 				sleep(20)
 	 				sh '''
@@ -270,149 +270,149 @@ pipeline {
 	 			echo "Deploy API Gateway of ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install api-gateway-preconfig $WORKSPACE/helm/base-code/reportnet-api-gateway/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install api-gateway-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
 						helm uninstall api-gateway-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade api-gateway $WORKSPACE/helm/base-code/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
+						helm upgrade api-gateway $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
 					'''
 					}
 	 			echo "Deploy Dataflow of ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install dataflow-preconfig $WORKSPACE/helm/base-code/reportnet-dataflow/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install dataflow-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-dataflow/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
 						helm uninstall dataflow-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-					helm upgrade dataflow $WORKSPACE/helm/base-code/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$Ver,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV,replicas=$DTAFLOWREP
+					helm upgrade dataflow $WORKSPACE/helm/eaa-deploy/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$Ver,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV,replicas=$DTAFLOWREP
 					'''
 					}
 				
 	 			echo "Deploy Recordstore of ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install recordstore-preconfig $WORKSPACE/helm/base-code/reportnet-recordstore/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install recordstore-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
 						helm uninstall recordstore-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					/*sh '''
-						helm upgrade recordstore-persistence $WORKSPACE/helm/base-code/reportnet-recordstore/pvc -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set repo=k8s-swi001:5000,tagSufix=_sandbox
+						helm upgrade recordstore-persistence $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/pvc -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set repo=k8s-swi001:5000,tagSufix=_sandbox
 					'''*/
 					sh '''
-						helm upgrade recordstore $WORKSPACE/helm/base-code/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$RCDSTRREP
+						helm upgrade recordstore $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$RCDSTRREP
 					'''
 					sleep(20)
 				}
 				echo "Deploy Dataset of ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install dataset-preconfig $WORKSPACE/helm/base-code/reportnet-dataset/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install dataset-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
 						helm uninstall dataset-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade dataset $WORKSPACE/helm/base-code/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$DTASETREP
+						helm upgrade dataset $WORKSPACE/helm/eaa-deploy/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$DTASETREP
 					'''
 				}
 	 			echo "Deploy Validation on ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install validation-preconfig $WORKSPACE/helm/base-code/reportnet-validation/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install validation-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-validation/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
 						helm uninstall validation-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade validation $WORKSPACE/helm/base-code/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$VLDREP
+						helm upgrade validation $WORKSPACE/helm/eaa-deploy/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$VLDREP
 					'''
 				}
 				echo "Deploy orchestrator-service for ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 				 	sh '''
-						helm install orchestrator-preconfig $WORKSPACE/helm/base-code/reportnet-orchestrator/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install orchestrator-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 				 	'''
 				 	sleep(20)
 				 	sh '''
 				 		helm uninstall orchestrator-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 				 	'''
 				 	sh '''
-				 		helm upgrade orchestrator $WORKSPACE/helm/base-code/reportnet-orchestrator/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$ORCHREP
+				 		helm upgrade orchestrator $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$ORCHREP
 				 	'''
 				}
 	 			echo "Deploy User Management of ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install ums-preconfig $WORKSPACE/helm/base-code/reportnet-ums/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install ums-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-ums/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
 						helm uninstall ums-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade ums $WORKSPACE/helm/base-code/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$USRMGMREP
+						helm upgrade ums $WORKSPACE/helm/eaa-deploy/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$USRMGMREP
 					'''
 				}
 	 			echo "Deploy Document Container on ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install document-preconfig $WORKSPACE/helm/base-code/reportnet-document/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install document-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
 						helm uninstall document-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade document $WORKSPACE/helm/base-code/reportnet-document/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
+						helm upgrade document $WORKSPACE/helm/eaa-deploy/reportnet-document/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
 					'''
 				}
 	 			echo "Deploy Communication for ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install communication-preconfig $WORKSPACE/helm/base-code/reportnet-communication/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install communication-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
 						helm uninstall communication-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade communication $WORKSPACE/helm/base-code/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
+						helm upgrade communication $WORKSPACE/helm/eaa-deploy/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
 					'''
 				}
 	 			echo "Deploy Collaboration of ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install collaboration-preconfig $WORKSPACE/helm/base-code/reportnet-collaboration/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
+						helm install collaboration-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
 						helm uninstall collaboration-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade collaboration $WORKSPACE/helm/base-code/reportnet-collaboration/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
+						helm upgrade collaboration $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
 					'''
 				}
 				/*echo "Deploy Indexsearch for ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install indexsearch-preconfig $WORKSPACE/helm/base-code/reportnet-indexsearch/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
+						helm install indexsearch-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-indexsearch/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
 						helm uninstall indexsearch-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade indexsearch $$WORKSPACE/helm/base-code/reportnet-indexsearch/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
+						helm upgrade indexsearch $$WORKSPACE/helm/eaa-deploy/reportnet-indexsearch/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
 					'''
 				}*/
 
@@ -421,20 +421,20 @@ pipeline {
 	 			echo "Deploy ReportNet Frontend for ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm upgrade frontend $WORKSPACE/helm/base-code/reportnet-frontend/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,backend=$REPORTNET_BACKEND,keycloak=$KEYCLOAK,websocket=$WEB_SOCKET,eulogin=$EULOGIN,sentry.environment=$SENTRY_ENV
+						helm upgrade frontend $WORKSPACE/helm/eaa-deploy/reportnet-frontend/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,backend=$REPORTNET_BACKEND,keycloak=$KEYCLOAK,websocket=$WEB_SOCKET,eulogin=$EULOGIN,sentry.environment=$SENTRY_ENV
 					'''
 				}
 	 			echo "Deploy Rod for ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					sh '''
-						helm install rod-preconfig $WORKSPACE/helm/base-code/reportnet-rod/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+						helm install rod-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-rod/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sleep(20)
 					sh '''
 						helm uninstall rod-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade rod $WORKSPACE/helm/base-code/reportnet-rod/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
+						helm upgrade rod $WORKSPACE/helm/eaa-deploy/reportnet-rod/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
 					'''
 				} 
 	 		}

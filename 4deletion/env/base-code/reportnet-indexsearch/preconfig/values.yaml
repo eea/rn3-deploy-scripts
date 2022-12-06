@@ -1,0 +1,14 @@
+# Default values for reportnet.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Specific Values for Api Gateway
+
+# Environment Variables
+consul:
+  server: consul
+  port: 8500
+
+
+
+# Other Variables

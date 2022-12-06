@@ -1,0 +1,64 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: inspire
+  labels:
+    name: inspire
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  replicas: {{.Values.replicas}}
+  selector:
+        matchLabels:
+          name: inspire
+  template:
+    metadata:
+      labels:
+        name: inspire
+        cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+    spec:
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      containers:
+      - name: inspire
+        image: {{.Values.repo}}/inspire-harvester:{{.Values.version}}{{.Values.tagSufix}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8050
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: 8050
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8050
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        env:
+        - name: CONSUL_HOST
+          value: "{{.Values.consul.server}}"
+        - name: CONSUL_PORT
+          value: "{{.Values.consul.port}}"
+        - name: KAFKA_BOOTSTRAP_URL
+          value: "{{.Values.kafka.bootstrap}}:{{.Values.kafka.port}}"
+        - name: ZIPKIN_URL
+          value: "{{.Values.zipkin.schema}}://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
+        - name: REDIS_HOST
+          value: "{{.Values.redis.ip}}"
+        - name: REDIS_PORT
+          value: "{{.Values.redis.port}}"
+        - name: SENTRY_DSN
+          value: "{{.Values.sentry.dsn}}"
+        - name: SENTRY_ENVIRONMENT
+          value: "{{.Values.sentry.environment}}"
+        - name: SENTRY_RELEASE
+          value: "{{.Values.version}}"
+
+      
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

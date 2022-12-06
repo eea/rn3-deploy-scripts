@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inspire-consul-configmap
+  labels:
+    name: inspire-consul-configmap
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+data:
+  inspire-service.properties: |-
+{{ .Files.Get "files/inspire-service.properties" | indent 4 }}
