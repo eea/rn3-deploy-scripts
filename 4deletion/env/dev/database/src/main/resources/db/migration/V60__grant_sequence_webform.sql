@@ -1,1 +1,0 @@
-GRANT ALL ON sequence public.webform_id_seq TO testuser, dataflow, dataset, recordstore, validation;

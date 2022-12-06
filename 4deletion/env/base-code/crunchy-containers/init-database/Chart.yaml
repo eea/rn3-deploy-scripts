@@ -1,4 +1,0 @@
-apiVersion: v1
-name: init-database
-description: Creates data model for metabase and datatasets database
-version: 1

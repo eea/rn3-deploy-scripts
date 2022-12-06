@@ -1,9 +1,0 @@
--- DROP UNNECESSARY COLUMNS IN EU_DATASET
-
-ALTER TABLE public."eu_dataset" 
-DROP COLUMN IF EXISTS visible;
-
-ALTER TABLE public."eu_dataset" 
-DROP COLUMN IF EXISTS name;
-
-commit;

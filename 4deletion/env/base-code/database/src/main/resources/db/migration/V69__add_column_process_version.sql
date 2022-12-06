@@ -1,1 +1,0 @@
-ALTER TABLE public.process ADD "version" int4 NULL;
