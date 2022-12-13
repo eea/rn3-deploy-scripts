@@ -38,6 +38,7 @@ pipeline {
 				}
 			}
 		}
+		}
 		
         stage('Deployment Init') {
             steps {
