@@ -20,8 +20,32 @@ pipeline {
 			string(defaultValue: '1', description: 'Validation Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Validation_replicas', trim: true)
 			string(defaultValue: '1', description: 'User Management Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=1)', name: 'User_management_replicas', trim: true)
 	}
-					
+
+
+
+
+
+
+
+
+
     stages {
+
+		stage('Pull Request') {
+		when {
+			not {
+			environment name: 'CHANGE_ID', value: ''
+			}
+			environment name: 'CHANGE_TARGET', value: 'master'
+		}
+		steps {
+			script {
+				if ( env.CHANGE_BRANCH != "main" ) {
+					error "Pipeline aborted due to PR not made from main branch"
+				}
+			}
+		}
+		
         stage('Deployment Init') {
             steps {
                 sh 'echo "Starting Deployment Pipeline"'                
