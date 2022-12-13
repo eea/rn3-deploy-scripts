@@ -22,13 +22,6 @@ pipeline {
 	}
 
 
-
-
-
-
-
-
-
     stages {
 
 		stage('Pull Request') {
