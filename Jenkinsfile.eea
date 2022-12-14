@@ -62,7 +62,7 @@ pipeline {
                 }
 			steps {
 				script {
-					"${params.EMERGENCY_COMMAND}"
+					sh '''${params.EMERGENCY_COMMAND)'''	sleep(20)
 				}
 			}
 		}
