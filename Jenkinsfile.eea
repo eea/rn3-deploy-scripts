@@ -19,8 +19,9 @@ pipeline {
 			string(defaultValue: '1', description: 'Orchestrator service Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Orchestrator_replicas', trim: true)
 			string(defaultValue: '1', description: 'Validation Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Validation_replicas', trim: true)
 			string(defaultValue: '1', description: 'User Management Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=1)', name: 'User_management_replicas', trim: true)
+			string(defaultValue: '', description: 'Command to run in case of error ', name: 'EMERGENCY_COMMAND', trim: false)
 	}
-
+					sh '''helm uninstall api-gateway-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}'''	sleep(20)
 
     stages {
 
@@ -55,7 +56,17 @@ pipeline {
 				}
 			}
 		}
-
+		stage('Emergency Command') {
+			when {
+				not {
+					environment name: 'EMERGENCY_COMMAND', value: ''
+                }
+			steps {
+				script {
+					"${params.EMERGENCY_COMMAND}"
+				}
+			}
+		}
 
 //
 //###################################### SETUP ENVIRONMENT VARIABLES ######################################
