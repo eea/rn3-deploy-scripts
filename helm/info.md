@@ -1,1 +1,1 @@
-Each environment with each settings can be found under the folder env!
+Each environment with each settigns can be found under the folder env!
