@@ -27,7 +27,7 @@ file:
 
 sentry:
     dsn: https://f1057cea7e954e1a8e11d76bab0a53fd@sentry.eea.europa.eu/46
-    environment: dev
+    environment: test
 
 orchestrator:
     curl: jdbc:postgresql://rn3-pg-helm-pgpool:5432/orchestrator_db
