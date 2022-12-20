@@ -7,8 +7,8 @@ pipeline {
     }
 
     parameters {
-			choice(choices: ['DEV','TEST','STAGING','HOTFIX','PROD'],description:'Select the target Environment', name: 'Env')
-			gitParameter branchFilter: 'origin/(.*)', defaultValue: 'dev', name: 'Brn', type: 'PT_BRANCH'
+			choice(choices: ['dev','test','staging','hotfix','prod'],description:'Select the target Environment', name: 'Env')
+			gitParameter branchFilter: 'origin/(.*)', defaultValue: 'main', name: 'Brn', type: 'PT_BRANCH'
 			//string(defaultValue: 'dev', description: 'Set the branch', name: 'Brn', trim: true)
 			//string(defaultValue: 'v3.1.6-DEV', description: 'Set the version to be deployed', name: 'Ver', trim: true)
 			//string(defaultValue: 'v3.1.6-demoArchV2', description: 'Set the version to be deployed', name: 'Ver', trim: true)
@@ -47,7 +47,7 @@ pipeline {
 //############################## ****** DEVELOPMENT ******  ######################################
  		stage('Deploy to DEV') {
 			when {
-				expression { params.Env == "DEV" }
+				expression { params.Env == "dev" }
 				}
             steps {
 				echo "ENV: ${params.Env}"
@@ -83,13 +83,58 @@ pipeline {
 					sh '''
 						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
+
+
+
+
+
+
+
+
+
+					// ####################################################################################################################################################
+					// LETS TRY TO SET THE CHANGE ON THE PROPERTIES STATIC FILE
+					//sh "cat $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
+					//sh "sed -i 's/ENV:.*}/ENV:${params.Env}}/g' $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
+					//sh "cat $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
+					//sh "grep -rni 'ENV:' $WORKSPACE/helm/eaa-deploy/application-config/ | xargs sed -i 's/ENV:.*}/ENV:${params.Env}}/g'"
+					//sh "grep -lE 'dev-' **/*| xargs sed -in 's/myPattern/NEWTEXT/g'"
+					//sh "cat $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
+					//sh "find $WORKSPACE/helm/eaa-deploy/application-config/ -type f | xargs sed -i 's/ENV:.*}/ENV:${params.Env}}/g'"
+
+
+
+					sh "echo ######################################################################################################################"
+
+
+					//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					//sh "cat $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
+					sh "sed -i 's/ENV:NONE/ENV:${params.Env}/g' $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
+					//sh "cat $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
+					//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+					//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~API GATEWAY~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					//sh "cat $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
+					sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
+					//sh "cat $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
+					//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+					//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~COLLABORATION~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					//sh "cat $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
+					sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
+					//sh "cat $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
+					//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
 				}
 			}
 		}
 //############################## ****** TEST ******  ######################################
  		stage('Deploy to TEST') {
 			when {
-				expression { params.Env == "TEST" }
+				expression { params.Env == "test" }
 				}
             steps {
 				echo "ENV: ${params.Env}"
@@ -129,7 +174,7 @@ pipeline {
 //############################## ****** STAGING  ******  ######################################
  		stage('Deploy to STAGING') {
 			when {
-				expression { params.Env == "STAGING" }
+				expression { params.Env == "staging" }
 				}
             steps {
 				echo "ENV: ${params.Env}"
@@ -168,7 +213,7 @@ pipeline {
 //############################## ****** HOTFIX  ******  ######################################
  		stage('Deploy to HOTFIX') {
 			when {
-				expression { params.Env == "HOTFIX" }
+				expression { params.Env == "hotfix" }
 				}
             steps {
 				echo "ENV: ${params.Env}"
@@ -208,7 +253,7 @@ pipeline {
 //############################## ****** PRODUCTION ******  ######################################
  		stage('Deploy to PRODUCTION') {
 			when {
-				expression { params.Env == "PROD_RENAME-BACK-TO-PROD-WHEN-IN-PRODUCTION" }
+				expression { params.Env == "PROD_RENAME-BACK-TO-prod-WHEN-IN-PRODUCTION" }
 				}
             steps {
 				echo "ENV: ${params.Env}"
