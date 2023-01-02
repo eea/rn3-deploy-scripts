@@ -19,14 +19,14 @@ postgres:
     metabase: 
         url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase?reWriteBatchedInserts=true
     user: recordstore
-    password: password
+    password: 53p057n373.0!
 datasets:
-    user: recordstore
-    password: password
+    user: postgres
+    password: postgres
 zipkin:
     ip: zipkin-ui
     port: 9411
-    schema: http
+    schema: https
 redis:
     ip: redis
     port: 6379
@@ -37,7 +37,7 @@ dataset:
     creation:
         notification:
             ms: 5000
-    users: recordstore,validation,dataset
+    users: postgres
 
 snapshot:
     bufferSize: 65536
@@ -45,12 +45,6 @@ snapshot:
 sentry:
     dsn: https://f1057cea7e954e1a8e11d76bab0a53fd@sentry.eea.europa.eu/46
     environment: test
-
-#axon:
-#    url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
-#    user: postgres
-#    pswd: 53p057n373.0! 
-
         
 tagSufix: 
 replicas: 1
