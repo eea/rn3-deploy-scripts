@@ -19,10 +19,10 @@ postgres:
     metabase: 
         url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase?reWriteBatchedInserts=true
     user: recordstore
-    password: 53p057n373.0!
+    password: password
 datasets:
-    user: postgres
-    password: 53p057n373.0!
+    user: recordstore
+    password: password
 zipkin:
     ip: zipkin-ui
     port: 9411
@@ -37,7 +37,7 @@ dataset:
     creation:
         notification:
             ms: 5000
-    users: postgres
+    users: recordstore,validation,dataset
 
 snapshot:
     bufferSize: 65536
