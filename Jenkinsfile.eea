@@ -81,6 +81,9 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
+					   	mvn flyway:repair
+					'''
+					sh '''
 						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 
@@ -325,7 +328,10 @@ pipeline {
 
  					echo "Update Database of ${params.Env}"
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+					   	mvn flyway:repair
+					'''
+					sh '''
+					   	mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 
 
