@@ -85,22 +85,16 @@ spec:
         - name: SENTRY_RELEASE
           value: "{{.Values.version}}"
         - name: DATASET_PATH
-          value: "/reportnet3-data/input"                                   
-        - name: AXON_CONNECTION_URL
-          value: "{{.Values.axon.url}}"
-        - name: AXON_USERNAME
-          value: "{{.Values.axon.user}}"
-        - name: AXON_CONNECTION_PASSWORD
-          value: "{{.Values.axon.pswd}}"
+          value: "{{.Values.file.path}}"                                   
         
         volumeMounts:
-        - mountPath: "/reportnet3-data/input"
+        - mountPath: "{{.Values.file.path}}"
           name: load-data  
       volumes:
       - name: load-data
         persistentVolumeClaim:
             claimName: reportnet3-data
-
+                            
   strategy:
     type: RollingUpdate
     rollingUpdate:
