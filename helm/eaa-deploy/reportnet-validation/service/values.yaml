@@ -16,7 +16,7 @@ kafka:
 metabase:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase
     user: validation
-    password: postgres
+    password: 53p057n373.0!
 datasets:
     user: postgres
     password: postgres
