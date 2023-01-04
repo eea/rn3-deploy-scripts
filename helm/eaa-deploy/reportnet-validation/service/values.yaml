@@ -16,10 +16,10 @@ kafka:
 metabase:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase
     user: validation
-    password: 53p057n373.0!
+    password: postgres
 datasets:
     user: postgres
-    password: 53p057n373.0!
+    password: postgres
 mongo:
   host: mongo-mongodb
   port: 27017
