@@ -30,7 +30,7 @@ spec:
         readinessProbe:
           httpGet:
             path: /actuator/health
-            scheme: HTTP
+            scheme: HTTPS
             port: 9020
           initialDelaySeconds: 20
           periodSeconds: 10
@@ -39,7 +39,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /actuator/health
-            scheme: HTTP
+            scheme: HTTPS
             port: 9020
           initialDelaySeconds: 15
           periodSeconds: 20
