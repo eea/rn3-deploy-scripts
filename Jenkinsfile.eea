@@ -811,6 +811,18 @@ pipeline {
 
 	 			echo "Deploy Communication for ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+					
+					
+					
+					//###################################################################
+					sh '''
+						helm uninstall communication $WORKSPACE/helm/eaa-deploy/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}
+					'''
+					sleep(20)
+					//###################################################################
+
+
+
 					sh '''
 						helm install communication-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
