@@ -816,7 +816,7 @@ pipeline {
 					
 					//###################################################################
 					//sh '''
-					//	helm uninstall communication $WORKSPACE/helm/eaa-deploy/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}
+					//	helm uninstall communication  -n $TARGET_ENV --kubeconfig=${FILE}
 					//'''
 					//sleep(20)
 					//###################################################################
