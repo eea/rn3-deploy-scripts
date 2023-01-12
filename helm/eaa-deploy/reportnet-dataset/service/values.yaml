@@ -46,6 +46,8 @@ axon:
     user: postgres
     pswd: 53p057n373.0!
 
+postgres:
+  url: jdbc:postgresql://rn3-pg-helm-dataset-pgpool:5432/datasets?reWriteBatchedInserts=true
         
 tagSufix: 
 replicas: 3
