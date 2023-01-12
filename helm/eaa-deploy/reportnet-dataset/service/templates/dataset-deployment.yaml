@@ -92,6 +92,8 @@ spec:
           value: "{{.Values.axon.user}}"
         - name: AXON_CONNECTION_PASSWORD
           value: "{{.Values.axon.pswd}}"
+        - name: DATASET_CONNECTION_STRING
+          value: "{{.Values.postgres.url}}"
         
         volumeMounts:
         - mountPath: "/reportnet3-data/input"
