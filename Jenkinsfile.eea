@@ -932,7 +932,7 @@ pipeline {
 					sh '''
 						helm install communication-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
-					//sleep(20)
+					sleep(20)
 					sh '''
 						helm uninstall communication-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
