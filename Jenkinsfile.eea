@@ -64,7 +64,7 @@ pipeline {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					
 					sh '''
-						kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy communication dataset document frontend rod ums collaboration --replicas=0
+						kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy rod  --replicas=0
 					'''
 				}
 			}
@@ -178,174 +178,174 @@ pipeline {
 				
         //     }
         // }
-		stage('Deploy Dataset') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }					
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install dataset-preconfig $WORKSPACE/helm/reportnet-dataset/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall dataset-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sh '''
-						helm upgrade dataset $WORKSPACE/helm/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,replicas=3,sentry.environment=$SENTRY_ENV
-					'''
-				}
-            }
-        }
+		// stage('Deploy Dataset') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }					
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install dataset-preconfig $WORKSPACE/helm/reportnet-dataset/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall dataset-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sh '''
+		// 				helm upgrade dataset $WORKSPACE/helm/reportnet-dataset/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,replicas=3,sentry.environment=$SENTRY_ENV
+		// 			'''
+		// 		}
+        //     }
+        // }
 
-		//############################################################################### ORCHESTRATOR 
-		stage('Deploy orchestrator') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }					
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install orchestrator-preconfig $WORKSPACE/helm/reportnet-orchestrator/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall orchestrator-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sh '''
-						helm upgrade orchestrator $WORKSPACE/helm/reportnet-orchestrator/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,replicas=3,sentry.environment=$SENTRY_ENV,replicas=1
-					'''
-				}
-            }
-        }
-		//###############################################################################
+		// //############################################################################### ORCHESTRATOR 
+		// stage('Deploy orchestrator') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }					
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install orchestrator-preconfig $WORKSPACE/helm/reportnet-orchestrator/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall orchestrator-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sh '''
+		// 				helm upgrade orchestrator $WORKSPACE/helm/reportnet-orchestrator/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,replicas=3,sentry.environment=$SENTRY_ENV,replicas=1
+		// 			'''
+		// 		}
+        //     }
+        // }
+		// //###############################################################################
 
 
 
-		stage('Deploy User Management') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }			
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install ums-preconfig $WORKSPACE/helm/reportnet-ums/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall ums-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sh '''
-						helm upgrade ums $WORKSPACE/helm/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=2
-					'''
-				}
-            }
-        }
-		stage('Deploy Document Container') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }			
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install document-preconfig $WORKSPACE/helm/reportnet-document/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall document-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sh '''
-						helm upgrade document $WORKSPACE/helm/reportnet-document/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
-					'''
-				}
-            }
-        }
-		stage('Deploy Communication') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }			
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install communication-preconfig $WORKSPACE/helm/reportnet-communication/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall communication-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sh '''
-						helm upgrade communication $WORKSPACE/helm/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
-					'''
-				}
-            }
-        }
-		stage('Deploy Collaboration') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }			
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install collaboration-preconfig $WORKSPACE/helm/reportnet-collaboration/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall collaboration-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sh '''
-						helm upgrade collaboration $WORKSPACE/helm/reportnet-collaboration/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
-					'''
-				}
-            }
-        }
-		/*stage('Deploy Indexsearch') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }			
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install indexsearch-preconfig $WORKSPACE/helm/reportnet-indexsearch/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall indexsearch-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sh '''
-						helm upgrade indexsearch $WORKSPACE/helm/reportnet-indexsearch/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
-					'''
-				}
-            }
-        }*/
-		stage('Deploy ReportNet Frontend') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }			
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-				   sh '''
-						helm upgrade frontend $WORKSPACE/helm/reportnet-frontend/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,backend=$REPORTNET_BACKEND,keycloak=$KEYCLOAK,websocket=$WEB_SOCKET,eulogin=$EULOGIN,sentry.environment=$SENTRY_ENV
-					'''
-				}
+		// stage('Deploy User Management') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }			
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install ums-preconfig $WORKSPACE/helm/reportnet-ums/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall ums-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sh '''
+		// 				helm upgrade ums $WORKSPACE/helm/reportnet-ums/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=2
+		// 			'''
+		// 		}
+        //     }
+        // }
+		// stage('Deploy Document Container') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }			
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install document-preconfig $WORKSPACE/helm/reportnet-document/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall document-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sh '''
+		// 				helm upgrade document $WORKSPACE/helm/reportnet-document/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
+		// 			'''
+		// 		}
+        //     }
+        // }
+		// stage('Deploy Communication') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }			
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install communication-preconfig $WORKSPACE/helm/reportnet-communication/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall communication-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sh '''
+		// 				helm upgrade communication $WORKSPACE/helm/reportnet-communication/service -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
+		// 			'''
+		// 		}
+        //     }
+        // }
+		// stage('Deploy Collaboration') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }			
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install collaboration-preconfig $WORKSPACE/helm/reportnet-collaboration/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall collaboration-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sh '''
+		// 				helm upgrade collaboration $WORKSPACE/helm/reportnet-collaboration/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
+		// 			'''
+		// 		}
+        //     }
+        // }
+		// /*stage('Deploy Indexsearch') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }			
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install indexsearch-preconfig $WORKSPACE/helm/reportnet-indexsearch/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall indexsearch-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sh '''
+		// 				helm upgrade indexsearch $WORKSPACE/helm/reportnet-indexsearch/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
+		// 			'''
+		// 		}
+        //     }
+        // }*/
+		// stage('Deploy ReportNet Frontend') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }			
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 		   sh '''
+		// 				helm upgrade frontend $WORKSPACE/helm/reportnet-frontend/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,backend=$REPORTNET_BACKEND,keycloak=$KEYCLOAK,websocket=$WEB_SOCKET,eulogin=$EULOGIN,sentry.environment=$SENTRY_ENV
+		// 			'''
+		// 		}
                 
-            }
-        }
+        //     }
+        // }
 		
 		stage('Deploy Rod') {
 			when {
