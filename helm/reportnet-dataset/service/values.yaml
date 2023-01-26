@@ -17,13 +17,14 @@ metabase:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase
     user: dataset
     password: 53p057n373.0!
+
 datasets:
     user: postgres
     password: 53p057n373.0!
-zipkin:
-    ip: zipkin-ui
-    port: 9411
-    schema: http
+
+postgres:  
+  url: jdbc:postgresql://rn3-pg-helm-dataset-pgpool:5432/datasets?reWriteBatchedInserts=true
+
 mongo:
   host: mongo-mongodb
   port: 27017
@@ -34,8 +35,14 @@ redis:
     port: 6379
     sentinel: mymaster
     nodes: redis:26379
+
 dataset-file:
     folder: /reportnet3-data/input
+
+zipkin:
+    ip: zipkin-ui
+    port: 9411
+    schema: http
 
 sentry:
     dsn: https://f1057cea7e954e1a8e11d76bab0a53fd@sentry.eea.europa.eu/46
