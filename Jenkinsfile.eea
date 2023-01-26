@@ -64,7 +64,7 @@ pipeline {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					
 					sh '''
-						kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums validation collaboration --replicas=0
+						kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums collaboration --replicas=0
 					'''
 				}
 			}
@@ -156,28 +156,28 @@ pipeline {
 				}
             }
         }
-        stage('Deploy Validation') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }			
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install validation-preconfig $WORKSPACE/helm/reportnet-validation/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall validation-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sh '''
-						helm upgrade validation $WORKSPACE/helm/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,replicas=4,sentry.environment=$SENTRY_ENV
-					'''
-				}
+        // stage('Deploy Validation') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }			
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install validation-preconfig $WORKSPACE/helm/reportnet-validation/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall validation-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sh '''
+		// 				helm upgrade validation $WORKSPACE/helm/reportnet-validation/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,replicas=4,sentry.environment=$SENTRY_ENV
+		// 			'''
+		// 		}
 				
-            }
-        }
+        //     }
+        // }
 		stage('Deploy Dataset') {
 			when {
 				not {
