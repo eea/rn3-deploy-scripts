@@ -41,18 +41,18 @@ pipeline {
 	      }
        
 		
-		stage('Update Database') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }					    
-            steps {
-                sh '''
-                    mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
-                '''
-	          }
-        }
+		// stage('Update Database') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }					    
+        //     steps {
+        //         sh '''
+        //             mvn -f $WORKSPACE/helm/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+        //         '''
+	    //       }
+        // }
 		stage('Scaling down services'){
 			when {
 				not {
