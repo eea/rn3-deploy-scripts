@@ -95,8 +95,8 @@ spec:
         - name: SENTRY_RELEASE
           value: "{{.Values.version}}"
         - name: DATASET_PATH
-          value: "/reportnet3-data/input"                                   
-        - name: DATASET_CONNECTION_STRING  
+          value: "/reportnet3-data/input"
+        - name: DATASET_CONNECTION_STRING
           value: "{{.Values.postgres.url}}"
         
         volumeMounts:
