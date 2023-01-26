@@ -64,98 +64,98 @@ pipeline {
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					
 					sh '''
-						kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy api-gateway communication dataflow dataset document frontend recordstore rod ums collaboration --replicas=0
+						kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy communication dataset document frontend rod ums collaboration --replicas=0
 					'''
 				}
 			}
 		}
-        stage('Configure Common Application properties') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }			
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install application-config $WORKSPACE/helm/application-config -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall application-config  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-				}
-            }
-        }
-        stage('Deploy API Gateway') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }			
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install api-gateway-preconfig $WORKSPACE/helm/reportnet-api-gateway/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall api-gateway-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sh '''
-						helm upgrade api-gateway $WORKSPACE/helm/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
-					'''
-				 }
+        // stage('Configure Common Application properties') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }			
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install application-config $WORKSPACE/helm/application-config -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall application-config  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 		}
+        //     }
+        // }
+        // stage('Deploy API Gateway') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }			
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install api-gateway-preconfig $WORKSPACE/helm/reportnet-api-gateway/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall api-gateway-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sh '''
+		// 				helm upgrade api-gateway $WORKSPACE/helm/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV
+		// 			'''
+		// 		 }
 				
-            }
-        }
-		stage('Deploy Dataflow') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }			
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install dataflow-preconfig $WORKSPACE/helm/reportnet-dataflow/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall dataflow-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sh '''
-						helm upgrade dataflow $WORKSPACE/helm/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$RELEASE_NAME,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV,replicas=3
+        //     }
+        // }
+		// stage('Deploy Dataflow') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }			
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install dataflow-preconfig $WORKSPACE/helm/reportnet-dataflow/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall dataflow-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sh '''
+		// 				helm upgrade dataflow $WORKSPACE/helm/reportnet-dataflow/service -n $TARGET_ENV  -i --kubeconfig=${FILE} --wait --set version=$RELEASE_NAME,fme.integration.callback.urlbase=$R3_CALLBACK_URL,fme.topic=$FME_TOPIC,sentry.environment=$SENTRY_ENV,replicas=3
 
-					'''
-				}
-            }
-        }
-		stage('Deploy Recordstore') {
-			when {
-				not {
-					environment name: 'RELEASE_NAME', value: ''
-                }
-            }			
-            steps {
-				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-					sh '''
-						helm install recordstore-preconfig $WORKSPACE/helm/reportnet-recordstore/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					sleep(20)
-					sh '''
-						helm uninstall recordstore-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
-					'''
-					/*sh '''
-						helm upgrade recordstore-persistence $WORKSPACE/helm/reportnet-recordstore/pvc -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set repo=k8s-swi001:5000,tagSufix=_sandbox
-					'''*/
-					sh '''
-						helm upgrade recordstore $WORKSPACE/helm/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=2
-					'''
-					sleep(20)
-				}
-            }
-        }
+		// 			'''
+		// 		}
+        //     }
+        // }
+		// stage('Deploy Recordstore') {
+		// 	when {
+		// 		not {
+		// 			environment name: 'RELEASE_NAME', value: ''
+        //         }
+        //     }			
+        //     steps {
+		// 		withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+		// 			sh '''
+		// 				helm install recordstore-preconfig $WORKSPACE/helm/reportnet-recordstore/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			sleep(20)
+		// 			sh '''
+		// 				helm uninstall recordstore-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
+		// 			'''
+		// 			/*sh '''
+		// 				helm upgrade recordstore-persistence $WORKSPACE/helm/reportnet-recordstore/pvc -n $TARGET_ENV --kubeconfig=${FILE}  -i --wait --set repo=k8s-swi001:5000,tagSufix=_sandbox
+		// 			'''*/
+		// 			sh '''
+		// 				helm upgrade recordstore $WORKSPACE/helm/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$RELEASE_NAME,sentry.environment=$SENTRY_ENV,replicas=2
+		// 			'''
+		// 			sleep(20)
+		// 		}
+        //     }
+        // }
         // stage('Deploy Validation') {
 		// 	when {
 		// 		not {
