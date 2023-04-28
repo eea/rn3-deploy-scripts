@@ -82,8 +82,6 @@ spec:
           value: "{{.Values.axon.user}}"
         - name: AXON_CONNECTION_PASSWORD
           value: "{{.Values.axon.pswd}}"
-        - name: DATASET_PATH
-          value: "/reportnet3-data/input"
 
         volumeMounts:
         - mountPath: "{{.Values.file.path}}"
