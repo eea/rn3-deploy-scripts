@@ -1,0 +1,23 @@
+controller:
+  containerEnv:
+  - name: user-admin
+    valueFrom:
+    secretKeyRef:
+      name: rn3-admin
+      key: username
+  - name: pass-admin
+    valueFrom:
+    secretKeyRef:
+      name:  rn3-admin
+      key: password
+  
+  - name: user-pgsql
+    valueFrom:
+    secretKeyRef:
+      name: rn3-pgsql
+      key: username
+  - name: pass-pgsql
+    valueFrom:
+    secretKeyRef:
+      name:  rn3-pgsql
+      key: password
