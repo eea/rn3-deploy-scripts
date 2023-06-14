@@ -80,11 +80,11 @@ pipeline {
 					
  					echo "Update Database of ${params.Env}"
 
-					node {
-						withCredentials([string(credentialsId: 'POSTGRES_PASS', variable: 'SECRET')]) { //set SECRET with the credential content
-							echo "My secret text is '${SECRET}'"
-						}
-					}
+					//node {
+					//	withCredentials([string(credentialsId: 'POSTGRES_PASS', variable: 'SECRET')]) { //set SECRET with the credential content
+					//		echo "My secret text is '${SECRET}'"
+					//	}
+					//}
 
 
 					sh('curl -u $EXAMPLE_CREDS_USR:$EXAMPLE_CREDS_PSW')
