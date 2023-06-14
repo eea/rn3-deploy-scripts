@@ -78,27 +78,29 @@ pipeline {
 					env.USRMGMREP="${params.User_management_replicas}"
 					
 					env.RN3_POSTGRES_CREDS = credentials('d2540d35-0b65-4c30-ab4d-57b5ab0c2397')
+					env.RN3_POSTGRES_CREDS_PASS = credentials('POSTGRES_PASS')
+					env.RN3_POSTGRES_CREDS_USER= credentials('POSTGRES_USER')
 
 
  					echo "Update Database of ${params.Env}"
 
-					node {
-						withCredentials([string(credentialsId: 'POSTGRES_PASS', variable: 'SECRET')]) { //set SECRET with the credential content
-							echo "My secret text is '${SECRET}'"
-						}
-					}
+					//node {
+					//	withCredentials([string(credentialsId: 'POSTGRES_PASS', variable: 'SECRET')]) { //set SECRET with the credential content
+					//		echo "My secret text is '${SECRET}'"
+					//	}
+					//}
 
 
 					
-					sh("echo '${RN3_POSTGRES_CREDS_USR}'")
-					sh("echo '${RN3_POSTGRES_CREDS_PSW}'")
-					sh("echo '$RN3_POSTGRES_CREDS_USR:$RN3_POSTGRES_CREDS_PSW'")
+					//sh("echo '${RN3_POSTGRES_CREDS_USR}'")
+					//sh("echo '${RN3_POSTGRES_CREDS_PSW}'")
+					//sh("echo '$RN3_POSTGRES_CREDS_USR:$RN3_POSTGRES_CREDS_PSW'")
 
 
 
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=${RN3_POSTGRES_CREDS_PSW} -DPOSTGRES_USER=${RN3_POSTGRES_CREDS_USR} flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=$RN3_POSTGRES_CREDS_PASS -DPOSTGRES_USER=$RN3_POSTGRES_CREDS_USER flyway:migrate
 					'''
 
 
