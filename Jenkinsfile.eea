@@ -90,7 +90,7 @@ pipeline {
 					//sh('curl -u $EXAMPLE_CREDS_USR:$EXAMPLE_CREDS_PSW')
 					//sh('echo ${EXAMPLE_CREDS_USR}')
 					//sh('echo ${EXAMPLE_CREDS_PSW}')
-					bat 'echo %EXAMPLE_CREDS%'
+					sh 'echo %EXAMPLE_CREDS%'
 
 
 
