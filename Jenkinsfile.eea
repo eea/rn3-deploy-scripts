@@ -81,7 +81,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=$POSTGRES_PASS -DPOSTGRES_USER=$POSTGRES_USER flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=([string(credentialsId: 'POSTGRES_PASS', variable: 'SECRET')]) -DPOSTGRES_USER=([string(credentialsId: 'POSTGRES_USER', variable: 'SECRET')]) flyway:migrate
 					'''
 
 
