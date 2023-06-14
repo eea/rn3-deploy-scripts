@@ -77,9 +77,7 @@ pipeline {
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
 					
-					//env.RN3_POSTGRES_CREDS = credentials('d2540d35-0b65-4c30-ab4d-57b5ab0c2397')
-					//env.RN3_POSTGRES_CREDS_PASS=credentials('POSTGRES_PASS_SECRET')
-					//env.RN3_POSTGRES_CREDS_USER=credentials('POSTGRES_USER_SECRET')
+
 
 
  					echo "Update Database of ${params.Env}"
@@ -90,9 +88,6 @@ pipeline {
 						usernameVariable: 'username',
 						passwordVariable: 'password')
 					]) {
-						//print 'username=' + username + 'password=' + password
-						//print 'username.collect { it }=' + username.collect { it }
-						//print 'password.collect { it }=' + password.collect { it }
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
 						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
@@ -222,9 +217,6 @@ pipeline {
 						usernameVariable: 'username',
 						passwordVariable: 'password')
 					]) {
-						//print 'username=' + username + 'password=' + password
-						//print 'username.collect { it }=' + username.collect { it }
-						//print 'password.collect { it }=' + password.collect { it }
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
 						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
@@ -363,9 +355,7 @@ pipeline {
 						usernameVariable: 'username',
 						passwordVariable: 'password')
 					]) {
-						//print 'username=' + username + 'password=' + password
-						//print 'username.collect { it }=' + username.collect { it }
-						//print 'password.collect { it }=' + password.collect { it }
+
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
 						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
@@ -495,9 +485,7 @@ pipeline {
 						usernameVariable: 'username',
 						passwordVariable: 'password')
 					]) {
-						//print 'username=' + username + 'password=' + password
-						//print 'username.collect { it }=' + username.collect { it }
-						//print 'password.collect { it }=' + password.collect { it }
+
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
 						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
@@ -629,9 +617,7 @@ pipeline {
 						usernameVariable: 'username',
 						passwordVariable: 'password')
 					]) {
-						//print 'username=' + username + 'password=' + password
-						//print 'username.collect { it }=' + username.collect { it }
-						//print 'password.collect { it }=' + password.collect { it }
+
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
 						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
@@ -770,9 +756,7 @@ pipeline {
 						usernameVariable: 'username',
 						passwordVariable: 'password')
 					]) {
-						//print 'username=' + username + 'password=' + password
-						//print 'username.collect { it }=' + username.collect { it }
-						//print 'password.collect { it }=' + password.collect { it }
+
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
 						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
