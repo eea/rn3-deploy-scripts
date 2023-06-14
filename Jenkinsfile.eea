@@ -76,8 +76,10 @@ pipeline {
 					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
-					env.RN3-POSTGRES_CREDS=credentials('d2540d35-0b65-4c30-ab4d-57b5ab0c2397')
 					
+					env.RN3_POSTGRES_CREDS = credentials('d2540d35-0b65-4c30-ab4d-57b5ab0c2397')
+
+
  					echo "Update Database of ${params.Env}"
 
 					//node {
@@ -90,7 +92,7 @@ pipeline {
 					//sh('curl -u $EXAMPLE_CREDS_USR:$EXAMPLE_CREDS_PSW')
 					//sh('echo ${EXAMPLE_CREDS_USR}')
 					//sh('echo ${EXAMPLE_CREDS_PSW}')
-					sh 'echo $RN3-POSTGRES_CREDS_USR:$RN3-POSTGRES_CREDS_PSW'
+					sh 'echo $RN3_POSTGRES_CREDS_USR:$RN3_POSTGRES_CREDS_PSW'
 
 
 
