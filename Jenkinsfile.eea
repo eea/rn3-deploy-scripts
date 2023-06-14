@@ -108,7 +108,7 @@ pipeline {
 						print 'password.collect { it }=' + password.collect { it }
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=$passwordVariable -DPOSTGRES_USER=$usernameVariable flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
 					'''
 
 						}
