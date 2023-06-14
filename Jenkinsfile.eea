@@ -12,7 +12,7 @@ pipeline {
 			//string(defaultValue: 'dev', description: 'Set the branch', name: 'Brn', trim: true)
 			//string(defaultValue: 'v3.1.6-DEV', description: 'Set the version to be deployed', name: 'Ver', trim: true)
 			//string(defaultValue: 'v3.1.6-demoArchV2', description: 'Set the version to be deployed', name: 'Ver', trim: true)
-			string(defaultValue: 'v3.3-ARCHITECTURE_DATALAKES', description: 'Set the version to be deployed', name: 'Ver', trim: true)
+			string(defaultValue: 'v3.1.6-ARCHITECTURE', description: 'Set the version to be deployed', name: 'Ver', trim: true)
 			string(defaultValue: 'api-gateway communication dataflow dataset document frontend recordstore rod ums validation orchestrator collaboration', description: 'Set the service to down scale before deployment (api-gateway communication dataflow dataset document frontend recordstore rod ums validation orchestrator collaboration)', name: 'Reset_Services', trim: true)
 			string(defaultValue: '1', description: 'Dataflow Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=2)', name: 'Dataflow_replicas', trim: true)
 			string(defaultValue: '1', description: 'DataSet Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=2)', name: 'DataSet_replicas', trim: true)
@@ -79,9 +79,17 @@ pipeline {
 					
 					
  					echo "Update Database of ${params.Env}"
+
+					node {
+						withCredentials([string(credentialsId: 'POSTGRES_PASS', variable: 'SECRET')]) { //set SECRET with the credential content
+							echo "My secret text is '${SECRET}'"
+						}
+					}
+
+
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="([string(credentialsId: 'POSTGRES_PASS', variable: 'SECRET')])" -DPOSTGRES_USER="([string(credentialsId: 'POSTGRES_USER', variable: 'SECRET')])" flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 
 
@@ -198,7 +206,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.4.175:30585 -DPOSTGRES_PASS=$POSTGRES_PASS -DPOSTGRES_USER=$POSTGRES_USER flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.4.175:30585 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 
 
@@ -325,7 +333,7 @@ pipeline {
 
  					echo "Update Database of ${params.Env}"
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=$POSTGRES_PASS -DPOSTGRES_USER=$POSTGRES_USER flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.10:30746 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 
 
@@ -444,7 +452,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"'
  					sh '''
- 	                  mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.70:31456 -DPOSTGRES_PASS=$POSTGRES_PASS -DPOSTGRES_USER=$POSTGRES_USER flyway:migrate
+ 	                  mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.70:31456 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
  					'''
 
 
@@ -565,7 +573,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=$POSTGRES_PASS -DPOSTGRES_USER=$POSTGRES_USER flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.4.153:31349 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 
 
@@ -694,7 +702,7 @@ pipeline {
  					echo "Update Database of ${params.Env}"
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.4.233:31827 -DPOSTGRES_PASS=$POSTGRES_PASS -DPOSTGRES_USER=$POSTGRES_USER flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.4.233:31827 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
 					'''
 
 
