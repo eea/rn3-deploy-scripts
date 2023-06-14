@@ -90,15 +90,15 @@ pipeline {
 
 
 					
-					sh("echo '${EXAMPLE_CREDS_USR}'")
-					sh("echo '${EXAMPLE_CREDS_PSW}'")
+					sh("echo '${RN3_POSTGRES_CREDS_USR}'")
+					sh("echo '${RN3_POSTGRES_CREDS_PSW}'")
 					sh("echo '$RN3_POSTGRES_CREDS_USR:$RN3_POSTGRES_CREDS_PSW'")
 
 
 
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS='${RN3_POSTGRES_CREDS_PSW}' -DPOSTGRES_USER='${RN3_POSTGRES_CREDS_USR}' flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=${RN3_POSTGRES_CREDS_PSW} -DPOSTGRES_USER=${RN3_POSTGRES_CREDS_USR} flyway:migrate
 					'''
 
 
