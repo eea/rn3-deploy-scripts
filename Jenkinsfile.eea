@@ -78,8 +78,8 @@ pipeline {
 					env.USRMGMREP="${params.User_management_replicas}"
 					
 					env.RN3_POSTGRES_CREDS = credentials('d2540d35-0b65-4c30-ab4d-57b5ab0c2397')
-					env.RN3_POSTGRES_CREDS_PASS=withCredentials([string(credentialsId: 'POSTGRES_PASS', variable: 'SECRET')])
-					env.RN3_POSTGRES_CREDS_USER=withCredentials([string(credentialsId: 'POSTGRES_USER', variable: 'SECRET')])
+					env.RN3_POSTGRES_CREDS_PASS=credentials('POSTGRES_PASS_SECRET')
+					env.RN3_POSTGRES_CREDS_USER=credentials('POSTGRES_USER_SECRET')
 
 
  					echo "Update Database of ${params.Env}"
