@@ -76,7 +76,7 @@ pipeline {
 					env.ORCHREP="${params.Orchestrator_replicas}"	
 					env.VLDREP="${params.Validation_replicas}"
 					env.USRMGMREP="${params.User_management_replicas}"
-					env.EXAMPLE_CREDS = credentials('d2540d35-0b65-4c30-ab4d-57b5ab0c2397')
+					env.EXAMPLE_CREDS=credentials('d2540d35-0b65-4c30-ab4d-57b5ab0c2397')
 					
  					echo "Update Database of ${params.Env}"
 
@@ -93,7 +93,7 @@ pipeline {
 					
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS=${EXAMPLE_CREDS_PSW} -DPOSTGRES_USER=${EXAMPLE_CREDS_USR} flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="${EXAMPLE_CREDS_PSW}" -DPOSTGRES_USER="${EXAMPLE_CREDS_USR}" flyway:migrate
 					'''
 
 
