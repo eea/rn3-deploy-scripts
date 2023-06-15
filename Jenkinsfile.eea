@@ -78,8 +78,24 @@ pipeline {
 					env.USRMGMREP="${params.User_management_replicas}"
 					
 
+					env.eea_keycloak_reportnet_admin = credentials('rn3_eea_keycloak_admin')
 
+					//KEYCLOAK_ADMIN_PASSWORD:admin
+					//KEYCLOAK_ADMIN_USER:reportnet_admin
+					//KEYCLOAK_CLIENT_PUBLIC_KEY:MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgbMIQ/yJEarq3gz5Ie+wqXs6p878xDeZcM/u8zu/f950BLAcNoNrXTt6lyFThhqxnD4O2N6Ffz4TIOigNwHsXbVGPZy2N1o8Smdaxk+YvrbzOXFELYEna2CZtwV6Gl7nkoLjmZVS143QunYLJ3d34ZTRskp5CYrFJRjaCBnB5LXGilAzaEdLRb4Rr6jU9xker7HGOx4/ZWeNkE3IwLkCzkKeGO8Jz7HS+xzwaMuYXCIl/8WD8e0fcKb6RzruDfepGtQmoVtmmzLF+3kQJOHN0vu+QeYkF7mLkkBAbXDbEgihILnOyocF1S+pEsxaHPkiVeslH32ieV1NWbqf7t3UPwIDAQAB}
+					//KEYCLOAK_SECRET:24c0724e-6f20-48f6-917f-e83ef5f03926
 
+					script {
+						userVar = null
+						passVar = null
+						withCredentials([usernamePassword(credentialsId: 'rn3_eea_keycloak_admin', passwordVariable: 'password', usernameVariable: 'username')]) {
+							userVar = username
+							passVar = password
+						}
+						echo "Username: ${userVar}"
+						echo "Password: ${passVar}"
+					}
+		
  					echo "Update Database of ${params.Env}"
 
 					script {
