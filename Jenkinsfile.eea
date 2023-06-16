@@ -116,8 +116,9 @@ pipeline {
 
 					withCredentials([file(credentialsId: 'applications_properties', variable: 'FILE')]) {
 						text = readFile(FILE)
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
+						//writeFile file: "$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties", text: readFile(FILE)
 						//sh 'cp \$applications_properties $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties'
+						sh "cp \${text} $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 					}
 					
 					println "${text}"
