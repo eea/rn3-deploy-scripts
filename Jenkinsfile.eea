@@ -108,6 +108,9 @@ pipeline {
 						}
 					}
 
+					withCredentials([file(credentialsId: applications_properties, variable: 'applications_properties')]) {
+							writeFile file: 'helm/eaa-deploy/application-config/files/application.properties', text: readFile(applications_properties)							
+						}
 
 
 
@@ -889,9 +892,6 @@ pipeline {
 
 
 
-					withCredentials([file(credentialsId: applications_properties, variable: 'applications_properties')]) {
-							writeFile file: 'helm/eaa-deploy/application-config/files/application.properties', text: readFile(applications_properties)							
-						}
 
 
 	 			echo "Deploy API Gateway of ${params.Env}"
