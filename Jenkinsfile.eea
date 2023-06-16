@@ -81,17 +81,36 @@ pipeline {
 					env.eea_keycloak_reportnet_admin = credentials('rn3_eea_keycloak_admin')
 
 
-					script {
-						userVar = null
-						passVar = null
-						withCredentials([usernamePassword(credentialsId: 'rn3_eea_keycloak_admin', passwordVariable: 'password', usernameVariable: 'username')]) {
-							rn3_eea_keycloak_admin_userVar = username
-							rn3_eea_keycloak_admin_passVar = password
-						}
-						echo "Username: ${rn3_eea_keycloak_admin_userVar}"
-						echo "Password: ${rn3_eea_keycloak_admin_passVar}"
-					}
-		
+					// script {
+					// 	userVar = null
+					// 	passVar = null
+					// 	withCredentials([usernamePassword(credentialsId: 'rn3_eea_keycloak_admin', passwordVariable: 'password', usernameVariable: 'username')]) {
+					// 		rn3_eea_keycloak_admin_userVar = username
+					// 		rn3_eea_keycloak_admin_passVar = password
+					// 	}
+					// 	echo "Username: ${rn3_eea_keycloak_admin_userVar}"
+					// 	echo "Password: ${rn3_eea_keycloak_admin_passVar}"
+					// }
+
+
+
+
+					//#######################################################################################################################
+					//copy the secret file to destination
+					withCredentials([file(credentialsId: 'applications_properties', variable: 'FILE')]) {
+						//text = readFile(FILE)
+						writeFile file: "$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties", text: readFile(FILE)
+					}			
+					//println "${text}"	
+					withCredentials([file(credentialsId: 'collaboration-service_properties', variable: 'FILE')]) {
+						//text = readFile(FILE)
+						writeFile file: "$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties", text: readFile(FILE)
+					}			
+					//println "${text}"	
+					//#######################################################################################################################
+
+
+
  					echo "Update Database of ${params.Env}"
 
 					script {
@@ -108,20 +127,7 @@ pipeline {
 						}
 					}
 
-					//withCredentials([file(credentialsId: applications_properties, variable: 'applications_properties')]) {
-							//sh 'cp \$applications_properties $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties'
-							//writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(applications_properties)	
-							//;sh 'cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties'						
-						//}
 
-					withCredentials([file(credentialsId: 'applications_properties', variable: 'FILE')]) {
-						text = readFile(FILE)
-						writeFile file: "$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties", text: readFile(FILE)
-						//sh 'cp \$applications_properties $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties'
-						//sh "cp \${text} $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-					}
-					
-					println "${text}"
 
 
 
