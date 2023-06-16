@@ -109,7 +109,8 @@ pipeline {
 					}
 
 					withCredentials([file(credentialsId: applications_properties, variable: 'applications_properties')]) {
-							writeFile file: 'helm/eaa-deploy/application-config/files/application.properties', text: readFile(applications_properties)							
+							writeFile file: 'helm/eaa-deploy/application-config/files/application.properties', text: readFile(applications_properties)	
+							sh 'cat helm/eaa-deploy/application-config/files/application.properties'						
 						}
 
 
