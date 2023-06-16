@@ -89,11 +89,11 @@ pipeline {
 						userVar = null
 						passVar = null
 						withCredentials([usernamePassword(credentialsId: 'rn3_eea_keycloak_admin', passwordVariable: 'password', usernameVariable: 'username')]) {
-							userVar = username
-							passVar = password
+							rn3_eea_keycloak_admin_userVar = username
+							rn3_eea_keycloak_admin_passVar = password
 						}
-						echo "Username: ${userVar}"
-						echo "Password: ${passVar}"
+						echo "Username: ${rn3_eea_keycloak_admin_userVar}"
+						echo "Password: ${rn3_eea_keycloak_admin_passVar}"
 					}
 		
  					echo "Update Database of ${params.Env}"
