@@ -108,12 +108,19 @@ pipeline {
 						}
 					}
 
-					withCredentials([file(credentialsId: applications_properties, variable: 'applications_properties')]) {
-							writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(applications_properties)	
-							sh 'cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties'						
-						}
+					//withCredentials([file(credentialsId: applications_properties, variable: 'applications_properties')]) {
+							//sh 'cp \$applications_properties $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties'
+							//writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(applications_properties)	
+							//;sh 'cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties'						
+						//}
 
-
+					withCredentials([file(credentialsId: 'applications_properties', variable: 'FILE')]) {
+						text = readFile(FILE)
+						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
+						//sh 'cp \$applications_properties $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties'
+					}
+					
+					println "${text}"
 
 
 
