@@ -100,7 +100,6 @@ pipeline {
 
 
 
-
 					// ####################################################################################################################################################
 					// LETS TRY TO SET THE CHANGE ON THE PROPERTIES STATIC FILE
 					////sh "cat $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
@@ -872,6 +871,12 @@ pipeline {
 	 			// 		helm uninstall application-config  -n $TARGET_ENV --kubeconfig=${FILE}
 	 			// 	'''
 	 			// }
+
+
+
+
+
+
 
 	 			echo "Deploy API Gateway of ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
