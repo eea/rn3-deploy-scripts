@@ -83,12 +83,12 @@ pipeline {
 					//copy the secret file to destination
 					withCredentials([file(credentialsId: 'applications_properties', variable: 'FILE')]) {
 						//text = readFile(FILE)
-						writeFile file: "$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties", text: readFile(FILE)
+						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
 					}			
 					//println "${text}"	
 					withCredentials([file(credentialsId: 'collaboration-service_properties', variable: 'FILE')]) {
 						//text = readFile(FILE)
-						writeFile file: "$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties", text: readFile(FILE)
+						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE)
 					}			
 					//println "${text}"	
 					//#######################################################################################################################
