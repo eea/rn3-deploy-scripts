@@ -43,29 +43,29 @@ pipeline {
 
 
 	stage application_properties
-	def build_application_properties() {
-	parallel([
-					withCredentials([file(credentialsId: 'application.properties', variable: 'FILE')]) {
-						//text = readFile(FILE)
-						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
-					}			
-					//println "${text}"	
-	])}
+		def build_application_properties() {
+		parallel([
+						withCredentials([file(credentialsId: 'application.properties', variable: 'FILE')]) {
+							//text = readFile(FILE)
+							echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+							writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
+						}			
+						//println "${text}"	
+		])}
 	build_application_properties()
 
 
-	stage collaboration_service_properties
-	def collaboration_service_properties() {
-	parallel([
-					//Collaboration
-					withCredentials([file(credentialsId: 'collaboration-service.properties', variable: 'FILE')]) {
-						//text = readFile(FILE)
-						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE)
-					}	
-	])}
-	build_collaboration_service_properties()
+	// stage collaboration_service_properties
+	// def collaboration_service_properties() {
+	// parallel([
+	// 				//Collaboration
+	// 				withCredentials([file(credentialsId: 'collaboration-service.properties', variable: 'FILE')]) {
+	// 					//text = readFile(FILE)
+	// 					echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
+	// 					writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE)
+	// 				}	
+	// ])}
+	// build_collaboration_service_properties()
 
 
         // stage('Setting Secret files into places batch 1') {
