@@ -338,8 +338,8 @@ pipeline {
 		 			//Api Gateway
 		 			withCredentials([file(credentialsId: 'api-gateway.properties', variable: 'FILE')]) {
 		 				//text = readFile(FILE)
-		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/files/api-gateway.properties"
-		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/files/api-gateway.properties', text: readFile(FILE)
+		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
+		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties', text: readFile(FILE)
 		 				sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
 		 			}			
 		 			//println "${text}"	
