@@ -78,21 +78,21 @@ pipeline {
 					}
 					//println "${text}"	
 
-					//Dataset
-					withCredentials([file(credentialsId: 'dataset-service.properties', variable: 'FILE')]) {
-					 	//text = readFile(FILE)
-					 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
-					 	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties', text: readFile(FILE)
-					}
-					//println "${text}"	
+					// //Dataset
+					// withCredentials([file(credentialsId: 'dataset-service.properties', variable: 'FILE')]) {
+					//  	//text = readFile(FILE)
+					//  	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
+					//  	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties', text: readFile(FILE)
+					// }
+					// //println "${text}"	
 
-					//Document document-service.properties 
-					withCredentials([file(credentialsId: 'document-service.properties', variable: 'FILE')]) {
-					 	//text = readFile(FILE)
-						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties"
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties', text: readFile(FILE)
-					}
-					//println "${text}"	
+					// //Document document-service.properties 
+					// withCredentials([file(credentialsId: 'document-service.properties', variable: 'FILE')]) {
+					//  	//text = readFile(FILE)
+					// 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties"
+					// 	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties', text: readFile(FILE)
+					// }
+					// //println "${text}"	
 
 					// //reportnet-e2e 
 					// withCredentials([file(credentialsId: 'e2e_application.properties', variable: 'FILE')]) {
