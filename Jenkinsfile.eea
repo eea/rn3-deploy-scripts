@@ -336,7 +336,7 @@ pipeline {
 					//}
 					def secretfiles
 					node('master') {
-						checkout scm
+						//checkout scm
 						secretfiles = load 'secrets.groovy'
 						secretfiles.CopySecretFiles()
 					}
