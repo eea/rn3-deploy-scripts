@@ -328,10 +328,19 @@ pipeline {
 					}			
 					//println "${text}"	
 
-					//node {
-					//def thing = load 'secret.groovy'
-					//echo thing.doStuff()
+					//def pipeline
+					//node('master') {
+					//	checkout scm
+					//	pipeline = load 'script.groovy'
+					//	pipeline.execute()
 					//}
+					def secretfiles
+					node('master') {
+						checkout scm
+						secretfiles = load 'secrets.groovy'
+						secretfiles.CopySecretFiles()
+					}
+
 
 
 

@@ -1,5 +1,5 @@
-class Thing {
-   def doStuff() { return "HI sotav" }
+def CopySecretFiles() {
+    println 'Test SOTAV SOTAV SOTAV SOTAV'
 }
 
-return new Thing();
+return this
