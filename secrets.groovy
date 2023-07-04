@@ -1,5 +1,5 @@
-class SecretFiles {
+class Thing {
    def doStuff() { return "HI sotav" }
 }
 
-return new SecretFiles();
+return new Thing();
