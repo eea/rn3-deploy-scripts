@@ -55,8 +55,8 @@ pipeline {
 	build_application_properties()
 
 
-	stage collaboration-service_properties
-	def collaboration-service_properties() {
+	stage collaboration_service_properties
+	def collaboration_service_properties() {
 	parallel([
 					//Collaboration
 					withCredentials([file(credentialsId: 'collaboration-service.properties', variable: 'FILE')]) {
@@ -65,7 +65,7 @@ pipeline {
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE)
 					}	
 	])}
-	build_collaboration-service_properties()
+	build_collaboration_service_properties()
 
 
         // stage('Setting Secret files into places batch 1') {
