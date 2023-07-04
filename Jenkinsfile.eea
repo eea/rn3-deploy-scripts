@@ -328,8 +328,8 @@ pipeline {
 					// }			
 					// //println "${text}"	
 
-				def thing = load 'Thing.groovy'
-				echo thing.doStuff()
+				//def thing = load 'Thing.groovy'
+				//echo thing.doStuff()
 
 
 
