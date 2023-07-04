@@ -86,37 +86,37 @@ pipeline {
 					}
 					//println "${text}"	
 
-					// //Document document-service.properties 
-					// withCredentials([file(credentialsId: 'document-service.properties', variable: 'FILE')]) {
-					// 	//text = readFile(FILE)
-					// 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties"
-					// 	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties', text: readFile(FILE)
-					// }
-					// //println "${text}"	
+					//Document document-service.properties 
+					withCredentials([file(credentialsId: 'document-service.properties', variable: 'FILE')]) {
+					 	//text = readFile(FILE)
+						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties"
+						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties', text: readFile(FILE)
+					}
+					//println "${text}"	
 
-					// //reportnet-e2e 
-					// withCredentials([file(credentialsId: 'e2e_application.properties', variable: 'FILE')]) {
-					// 	//text = readFile(FILE)
-					// 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties"
-					// 	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties', text: readFile(FILE)
-					// }
-					// //println "${text}"	
+					//reportnet-e2e 
+					withCredentials([file(credentialsId: 'e2e_application.properties', variable: 'FILE')]) {
+						//text = readFile(FILE)
+						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties"
+						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties', text: readFile(FILE)
+					}
+					//println "${text}"	
 
-					// //Indexsearch
-					// withCredentials([file(credentialsId: 'indexsearch-service.properties', variable: 'FILE')]) {
-					// 	//text = readFile(FILE)
-					// 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-indexsearch/preconfig/files/indexsearch-service.properties"
-					// 	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-indexsearch/preconfig/files/indexsearch-service.properties', text: readFile(FILE)
-					// }
-					// //println "${text}"	
+					//Indexsearch
+					withCredentials([file(credentialsId: 'indexsearch-service.properties', variable: 'FILE')]) {
+						//text = readFile(FILE)
+						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-indexsearch/preconfig/files/indexsearch-service.properties"
+						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-indexsearch/preconfig/files/indexsearch-service.properties', text: readFile(FILE)
+					}
+					//println "${text}"	
 
-					// //Orchestrator
-					// withCredentials([file(credentialsId: 'orchestrator-service.properties', variable: 'FILE')]) {
-					// 	//text = readFile(FILE)
-					// 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
-					// 	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties ', text: readFile(FILE)
-					// }
-					// //println "${text}"	
+					//Orchestrator
+					withCredentials([file(credentialsId: 'orchestrator-service.properties', variable: 'FILE')]) {
+						//text = readFile(FILE)
+						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
+						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties ', text: readFile(FILE)
+					}
+					//println "${text}"	
 
 					// //RecordStore
 					// withCredentials([file(credentialsId: 'recordstore-service.properties', variable: 'FILE')]) {
