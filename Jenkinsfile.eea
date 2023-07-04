@@ -45,7 +45,7 @@ pipeline {
 
 
 
-	stage foo
+	stage ('Secret_files') {
 		def build_Secret_files() {
 		parallel([
 					//#######################################################################################################################
@@ -141,7 +141,7 @@ pipeline {
 					//println "${text}"
 		])}
 	build_Secret_files()
-
+	}
 
 
 
