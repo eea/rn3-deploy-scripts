@@ -40,7 +40,7 @@ pipeline {
 		}
 
 
-        stage('Setting Default Environmental Variables') {
+        stage('Setting Secret files into places part1') {
 			
 			steps {
 				script {
