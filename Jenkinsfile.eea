@@ -346,11 +346,8 @@ pipeline {
 						//text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties', text: readFile(FILE)
-					}	
-
-						
+					}			
 					//println "${text}"	
-					sleep(5)
 
 		//		}
 		//	}
@@ -386,8 +383,7 @@ pipeline {
 		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties"
 		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties', text: readFile(FILE)
 		 			}
-		 			//println "${text}"
-					sleep(5)	
+		 			//println "${text}"	
 		// 		}
 		// 	}
 		// }
@@ -413,7 +409,6 @@ pipeline {
 		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig/files/recordstore-service.properties', text: readFile(FILE)
 		 			}
 		 			//println "${text}"	
-					sleep(5)
 		// 		}
 		// 	}
 		// }
@@ -438,7 +433,6 @@ pipeline {
 		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-validation/preconfig/files/validation-service.properties', text: readFile(FILE)
 		 			}
 		 			//println "${text}"
-					sleep(5)
 
 		// 		}
 		// 	}
@@ -449,29 +443,28 @@ pipeline {
 		// 	steps {
 		// 		script {
 					
-		 			echo "Saving Secret Files batch 5 into place for Env  ${params.Env}"
-		 			//UMS
-		 			withCredentials([file(credentialsId: 'ums-service.properties', variable: 'FILE')]) {
-		 				//text = readFile(FILE)
-		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-ums/preconfig/files/ums-service.properties"
-		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-ums/preconfig/files/ums-service.properties', text: readFile(FILE)
-		 			}
-		 			//println "${text}"	
-		 			//Indexsearch
-		 			withCredentials([file(credentialsId: 'indexsearch-service.properties', variable: 'FILE')]) {
-		 				//text = readFile(FILE)
-		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-indexsearch/preconfig/files/indexsearch-service.properties"
-		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-indexsearch/preconfig/files/indexsearch-service.properties', text: readFile(FILE)
-		 			}
-		 			//println "${text}"
-		 			//Rod
-		 			withCredentials([file(credentialsId: 'rod-service.properties', variable: 'FILE')]) {
-		 				//text = readFile(FILE)
-		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-rod/preconfig/files/rod-service.properties"
-		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-rod/preconfig/files/rod-service.properties', text: readFile(FILE)
-		 			}
-		 			//println "${text}"
-					sleep(5)	
+		// 			echo "Saving Secret Files batch 5 into place for Env  ${params.Env}"
+		// 			//UMS
+		// 			withCredentials([file(credentialsId: 'ums-service.properties', variable: 'FILE')]) {
+		// 				//text = readFile(FILE)
+		// 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-ums/preconfig/files/ums-service.properties"
+		// 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-ums/preconfig/files/ums-service.properties', text: readFile(FILE)
+		// 			}
+		// 			//println "${text}"	
+		// 			//Indexsearch
+		// 			withCredentials([file(credentialsId: 'indexsearch-service.properties', variable: 'FILE')]) {
+		// 				//text = readFile(FILE)
+		// 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-indexsearch/preconfig/files/indexsearch-service.properties"
+		// 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-indexsearch/preconfig/files/indexsearch-service.properties', text: readFile(FILE)
+		// 			}
+		// 			//println "${text}"
+		// 			//Rod
+		// 			withCredentials([file(credentialsId: 'rod-service.properties', variable: 'FILE')]) {
+		// 				//text = readFile(FILE)
+		// 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-rod/preconfig/files/rod-service.properties"
+		// 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-rod/preconfig/files/rod-service.properties', text: readFile(FILE)
+		// 			}
+		// 			//println "${text}"	
 					
 		// 		}
 		// 	}
