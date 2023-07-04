@@ -319,54 +319,54 @@ pipeline {
 
 					echo "Saving Secret Files batch 1 into place for Env  ${params.Env}"
 					//#######################################################################################################################
-					// //Application
-					// withCredentials([file(credentialsId: 'application.properties', variable: 'FILE')]) {
-					// 	//text = readFile(FILE)
-					// 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-					// 	writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
-					// 	sh "sed -i 's/dev.reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-					// }			
-					// //println "${text}"	
+					 //Application
+					 withCredentials([file(credentialsId: 'application.properties', variable: 'FILE')]) {
+					 	//text = readFile(FILE)
+					 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+					 	writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
+						sh "sed -i 's/dev.reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+					}			
+					//println "${text}"	
 
-					node {
-					def thing = load 'secret.groovy'
-					echo thing.doStuff()
-					}
+					//node {
+					//def thing = load 'secret.groovy'
+					//echo thing.doStuff()
+					//}
 
 
 
-		// 			//Api Gateway
-		// 			withCredentials([file(credentialsId: 'api-gateway.properties', variable: 'FILE')]) {
-		// 				//text = readFile(FILE)
-		// 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/files/api-gateway.properties"
-		// 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/files/api-gateway.properties', text: readFile(FILE)
-		// 				sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
-		// 			}			
-		// 			//println "${text}"	
-		// 			//Collaboration
-		// 			withCredentials([file(credentialsId: 'collaboration-service.properties', variable: 'FILE')]) {
-		// 				//text = readFile(FILE)
-		// 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
-		// 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE)
-		// 				sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
-		// 			}			
-		// 			//println "${text}"	
-		// 			//Communication
-		// 			withCredentials([file(credentialsId: 'communication-service.properties', variable: 'FILE')]) {
-		// 				//text = readFile(FILE)
-		// 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
-		// 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties', text: readFile(FILE)
-		// 				sh "sed -i 's/ELASTIC_INDEX:dev-communication-metrics/ELASTIC_INDEX:${params.Env}-communication-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
-		// 			}			
-		// 			//println "${text}"	
-		//  			//Dataset
-		//  			withCredentials([file(credentialsId: 'dataset-service.properties', variable: 'FILE')]) {
-		//  			 	//text = readFile(FILE)
-		//  			 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
-		//  			 	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties', text: readFile(FILE)
-		// 				sh "sed -i 's/ELASTIC_INDEX:dev-dataset-metrics/ELASTIC_INDEX:${params.Env}-dataset-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
-		//  			}
-		//  			//println "${text}"	
+		 			//Api Gateway
+		 			withCredentials([file(credentialsId: 'api-gateway.properties', variable: 'FILE')]) {
+		 				//text = readFile(FILE)
+		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/files/api-gateway.properties"
+		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/files/api-gateway.properties', text: readFile(FILE)
+		 				sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
+		 			}			
+		 			//println "${text}"	
+		 			//Collaboration
+		 			withCredentials([file(credentialsId: 'collaboration-service.properties', variable: 'FILE')]) {
+		 				//text = readFile(FILE)
+		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
+		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE)
+		 				sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
+		 			}			
+		 			//println "${text}"	
+		 			//Communication
+		 			withCredentials([file(credentialsId: 'communication-service.properties', variable: 'FILE')]) {
+		 				//text = readFile(FILE)
+		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
+		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties', text: readFile(FILE)
+		 				sh "sed -i 's/ELASTIC_INDEX:dev-communication-metrics/ELASTIC_INDEX:${params.Env}-communication-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
+		 			}			
+		 			//println "${text}"	
+		  			//Dataset
+		  			withCredentials([file(credentialsId: 'dataset-service.properties', variable: 'FILE')]) {
+		  			 	//text = readFile(FILE)
+		  			 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
+		  			 	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties', text: readFile(FILE)
+		 				sh "sed -i 's/ELASTIC_INDEX:dev-dataset-metrics/ELASTIC_INDEX:${params.Env}-dataset-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
+		  			}
+		  			//println "${text}"	
 		//  			//Document  
 		//  			withCredentials([file(credentialsId: 'document-service.properties', variable: 'FILE')]) {
 		//  			 	//text = readFile(FILE)
