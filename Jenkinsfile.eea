@@ -318,10 +318,10 @@ pipeline {
 
 
 
-        stage('Setting Secret files into places batch 1') {
+        //stage('Setting Secret files into places batch 1') {
 			
-			steps {
-				script {
+		//	steps {
+		//		script {
 
 					echo "Saving Secret Files batch 1 into place for Env  ${params.Env}"
 					//#######################################################################################################################
@@ -349,9 +349,9 @@ pipeline {
 					}			
 					//println "${text}"	
 
-				}
-			}
-		}
+		//		}
+		//	}
+		//}
 
 
 
@@ -360,30 +360,30 @@ pipeline {
 		// 	steps {
 		// 		script {
 
-		// 			echo "Saving Secret Files batch 2 into place for Env  ${params.Env}"
-		// 			//Dataset
-		// 			withCredentials([file(credentialsId: 'dataset-service.properties', variable: 'FILE')]) {
-		// 			 	//text = readFile(FILE)
-		// 			 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
-		// 			 	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties', text: readFile(FILE)
-		// 			}
-		// 			//println "${text}"	
+		 			echo "Saving Secret Files batch 2 into place for Env  ${params.Env}"
+		 			//Dataset
+		 			withCredentials([file(credentialsId: 'dataset-service.properties', variable: 'FILE')]) {
+		 			 	//text = readFile(FILE)
+		 			 	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
+		 			 	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties', text: readFile(FILE)
+		 			}
+		 			//println "${text}"	
 
-		// 			//Document document-service.properties 
-		// 			withCredentials([file(credentialsId: 'document-service.properties', variable: 'FILE')]) {
-		// 			 	//text = readFile(FILE)
-		// 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties"
-		// 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties', text: readFile(FILE)
-		// 			}
-		// 			//println "${text}"	
+		 			//Document document-service.properties 
+		 			withCredentials([file(credentialsId: 'document-service.properties', variable: 'FILE')]) {
+		 			 	//text = readFile(FILE)
+		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties"
+		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties', text: readFile(FILE)
+		 			}
+		 			//println "${text}"	
 
-		// 			//reportnet-e2e 
-		// 			withCredentials([file(credentialsId: 'e2e_application.properties', variable: 'FILE')]) {
-		// 				//text = readFile(FILE)
-		// 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties"
-		// 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties', text: readFile(FILE)
-		// 			}
-		// 			//println "${text}"	
+		 			//reportnet-e2e 
+					withCredentials([file(credentialsId: 'e2e_application.properties', variable: 'FILE')]) {
+		 				//text = readFile(FILE)
+		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties"
+		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties', text: readFile(FILE)
+		 			}
+		 			//println "${text}"	
 		// 		}
 		// 	}
 		// }
