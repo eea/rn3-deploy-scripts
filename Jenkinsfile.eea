@@ -326,7 +326,7 @@ pipeline {
 					echo "Saving Secret Files batch 1 into place for Env  ${params.Env}"
 					//#######################################################################################################################
 					//copy the secret file to destination
-					withCredentials([file(credentialsId: 'application_properties', variable: 'FILE')]) {
+					withCredentials([file(credentialsId: 'application.properties', variable: 'FILE')]) {
 						//text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
@@ -393,22 +393,22 @@ pipeline {
 		// 	steps {
 		// 		script {
 
-		// 			echo "Saving Secret Files batch 3 into place for Env  ${params.Env}"
-		// 			//Orchestrator
-		// 			withCredentials([file(credentialsId: 'orchestrator-service.properties', variable: 'FILE')]) {
-		// 				//text = readFile(FILE)
-		// 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
-		// 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties ', text: readFile(FILE)
-		// 			}
-		// 			//println "${text}"	
+		 			echo "Saving Secret Files batch 3 into place for Env  ${params.Env}"
+		 			//Orchestrator
+		 			withCredentials([file(credentialsId: 'orchestrator-service.properties', variable: 'FILE')]) {
+		 				//text = readFile(FILE)
+		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
+		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties ', text: readFile(FILE)
+		 			}
+		 			//println "${text}"	
 
-		// 			//RecordStore
-		// 			withCredentials([file(credentialsId: 'recordstore-service.properties', variable: 'FILE')]) {
-		// 				//text = readFile(FILE)
-		// 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig/files/recordstore-service.properties"
-		// 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig/files/recordstore-service.properties', text: readFile(FILE)
-		// 			}
-		// 			//println "${text}"	
+		 			//RecordStore
+		 			withCredentials([file(credentialsId: 'recordstore-service.properties', variable: 'FILE')]) {
+		 				//text = readFile(FILE)
+		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig/files/recordstore-service.properties"
+		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig/files/recordstore-service.properties', text: readFile(FILE)
+		 			}
+		 			//println "${text}"	
 		// 		}
 		// 	}
 		// }
