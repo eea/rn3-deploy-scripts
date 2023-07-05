@@ -481,7 +481,7 @@ pipeline {
 					env.USRMGMREP="${params.User_management_replicas}"
 
 
-					//build_Secret_Files()
+					build_Secret_Files()
 
 
 
