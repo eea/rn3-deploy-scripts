@@ -38,8 +38,6 @@ pipeline {
 				}
 			}
 		}
-
-
 		stage('Copy the secret Files ') {   
 					steps {
 					script {
