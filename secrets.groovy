@@ -8,28 +8,29 @@ def CopySecretFiles()
 					withCredentials([file(credentialsId: 'application.properties', variable: 'FILE')]) {
 					    //text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
+						writeFile file: "$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties", text: readFile(FILE)
                         //sh "sed -i 's/dev.reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 					}			
-					//println "${text}"
+					println "${text}"
 
 		 			//Api Gateway
 		 			withCredentials([file(credentialsId: 'api-gateway.properties', variable: 'FILE')]) {
 		 				//text = readFile(FILE)
 		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
-		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties', text: readFile(FILE)
+		 				writeFile file: "$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties", text: readFile(FILE)
 						
 		 				//sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
 		 			}
+					println "${text}"
 
 					//Collaboration
 					withCredentials([file(credentialsId: 'collaboration-service.properties', variable: 'FILE')]) {
 						//text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE)
+						writeFile file: "$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties", text: readFile(FILE)
                         //sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
 					}			
-					//println "${text}"	
+					println "${text}"	
 
 					//Communication
 					withCredentials([file(credentialsId: 'communication-service.properties', variable: 'FILE')]) {
