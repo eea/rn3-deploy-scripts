@@ -41,10 +41,10 @@ pipeline {
 
 
 
-
-
-
-
+        stage('SecretFiles') {
+			
+			steps {
+				script {
 def CopySecretFiles() {
                     //println 'Test SOTAV SOTAV SOTAV SOTAV'
                     echo "Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV"
@@ -166,6 +166,13 @@ def CopySecretFiles() {
 					// //#######################################################################################################################
 
 }
+				}
+			}
+		}
+
+
+
+
 
 
 
