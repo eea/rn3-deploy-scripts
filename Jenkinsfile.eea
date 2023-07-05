@@ -1,15 +1,7 @@
 
-	def build_Secret_Files(){
-	stage('Copy the secret Files ') {   
-				steps {
-				script {
-							// Load Shared library Groovy file secrets.Give your path of secrets file which is created
-							build_Secret_Files = load './secrets.groovy'
-							build_Secret_Files.CopySecretFiles()       
-						}               
-					}
-			}
-	}
+	// def build_Secret_Files(){
+
+	// }
 
 pipeline {
 
@@ -53,7 +45,15 @@ pipeline {
 		}
 
 
-
+		stage('Copy the secret Files ') {   
+					steps {
+					script {
+								// Load Shared library Groovy file secrets.Give your path of secrets file which is created
+								build_Secret_Files = load './secrets.groovy'
+								build_Secret_Files.CopySecretFiles()       
+							}               
+						}
+				}
 
 	// stage Secret_Files
 	// def build_Secret_Files() {
@@ -481,7 +481,7 @@ pipeline {
 					env.USRMGMREP="${params.User_management_replicas}"
 
 
-					build_Secret_Files()
+					//build_Secret_Files()
 
 
 
