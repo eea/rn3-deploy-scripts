@@ -70,13 +70,14 @@ def CopySecretFiles()
                         //sh "sed -i 's/ELASTIC_INDEX:dev-recordstore-metrics/ELASTIC_INDEX:${params.Env}-recordstore-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig/files/recordstore-service.properties"
 						sh "ls -la  $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig/files/"
 					}
-					//reportnet-e2e 
-					withCredentials([file(credentialsId: 'e2e_application.properties', variable: 'FILE')]) {
 
-						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties"
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties', text: readFile(FILE)
-                        sh "ls -la  $WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/"
-					}
+					//reportnet-e2e 
+					//withCredentials([file(credentialsId: 'e2e_application.properties', variable: 'FILE')]) {
+					//	echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties"
+					//	writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/application.properties', text: readFile(FILE)
+                    //    sh "ls -la  $WORKSPACE/helm/eaa-deploy/reportnet-e2e/preconfig/files/"
+					//}
+
 					//Indexsearch
 					withCredentials([file(credentialsId: 'indexsearch-service.properties', variable: 'FILE')]) {
 
