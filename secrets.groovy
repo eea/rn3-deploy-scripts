@@ -9,20 +9,20 @@ def CopySecretFiles()
 					withCredentials([file(credentialsId: 'application.properties', variable: 'FILE')]) {
 
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
+						//writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
                         //sh "sed -i 's/dev.reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-
-
 						sh "cp \$FILE $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+						sh "cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 						sh "ls -la  $WORKSPACE/helm/eaa-deploy/application-config/files/"
 					}			
 		 			//Api Gateway
 		 			withCredentials([file(credentialsId: 'api-gateway.properties', variable: 'FILE')]) {
 
 		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
-		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties', text: readFile(FILE)
-						
-		 				//sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
+		 				//writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties', text: readFile(FILE)
+						//sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
+						sh "cp \$FILE $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
+						sh "cat $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
 						sh "ls -la  $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/"
 		 			}
 					//Collaboration
