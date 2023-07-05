@@ -27,7 +27,7 @@ def CopySecretFiles()
 						//text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE)
-                        sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
+                        //sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
 					}			
 					//println "${text}"	
 
@@ -36,7 +36,7 @@ def CopySecretFiles()
 						//text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties', text: readFile(FILE)
-                        sh "sed -i 's/ELASTIC_INDEX:dev-communication-metrics/ELASTIC_INDEX:${params.Env}-communication-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
+                        //sh "sed -i 's/ELASTIC_INDEX:dev-communication-metrics/ELASTIC_INDEX:${params.Env}-communication-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
 					}			
 					//println "${text}"	
 
@@ -45,7 +45,7 @@ def CopySecretFiles()
 						//text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataflow/preconfig/files/dataflow-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-dataflow/preconfig/files/dataflow-service.properties', text: readFile(FILE)
-                        sh "sed -i 's/ELASTIC_INDEX:dev-dataflow-metrics/ELASTIC_INDEX:${params.Env}-dataflow-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-dataflow/preconfig/files/dataflow-service.properties"
+                        //sh "sed -i 's/ELASTIC_INDEX:dev-dataflow-metrics/ELASTIC_INDEX:${params.Env}-dataflow-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-dataflow/preconfig/files/dataflow-service.properties"
 					}
 					//println "${text}"	
 
@@ -54,7 +54,7 @@ def CopySecretFiles()
 						//text = readFile(FILE)
 					    echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties', text: readFile(FILE)
-                        sh "sed -i 's/ELASTIC_INDEX:dev-dataset-metrics/ELASTIC_INDEX:${params.Env}-dataset-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
+                        //sh "sed -i 's/ELASTIC_INDEX:dev-dataset-metrics/ELASTIC_INDEX:${params.Env}-dataset-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
 					}
 					//println "${text}"	
 
@@ -63,7 +63,7 @@ def CopySecretFiles()
 						//text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties', text: readFile(FILE)
-                        sh "sed -i 's/ELASTIC_INDEX:dev-document-metrics/ELASTIC_INDEX:${params.Env}-document-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties"
+                        //sh "sed -i 's/ELASTIC_INDEX:dev-document-metrics/ELASTIC_INDEX:${params.Env}-document-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig/files/document-service.properties"
 					}
 					//println "${text}"	
 
@@ -72,7 +72,7 @@ def CopySecretFiles()
 						//text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig/files/recordstore-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig/files/recordstore-service.properties', text: readFile(FILE)
-                        sh "sed -i 's/ELASTIC_INDEX:dev-recordstore-metrics/ELASTIC_INDEX:${params.Env}-recordstore-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig/files/recordstore-service.properties"
+                        //sh "sed -i 's/ELASTIC_INDEX:dev-recordstore-metrics/ELASTIC_INDEX:${params.Env}-recordstore-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig/files/recordstore-service.properties"
 					}
 					//println "${text}"	
 
@@ -98,7 +98,7 @@ def CopySecretFiles()
 					withCredentials([file(credentialsId: 'orchestrator-service.properties', variable: 'FILE')]) {
 						//text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties"
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties ', text: readFile(FILE)
+						//writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig/files/orchestrator-service.properties ', text: readFile(FILE)
 
 					}
 					//println "${text}"	
@@ -110,7 +110,7 @@ def CopySecretFiles()
 					    //text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-rod/preconfig/files/rod-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-rod/preconfig/files/rod-service.properties', text: readFile(FILE)
-                        sh "sed -i 's/ELASTIC_INDEX:dev-rod-metrics/ELASTIC_INDEX:${params.Env}-rod-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-rod/preconfig/files/rod-service.properties"
+                        //sh "sed -i 's/ELASTIC_INDEX:dev-rod-metrics/ELASTIC_INDEX:${params.Env}-rod-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-rod/preconfig/files/rod-service.properties"
 					}
 					//println "${text}"	
 
@@ -119,7 +119,7 @@ def CopySecretFiles()
 						//text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-ums/preconfig/files/ums-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-ums/preconfig/files/ums-service.properties', text: readFile(FILE)
-                        sh "sed -i 's/ELASTIC_INDEX:dev-ums-metrics/ELASTIC_INDEX:${params.Env}-ums-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-ums/preconfig/files/ums-service.properties"
+                        //sh "sed -i 's/ELASTIC_INDEX:dev-ums-metrics/ELASTIC_INDEX:${params.Env}-ums-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-ums/preconfig/files/ums-service.properties"
 					}
 					//println "${text}"	
 
@@ -128,7 +128,7 @@ def CopySecretFiles()
 						//text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-validation/preconfig/files/validation-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-validation/preconfig/files/validation-service.properties', text: readFile(FILE)
-                        sh "sed -i 's/ELASTIC_INDEX:dev-validation-metrics/ELASTIC_INDEX:${params.Env}-validation-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-validation/preconfig/files/validation-service.properties"
+                        //sh "sed -i 's/ELASTIC_INDEX:dev-validation-metrics/ELASTIC_INDEX:${params.Env}-validation-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-validation/preconfig/files/validation-service.properties"
 					}
 					//println "${text}"	
 
