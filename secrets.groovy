@@ -15,7 +15,7 @@ def CopySecretFiles()
 
 		 			//Api Gateway
 		 			withCredentials([file(credentialsId: 'api-gateway.properties', variable: 'FILE1')]) {
-		 				//text = readFile(FILE)
+		 				text = readFile(FILE1)
 		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
 		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties', text: readFile(FILE1)
 						
@@ -25,21 +25,21 @@ def CopySecretFiles()
 					
 					//Collaboration
 					withCredentials([file(credentialsId: 'collaboration-service.properties', variable: 'FILE2')]) {
-						//text = readFile(FILE)
+						text = readFile(FILE2)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE2)
                         //sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
 					}			
-					//println "${text}"	
+					println "${text}"	
 
 					//Communication
 					withCredentials([file(credentialsId: 'communication-service.properties', variable: 'FILE3')]) {
-						//text = readFile(FILE)
+						text = readFile(FILE3)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties', text: readFile(FILE3)
                         //sh "sed -i 's/ELASTIC_INDEX:dev-communication-metrics/ELASTIC_INDEX:${params.Env}-communication-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
 					}			
-					//println "${text}"	
+					println "${text}"	
 
 					//Dataflow
 					withCredentials([file(credentialsId: 'dataflow-service.properties', variable: 'FILE')]) {
