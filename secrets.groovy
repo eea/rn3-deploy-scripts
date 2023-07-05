@@ -11,6 +11,9 @@ def CopySecretFiles()
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
                         //sh "sed -i 's/dev.reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+
+
+						sh "cp \$FILE $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 						sh "ls -la  $WORKSPACE/helm/eaa-deploy/application-config/files/"
 					}			
 		 			//Api Gateway
