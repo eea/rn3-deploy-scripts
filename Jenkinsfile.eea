@@ -41,12 +41,10 @@ pipeline {
 
 
 
-        stage('SecretFiles') {
-			
-			steps {
-				script {
-def CopySecretFiles() {
-                    //println 'Test SOTAV SOTAV SOTAV SOTAV'
+
+	stage Secret_Files
+	def build_Secret_Files() {
+	parallel([
                     echo "Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV"
 					 echo "Saving Secret Files into place for Env  ${params.Env}"
 					 //#######################################################################################################################
@@ -164,16 +162,8 @@ def CopySecretFiles() {
 					// //println "${text}"	
 
 					// //#######################################################################################################################
-
-}
-				}
-			}
-		}
-
-
-
-
-
+	])}
+	
 
 
 
@@ -478,7 +468,7 @@ def CopySecretFiles() {
 					env.USRMGMREP="${params.User_management_replicas}"
 
 
-					echo "Saving Secret Files batch 1 into place for Env  ${params.Env}"
+					//echo "Saving Secret Files batch 1 into place for Env  ${params.Env}"
 					//#######################################################################################################################
 					 //Application
 					// withCredentials([file(credentialsId: 'application.properties', variable: 'FILE')]) {
@@ -495,14 +485,14 @@ def CopySecretFiles() {
 					//	pipeline = load 'script.groovy'
 					//	pipeline.execute()
 					//}
-					def secretfiles
-					node(){
-						//checkout scm
-						//secretfiles = load 'secrets.groovy'
-						CopySecretFiles()
-					}
+					// def secretfiles
+					// node(){
+					// 	//checkout scm
+					// 	//secretfiles = load 'secrets.groovy'
+					// 	CopySecretFiles()
+					// }
 
-
+					build_Secret_Files()
 
 
 		 			// //Api Gateway
