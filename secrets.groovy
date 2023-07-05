@@ -6,7 +6,7 @@ def CopySecretFiles()
 					 //#######################################################################################################################
 					 //copy the secret file to destination
 					withCredentials([file(credentialsId: 'application.properties', variable: 'FILE0')]) {
-					    //text = readFile(FILE)
+					    text = readFile(FILE0)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE0)
                         //sh "sed -i 's/dev.reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
