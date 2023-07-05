@@ -9,3 +9,5 @@ Try also [the index.yaml](index.yaml) file.
 ## Source repository
 
 The sources for these pages are located at the [Github project](https://github.com/eea/rn3-deploy-scripts/)
+
+The sources for these pages are located at the [GitHub project](https://github.com/eea/rn3-deploy-scripts).
