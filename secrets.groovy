@@ -2,12 +2,10 @@
 
 def CopySecretFiles()
  {
-                    //println 'Test SOTAV SOTAV SOTAV SOTAV'
-                    echo "Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV"
                     echo "Saving Secret Files into place for Env  ${params.Env}"
 					 //#######################################################################################################################
 					 //copy the secret file to destination
-					withCredentials([file(credentialsId: 'applications.properties', variable: 'FILE')]) {
+					withCredentials([file(credentialsId: 'application.properties', variable: 'FILE')]) {
 					    //text = readFile(FILE)
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
