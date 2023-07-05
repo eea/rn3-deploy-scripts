@@ -45,13 +45,13 @@ pipeline {
 	stage Secret_Files
 	def build_Secret_Files() {
 	parallel([
-                    echo "Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV"
-					 echo "Saving Secret Files into place for Env  ${params.Env}"
+                    //echo "Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV Test SOTAV SOTAV SOTAV SOTAV"
+					//echo "Saving Secret Files into place for Env  ${params.Env}"
 					 //#######################################################################################################################
 					 //copy the secret file to destination
 					withCredentials([file(credentialsId: 'applications.properties', variable: 'FILE')]) {
 					    //text = readFile(FILE)
-						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+						//echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
 					}			
 					//println "${text}"
@@ -59,16 +59,16 @@ pipeline {
 		 			//Api Gateway
 		 			withCredentials([file(credentialsId: 'api-gateway.properties', variable: 'FILE')]) {
 		 				//text = readFile(FILE)
-		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
+		 				//echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
 		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties', text: readFile(FILE)
-						sleep(2)
+						//sleep(2)
 		 				sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
 		 			}
 
 					//Collaboration
 					withCredentials([file(credentialsId: 'collaboration-service.properties', variable: 'FILE')]) {
 						//text = readFile(FILE)
-						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
+						//echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE)
 					}			
 					//println "${text}"	
@@ -76,7 +76,7 @@ pipeline {
 					//Communication
 					withCredentials([file(credentialsId: 'communication-service.properties', variable: 'FILE')]) {
 						//text = readFile(FILE)
-						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
+						//echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties', text: readFile(FILE)
 					}			
 					//println "${text}"	
@@ -84,7 +84,7 @@ pipeline {
 					//Dataflow
 					withCredentials([file(credentialsId: 'dataflow-service.properties', variable: 'FILE')]) {
 						//text = readFile(FILE)
-						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataflow/preconfig/files/dataflow-service.properties"
+						//echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataflow/preconfig/files/dataflow-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-dataflow/preconfig/files/dataflow-service.properties', text: readFile(FILE)
 					}
 					//println "${text}"	
@@ -92,7 +92,7 @@ pipeline {
 					//Dataset
 					withCredentials([file(credentialsId: 'dataset-service.properties', variable: 'FILE')]) {
 						//text = readFile(FILE)
-					    echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
+					    //echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties"
 						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig/files/dataset-service.properties', text: readFile(FILE)
 					}
 					//println "${text}"	
