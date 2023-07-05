@@ -5,41 +5,41 @@ def CopySecretFiles()
                     echo "Saving Secret Files into place for Env  ${params.Env}"
 					 //#######################################################################################################################
 					 //copy the secret file to destination
-					withCredentials([file(credentialsId: 'application.properties', variable: 'FILE0')]) {
-					    text = readFile(FILE0)
+					withCredentials([file(credentialsId: 'application.properties', variable: 'FILE')]) {
+
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE0)
+						writeFile file: '$WORKSPACE/helm/eaa-deploy/application-config/files/application.properties', text: readFile(FILE)
                         //sh "sed -i 's/dev.reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 					}			
-					println "${text}"
+
 
 		 			//Api Gateway
-		 			withCredentials([file(credentialsId: 'api-gateway.properties', variable: 'FILE1')]) {
-		 				text = readFile(FILE1)
+		 			withCredentials([file(credentialsId: 'api-gateway.properties', variable: 'FILE')]) {
+
 		 				echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
-		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties', text: readFile(FILE1)
+		 				writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties', text: readFile(FILE)
 						
 		 				//sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig/files/api-gateway.properties"
 		 			}
-					println "${text}"
+
 					
 					//Collaboration
-					withCredentials([file(credentialsId: 'collaboration-service.properties', variable: 'FILE2')]) {
-						text = readFile(FILE2)
+					withCredentials([file(credentialsId: 'collaboration-service.properties', variable: 'FILE')]) {
+
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE2)
+						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties', text: readFile(FILE)
                         //sh "sed -i 's/ELASTIC_INDEX:dev-apigateway-metrics/ELASTIC_INDEX:${params.Env}-apigateway-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig/files/collaboration-service.properties"
 					}			
-					println "${text}"	
+
 
 					//Communication
-					withCredentials([file(credentialsId: 'communication-service.properties', variable: 'FILE3')]) {
-						text = readFile(FILE3)
+					withCredentials([file(credentialsId: 'communication-service.properties', variable: 'FILE')]) {
+
 						echo "writing properties secret file to $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
-						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties', text: readFile(FILE3)
+						writeFile file: '$WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties', text: readFile(FILE)
                         //sh "sed -i 's/ELASTIC_INDEX:dev-communication-metrics/ELASTIC_INDEX:${params.Env}-communication-metrics/g' $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig/files/communication-service.properties"
 					}			
-					println "${text}"	
+
 
 					//Dataflow
 					withCredentials([file(credentialsId: 'dataflow-service.properties', variable: 'FILE')]) {
