@@ -57,7 +57,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables for $Environment and Starting Deployment Pipeline "'    
+					//sh 'echo "Setting Environment Variables for $Environment and Starting Deployment Pipeline "'    
 					//env.TARGET_ENV="reportnet"
 					env.REPORTNET_BACKEND="https://dev-api.reportnet.europa.eu"
 					env.EULOGIN="https://dev-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fdev.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
@@ -306,7 +306,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables for $Environment and Starting Deployment Pipeline"'    
+					//sh 'echo "Setting Environment Variables for $Environment and Starting Deployment Pipeline"'    
 					env.REPORTNET_BACKEND="https://test-api.reportnet.europa.eu"
 					env.EULOGIN="https://test-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Ftest.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://test.reportnet.europa.eu/communication/reportnet-websocket"
@@ -621,7 +621,7 @@ pipeline {
 					echo "deploy to  ${params.Env}"
  					//Set Environment to dev
  					echo "Setting environment specific variables to ${params.Env}"
-					sh 'echo "Setting Environment Variables for $Environment and Starting Deployment Pipeline"'    
+					//sh 'echo "Setting Environment Variables for $Environment and Starting Deployment Pipeline"'    
 					env.REPORTNET_BACKEND="https://sandbox-api.reportnet.europa.eu"
 					env.EULOGIN="https://sandbox-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet\\&redirect_uri=https%3A%2F%2Fsandbox.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment\\&response_type=code\\&scope=openid"
 					env.WEB_SOCKET="wss://sandbox.reportnet.europa.eu/communication/reportnet-websocket"
