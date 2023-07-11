@@ -6,7 +6,7 @@ appVersion: 1.5.3
 description: Highly available and distributed service discovery and key-value store
   designed with support for the modern data center to make distributed systems and
   configuration easy.
-icon: https://raw.githubusercontent.com/eea/rn3-deploy-scripts/helm/eaa-deploy/consul/android-chrome-512x512.png
+icon: https://raw.githubusercontent.com/eea/rn3-deploy-scripts/main/helm/eaa-deploy/consul/android-chrome-512x512.png
 sources:
 - https://github.com/kelseyhightower/consul-on-kubernetes
 # NOTE: Deprecated charts can't have maintainers but leaving commented-out for
