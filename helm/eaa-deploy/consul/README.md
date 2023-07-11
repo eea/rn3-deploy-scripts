@@ -1,10 +1,8 @@
 # Consul Helm Chart
 
-## Deprecated
-This chart is deprecated in favor of HashiCorp's [Official Helm Chart](https://github.com/hashicorp/consul-helm).
+This chart was originally deprecated, but since Reportnet 3 depends on it, EEA has made a copy and taken over maintenance for its own benefit.
 
-See [https://www.consul.io/docs/k8s/installation/overview](https://www.consul.io/docs/k8s/installation/overview)
-for installation instructions.
+The original chart was version 3.9.6 and came from https://charts.helm.sh/stable.
 
 ## Prerequisites Details
 * Kubernetes 1.10+
@@ -23,7 +21,7 @@ This chart will do the following:
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release stable/consul
+$ helm install --name my-release rn3-deploy-scripts/consul
 ```
 
 ## Configuration
