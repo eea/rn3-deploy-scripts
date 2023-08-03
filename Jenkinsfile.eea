@@ -115,9 +115,9 @@ pipeline {
 
 
 					
-					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.13:31293 -DPOSTGRES_PASS=$password -DPOSTGRES_USER=$username flyway:migrate
-					'''
+					//sh '''
+					//	mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.13:31293 -DPOSTGRES_PASS=$password -DPOSTGRES_USER=$username flyway:migrate
+					//'''
 
 						}
 					}
