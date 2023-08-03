@@ -25,7 +25,17 @@ pipeline {
     stages {
         stage('Deployment Init') {
             steps {
-                sh 'echo "Starting Deployment Pipeline"'                
+                sh 'echo "Starting Deployment Pipeline"'
+				//sh 'nc -z -v -w5 10.50.4.185 31293'
+				sh 'timeout 5 bash -c "cat < /dev/null > /dev/tcp/10.50.4.185/31293"; echo $?'
+				sh 'timeout 5 bash -c "cat < /dev/null > /dev/tcp/10.50.4.13/31293"; echo $?'
+				sh 'timeout 5 bash -c "cat < /dev/null > /dev/tcp/10.50.4.14/31293"; echo $?'
+
+				//sh 'nc -z -v -w5 kvm-rn3dev-03.pdmz.eea 31293'
+				//sh 'nc -z -v -w5 10.50.5.13 31293"'
+				//sh 'nc -z -v -w5 kvm-rn3dev-04.pdmz.eea 31293'
+				//sh 'nc -z -v -w5 10.50.5.14 31293'
+				//sh 'nc -z -v -w5 kvm-rn3dev-05.pdmz.eea 31293'             
             }
         }
         stage('Setting Default Environmental Variables') {
@@ -98,16 +108,7 @@ pipeline {
 					]) {
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh 'echo "Setting user:$username  & password : $password"' 
-					//sh 'nc -z -v -w5 10.50.4.185 31293'
-					sh 'timeout 5 bash -c "cat < /dev/null > /dev/tcp/10.50.4.185/31293"; echo $?'
-					sh 'timeout 5 bash -c "cat < /dev/null > /dev/tcp/10.50.4.13/31293"; echo $?'
-					sh 'timeout 5 bash -c "cat < /dev/null > /dev/tcp/10.50.4.14/31293"; echo $?'
 
-					//sh 'nc -z -v -w5 kvm-rn3dev-03.pdmz.eea 31293'
-					//sh 'nc -z -v -w5 10.50.5.13 31293"'
-					//sh 'nc -z -v -w5 kvm-rn3dev-04.pdmz.eea 31293'
-					//sh 'nc -z -v -w5 10.50.5.14 31293'
-					//sh 'nc -z -v -w5 kvm-rn3dev-05.pdmz.eea 31293'
 
 					
 					sh '''
