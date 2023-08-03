@@ -27,12 +27,16 @@ pipeline {
             steps {
                 sh 'echo "Starting Deployment Pipeline"'
 				//sh 'nc -z -v -w5 10.50.4.185 31293'
-				sh 'timeout 5 /bin/bash -c "cat < /dev/null > /dev/tcp/10.50.4.185/31293"; echo $?'
-				sh 'timeout 5 /bin/bash -c "cat < /dev/null > /dev/tcp/10.50.4.13/31293"; echo $?'
-				sh 'timeout 5 /bin/bash -c "cat < /dev/null > /dev/tcp/10.50.4.14/31293"; echo $?'
+				//sh 'timeout 5 /bin/bash -c "cat < /dev/null > /dev/tcp/10.50.4.185/31293"; echo $?'
+				//sh 'timeout 5 /bin/bash -c "cat < /dev/null > /dev/tcp/10.50.4.13/31293"; echo $?'
+				//sh 'timeout 5 /bin/bash -c "cat < /dev/null > /dev/tcp/10.50.4.14/31293"; echo $?'
+
+				sh 'telnet 10.50.5.185 31293'
+				sh 'telnet 10.50.5.13 31293'
+				sh 'telnet 10.50.5.14 31293'
 
 				//sh 'nc -z -v -w5 kvm-rn3dev-03.pdmz.eea 31293'
-				//sh 'nc -z -v -w5 10.50.5.13 31293"'
+				//sh 'nc -z -v -w5 10.50.5.13 31293'
 				//sh 'nc -z -v -w5 kvm-rn3dev-04.pdmz.eea 31293'
 				//sh 'nc -z -v -w5 10.50.5.14 31293'
 				//sh 'nc -z -v -w5 kvm-rn3dev-05.pdmz.eea 31293'             
