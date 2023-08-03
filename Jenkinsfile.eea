@@ -92,7 +92,7 @@ pipeline {
 
 					script {
 					withCredentials([
-						usernamePassword(credentialsId: 'd2540d35-0b65-4c30-ab4d-57b5ab0c2397',
+						usernamePassword(credentialsId: 'PostgresDB',
 						usernameVariable: 'username',
 						passwordVariable: 'password')
 					]) {
