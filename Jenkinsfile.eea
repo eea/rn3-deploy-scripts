@@ -25,21 +25,7 @@ pipeline {
     stages {
         stage('Deployment Init') {
             steps {
-                sh 'echo "Starting Deployment Pipeline"'
-				//sh 'nc -z -v -w5 10.50.4.185 31293'
-				//sh 'timeout 5 /bin/bash -c "cat < /dev/null > /dev/tcp/10.50.4.185/31293"; echo $?'
-				//sh 'timeout 5 /bin/bash -c "cat < /dev/null > /dev/tcp/10.50.4.13/31293"; echo $?'
-				//sh 'timeout 5 /bin/bash -c "cat < /dev/null > /dev/tcp/10.50.4.14/31293"; echo $?'
-
-				//sh 'ping -c 1 10.50.5.185'
-				//sh 'ping -c 1 10.50.5.13'
-				//sh 'ping -c 1 10.50.5.14'
-
-				//sh 'nc -z -v -w5 kvm-rn3dev-03.pdmz.eea 31293'
-				//sh 'nc -z -v -w5 10.50.5.13 31293'
-				//sh 'nc -z -v -w5 kvm-rn3dev-04.pdmz.eea 31293'
-				//sh 'nc -z -v -w5 10.50.5.14 31293'
-				//sh 'nc -z -v -w5 kvm-rn3dev-05.pdmz.eea 31293'             
+                sh 'echo "Starting Deployment Pipeline"'                
             }
         }
         stage('Setting Default Environmental Variables') {
@@ -111,13 +97,9 @@ pipeline {
 						passwordVariable: 'password')
 					]) {
 					sh 'echo "Starting $TARGET_ENV building"' 
-					sh 'echo "Setting user:$username  & password : $password"' 
-
-
-					
-					//sh '''
-					//	mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.13:31293 -DPOSTGRES_PASS=$password -DPOSTGRES_USER=$username flyway:migrate
-					//'''
+					sh '''
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
+					'''
 
 						}
 					}
@@ -166,7 +148,7 @@ pipeline {
 					]) {
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.13:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
 					'''
 
 						}
@@ -217,7 +199,7 @@ pipeline {
 
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.13:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
 					'''
 
 						}
@@ -268,7 +250,7 @@ pipeline {
 
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.13:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
 					'''
 
 						}
@@ -319,7 +301,7 @@ pipeline {
 
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.13:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
 					'''
 
 						}
@@ -371,7 +353,7 @@ pipeline {
 
 					sh 'echo "Starting $TARGET_ENV building"' 
 					sh '''
-						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.13:31293 -DPOSTGRES_PASS=53p057n373.0! -DPOSTGRES_USER=postgres flyway:migrate
+						mvn -f $WORKSPACE/helm/eaa-deploy/database -DPOSTGRES_SERVER=10.50.5.14:31293 -DPOSTGRES_PASS="$password" -DPOSTGRES_USER="$username" flyway:migrate
 					'''
 
 						}
