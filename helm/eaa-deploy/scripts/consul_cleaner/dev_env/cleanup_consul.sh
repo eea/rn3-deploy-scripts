@@ -3,7 +3,6 @@
 #
 # LAST UPDATE @ 11/11/2022 Tavoulas Sotiris / Sotirios.TAVOULAS-KAVOULAS@trasys.gr
 # 
-
 tmp_fld="./data"
 services=( 
 "apiGateway"
@@ -18,10 +17,6 @@ services=(
 "ums"
 "validation"
 )
-
-
-
-
 for (( i=0; i<${#services[@]}; i++ ));
 do
 		curl http://kvm-rn3dev-05.pdmz.eea:32233/v1/catalog/service/${services[$i]}| jq . > $tmp_fld/${services[$i]}.json 

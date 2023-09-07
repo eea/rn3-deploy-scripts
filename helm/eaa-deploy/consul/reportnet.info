@@ -2,6 +2,11 @@ current running settings on 11-07-2023
 
 
 
+helm add repo eea-charts https://eea.github.io/helm-charts/
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo add rn3-kafka-mgr https://radar-base.github.io/radar-helm-charts
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo update
+
 
 ##################################################
 Component: consul
