@@ -415,7 +415,7 @@ pipeline {
 						helm uninstall api-gateway-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
 					sh '''
-						helm upgrade api-gateway $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set version=$Ver,sentry.environment=$SENTRY_ENV
+						helm upgrade api-gateway $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/service -n $TARGET_ENV --kubeconfig=${FILE} -i  --wait --set livenessProbe.enabled=false,version=$Ver,sentry.environment=$SENTRY_ENV
 					'''
 					}
 
