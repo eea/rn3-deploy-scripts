@@ -378,11 +378,11 @@ pipeline {
 				echo "BRANCH: ${params.Brn}"
 				echo "VERSION: ${params.Ver}"
 	 			echo "Scaling down services of ${params.Env}"
-	 			//withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-	 			//	sh '''
-	 			//		kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy $Reset_Services --replicas=0
-	 			//	'''
-	 			//}
+	 			withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+	 				sh '''
+	 					kubectl -n $TARGET_ENV --kubeconfig=${FILE}  scale deploy $Reset_Services --replicas=0
+	 				'''
+	 			}
 
 	 			// echo "Configure Common Application properties for ${params.Env}"
 	 			// withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
