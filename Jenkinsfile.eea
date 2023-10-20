@@ -389,7 +389,7 @@ pipeline {
 	 				sh '''
 	 			 		helm install application-config $WORKSPACE/helm/eaa-deploy/application-config -n $TARGET_ENV --kubeconfig=${FILE}
 	 			 	'''
-	 				sleep(20)
+	 				sleep(5)
 	 			 	sh '''
 	 			 		helm uninstall application-config  -n $TARGET_ENV --kubeconfig=${FILE}
 	 			 	'''
@@ -406,11 +406,11 @@ pipeline {
 					//sh '''
 					//	helm uninstall api-gateway-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					//'''
-					//sleep(20)
+					//sleep(5)
 					sh '''
 						helm install api-gateway-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-api-gateway/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
-					sleep(20)
+					sleep(5)
 					sh '''
 						helm uninstall api-gateway-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -424,7 +424,7 @@ pipeline {
 					sh '''
 						helm install dataflow-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-dataflow/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
-					sleep(20)
+					sleep(5)
 					sh '''
 						helm uninstall dataflow-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -438,7 +438,7 @@ pipeline {
 					sh '''
 						helm install recordstore-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
-					sleep(20)
+					sleep(5)
 					sh '''
 						helm uninstall recordstore-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -448,7 +448,7 @@ pipeline {
 					sh '''
 						helm upgrade recordstore $WORKSPACE/helm/eaa-deploy/reportnet-recordstore/service -n $TARGET_ENV --kubeconfig=${FILE} -i --wait --set version=$Ver,sentry.environment=$SENTRY_ENV,replicas=$RCDSTRREP
 					'''
-					sleep(20)
+					sleep(5)
 				}
 
 				echo "Deploy Dataset of ${params.Env}"
@@ -456,7 +456,7 @@ pipeline {
 					sh '''
 						helm install dataset-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-dataset/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
-					sleep(20)
+					sleep(5)
 					sh '''
 						helm uninstall dataset-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -470,7 +470,7 @@ pipeline {
 					sh '''
 						helm install validation-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-validation/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
-					sleep(20)
+					sleep(5)
 					sh '''
 						helm uninstall validation-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -484,7 +484,7 @@ pipeline {
 				 	sh '''
 						helm install orchestrator-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-orchestrator/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 				 	'''
-				 	sleep(20)
+				 	sleep(5)
 				 	sh '''
 				 		helm uninstall orchestrator-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 				 	'''
@@ -498,7 +498,7 @@ pipeline {
 					sh '''
 						helm install ums-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-ums/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
-					sleep(20)
+					sleep(5)
 					sh '''
 						helm uninstall ums-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -514,11 +514,11 @@ pipeline {
 					//sh '''
 					//	helm uninstall document-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					//'''
-					//sleep(20)
+					//sleep(5)
 					sh '''
 						helm install document-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-document/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
-					sleep(20)
+					sleep(5)
 					sh '''
 						helm uninstall document-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -533,13 +533,13 @@ pipeline {
 					//sh '''
 					//	helm uninstall communication-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					//'''
-					//sleep(20)
+					//sleep(5)
 
 
 					sh '''
 						helm install communication-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-communication/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
-					sleep(20)
+					sleep(5)
 					sh '''
 						helm uninstall communication-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -553,7 +553,7 @@ pipeline {
 					sh '''
 						helm install collaboration-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-collaboration/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
 					'''
-					sleep(20)
+					sleep(5)
 					sh '''
 						helm uninstall collaboration-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -567,7 +567,7 @@ pipeline {
 					sh '''
 						helm install indexsearch-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-indexsearch/preconfig -n $TARGET_ENV  --kubeconfig=${FILE}
 					'''
-					sleep(20)
+					sleep(5)
 					sh '''
 						helm uninstall indexsearch-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
@@ -590,7 +590,7 @@ pipeline {
 					sh '''
 						helm install rod-preconfig $WORKSPACE/helm/eaa-deploy/reportnet-rod/preconfig -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
-					sleep(20)
+					sleep(5)
 					sh '''
 						helm uninstall rod-preconfig  -n $TARGET_ENV --kubeconfig=${FILE}
 					'''
