@@ -396,11 +396,6 @@ pipeline {
 	 			}
 
 
-
-
-
-
-
 	 			echo "Deploy API Gateway of ${params.Env}"
 				withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
 					//sh '''
