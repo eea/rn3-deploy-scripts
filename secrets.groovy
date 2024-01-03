@@ -13,6 +13,54 @@ def CopySecretFiles()
 						sh "sed -i 's/dev.reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 						//sh "ls -la  $WORKSPACE/helm/eaa-deploy/application-config/files/"
 						//sh "cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+
+						// Changes on 07122023 cause of test failing to connect to keycloak !!!!
+						//KEYCLOAK_REDIRECT_URI
+						// from 
+						// config/application/eea.keycloak.redirect_uri=${KEYCLOAK_REDIRECT_URI:https://reportnet.europa.eu/eulogin/}
+						// to
+						// config/application/eea.keycloak.redirect_uri=${KEYCLOAK_REDIRECT_URI:https://test.reportnet.europa.eu/eulogin/}}
+						// and for keycloak key in test ENV 
+						// config/application/eea.keycloak.secret=${KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24}
+						// to 
+						// config/application/eea.keycloak.secret=${KEYCLOAK_SECRET:39938213-b771-4ab3-a5ed-c525e88026b7}
+
+
+						// FOR EACH ENV WE NEED TO PUT THE KEYCLOAK KEY TO THE BELOW BLOCK - WHENEVER THERE IS A NEW KEY !	
+						sh "case '${params.Env}' in
+
+							dev)
+								echo -n "test"
+								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+								;;
+
+							test | testing)
+								echo -n "sandbox"
+								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+								;;
+
+							sandbox | staging )
+								echo -n "prod"
+								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+								;;
+
+							sandbox | staging )
+								echo -n "transport"
+								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+								;;
+
+							*)
+								echo -n "No_Enviroment_was_selected --- ERROR !!!!!!"
+								;;
+							esac
+
+							"
+
+
+
+
+
+
 					}	
 
 
