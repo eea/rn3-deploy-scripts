@@ -27,7 +27,7 @@ def CopySecretFiles()
 
 
 						// FOR EACH ENV WE NEED TO PUT THE KEYCLOAK KEY TO THE BELOW BLOCK - WHENEVER THERE IS A NEW KEY !	
-						sh "case '${params.Env}' in
+						sh "case ${params.Env} in
 							dev)
 								echo -n "Application properties on ${params.Env} changed "
 								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/0380996f-a7ad-4667-8ba4-14995e408d24-TEST/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
@@ -43,16 +43,17 @@ def CopySecretFiles()
 								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 								;;
 
-							staging )
+							staging)
 								echo -n "staging"
 								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 								;;
 
-							transport | prod2 )
+							transport | prod2)
 								echo -n "prod2-transport"
 								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 								;;
-							prod )
+
+							prod)
 								echo -n "prod"
 								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 								;;
