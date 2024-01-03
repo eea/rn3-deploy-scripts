@@ -29,12 +29,36 @@ def CopySecretFiles()
 						// FOR EACH ENV WE NEED TO PUT THE KEYCLOAK KEY TO THE BELOW BLOCK - WHENEVER THERE IS A NEW KEY !
 
 
-						if ( ${params.Env} == "dev") 
-						{ 
-							echo -n  "changing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties THE KEYCLOAK_SECRET"
-							sh  "sed -i 's/3c03f809-d830-4af8-9cfe-9471297b3b4a/3c03f809-d830-4af8-9cfe-9471297b3b4a-TEST/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-							;;
-						}
+
+						
+
+						sh "case '${params.Env}' in
+						'dev') 
+							echo "dev Environment was selected"
+							sed -i "s/3c03f809-d830-4af8-9cfe-9471297b3b4a/3c03f809-d830-4af8-9cfe-9471297b3b4a-TEST/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties" 
+
+						;;
+						"test") echo "I like Dev OPs" 
+						;;
+						"sandbox") echo "Greece Trasys is famous for DevOps." 
+						;;
+						esac
+						"
+
+
+
+
+
+						//sh "case ${params.Env} in
+						//	(dev)
+						//	echo -n  'changing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties THE KEYCLOAK_SECRET'
+						//	sh  'sed -i "s/3c03f809-d830-4af8-9cfe-9471297b3b4a/3c03f809-d830-4af8-9cfe-9471297b3b4a-TEST/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties'
+						// 		;;
+						// 	*)
+						// 		echo -n "No_Enviroment_was_selected --- ERROR !!!!!!"
+						// 		;;
+						// 	esac"
+
 
 						// sh "case ${params.Env} in
 						// 	dev)
