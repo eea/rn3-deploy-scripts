@@ -39,8 +39,7 @@ def CopySecretFiles()
 								;;
 								sandbox ) echo "Greece Trasys is famous for DevOps." 
 								;;
-								esac
-						"""
+								esac"""
 
 						//sh "case ${params.Env} in
 						//	(dev)
