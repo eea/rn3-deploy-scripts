@@ -26,43 +26,47 @@ def CopySecretFiles()
 						// config/application/eea.keycloak.secret=${KEYCLOAK_SECRET:39938213-b771-4ab3-a5ed-c525e88026b7}
 
 
-						// FOR EACH ENV WE NEED TO PUT THE KEYCLOAK KEY TO THE BELOW BLOCK - WHENEVER THERE IS A NEW KEY !	
-						sh "case ${params.Env} in
-							dev)
-								echo -n "Application properties on ${params.Env} changed "
-								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/0380996f-a7ad-4667-8ba4-14995e408d24-TEST/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-								;;
+						// FOR EACH ENV WE NEED TO PUT THE KEYCLOAK KEY TO THE BELOW BLOCK - WHENEVER THERE IS A NEW KEY !
 
-							test)
-								echo -n "test"
-								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-								;;
 
-							sandbox)
-								echo -n "sandbox"
-								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-								;;
+						    if (${params.Env} == 'dev') { sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/0380996f-a7ad-4667-8ba4-14995e408d24-TEST/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"}
 
-							staging)
-								echo -n "staging"
-								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-								;;
+						// sh "case ${params.Env} in
+						// 	dev)
+						// 		echo -n "Application properties on ${params.Env} changed "
+						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/0380996f-a7ad-4667-8ba4-14995e408d24-TEST/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+						// 		;;
 
-							transport | prod2)
-								echo -n "prod2-transport"
-								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-								;;
+						// 	test)
+						// 		echo -n "test"
+						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+						// 		;;
 
-							prod)
-								echo -n "prod"
-								sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-								;;
-							*)
-								echo -n "No_Enviroment_was_selected --- ERROR !!!!!!"
-								;;
-							esac
+						// 	sandbox)
+						// 		echo -n "sandbox"
+						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+						// 		;;
 
-							"
+						// 	staging)
+						// 		echo -n "staging"
+						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+						// 		;;
+
+						// 	transport | prod2)
+						// 		echo -n "prod2-transport"
+						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+						// 		;;
+
+						// 	prod)
+						// 		echo -n "prod"
+						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+						// 		;;
+						// 	*)
+						// 		echo -n "No_Enviroment_was_selected --- ERROR !!!!!!"
+						// 		;;
+						// 	esac
+
+						// 	"
 
 
 
