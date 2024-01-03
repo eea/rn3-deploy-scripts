@@ -30,7 +30,7 @@ def CopySecretFiles()
 
 
 						    if ("${params.Env}" == "dev") { 
-								echo -n  "This is dev and i am changing the KEYCLOAK_SECRET"
+								echo -n  "changing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties THE KEYCLOAK_SECRET"
 								sh  "sed -i 's/3c03f809-d830-4af8-9cfe-9471297b3b4a/3c03f809-d830-4af8-9cfe-9471297b3b4a-TEST/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
 								}
 
