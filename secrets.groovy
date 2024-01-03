@@ -34,11 +34,14 @@ def CopySecretFiles()
 								dev )
 									echo "dev Environment was selected" 
 									echo "The contents of the application.properties file is currently : " 
-									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_SECRET"
+									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_REDIRECT_URI"
 									echo "Changing the file  " 
-									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24-TEST/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s/KEYCLOAK_REDIRECT_URI:https://reportnet.europa.eu/eulogin/KEYCLOAK_REDIRECT_URI:https://${params.Env}.reportnet.europa.eu/eulogin/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									echo "The contents of application.properties file now is  : "
-									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_SECRET"
+									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_REDIRECT_URI"
 									;;
 								test ) 
 									echo "I like Dev OPs" 
