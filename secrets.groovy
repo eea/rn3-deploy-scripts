@@ -26,10 +26,7 @@ def CopySecretFiles()
 						// config/application/eea.keycloak.secret=${KEYCLOAK_SECRET:39938213-b771-4ab3-a5ed-c525e88026b7}
 
 
-						// FOR EACH ENV WE NEED TO PUT THE KEYCLOAK KEY TO THE BELOW BLOCK - WHENEVER THERE IS A NEW KEY !
-
-
-
+						// FOR EACH ENV WE NEED TO PUT THE NEW KEYCLOAK KEY TO THE BELOW BLOCK - WHENEVER THERE IS A NEW KEY !
 						 sh """	case "${params.Env}" in
 								dev )
 									echo "dev Environment was selected" 
@@ -37,68 +34,31 @@ def CopySecretFiles()
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_SECRET"
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_REDIRECT_URI"
 									echo "Changing the file  " 
-									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET:3c03f809-d830-4af8-9cfe-9471297b3b4a/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									sed -i "s/reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									echo "The contents of application.properties file now is  : "
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_SECRET"
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_REDIRECT_URI"
 									;;
 								test ) 
-									echo "I like Dev OPs" 
+									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET:cd7691a4-9f26-48a2-be9a-4d4dbde2b331/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s/reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									;;
-								sandbox ) 
-									echo "Greece Trasys is famous for DevOps." 
+								sandbox | testing ) 
+									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET:24c0724e-6f20-48f6-917f-e83ef5f03926/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s/reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									;;
+								prod ) 
+									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET: ~~~~~ CHANGE ME ~~~~~~ /g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s/reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									;;
+								prod2 | transport ) 
+									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET: ~~~~~ CHANGE ME ~~~~~~ /g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s/reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									;;
 								esac
 							"""
 
-						//sh "case ${params.Env} in
-						//	(dev)
-						//	echo -n  'changing properties secret file to $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties THE KEYCLOAK_SECRET'
-						//	sh  'sed -i "s/3c03f809-d830-4af8-9cfe-9471297b3b4a/3c03f809-d830-4af8-9cfe-9471297b3b4a-TEST/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties'
-						// 		;;
-						// 	*)
-						// 		echo -n "No_Enviroment_was_selected --- ERROR !!!!!!"
-						// 		;;
-						// 	esac"
-
-
-						// sh "case ${params.Env} in
-						// 	dev)
-						// 		echo -n "Application properties on ${params.Env} changed "
-						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/0380996f-a7ad-4667-8ba4-14995e408d24-TEST/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-						// 		;;
-
-						// 	test)
-						// 		echo -n "test"
-						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-						// 		;;
-
-						// 	sandbox)
-						// 		echo -n "sandbox"
-						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-						// 		;;
-
-						// 	staging)
-						// 		echo -n "staging"
-						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-						// 		;;
-
-						// 	transport | prod2)
-						// 		echo -n "prod2-transport"
-						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-						// 		;;
-
-						// 	prod)
-						// 		echo -n "prod"
-						// 		sh "sed -i 's/0380996f-a7ad-4667-8ba4-14995e408d24/39938213-b771-4ab3-a5ed-c525e88026b7/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
-						// 		;;
-						// 	*)
-						// 		echo -n "No_Enviroment_was_selected --- ERROR !!!!!!"
-						// 		;;
-						// 	esac
-
-						// 	"
 
 
 
