@@ -29,7 +29,10 @@ def CopySecretFiles()
 						// FOR EACH ENV WE NEED TO PUT THE KEYCLOAK KEY TO THE BELOW BLOCK - WHENEVER THERE IS A NEW KEY !
 
 
-						    if ("${params.Env}" == 'dev') { sh "echo "This is dev and i am changing the KEYCLOAK_SECRET" && sed -i 's/3c03f809-d830-4af8-9cfe-9471297b3b4a/3c03f809-d830-4af8-9cfe-9471297b3b4a-TEST/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"}
+						    if ("${params.Env}" == "dev") { 
+								echo -n  "This is dev and i am changing the KEYCLOAK_SECRET"
+								sh  "sed -i 's/3c03f809-d830-4af8-9cfe-9471297b3b4a/3c03f809-d830-4af8-9cfe-9471297b3b4a-TEST/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+								}
 
 						// sh "case ${params.Env} in
 						// 	dev)
