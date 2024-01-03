@@ -33,8 +33,11 @@ def CopySecretFiles()
 						 sh """	case "${params.Env}" in
 								dev )
 									echo "dev Environment was selected" 
+									echo "The contents of the application.properties file is currently : " 
+									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									echo "Changing the file  " 
 									sed -i 's/3c03f809-d830-4af8-9cfe-9471297b3b4a/3c03f809-d830-4af8-9cfe-9471297b3b4a-TEST/g' $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									echo "The contents of $WORKSPACE/helm/eaa-deploy/application-config/files/        application.properties"
+									echo "The contents of application.properties file now is  : "
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									;;
 								test ) 
