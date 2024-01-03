@@ -32,12 +32,10 @@ def CopySecretFiles()
 
 						
 
-						sh "case '${params.Env}' in
-						'dev') 
+						sh "case '${params.Env}' in	'dev'
 							echo "dev Environment was selected"
-							sed -i "s/3c03f809-d830-4af8-9cfe-9471297b3b4a/3c03f809-d830-4af8-9cfe-9471297b3b4a-TEST/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties" 
-
-						;;
+							sed -i "s/3c03f809-d830-4af8-9cfe-9471297b3b4a/3c03f809-d830-4af8-9cfe-9471297b3b4a-TEST/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties"
+							;;
 						"test") echo "I like Dev OPs" 
 						;;
 						"sandbox") echo "Greece Trasys is famous for DevOps." 
