@@ -36,7 +36,7 @@ def CopySecretFiles()
 									echo "The contents of the application.properties file is currently : " 
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									echo "Changing the file  " 
-									sed -i "s/3c03f809-d830-4af8-9cfe-9471297b3b4a/3c03f809-d830-4af8-9cfe-9471297b3b4a-TEST/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s/0380996f-a7ad-4667-8ba4-14995e408d24/0380996f-a7ad-4667-8ba4-14995e408d24-TEST/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									echo "The contents of application.properties file now is  : "
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									;;
