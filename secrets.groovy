@@ -43,35 +43,35 @@ def CopySecretFiles()
 
 						 sh """	case "${params.Env}" in
 								dev )
-									sed -i "s/${KC_OLD_PUB_KEY}/${DEV_KC_NEW_PUB_KEY}}/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET:8bb193b1-fc5e-4112-9c4c-58a0d615c7e8/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									sed -i "s/reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|${KC_OLD_PUB_KEY}|${DEV_KC_NEW_PUB_KEY}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24|KEYCLOAK_SECRET:8bb193b1-fc5e-4112-9c4c-58a0d615c7e8|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|reportnet.europa.eu|${params.Env}.reportnet.europa.eu|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									;;
 								test ) 
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_SECRET"
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_REDIRECT_URI"
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_CLIENT_PUBLIC_KEY"
-									sed -i "s/${KC_OLD_PUB_KEY}/${TEST_KC_NEW_PUB_KEY}}/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET:cd7691a4-9f26-48a2-be9a-4d4dbde2b331/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									sed -i "s/reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|${KC_OLD_PUB_KEY}|${TEST_KC_NEW_PUB_KEY}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24|KEYCLOAK_SECRET:cd7691a4-9f26-48a2-be9a-4d4dbde2b331|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|reportnet.europa.eu|${params.Env}.reportnet.europa.eu|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_SECRET"
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_REDIRECT_URI"
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_CLIENT_PUBLIC_KEY"
 									;;
 								sandbox | testing )
-									sed -i "s/${KC_OLD_PUB_KEY}/${STAGING_KC_NEW_PUB_KEY}}/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET:~~~~~~~~~~~CHANGE ME ~~~~~~~~~~~~/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									sed -i "s/reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|${KC_OLD_PUB_KEY}|${STAGING_KC_NEW_PUB_KEY}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24|KEYCLOAK_SECRET:~~~~~~~~~~~CHANGE ME ~~~~~~~~~~~~|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|reportnet.europa.eu|${params.Env}.reportnet.europa.eu|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									;;
 								prod )
-									sed -i "s/${KC_OLD_PUB_KEY}/${PROD_KC_NEW_PUB_KEY}}/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET: ~~~~~ CHANGE ME ~~~~~~ /g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									sed -i "s/reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|${KC_OLD_PUB_KEY}|${PROD_KC_NEW_PUB_KEY}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24|KEYCLOAK_SECRET:~~~~~~~~~~~CHANGE ME ~~~~~~~~~~~~|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|reportnet.europa.eu|${params.Env}.reportnet.europa.eu|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									;;
 								prod2 | transport )
-									sed -i "s/${KC_OLD_PUB_KEY}/${PROD2_KC_NEW_PUB_KEY}}/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									sed -i "s/KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24/KEYCLOAK_SECRET: ~~~~~ CHANGE ME ~~~~~~ /g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									sed -i "s/reportnet.europa.eu/${params.Env}.reportnet.europa.eu/g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|${KC_OLD_PUB_KEY}|${PROD2_KC_NEW_PUB_KEY}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24|KEYCLOAK_SECRET:~~~~~~~~~~~CHANGE ME ~~~~~~~~~~~~|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
+									sed -i "s|reportnet.europa.eu|${params.Env}.reportnet.europa.eu|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									;;
 								esac
 							"""
