@@ -37,7 +37,7 @@ axon:
     user: postgres
     pswd: 
       valueFrom:
-          secretKeyRef:
+        secretKeyRef:
           name: pg-secret
           key: pg-pass
         
