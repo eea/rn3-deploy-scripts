@@ -27,10 +27,10 @@ postgres:
 datasets:
     user: postgres
     password:
-        valueFrom:
-            secretKeyRef:
-            name: pg-secret
-            key: pg-pass
+      valueFrom:
+        secretKeyRef:
+        name: pg-secret
+        key: pg-pass
 zipkin:
     ip: zipkin-ui
     port: 9411
@@ -58,10 +58,10 @@ axon:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
     user: postgres
     pswd: 
-        valueFrom:
-            secretKeyRef:
-            name: pg-secret
-            key: pg-pass
+      valueFrom:
+        secretKeyRef:
+        name: pg-secret
+        key: pg-pass
 
         
 tagSufix: 

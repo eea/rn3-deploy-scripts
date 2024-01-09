@@ -17,17 +17,17 @@ metabase:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase
     user: validation
     password:
-        valueFrom:
-            secretKeyRef:
-            name: pg-secret
-            key: pg-pass
+      valueFrom:
+        secretKeyRef:
+        name: pg-secret
+        key: pg-pass
 datasets:
     user: postgres
     password:
-        valueFrom:
-            secretKeyRef:
-            name: pg-secret
-            key: pg-pass
+      valueFrom:
+        secretKeyRef:
+        name: pg-secret
+        key: pg-pass
 mongo:
   host: mongo-mongodb
   port: 27017
@@ -61,10 +61,10 @@ axon:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
     user: postgres
     pswd: 
-        valueFrom:
-            secretKeyRef:
-            name: pg-secret
-            key: pg-pass
+      valueFrom:
+        secretKeyRef:
+        name: pg-secret
+        key: pg-pass
          
 tagSufix: 
 replicas: 4

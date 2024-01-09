@@ -17,10 +17,10 @@ metabase:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase
     user: dataflow
     password:
-        valueFrom:
-            secretKeyRef:
-            name: pg-secret
-            key: pg-pass
+      valueFrom:
+        secretKeyRef:
+        name: pg-secret
+        key: pg-pass
     
 zipkin:
     ip: zipkin-ui
@@ -49,10 +49,10 @@ axon:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
     user: postgres
     pswd:
-        valueFrom:
-            secretKeyRef:
-            name: pg-secret
-            key: pg-pass
+      valueFrom:
+        secretKeyRef:
+        name: pg-secret
+        key: pg-pass
 
 tagSufix: 
 replicas: 1
