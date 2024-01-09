@@ -35,11 +35,7 @@ sentry:
 axon:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
     user: postgres
-    pswd: 
-      valueFrom:
-        secretKeyRef:
-          name: pg-secret
-          key: pg-pass
+    pswd: 53p057n373.0!
         
 tagSufix: 
 replicas: 1

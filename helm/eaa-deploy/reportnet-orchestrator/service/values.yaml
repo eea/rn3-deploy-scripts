@@ -32,20 +32,13 @@ sentry:
 orchestrator:
     curl: jdbc:postgresql://rn3-pg-helm-pgpool:5432/orchestrator_db
     user: postgres
-    pswd: 
-      valueFrom:
-        secretKeyRef:
-          name: pg-secret
-          key: pg-pass
+    pswd: 53p057n373.0!
          
 axon:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
     user: postgres
-    pswd: 
-      valueFrom:
-        secretKeyRef:
-          name: pg-secret
-          key: pg-pass
+    pswd: 53p057n373.0!
+
 
 tagSufix: 
 replicas: 4
