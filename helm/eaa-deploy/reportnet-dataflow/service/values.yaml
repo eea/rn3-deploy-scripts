@@ -19,8 +19,8 @@ metabase:
     password:
       valueFrom:
         secretKeyRef:
-        name: pg-secret
-        key: pg-pass
+            name: pg-secret
+            key: pg-pass
     
 zipkin:
     ip: zipkin-ui
@@ -51,8 +51,8 @@ axon:
     pswd:
       valueFrom:
         secretKeyRef:
-        name: pg-secret
-        key: pg-pass
+            name: pg-secret
+            key: pg-pass
 
 tagSufix: 
 replicas: 1

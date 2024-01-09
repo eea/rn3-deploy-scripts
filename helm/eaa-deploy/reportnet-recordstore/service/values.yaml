@@ -29,8 +29,8 @@ datasets:
     password:
       valueFrom:
         secretKeyRef:
-        name: pg-secret
-        key: pg-pass
+          name: pg-secret
+          key: pg-pass
 zipkin:
     ip: zipkin-ui
     port: 9411
@@ -60,8 +60,8 @@ axon:
     pswd: 
       valueFrom:
         secretKeyRef:
-        name: pg-secret
-        key: pg-pass
+          name: pg-secret
+          key: pg-pass
 
         
 tagSufix: 

@@ -19,15 +19,15 @@ metabase:
     password:
       valueFrom:
         secretKeyRef:
-        name: pg-secret
-        key: pg-pass
+          name: pg-secret
+          key: pg-pass
 datasets:
     user: postgres
     password:
       valueFrom:
         secretKeyRef:
-        name: pg-secret
-        key: pg-pass
+          name: pg-secret
+          key: pg-pass
 mongo:
   host: mongo-mongodb
   port: 27017
@@ -63,8 +63,8 @@ axon:
     pswd: 
       valueFrom:
         secretKeyRef:
-        name: pg-secret
-        key: pg-pass
+          name: pg-secret
+          key: pg-pass
          
 tagSufix: 
 replicas: 4

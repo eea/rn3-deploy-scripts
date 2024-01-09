@@ -35,8 +35,8 @@ orchestrator:
     pswd: 
       valueFrom:
         secretKeyRef:
-        name: pg-secret
-        key: pg-pass
+          name: pg-secret
+          key: pg-pass
          
 axon:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
@@ -44,8 +44,8 @@ axon:
     pswd: 
       valueFrom:
         secretKeyRef:
-        name: pg-secret
-        key: pg-pass
+          name: pg-secret
+          key: pg-pass
 
 tagSufix: 
 replicas: 4
