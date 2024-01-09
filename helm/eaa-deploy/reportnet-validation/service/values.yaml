@@ -16,10 +16,18 @@ kafka:
 metabase:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase
     user: validation
-    password: 53p057n373.0!
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: pg-secret
+          key: pg-pass
 datasets:
     user: postgres
-    password: 53p057n373.0!
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: pg-secret
+          key: pg-pass
 mongo:
   host: mongo-mongodb
   port: 27017
@@ -52,7 +60,11 @@ sentry:
 axon:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
     user: postgres
-    pswd: 53p057n373.0!
+    pswd: 
+      valueFrom:
+        secretKeyRef:
+          name: pg-secret
+          key: pg-pass
          
 tagSufix: 
 replicas: 4
