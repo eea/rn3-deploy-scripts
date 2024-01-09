@@ -21,3 +21,5 @@ controller:
     secretKeyRef:
       name:  rn3-pgsql
       key: password
+
+
