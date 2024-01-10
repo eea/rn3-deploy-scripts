@@ -75,13 +75,19 @@ spec:
         - name: ORCHESTRATOR_CONNECTION_USER
           value: "{{.Values.orchestrator.user}}"
         - name: ORCHESTRATOR_CONNECTION_PASSWORD
-          value: "{{.Values.orchestrator.pswd}}"
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-pass
         - name: AXON_CONNECTION_URL
           value: "{{.Values.axon.url}}"
         - name: AXON_USERNAME
           value: "{{.Values.axon.user}}"
         - name: AXON_CONNECTION_PASSWORD
-          value: "{{.Values.axon.pswd}}"
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-pass
 
         volumeMounts:
         - mountPath: "{{.Values.file.path}}"

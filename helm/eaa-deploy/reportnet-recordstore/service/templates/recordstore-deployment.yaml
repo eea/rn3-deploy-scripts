@@ -59,17 +59,26 @@ spec:
         - name: RECORDSTORE_USERNAME
           value: "{{.Values.postgres.user}}"
         - name: RECORDSTORE_PASSWORD
-          value: "{{.Values.postgres.password}}"
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-pass
         - name: METABASE_CONNECTION_USER
           value: "{{.Values.postgres.user}}"
         - name: METABASE_CONNECTION_PASSWORD
-          value: "{{.Values.postgres.password}}"
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-pass
         - name: METABASE_CONNECTION_URL
           value: "{{.Values.postgres.metabase.url}}"
         - name: DATASETS_USERNAME
           value: "{{.Values.datasets.user}}"
         - name: DATASETS_PASSWORD
-          value: "{{.Values.datasets.password}}"  
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-pass
         - name: ZIPKIN_URL
           value: "{{.Values.zipkin.schema}}://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
         - name: REDIS_HOST
@@ -97,7 +106,10 @@ spec:
         - name: AXON_USERNAME
           value: "{{.Values.axon.user}}"
         - name: AXON_CONNECTION_PASSWORD
-          value: "{{.Values.axon.pswd}}"
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-pass
 
 
         volumeMounts:

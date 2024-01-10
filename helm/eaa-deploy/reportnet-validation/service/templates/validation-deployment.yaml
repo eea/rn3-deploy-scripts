@@ -63,11 +63,17 @@ spec:
         - name: METABASE_CONNECTION_USER
           value: "{{.Values.metabase.user}}"
         - name: METABASE_CONNECTION_PASSWORD
-          value: "{{.Values.metabase.password}}"  
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-pass
         - name: DATASETS_USERNAME
           value: "{{.Values.datasets.user}}"
         - name: DATASETS_PASSWORD
-          value: "{{.Values.datasets.password}}"  
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-pass
         - name: ZIPKIN_URL
           value: "{{.Values.zipkin.schema}}://{{.Values.zipkin.ip}}:{{.Values.zipkin.port}}"
         - name: REDIS_HOST
@@ -105,7 +111,10 @@ spec:
         - name: AXON_USERNAME
           value: "{{.Values.axon.user}}"
         - name: AXON_CONNECTION_PASSWORD
-          value: "{{.Values.axon.pswd}}"
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-pass
                             
         volumeMounts:
         - mountPath: "{{.Values.file.path}}"

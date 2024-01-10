@@ -16,7 +16,6 @@ kafka:
 metabase:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/metabase
     user: dataflow
-    #password: 53p057n373.0!
   
 zipkin:
     ip: zipkin-ui
@@ -35,7 +34,6 @@ sentry:
 axon:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
     user: postgres
-    #pswd: 53p057n373.0!
 
 
 tagSufix: 
