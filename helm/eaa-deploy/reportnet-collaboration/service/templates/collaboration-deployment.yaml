@@ -68,6 +68,11 @@ spec:
           value: "{{.Values.metabase.user}}"
         - name: METABASE_CONNECTION_PASSWORD
           value: "{{.Values.metabase.password}}"
+        - name: METABASE_CONNECTION_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-pass
         - name: SENTRY_DSN
           value: "{{.Values.sentry.dsn}}"
         - name: SENTRY_ENVIRONMENT
@@ -79,7 +84,10 @@ spec:
         - name: AXON_USERNAME
           value: "{{.Values.axon.user}}"
         - name: AXON_CONNECTION_PASSWORD
-          value: "{{.Values.axon.pswd}}"
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-pass
 
       
   strategy:
