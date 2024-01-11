@@ -27,8 +27,8 @@ def CopySecretFiles()
 						// Properties & values
 						RP3_DRM_USR="bieber"
 						RP3_TEST_DRM_USR="rn3svc"
-						RP3_DRM_PSW="justin3\$"
-						RP3_TEST_DRM_PSW="1Batman\$"
+						RP3_DRM_PSW='justin3$'
+						RP3_TEST_DRM_PSW='1Batman$'
 						RP3_DRM_CLI_URL="https://dremio-reporting-test.eea.europa.eu:9047"
 						RP3_TEST_DRM_CLI_URL="https://dremio-reportnet-pre01.eea.europa.eu:9047"
 
