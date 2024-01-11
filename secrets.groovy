@@ -53,8 +53,6 @@ def CopySecretFiles()
 									sed -i "s|${RP3_DRM_USR}|${RP3_TEST_DRM_USR}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									sed -i "s|${RP3_DRM_PSW}|${RP3_TEST_DRM_PSW}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									sed -i "s|${RP3_DRM_CLI_URL}|${RP3_TEST_DRM_CLI_URL}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "${RP3_TEST_DRM_USR}"
-									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "${RP3_TEST_DRM_PSW}"								
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "dremio.username"
 									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "dremio.password"
 									#cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_SECRET"
