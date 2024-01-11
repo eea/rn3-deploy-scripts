@@ -22,8 +22,6 @@ def CopySecretFiles()
 						 def PROD2_KC_NEW_PUB_KEY="KEYCLOAK_CLIENT_PUBLIC_KEY:CHANGEME" //local variable
 
 
-
-
 						// Properties & values
 						RP3_DRM_USR="bieber"
 						RP3_TEST_DRM_USR="rn3svc"
@@ -31,8 +29,6 @@ def CopySecretFiles()
 						RP3_TEST_DRM_PSW='1Batman'
 						RP3_DRM_CLI_URL="https://dremio-reporting-test.eea.europa.eu:9047"
 						RP3_TEST_DRM_CLI_URL="https://dremio-reportnet-pre01.eea.europa.eu:9047"
-
-	
 
 
 						 sh """	case "${params.Env}" in
@@ -45,16 +41,16 @@ def CopySecretFiles()
 									#cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_SECRET"
 									#cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_REDIRECT_URI"
 									#cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_CLIENT_PUBLIC_KEY"
-									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "dremio.username"
-									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "dremio.password"
+									#cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "dremio.username"
+									#cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "dremio.password"
 									sed -i "s|${KC_OLD_PUB_KEY}|${TEST_KC_NEW_PUB_KEY}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									sed -i "s|KEYCLOAK_SECRET:0380996f-a7ad-4667-8ba4-14995e408d24|KEYCLOAK_SECRET:cd7691a4-9f26-48a2-be9a-4d4dbde2b331|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									sed -i "s|reportnet.europa.eu|${params.Env}.reportnet.europa.eu|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									sed -i "s|${RP3_DRM_USR}|${RP3_TEST_DRM_USR}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									sed -i "s|${RP3_DRM_PSW}|${RP3_TEST_DRM_PSW}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
 									sed -i "s|${RP3_DRM_CLI_URL}|${RP3_TEST_DRM_CLI_URL}|g" $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties
-									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "dremio.username"
-									cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "dremio.password"
+									#cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "dremio.username"
+									#cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "dremio.password"
 									#cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_SECRET"
 									#cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_REDIRECT_URI"
 									#cat $WORKSPACE/helm/eaa-deploy/application-config/files/application.properties | grep "KEYCLOAK_CLIENT_PUBLIC_KEY"
