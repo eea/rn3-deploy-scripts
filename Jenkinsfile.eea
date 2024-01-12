@@ -21,8 +21,8 @@ pipeline {
 			string(defaultValue: '1', description: 'Orchestrator service Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Orchestrator_replicas', trim: true)
 			string(defaultValue: '1', description: 'Validation Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=4)', name: 'Validation_replicas', trim: true)
 			string(defaultValue: '1', description: 'User Management Replicas to be deployed (dev=1,test=1,staging=1,hotfix=1,production=1)', name: 'User_management_replicas', trim: true)
-			string(defaultValue: '0', description: 'Select if you need to reset the PGpool users to the defaults ones from code  (dev=0,test=0,staging=0,hotfix=0,production=0)', name: 'Helm_PGpool_Users', trim: true)
-			choice(choices: ['no','yes'],description:'Should rewrite default PGpoll users ?', name: 'PGpoolUsers')
+			//string(defaultValue: '0', description: 'Select if you need to reset the PGpool users to the defaults ones from code  (dev=0,test=0,staging=0,hotfix=0,production=0)', name: 'Helm_PGpool_Users', trim: true)
+			choice(choices: ['no','yes'],description:'Should we rewrite the default PGpool users ?', name: 'PGpoolUsers')
 	}
 					
     stages {
@@ -377,19 +377,15 @@ pipeline {
 				echo "ENV: ${params.Env}"
 				echo "FIXUSERS: ${params.PGpoolUsers}"
 				script { 	
-
-
-						echo "Configuring Helm-PGpool Users on  ${params.Env}"
-						withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
-							sh '''
-								chmod +x $WORKSPACE/helm/eaa-deploy/scripts/pgpool-usr-fix.sh
-							'''
-							sh '''
-								$WORKSPACE/helm/eaa-deploy/scripts/pgpool-usr-fix.sh $TARGET_ENV reportnet ${FILE}
-							'''
-						}
-
-
+							echo "Configuring Helm-PGpool Users on  ${params.Env}"
+							withCredentials([file(credentialsId: "${ENVIRONMENT}", variable: 'FILE')]) {
+								sh '''
+									chmod +x $WORKSPACE/helm/eaa-deploy/scripts/pgpool-usr-fix.sh
+								'''
+								sh '''
+									$WORKSPACE/helm/eaa-deploy/scripts/pgpool-usr-fix.sh $TARGET_ENV reportnet ${FILE}
+								'''
+							}
 						}
 					}
 				}
