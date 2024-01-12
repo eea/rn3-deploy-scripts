@@ -3,6 +3,11 @@
 # Created:	12-01-2024 
 # Modified:	----------
 
+#Usage of the script : ./pgpool-usr-fix.sh ENV NAMESPACE KUBECONFIG
+#Example : ./pgpool-usr-fix.sh test reportnet .kube/test/config
+#or 
+#Example : ./pgpool-usr-fix.sh test reportnet ../../../../.kube/test/config
+
 # Temporary colors
 NORMAL=''
 GREEN=''
@@ -17,9 +22,6 @@ if tty -s; then
   ITALIC=$(tput sitm)
 fi
 
-
-#kubectl  --namespace=reportnet get pods |grep helm-pgpool
-
 ENV=$1
 NS=$2
 KC=$3
@@ -29,11 +31,9 @@ echo 'testuser:md5cdc0ba8c75f2cc98122838c15c470a0d' >> /opt/bitnami/pgpool/conf/
 echo 'dataflow:md554b98b73cfe60e759ef332490d7b7371' >> /opt/bitnami/pgpool/conf/pool_passwd && \
 echo 'dataset:md5230a13dcd5e8f72ce9ce047e5c69906d' >> /opt/bitnami/pgpool/conf/pool_passwd && \
 echo 'validation:md5b6e17a172ec57d0cdc9a14553410b8ef' >> /opt/bitnami/pgpool/conf/pool_passwd && \
-echo 'recordstore:md5e2a1ff8ce8fe36ca27f6f2212fe025da' >> /opt/bitnami/pgpool/conf/pool_passwd && \
-echo 'sotav:md5e2a1ff8ce8fe36ca27f6f2212fe025da' >> /opt/bitnami/pgpool/conf/pool_passwd && \ 
-echo 'fotis:md5e2a1ff8ce8fe36ca27f6f2212fe025da' >> /opt/bitnami/pgpool/conf/pool_passwd");
+echo 'recordstore:md5e2a1ff8ce8fe36ca27f6f2212fe025da' >> /opt/bitnami/pgpool/conf/pool_passwd");
 
-
+# For testing the PoC uncomment the below and comment out the above block or just any new user to the above block !!!
 #users=("echo 'postgres:md5a667f81c18c360beb563089097a5b94f' > /opt/bitnami/pgpool/conf/pool_passwd && \
 #echo 'testuser:md5cdc0ba8c75f2cc98122838c15c470a0d' >> /opt/bitnami/pgpool/conf/pool_passwd && \
 #echo 'dataflow:md554b98b73cfe60e759ef332490d7b7371' >> /opt/bitnami/pgpool/conf/pool_passwd && \
