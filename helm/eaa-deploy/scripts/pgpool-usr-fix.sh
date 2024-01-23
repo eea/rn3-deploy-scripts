@@ -7,6 +7,11 @@
 #Example : ./pgpool-usr-fix.sh test reportnet .kube/test/config
 #or 
 #Example : ./pgpool-usr-fix.sh test reportnet ../../../../.kube/test/config
+#			#SOTAV_SPECIFIC USE ON MY TERMINAL
+#           # cd /drives/c/Users/P70693/EAA/rn3-deploy-scripts/helm/eaa-deploy/scripts
+#           # ./pgpool-usr-fix.sh prod2 reportnet ../../../../.kube/prod2/config
+
+
 
 # Temporary colors
 NORMAL=''
