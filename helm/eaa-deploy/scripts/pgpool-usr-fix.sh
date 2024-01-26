@@ -10,6 +10,8 @@
 #			#SOTAV_SPECIFIC USE ON MY TERMINAL
 #           # cd /drives/c/Users/P70693/EAA/rn3-deploy-scripts/helm/eaa-deploy/scripts
 #           # ./pgpool-usr-fix.sh prod2 reportnet ../../../../.kube/prod2/config
+#           # ./pgpool-usr-fix.sh test reportnet ../../../../.kube/test/config
+#           # ./pgpool-usr-fix.sh dev reportnet ../../../../.kube/dev/config
 
 
 
