@@ -13,7 +13,7 @@
 #           # ./pgpool-usr-fix.sh test reportnet ../../../../.kube/test/config
 #           # ./pgpool-usr-fix.sh dev reportnet ../../../../.kube/dev/config
 
-
+# ~/EAA/rn3-deploy-scripts/helm/eaa-deploy/scripts
 
 # Temporary colors
 NORMAL=''

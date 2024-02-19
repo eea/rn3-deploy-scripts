@@ -123,13 +123,13 @@ clusterDomain: cluster.local
 postgresql:
   ## Number of replicas to deploy
   ##
-  replicaCount: 2
+  replicaCount: 3
 
 
   ## Update strategy for PostgreSQL statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
-  updateStrategyType: RollingUpdate
+  updateStrategyType: Parallel
 
   ## Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -347,14 +347,14 @@ pgpool:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    enabled: true
+    enabled: false
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
   readinessProbe:
-    enabled: true
+    enabled: false
     initialDelaySeconds: 5
     periodSeconds: 5
     timeoutSeconds: 5
