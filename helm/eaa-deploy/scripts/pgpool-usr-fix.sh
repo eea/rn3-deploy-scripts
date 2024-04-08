@@ -12,6 +12,18 @@
 #           # ./pgpool-usr-fix.sh prod2 reportnet ../../../../.kube/prod2/config
 #           # ./pgpool-usr-fix.sh test reportnet ../../../../.kube/test/config
 #           # ./pgpool-usr-fix.sh dev reportnet ../../../../.kube/dev/config
+#
+#
+#           Using WSL      
+#           # cd ~/EAA/rn3-deploy-scripts/helm/eaa-deploy/scripts
+#           # ./pgpool-usr-fix.sh prod2 reportnet ~/.kube/prod2/config
+#           # ./pgpool-usr-fix.sh test reportnet ~/.kube/test/config
+#           # ./pgpool-usr-fix.sh dev reportnet ~/.kube/dev/config
+
+
+### Using wsl 
+
+
 
 
 
