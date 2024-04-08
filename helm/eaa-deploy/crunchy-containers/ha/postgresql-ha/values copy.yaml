@@ -123,12 +123,13 @@ clusterDomain: cluster.local
 postgresql:
   ## Number of replicas to deploy
   ##
-  replicaCount: 3
+  replicaCount: 2
+
 
   ## Update strategy for PostgreSQL statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
-  updateStrategyType: Parallel
+  updateStrategyType: RollingUpdate
 
   ## Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -456,7 +457,7 @@ volumePermissions:
 ## PostgreSQL Prometheus exporter parameters
 ##
 metrics:
-  enabled: true
+  enabled: false
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -627,11 +628,11 @@ ingress:
 ## NetworkPolicy paramaters
 ##
 networkPolicy:
-  enabled: true
+  enabled: false
 
   ## The Policy model to apply. When set to false, only pods with the correct
   ## client labels will have network access to the port PostgreSQL is listening
   ## on. When true, PostgreSQL will accept connections from any source
   ## (with the correct destination port).
   ##
-  allowExternal: false
+  allowExternal: true

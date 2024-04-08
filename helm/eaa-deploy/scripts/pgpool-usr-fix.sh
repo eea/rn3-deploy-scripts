@@ -25,7 +25,7 @@
 
 
 
-
+# ~/EAA/rn3-deploy-scripts/helm/eaa-deploy/scripts
 
 # Temporary colors
 NORMAL=''
