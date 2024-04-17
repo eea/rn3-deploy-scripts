@@ -1,0 +1,4 @@
+export KC=~/.kube/dev/config
+export NS=reportnet
+echo $KC
+echo $NS
