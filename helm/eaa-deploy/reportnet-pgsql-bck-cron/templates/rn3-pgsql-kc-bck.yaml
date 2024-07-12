@@ -1,0 +1,47 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: dump-keycloak-dev
+  labels:
+    component: dump-keycloak-dev
+
+spec:
+  schedule: {{.Values.schedule }}
+  #schedule: "0 7 * * *" 
+  #debugging only - every hour 
+  #schedule: "0 * * * *" 
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: pgdump
+            env:
+              {{- toYaml .Values.envconfig | nindent 13 }}
+            resources:
+              {{- toYaml .Values.resources | nindent 13 }}
+
+            volumeMounts:
+            {{- toYaml .Values.volumeMounts | nindent 13 }}          
+            #image: bitnami/postgresql-repmgr:11.7.0-debian-10-r74
+            image: {{.Values.runner_image }}
+            command: ["/bin/sh"]
+            args: ["-c", 'mkdir -p /keycloak-backups/pgdump/ && pg_dump  -Fc > /keycloak-backups/pgdump/kc-bck_$(date +"%m%d%Y_%H%M")-{{.Values.environment }}.dump  && find /keycloak-backups/pgdump -type f -mtime +30 -ls -delete && ls -la /keycloak-backups/pgdump && sleep 3600']
+            # for debugging only !!!
+            #args: ["-c", 'mkdir -p /keycloak-backups/pgdump/ && pg_dump  -Fc > /keycloak-backups/pgdump/kc-bck_$(date +"%m%d%Y_%H%M")-$environment.dump  && find /keycloak-backups/pgdump -type f -mtime +3 -ls -delete && ls -la /keycloak-backups/pgdump && sleep 3600']
+            #args: ["-c", 'mkdir -p /keycloak-backups/pgdump/ && pg_dump  -Fc > /keycloak-backups/pgdump/kc-bck_$(date +"%m%d%Y_%H%M")-$environment.dump  && find /keycloak-backups/pgdump -type f -mtime +3 -ls -delete && ls -l /keycloak-backups/pgdump && cat /keycloak-backups/pgdump/kc-bck_$(date +"%m%d%Y_%H%M").dump']
+            #restore example command 
+            #args: ["-c", 'psql -U postgres  -c "create database keycloak1;" && pg_restore -d keycloak1 -U postgres /keycloak-backups/pgdump/kc-bck_07112024_0640.dump && sleep 3600']
+            securityContext:
+              runAsUser: 0
+              privileged: true
+
+
+
+
+          restartPolicy: Never
+
+          volumes:
+          {{- toYaml .Values.volumes | nindent 10 }}
+
