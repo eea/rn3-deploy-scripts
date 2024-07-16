@@ -64,6 +64,10 @@ kubectl --kubeconfig $KC -n $NS create -f ./pv-pvc/kc-bck-pvc-nfs_test.yaml
 helm --kubeconfig $KC -n $NS upgrade --install rn3-pgsql-kc-bck . -f values.yaml --set environment=test
 
 
+all is ok
+
+
+
 #############################################################
 #for helm Using Jenkins .....
 helm install --set env=[ environment_value ] [chart name] [chart path]
