@@ -7,7 +7,7 @@ pipeline {
     }
 
     parameters {
-			choice(choices: ['dev','test','sandbox','hotfix','prod','prod2'],description:'Select the target Environment', name: 'Env')
+			choice(choices: ['dev','test','sandbox','hotfix','prod','prod2','r2dev'],description:'Select the target Environment', name: 'Env')
 			gitParameter branchFilter: 'origin/(.*)', defaultValue: 'main', name: 'Brn', type: 'PT_BRANCH'
 			//string(defaultValue: 'dev', description: 'Set the branch', name: 'Brn', trim: true)
 			//string(defaultValue: 'v3.1.6-DEV', description: 'Set the version to be deployed', name: 'Ver', trim: true)
