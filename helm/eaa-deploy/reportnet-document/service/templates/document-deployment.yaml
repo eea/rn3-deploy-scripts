@@ -74,6 +74,15 @@ spec:
           value: "{{.Values.sentry.environment}}"
         - name: SENTRY_RELEASE
           value: "{{.Values.version}}"          
+        volumeMounts:
+        - mountPath: "/reportnet3-data/input"
+          name: load-data  
+      volumes:
+      - name: load-data
+        persistentVolumeClaim:
+            claimName: reportnet3-data
+
+
 
   strategy:
     type: RollingUpdate
