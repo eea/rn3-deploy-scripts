@@ -2,3 +2,9 @@ export KC=~/.kube/dev/config
 export NS=reportnet
 echo $KC
 echo $NS
+
+
+export KC=~/.kube/test/config
+export NS=reportnet
+echo $KC
+echo $NS
