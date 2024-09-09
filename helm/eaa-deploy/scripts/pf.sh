@@ -3,9 +3,13 @@
 #
 # LAST UPDATE @ 06/09/2024 Tavoulas Sotiris
 #
-# Usage  ".pf.sh on" to start the port forwarding
-# Usage  ".pf.sh off" to stop and kill all kubectl processes port forwards
+# Usage  "./pf.sh on" to start the port forwarding
+# Usage  "./pf.sh off" to stop and kill all kubectl processes port forwards
+# Sotav specific
+#
+# cd /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/helm/eaa-deploy/scripts
 
+# Conventions agreed!
 #01-20=web-ui
 #21-40=svs 
 #41-60=metrics
@@ -28,7 +32,7 @@ envr2[dev-r2]=kavoulas
 
 
 if [ -z "$1" ]; then
- echo "Please enter an option like : '.pf.sh on' or '.pf.sh off' "
+ echo "Please enter an option like : './pf.sh on' or './pf.sh off' "
  exit;
 fi
 
@@ -62,6 +66,15 @@ if [ "$1" = "on" ] ; then
             
             echo "exposing service rn-kafka-ui to https://localhost:1"$c"703"
                 kubectl --kubeconfig $KC -n $NS port-forward service/rn-kafka-ui 1"$c"703:9002 &
+
+
+            echo "exposing service minio-rn3-service to https://localhost:1"$c"704"
+                kubectl --kubeconfig $KC -n $NS port-forward service/minio-rn3-service 1"$c"704:9001 &
+
+
+            echo "exposing service keycloak-http to https://localhost:1"$c"705"
+                kubectl --kubeconfig $KC -n $NS port-forward service/keycloak-http 1"$c"705:80 &
+
 
             # echo "exposing service rn3-postgresql-ha-pgpool to https://localhost:1"$c"721"
             #     kubectl --kubeconfig $KC -n $NS port-forward service/rn3-postgresql-ha-pgpool 1"$c"721:5432 &
