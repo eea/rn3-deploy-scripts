@@ -58,7 +58,7 @@ if [ "$1" = "on" ] ; then
             c=$((c + 1))
             echo "$c"
             
-            #kubectl --kubeconfig $KC -n $NS get services
+            kubectl --kubeconfig $KC -n $NS get services
             #####################################################################################################
 
             echo "exposing service consul-ui to https://localhost:1"$c"702"
@@ -76,8 +76,8 @@ if [ "$1" = "on" ] ; then
                 kubectl --kubeconfig $KC -n $NS port-forward service/keycloak-http 1"$c"705:80 &
 
 
-            # echo "exposing service rn3-postgresql-ha-pgpool to https://localhost:1"$c"721"
-            #     kubectl --kubeconfig $KC -n $NS port-forward service/rn3-postgresql-ha-pgpool 1"$c"721:5432 &
+            echo "exposing service rn3-postgresql-ha-pgpool to https://localhost:1"$c"721"
+                kubectl --kubeconfig $KC -n $NS port-forward service/rn3-postgresql-ha-pgpool 1"$c"721:5432 &
 
             # echo "exposing service rn3-redis-master to https://localhost:1"$c"722"
             #     kubectl --kubeconfig $KC -n $NS port-forward service/rn3-redis-master 1"$c"722:6379 &
@@ -106,7 +106,7 @@ if [ "$1" = "on" ] ; then
             
             c=$((c + 1))
             echo "$c"
-            #kubectl --kubeconfig $KC -n $NS get services
+            kubectl --kubeconfig $KC -n $NS get services
             #####################################################################################################
 
             echo "exposing service mongo-ui to https://localhost:1"$c"701"
