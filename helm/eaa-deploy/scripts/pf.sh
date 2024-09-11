@@ -118,6 +118,9 @@ if [ "$1" = "on" ] ; then
             echo "exposing service rn3-keycloak to https://localhost:1"$c"703"
                 kubectl --kubeconfig $KC -n $NS port-forward service/rn3-keycloak 1"$c"703:80 &
 
+            echo "exposing service rn3-kafka-ui to https://localhost:1"$c"704"
+                kubectl --kubeconfig $KC -n $NS port-forward service/rn3-kafka-ui 1"$c"704:80 &
+
             echo "exposing service rn3-postgresql-ha-pgpool to https://localhost:1"$c"721"
                 kubectl --kubeconfig $KC -n $NS port-forward service/rn3-postgresql-ha-pgpool 1"$c"721:5432 &
 
