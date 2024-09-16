@@ -28,10 +28,10 @@ helm --kubeconfig $KC -n $NS upgrade --install rn3-pgsql-mb-bck . -f values.yaml
 
 # uninstall 
 helm --kubeconfig $KC -n $NS uninstall rn3-pgsql-mb-bck
-helm --kubeconfig $KC -n $NS uninstall rn3-pgsql-mb-bck
+
 # update
 helm --kubeconfig $KC -n $NS update --install rn3-pgsql-mb-bck
-helm --kubeconfig $KC -n $NS update --install rn3-pgsql-mb-bck
+
 
 ######################################################################
 ######################################################################

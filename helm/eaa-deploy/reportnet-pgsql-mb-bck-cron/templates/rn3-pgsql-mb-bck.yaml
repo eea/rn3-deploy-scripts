@@ -27,7 +27,7 @@ spec:
             #image: bitnami/postgresql-repmgr:11.7.0-debian-10-r74
             image: {{.Values.runner_image }}
             command: ["/bin/sh"]
-            args: ["-c", 'mkdir -p /metabase-backups/pgdump/ && pg_dump  -Fc > /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-{{.Values.environment }}.dump  && find /metabase-backups/pgdump -type f -mtime +30 -ls -delete && ls -la /metabase-backups/pgdump && sleep 3600']
+            args: ["-c", 'mkdir -p /metabase-backups/pgdump/ && date > /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-{{.Values.environment }}.log  && pg_dump  -Fc > /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-{{.Values.environment }}.dump && date >> /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-{{.Values.environment }}.log && find /metabase-backups/pgdump -type f -mtime +30 -ls -delete && ls -la /metabase-backups/pgdump && cat /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-{{.Values.environment }}.log && sleep 3600']
             # for debugging only !!!
             #args: ["-c", 'mkdir -p /metabase-backups/pgdump/ && pg_dump  -Fc > /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-$environment.dump  && find /metabase-backups/pgdump -type f -mtime +3 -ls -delete && ls -la /metabase-backups/pgdump && sleep 3600']
             #args: ["-c", 'mkdir -p /metabase-backups/pgdump/ && pg_dump  -Fc > /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-$environment.dump  && find /metabase-backups/pgdump -type f -mtime +3 -ls -delete && ls -l /metabase-backups/pgdump && cat /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M").dump']
