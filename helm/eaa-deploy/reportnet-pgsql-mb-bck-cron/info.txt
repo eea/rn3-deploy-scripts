@@ -1,0 +1,92 @@
+export KC=../../../../.kube/dev/config
+export Pname=rn3-pg-helm-postgresql-0
+export NS=reportnet
+echo $KC
+echo $NS
+echo $Pname
+
+
+
+cd /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/helm/eaa-deploy/reportnet-pgsql-bck-cron
+
+# demo command
+helm --kubeconfig=../../../../.kube/dev/config --namespace=reportnet upgrade --install rn3-pgsql-mb-bck . -f values.yaml
+
+# create the pv and pvc for the helm to mount 
+# for metabase
+kubectl --kubeconfig $KC -n $NS create -f ./mb-bck-pv-nfs.yaml
+kubectl --kubeconfig $KC -n $NS create -f ./mb-bck-pvc-nfs.yaml
+
+
+
+
+# debug the helm install 
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pgsql-mb-bck . -f values.yaml --dry-run --debug --set environment=dev
+# run the helm install 
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pgsql-mb-bck . -f values.yaml --set environment=dev
+
+
+# uninstall 
+helm --kubeconfig $KC -n $NS uninstall rn3-pgsql-mb-bck
+helm --kubeconfig $KC -n $NS uninstall rn3-pgsql-mb-bck
+# update
+helm --kubeconfig $KC -n $NS update --install rn3-pgsql-mb-bck
+helm --kubeconfig $KC -n $NS update --install rn3-pgsql-mb-bck
+
+######################################################################
+######################################################################
+######################################################################
+######################################################################
+#dev
+export KC=../../../../.kube/dev/config
+export NS=reportnet 
+kubectl --kubeconfig $KC -n $NS create -f ./pv-pvc/mb-bck-pv-nfs_dev.yaml
+kubectl --kubeconfig $KC -n $NS create -f ./pv-pvc/mb-bck-pvc-nfs_dev.yaml
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pgsql-mb-bck . -f values.yaml --set environment=dev
+
+helm --kubeconfig $KC -n $NS uninstall rn3-pgsql-mb-bck
+
+
+
+#prod2
+export KC=../../../../.kube/prod2/config
+export NS=reportnet 
+kubectl --kubeconfig $KC -n $NS create -f ./pv-pvc/mb-bck-pv-nfs_prod2.yaml
+kubectl --kubeconfig $KC -n $NS  create -f ./pv-pvc/mb-bck-pvc-nfs_prod2.yaml
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pgsql-mb-bck . -f values.yaml --set environment=prod2
+
+#prod
+export KC=../../../../.kube/prod/config
+export NS=reportnet 
+kubectl --kubeconfig $KC -n $NS create -f ./pv-pvc/mb-bck-pv-nfs_prod.yaml
+kubectl --kubeconfig $KC -n $NS create -f ./pv-pvc/mb-bck-pvc-nfs_prod.yaml
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pgsql-mb-bck . -f values.yaml --set environment=prod
+
+#sanbox
+export KC=../../../../.kube/sandbox/config
+export NS=reportnet 
+kubectl --kubeconfig $KC -n $NS create -f ./pv-pvc/mb-bck-pv-nfs_sandbox.yaml
+kubectl --kubeconfig $KC -n $NS create -f ./pv-pvc/mb-bck-pvc-nfs_sandbox.yaml
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pgsql-mb-bck . -f values.yaml --set environment=sandbox
+
+#test
+export KC=../../../../.kube/test/config
+export NS=reportnet 
+kubectl --kubeconfig $KC -n $NS create -f ./pv-pvc/mb-bck-pv-nfs_test.yaml
+kubectl --kubeconfig $KC -n $NS create -f ./pv-pvc/mb-bck-pvc-nfs_test.yaml
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pgsql-mb-bck . -f values.yaml --set environment=test
+
+
+all is ok
+
+
+
+#############################################################
+#for helm Using Jenkins .....
+helm install --set env=[ environment_value ] [chart name] [chart path]
+#ex: for {{ env }}
+helm install --set environment=dev rn3-pgsql-mb-bck eaa-deploy/reportnet-pgsql-bck-cron
+
+
+
+
