@@ -59,6 +59,8 @@ envconfig:
 volumeMounts:
   - mountPath: /metabase-backups
     name: metabase-backups
+  - mountPath: /scripts
+    name: metabase-backups
 
 volumes:
   - name: metabase-backups

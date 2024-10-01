@@ -90,3 +90,15 @@ helm install --set environment=dev rn3-pgsql-mb-bck eaa-deploy/reportnet-pgsql-b
 
 
 
+
+
+
+
+
+
+
+pg_restore -d metabase -U postgres /metabase-backups/pgdump/mb-bck_09172024_0400-dev.dump
+
+########restore  as a helm cron job 
+#change the script to have the below 
+#args: ["-c", 'psql -U postgres  -c "create database metabase;" && pg_restore -d metabase -U postgres /metabase-backups/pgdump/mb-bck_09172024_0400-dev.dump && sleep 3600']

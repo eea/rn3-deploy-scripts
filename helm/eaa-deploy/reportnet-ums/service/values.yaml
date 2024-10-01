@@ -13,9 +13,24 @@ kafka:
   bootstrap: bootstrap-kafka
   port: 9092
 
+
+
 keycloak:
-    user: reportnet_admin
-    password: admin
+    - name: user
+        valueFrom:
+         secretKeyRef:
+            name: ums-kc
+            key: username
+    - name: password
+        valueFrom:
+         secretKeyRef:
+            name: ums-kc
+            key: password
+#keycloak:
+    # user: reportnet_admin
+    # password: admin
+
+
     clientId: reportnet
     realm: Reportnet
     host: keycloak-http

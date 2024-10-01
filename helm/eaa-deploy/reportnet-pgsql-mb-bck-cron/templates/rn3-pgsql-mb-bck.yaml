@@ -28,11 +28,32 @@ spec:
             image: {{.Values.runner_image }}
             command: ["/bin/sh"]
             args: ["-c", 'mkdir -p /metabase-backups/pgdump/ && date > /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-{{.Values.environment }}.log  && pg_dump  -Fc > /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-{{.Values.environment }}.dump && date >> /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-{{.Values.environment }}.log && find /metabase-backups/pgdump -type f -mtime +30 -ls -delete && ls -la /metabase-backups/pgdump && cat /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-{{.Values.environment }}.log && sleep 3600']
+            
             # for debugging only !!!
             #args: ["-c", 'mkdir -p /metabase-backups/pgdump/ && pg_dump  -Fc > /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-$environment.dump  && find /metabase-backups/pgdump -type f -mtime +3 -ls -delete && ls -la /metabase-backups/pgdump && sleep 3600']
             #args: ["-c", 'mkdir -p /metabase-backups/pgdump/ && pg_dump  -Fc > /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M")-$environment.dump  && find /metabase-backups/pgdump -type f -mtime +3 -ls -delete && ls -l /metabase-backups/pgdump && cat /metabase-backups/pgdump/mb-bck_$(date +"%m%d%Y_%H%M").dump']
-            #restore example command 
-            #args: ["-c", 'psql -U postgres  -c "create database metabase1;" && pg_restore -d metabase1 -U postgres /metabase-backups/pgdump/mb-bck_07112024_0640.dump && sleep 3600']
+            
+            #restore example command
+            # if you need to restore the db please uncomment the below and comment out the backup command args :  
+            # Please change the command with the correct dump !!!!!!
+            #select the one that is the primary ......
+            #args: ["-c", 'ls -la /metabase-backups/pgdump && echo "restoring... $(date +"%m%d%Y_%H%M")" &&  pg_restore -d postgresql://postgres@rn3-pg-helm-postgresql-0.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local:5432/metabase  /metabase-backups/pgdump/mb-bck_09192024_0400-dev.dump &&  echo "Finish restoring... "$(date +"%m%d%Y_%H%M") && sleep 3600']
+            #args: ["-c", 'ls -la /metabase-backups/pgdump && echo "restoring... $(date +"%m%d%Y_%H%M")" &&  pg_restore -d postgresql://postgres@rn3-pg-helm-postgresql-1.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local:5432/metabase  /metabase-backups/pgdump/mb-bck_09192024_0400-dev.dump &&  echo "Finish restoring... "$(date +"%m%d%Y_%H%M") && sleep 3600']
+            #args: ["-c", 'ls -la /metabase-backups/pgdump && echo "restoring... $(date +"%m%d%Y_%H%M")" &&  pg_restore -d postgresql://postgres@rn3-pg-helm-postgresql-2.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local:5432/metabase  /metabase-backups/pgdump/mb-bck_09192024_0400-dev.dump &&  echo "Finish restoring... "$(date +"%m%d%Y_%H%M") && sleep 3600']
+            
+            
+            ###
+            # pg_restore -d postgresql://postgres@rn3-pg-helm-postgresql-0.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local:5432/metabase  /metabase-backups/pgdump/mb-bck_09192024_0400-dev.dump
+            # $(MY_POD_NAME).rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local
+            # psql postgresql://postgres@rn3-pg-helm-postgresql-0.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local:5432/postgres -c 'SET default_transaction_read_only = OFF;'
+            #
+            #
+            #
+            #
+
+
+
+
             securityContext:
               runAsUser: 0
               privileged: true
