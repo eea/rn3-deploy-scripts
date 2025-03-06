@@ -1,0 +1,46 @@
+
+export KC=~/.kube/dev-r2/01dev.yaml
+export NS=kavoulas
+export UI_PASSWORD=Summer_24_Kafk@
+export UI_USER=admin
+export KRAFT_CLUSTER_NAME=rn2-kafka-01
+echo $KC
+echo $NS
+echo $UI_USER
+echo $UI_PASSWORD
+echo $KRAFT_CLUSTER_NAME
+export SENTRY_ENV=r2-dev
+export Ver=v3.1.6-ARCHITECTURE
+
+
+helm --kubeconfig=$KC -n $NS install api-gateway-preconfig ./preconfig 
+helm --kubeconfig=$KC -n $NS uninstall api-gateway-preconfig  
+helm --kubeconfig=$KC -n $NS upgrade api-gateway ./service  -i  --wait --set livenessProbe.enabled=false,version=$Ver,sentry.environment=$SENTRY_ENV
+
+
+
+#get the consul values from the existing dev
+curl http://kvm-rn3dev-05.pdmz.eea:32233/v1/kv/\?recurse=true | jq -r '.[].Value | @base64d' > consul-dev.txt
+
+> consul-dev.txt
+
+while read -r key
+do    
+    value=`curl --silent "http://kvm-rn3dev-05.pdmz.eea:32233/v1/kv/$key" | jq -r '.[].Value' | base64 --decode`
+    echo "$key - $value" >> consul-dev.txt
+done <<(curl --silent "http://kvm-rn3dev-05.pdmz.eea:32233/v1/kv/?keys"| jq -r '.[]')
+
+
+
+
+
+wget -O /usr/local/bin/consul-imex https://github.com/gamegos/consul-imex/releases/download/1.0.0-rc1/consul-imex.phar
+chmod +x /usr/local/bin/consul-imex
+
+consul-imex export -u http://kvm-rn3dev-05.pdmz.eea:32233  dev-consul-data.json
+
+consul-imex import -u http://localhost:8500 -p /new/prefix my-data.json
+
+
+
+

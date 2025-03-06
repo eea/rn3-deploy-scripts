@@ -102,3 +102,14 @@ pg_restore -d metabase -U postgres /metabase-backups/pgdump/mb-bck_09172024_0400
 ########restore  as a helm cron job 
 #change the script to have the below 
 #args: ["-c", 'psql -U postgres  -c "create database metabase;" && pg_restore -d metabase -U postgres /metabase-backups/pgdump/mb-bck_09172024_0400-dev.dump && sleep 3600']
+
+
+
+kubectl --kubeconfig $KC -n $NS delete pod dataset-54476fc5df-77fpv --grace-period 0
+
+rn3-pg-helm-dataset-pgpool-6569dd8665-42567
+
+--kubeconfig $KC -n $NS
+
+
+dataset-7d5c469f84-z9n5x
