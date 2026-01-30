@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgpool-dataset-config
+  labels:
+    name: pgpool-dataset-config
+data:
+  pgpool.conf: |-
+    listen_addresses = '*'
+    port = 5432
+    socket_dir = '/var/run/pgpool'
+    pcp_listen_addresses = '*'
+    pcp_port = 9898
+    pcp_socket_dir = '/var/run/pgpool'
+    backend_hostname0 = 'pg-citus-dataset-master-0.pg-citus-dataset-master.reportnet.svc.cluster.local'
+    backend_port0 = 5432
+    backend_weight0 = 1
+    backend_flag0 = 'ALWAYS_PRIMARY|DISALLOW_TO_FAILOVER'
+    sr_check_period = 0
+    health_check_period = 0
+    backend_clustering_mode = 'streaming_replication'
+    num_init_children = 25
+    max_pool = 20
+    child_life_time = 300
+    child_max_connections = 0
+    connection_life_time = 0
+    client_idle_limit = 1200
+    connection_cache = on
+    load_balance_mode = on
+    ssl = off
+    enable_pool_hba = on
+    failover_on_backend_error = off
+    log_min_messages = warning
+  pool_hba.conf: |-
+    local    all             all                            trust
+    host     all             postgres           all         md5
+    host     all             wide               all         trust
+    host     all             pop_user           all         trust
+    host     all             all                all         md5

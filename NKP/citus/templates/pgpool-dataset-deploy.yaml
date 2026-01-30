@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rn3-pg-helm-dataset-pgpool
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pgpool
+  template:
+    metadata:
+      labels:
+        app: pgpool
+    spec:
+      containers:
+      - name: rn3-pg-helm-dataset-pgpool
+        image: pgpool/pgpool:4.2
+        imagePullPolicy: Always
+        env:
+        - name: POSTGRES_USERNAME
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: citus-secrets
+              key: password
+        - name: PGPOOL_PASSWORD_ENCRYPTION_METHOD
+          value: "scram-sha-256"
+        - name: PGPOOL_ENABLE_POOL_PASSWD
+          value: "true"
+        volumeMounts:
+        - name: pgpool-config
+          mountPath: /config
+      #  - name: pgpool-pass
+      #    mountPath: /opt/pgpool-II/etc/
+      volumes:
+      - name: pgpool-config
+        configMap:
+          name: pgpool-dataset-config
+      #- name: pgpool-pass
+      #  configMap:
+      #    name: pgpool-dataset-config-pass
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rn3-pg-helm-dataset-pgpool
+spec:
+  selector:
+    app: pgpool
+  ports:
+  - name: pgpool-port
+    protocol: TCP
+    port: 5432
+    targetPort: 5432

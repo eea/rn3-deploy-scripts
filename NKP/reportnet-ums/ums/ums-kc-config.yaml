@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ums-kc-config
+  namespace: reportnet
+data:
+  clientId: "reportnet"
+  realm: "Reportnet"
+  host: "keycloak-http"

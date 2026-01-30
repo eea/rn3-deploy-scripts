@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-exporter
+  labels:
+    app: postgres-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-exporter
+  template:
+    metadata:
+      labels:
+        app: postgres-exporter
+    spec:
+      containers:
+        - name: postgres-exporter
+          image: ghcr.io/eea/postgres-exporter:0.8.0-debian-10-r71
+          ports:
+            - containerPort: 9187
+          env:
+            - name: CONNECTION_URL
+              value: "jdbc:postgresql://rn3-pg-helm-postgresql:5432"
+            - name: CONNECTION_USER
+              value: "postgres"
+            - name: CONNECTION_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-secret
+                  key: pg-pass
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-exporter
+  labels:
+    app: postgres-exporter
+spec:
+  selector:
+    app: postgres-exporter
+  ports:
+    - name: web
+      protocol: TCP
+      port: 9187
+      targetPort: 9187

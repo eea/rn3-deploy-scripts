@@ -1,0 +1,18 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: validation
+  labels:
+    name: validation
+    namespace: {{.Release.Namespace}}
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  ports:
+  - protocol: TCP
+    port: 8015
+    targetPort: 8015
+    
+  selector:
+    name: validation
+  type: ClusterIP
+  sessionAffinity: None

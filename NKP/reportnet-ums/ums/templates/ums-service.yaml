@@ -1,0 +1,18 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ums
+  labels:
+    name: ums
+    namespace: {{.Release.Namespace}}
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  ports:
+  - protocol: TCP
+    port: 9010
+    targetPort: 9010
+    nodePort: 0
+  selector:
+    name: ums
+  type: ClusterIP
+  sessionAffinity: None

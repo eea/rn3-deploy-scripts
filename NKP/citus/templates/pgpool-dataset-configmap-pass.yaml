@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgpool-dataset-config-pass
+  labels:
+    name: pgpool-dataset-config-pass
+data:
+  pool_passwd: |-
+    #user:pass(in md5)

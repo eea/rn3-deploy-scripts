@@ -1,0 +1,11 @@
+# Ignore the entire secrets directory
+secrets/
+
+# Ignore the entire ingress directory
+ingress/
+
+# Ignore any file named info.txt anywhere in the repo
+**/info.txt
+
+# Ignore any file named *.sql anywhere in the repo
+*.sql

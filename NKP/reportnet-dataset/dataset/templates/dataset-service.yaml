@@ -1,0 +1,18 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: dataset
+  labels:
+    name: dataset
+    namespace: {{.Release.Namespace}}
+    cleanup: "{{.Release.Namespace}}-{{.Chart.Name}}-services"
+spec:
+  ports:
+  - protocol: TCP
+    port: 8030
+    targetPort: 8030
+    nodePort: 0
+  selector:
+    name: dataset
+  type: ClusterIP
+  sessionAffinity: None

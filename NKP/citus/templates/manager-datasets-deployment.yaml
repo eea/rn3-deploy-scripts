@@ -1,0 +1,48 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: citus-datasets-manager 
+spec:
+  selector:
+    matchLabels:
+      app: citus-manager
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: citus-manager
+    spec:
+      serviceAccountName: pod-listing-sa
+      containers:
+      - name: citus-manager-container
+        image: eeacms/citus-manager:1.0
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: citus-config-mount
+          mountPath: /etc/citus-config
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: NAMESPACE
+          value: reportnet
+        - name: PG_DB
+          value: datasets
+        - name: MASTER_LABEL
+          value: citus-dataset-master
+        - name: MASTER_SERVICE
+          value: pg-citus-dataset-master
+        - name: WORKER_LABEL
+          value: citus-dataset-worker
+        - name: WORKER_SERVICE
+          value: pg-citus-dataset-worker
+        - name: PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: citus-secrets
+              key: password
+      volumes:
+      - name: citus-config-mount
+        configMap:
+          name: setup-config

@@ -1,0 +1,96 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-citus-dataset-master
+  labels:
+    app: citus-dataset-master
+spec:
+  ports:
+  - port: 5432
+    name: psql
+  clusterIP: None
+  selector:
+    app: citus-dataset-master
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: citus-dataset-master
+  name: pg-citus-dataset-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: citus-dataset-master
+  serviceName: "pg-citus-dataset-master"
+  template:
+    metadata:
+      labels:
+        app: citus-dataset-master
+        citusType: "citus-dataset-master"
+    spec:
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #       - matchExpressions:
+      #         - key: db
+      #           operator: In
+      #           values:
+      #           - "true"          
+      containers:
+        - env:
+          - name: PGDATA
+            value: /var/lib/postgresql/data/pgdata
+          - name: POSTGRES_DB
+            value: datasets
+          - name: POSTGRES_HOST_AUTH_METHOD
+            value: scram-sha-256
+          - name: POSTGRES_INITDB_ARGS
+            value: --auth-host=scram-sha-256
+          - name: POSTGRES_USER
+            value: postgres
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: citus-secrets
+                key: password
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: citus-secrets
+                key: password
+          image: eeacms/citus-postgis:1.0
+          imagePullPolicy: Always
+          name: citus-master
+          volumeMounts:
+          - name: storage
+            mountPath: /var/lib/postgresql/data
+          - name: dshm
+            mountPath: /dev/shm
+          ports:
+            - containerPort: 5432
+              name: psql
+          readinessProbe:
+            exec:
+              command:
+              - echo
+              - "test"
+            initialDelaySeconds: 10
+      volumes:
+      - emptyDir:
+         medium: Memory
+         sizeLimit: 2Gi
+        name: dshm
+  volumeClaimTemplates:
+    - metadata:
+        name: storage
+      spec:
+        storageClassName: nutanix-volume
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 100Mi
+
