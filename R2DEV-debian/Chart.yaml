@@ -1,0 +1,6 @@
+apiVersion: v2
+name: linux-pod
+description: A Helm chart for deploying a Linux environment
+type: application
+version: 0.1.0
+appVersion: "1.0"

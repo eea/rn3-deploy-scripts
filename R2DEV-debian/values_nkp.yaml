@@ -1,0 +1,11 @@
+podName: debian-linux-env
+
+image:
+  repository: debian
+  tag: trixie
+  pullPolicy: IfNotPresent
+
+persistence:
+  enabled: true
+  storageClassName: "nutanix-file-static"
+  accessMode: ReadWriteMany
