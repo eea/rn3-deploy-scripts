@@ -32,7 +32,7 @@
   - kubectl port-forward svc/SERVICE LPORT:RPORT
 - Copy a file from a pod
   - kubectl cp POD:/FILENAME ./DEST
-- Change a PV Policy on demand
-  - kubectl patch pv PVC -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
+- Change a PV Reclaim Policy on demand
+  - kubectl patch pv PV_name -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
 - Scale a deployment to 0 pods
   - kubectl scale deployment DEPLOYMENT --replicas=0
