@@ -1,0 +1,165 @@
+
+Rancher 2
+
+
+export KC=~/.kube/dev-r2/01dev.yaml
+export NS=kavoulas
+echo $KC
+echo $NS
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+cd /home/sotav/TRASYS_GIT_PRV/EAA/DREMIO_MINIO/Rancher2-sts/postgresql-ha
+
+
+
+
+
+
+helm repo add rn3-postgresql-helm-ha https://charts.bitnami.com/bitnami
+helm --kubeconfig $KC -n $NS show values rn3-postgresql-helm-ha/postgresql-ha > rn3-postgresql-helm-ha_values.yaml 
+
+
+helm --kubeconfig $KC -n $NS install rn3-pgsql . -f rn3-pgsql-helm-ha_values.yaml --debug --dry-run
+
+
+
+helm --kubeconfig $KC -n $NS install rn3-helm . -f rn3-pgsql-helm-ha_values.yaml --debug
+
+helm --kubeconfig $KC -n $NS upgrade --install rn3-helm . -f rn3-pgsql-helm-ha_values.yaml
+
+helm --kubeconfig $KC -n $NS uninstall rn3-helm
+
+
+
+--version 11.0.0
+
+######### UPGRADE ONLY 
+export POSTGRES_PASSWORD=$(kubectl --kubeconfig $KC -n $NS get secret  rn3-postgresql-helm-ha-postgresql -o jsonpath="{.data.password}" | base64 -d) && echo $POSTGRES_PASSWORD
+export REPMGR_PASSWORD=$(kubectl --kubeconfig $KC -n $NS get secret  rn3-postgresql-helm-ha-postgresql -o jsonpath="{.data.repmgr-password}" | base64 -d) && echo $REPMGR_PASSWORD
+export ADMIN_PASSWORD=$(kubectl --kubeconfig $KC -n $NS get secret  rn3-postgresql-helm-ha-pgpool -o jsonpath="{.data.admin-password}" | base64 -d) && echo $ADMIN_PASSWORD
+helm --kubeconfig $KC -n $NS upgrade --install rn3-postgresql-helm-ha . -f rn3-postgresql-helm-ha_values.yaml \
+--set postgresql.password=$POSTGRES_PASSWORD \
+--set postgresql.repmgrPassword=$REPMGR_PASSWORD \
+--set pgpool.adminPassword=$ADMIN_PASSWORD 
+
+
+
+
+
+####################
+helm repo add rn3-helm-postgresql-ha https://charts.bitnami.com/bitnami
+helm install rn3-helm-postgresql-ha rn3-pgsql-helm-ha/postgresql-ha
+
+cd /home/sotav/TRASYS_GIT_PRV/EAA/DREMIO_MINIO/Rancher2-sts/postgresql-helm-ha
+
+#kubectl --kubeconfig $KC -n $NS delete secret rn3-helm-postgresql-ha-postgresql
+#kubectl --kubeconfig $KC -n $NS create secret generic rn3-helm-postgresql-ha-postgresql \
+#  --from-literal=postgresql-password=53p057n373.0! \
+#  --from-literal=repmgr-password=OWI9xc2s6R \
+#  --from-literal=admin-password=53p057n373.0! 
+
+
+
+export POSTGRES_PASSWORD=53p057n373.0!
+export REPMGR_PASSWORD=OWI9xc2s6R
+export ADMIN_PASSWORD=53p057n373.0!
+helm --kubeconfig $KC -n $NS upgrade --install --version 11.0.0 rn3-helm  rn3-pgsql-helm-ha/postgresql-ha -f ov-eaa-r2-dev-pgsql-ha.yaml \
+--set postgresql.password=$POSTGRES_PASSWORD \
+--set postgresql.repmgrPassword=$REPMGR_PASSWORD \
+--set pgpool.adminPassword=$ADMIN_PASSWORD 
+
+
+helm --kubeconfig $KC -n $NS uninstall rn3-helm
+#########################################################
+
+
+
+
+
+
+
+
+
+
+helm --kubeconfig $KC -n $NS uninstall rn3-postgresql-helm-ha
+
+
+
+
+
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+
+
+
+PostgreSQL can be accessed through Pgpool via port 5432 on the following DNS name from within your cluster:
+
+    rn3-postgresql-helm-ha-pgpool.kavoulas.svc.cluster.local
+
+Pgpool acts as a load balancer for PostgreSQL and forward read/write connections to the primary node while read-only connections are forwarded to standby nodes.
+
+To get the password for "postgres" run:
+
+    export POSTGRES_PASSWORD=$(kubectl --kubeconfig $KC -n $NS get secret  rn3-postgresql-helm-ha-postgresql -o jsonpath="{.data.password}" | base64 -d) && echo $POSTGRES_PASSWORD
+current : vv9A4n8P7c
+
+To get the password for "repmgr" run:
+
+    export REPMGR_PASSWORD=$(kubectl --kubeconfig $KC -n $NS get secret  rn3-postgresql-helm-ha-postgresql -o jsonpath="{.data.repmgr-password}" | base64 -d) && echo $REPMGR_PASSWORD
+current : 1rZagmBfQy
+
+
+
+    export ADMIN_PASSWORD=$(kubectl --kubeconfig $KC -n $NS get secret  rn3-postgresql-helm-ha-pgpool -o jsonpath="{.data.admin-password}" | base64 -d) && echo $ADMIN_PASSWORD
+current : GxZ5fHh9VI
+
+
+
+
+
+
+
+
+
+
+
+
+To connect to your database run the following command:
+
+    kubectl --kubeconfig $KC -n $NS run rn3-postgresql-helm-ha-client --rm --tty -i --restart='Never' --image docker.io/bitnami/postgresql-repmgr:16.4.0-debian-12-r0 --env="PGPASSWORD=$POSTGRES_PASSWORD"  \
+        --command -- psql -h rn3-postgresql-helm-ha-pgpool -p 5432 -U postgres -d postgres
+
+To connect to your database from outside the cluster execute the following commands:
+
+    kubectl --kubeconfig $KC -n $NS port-forward  svc/rn3-postgresql-helm-ha-pgpool 5432:5432 &
+    psql -h 127.0.0.1 -p 5432 -U postgres -d postgres
+
+WARNING: There are "resources" sections in the chart not set. Using "resourcesPreset" is not recommended for production. For production installations, please set the following values according to your workload needs:
+  - pgpool.resources
+  - postgresql.resources
+  - witness.resources
++info https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+
+
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################

@@ -101,14 +101,10 @@ spec:
               value: "/opt/bitnami/pgpool/secrets/pgpool-password"
             {{- else }}
             - name: PGPOOL_POSTGRES_PASSWORD
-              # valueFrom:
-              #   secretKeyRef:
-              #     name: {{ include "postgresql-ha.postgresqlSecretName" . }}
-              #     key: postgresql-password
               valueFrom:
                 secretKeyRef:
-                  name: pg-secret
-                  key: pg-pass
+                  name: {{ include "postgresql-ha.postgresqlSecretName" . }}
+                  key: postgresql-password
             {{- end }}
             - name: PGPOOL_ADMIN_USERNAME
               value: {{ (include "postgresql-ha.pgpoolAdminUsername" .) | quote }}

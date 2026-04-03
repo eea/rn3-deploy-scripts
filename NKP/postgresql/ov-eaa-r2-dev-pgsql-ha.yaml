@@ -1,12 +1,12 @@
 postgresqlImage:
-  registry: ghcr.io
-  repository: eea/postgresql-repmgr
+  registry: docker.io
+  repository: bitnami/postgresql-repmgr
   tag: 11.7.0-debian-10-r74
   pullPolicy: IfNotPresent
   debug: false
 pgpoolImage:
-  registry: ghcr.io
-  repository: eea/pgpool
+  registry: docker.io
+  repository: bitnami/pgpool
   tag: 4.1.1-debian-10-r50
   pullPolicy: IfNotPresent
   debug: false
@@ -16,15 +16,15 @@ volumePermissionsImage:
   tag: buster
   pullPolicy: Always
 metricsImage:
-  registry: ghcr.io
-  repository: eea/postgres-exporter
+  registry: docker.io
+  repository: bitnami/postgres-exporter
   tag: 0.8.0-debian-10-r71
   pullPolicy: IfNotPresent
   debug: false
 clusterDomain: cluster.local
 postgresql:
   replicaCount: 3
-  updateStrategyType: RollingUpdate
+  updateStrategyType: Parallel
   podAnnotations: {}
   affinity: {}
   nodeSelector: {}
@@ -34,13 +34,13 @@ postgresql:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  # resources:
-  #   limits: 
-  #     cpu: 500m
-  #     memory: 4000Mi
-  #   requests: 
-  #     cpu: 250m
-  #     memory: 3000Mi
+  resources:
+    limits: 
+      cpu: 500m
+      memory: 4000Mi
+    requests: 
+      cpu: 250m
+      memory: 3000Mi
   livenessProbe:
     enabled: true
     initialDelaySeconds: 30
@@ -126,13 +126,13 @@ metrics:
   securityContext:
     enabled: true
     runAsUser: 1001
-  # resources:
-  #   limits: 
-  #     cpu: 100m
-  #     memory: 40Mi
-  #   requests: 
-  #     cpu: 100m
-  #     memory: 80Mi
+  resources:
+    limits: 
+      cpu: 100m
+      memory: 40Mi
+    requests: 
+      cpu: 100m
+      memory: 80Mi
   livenessProbe:
     enabled: true
     initialDelaySeconds: 30
@@ -157,10 +157,9 @@ metrics:
 persistence:
   enabled: true
   mountPath: /bitnami/postgresql
-  #dshmPath: /dev/shm
   accessModes:
     - ReadWriteOnce
-  size: 1000Gi
+  size: 20Gi
   annotations: {}
 service:
   type: ClusterIP

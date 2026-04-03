@@ -89,14 +89,10 @@ spec:
               value: "/opt/bitnami/postgresql/secrets/postgresql-password"
             {{- else }}
             - name: POSTGRES_PASSWORD
-              # valueFrom:
-              #   secretKeyRef:
-              #     name: {{ include "postgresql-ha.postgresqlSecretName" . }}
-              #     key: postgresql-password
               valueFrom:
                 secretKeyRef:
-                  name: pg-secret
-                  key: pg-pass
+                  name: {{ include "postgresql-ha.postgresqlSecretName" . }}
+                  key: postgresql-password
             {{- end }}
             {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }}
             - name: POSTGRES_DB
@@ -136,14 +132,10 @@ spec:
               value: "/opt/bitnami/repmgr/secrets/repmgr-password"
             {{- else }}
             - name: REPMGR_PASSWORD
-              # valueFrom:
-              #   secretKeyRef:
-              #     name: {{ include "postgresql-ha.postgresqlSecretName" . }}
-              #     key: repmgr-password
               valueFrom:
                 secretKeyRef:
-                  name: pg-secret
-                  key: pg-pass
+                  name: {{ include "postgresql-ha.postgresqlSecretName" . }}
+                  key: repmgr-password
             {{- end }}
             {{- if (include "postgresql-ha.repmgrDatabase" .) }}
             - name: REPMGR_DATABASE
@@ -202,8 +194,6 @@ spec:
             {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
-            - name: dshm
-              mountPath: /dev/shm
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
