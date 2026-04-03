@@ -88,7 +88,7 @@ diagnosticMode:
 ##
 image:
   registry: docker.io
-  repository: bitnamilegacy/kafka
+  repository: bitnami/kafka
   tag: 3.7.1-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
@@ -159,31 +159,26 @@ brokerRackAssignment: ""
 interBrokerProtocolVersion: ""
 ## Kafka listeners configuration
 ##
-
 listeners:
   ## @param listeners.client.name Name for the Kafka client listener
   ## @param listeners.client.containerPort Port for the Kafka client listener
   ## @param listeners.client.protocol Security protocol for the Kafka client listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'
   ## @param listeners.client.sslClientAuth Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.authType for this listener. Allowed values are 'none', 'requested' and 'required'
-  # client:
-  #   containerPort: 9092
-  #   protocol: SASL_PLAINTEXT
-  #   name: CLIENT
-  #   sslClientAuth: ""
   client:
-    protocol: 'PLAINTEXT'
+    containerPort: 9092
+    protocol: SASL_PLAINTEXT
+    name: CLIENT
+    sslClientAuth: ""
   ## @param listeners.controller.name Name for the Kafka controller listener
   ## @param listeners.controller.containerPort Port for the Kafka controller listener
   ## @param listeners.controller.protocol Security protocol for the Kafka controller listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'
   ## @param listeners.controller.sslClientAuth Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.authType for this listener. Allowed values are 'none', 'requested' and 'required'
   ## Ref: https://cwiki.apache.org/confluence/display/KAFKA/KIP-684+-+Support+mutual+TLS+authentication+on+SASL_SSL+listeners
-  # controller:
-  #   name: CONTROLLER
-  #   containerPort: 9093
-  #   protocol: SASL_PLAINTEXT
-  #   sslClientAuth: ""
   controller:
-    protocol: 'PLAINTEXT'
+    name: CONTROLLER
+    containerPort: 9093
+    protocol: SASL_PLAINTEXT
+    sslClientAuth: ""
   ## @param listeners.interbroker.name Name for the Kafka inter-broker listener
   ## @param listeners.interbroker.containerPort Port for the Kafka inter-broker listener
   ## @param listeners.interbroker.protocol Security protocol for the Kafka inter-broker listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'
@@ -222,7 +217,6 @@ listeners:
 ## Kafka SASL settings for authentication, required if SASL_PLAINTEXT or SASL_SSL listeners are configured
 ##
 sasl:
-  enabled: false
   ## @param sasl.enabledMechanisms Comma-separated list of allowed SASL mechanisms when SASL listeners are configured. Allowed types: `PLAIN`, `SCRAM-SHA-256`, `SCRAM-SHA-512`, `OAUTHBEARER`
   ## NOTE: At the moment, Kafka Raft mode does not support SCRAM, that is why only PLAIN is configured.
   ##
@@ -532,7 +526,7 @@ controller:
   existingSecretConfig: ""
   ## @param controller.heapOpts Kafka Java Heap size for controller-eligible nodes
   ##
-  heapOpts: -Xmx2048m -Xms2048m
+  heapOpts: -Xmx1024m -Xms1024m
   ## @param controller.command Override Kafka container command
   ##
   command: []
@@ -625,18 +619,18 @@ controller:
   ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  #resourcesPreset: "small"
+  resourcesPreset: "small"
   ## @param controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
-  resources:
-    requests:
-      cpu: 2
-      memory: 2048Mi
-    limits:
-      cpu: 3
-      memory: 3096Mi
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
-  #resources: {}
+  resources: {}
   ## Kafka pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enable security context for the pods
@@ -895,7 +889,7 @@ controller:
       - ReadWriteOnce
     ## @param controller.persistence.size PVC Storage Request for Kafka data volume
     ##
-    size: 20Gi
+    size: 8Gi
     ## @param controller.persistence.annotations Annotations for the PVC
     ##
     annotations: {}
@@ -1907,7 +1901,7 @@ metrics:
   jmx:
     ## @param metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
     ##
-    enabled: true
+    enabled: false
     ## @param metrics.jmx.kafkaJmxPort JMX port where the exporter will collect metrics, exposed in the Kafka container.
     ##
     kafkaJmxPort: 5555
@@ -1922,7 +1916,7 @@ metrics:
     ##
     image:
       registry: docker.io
-      repository: bitnamilegacy/jmx-exporter
+      repository: bitnami/jmx-exporter
       tag: 1.0.1-debian-12-r5
       digest: ""
       ## Specify a imagePullPolicy
@@ -1973,16 +1967,16 @@ metrics:
     ## @param metrics.jmx.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.jmx.resources is set (metrics.jmx.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    # resourcesPreset: "micro"
+    resourcesPreset: "micro"
     ## @param metrics.jmx.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
-    resources:
-      requests:
-        cpu: 2
-        memory: 512Mi
-      limits:
-        cpu: 3
-        memory: 1024Mi
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
     ##
     resources: {}
     ## Prometheus JMX exporter service configuration
@@ -2106,16 +2100,16 @@ metrics:
 provisioning:
   ## @param provisioning.enabled Enable kafka provisioning Job
   ##
-  enabled: true
+  enabled: false
   ## @param provisioning.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
   ## @param provisioning.numPartitions Default number of partitions for topics when unspecified
   ##
-  numPartitions: 8
+  numPartitions: 1
   ## @param provisioning.replicationFactor Default replication factor for topics when unspecified
   ##
-  replicationFactor: 3
+  replicationFactor: 1
   ## @param provisioning.topics Kafka topics to provision
   ## - name: topic-name
   ##   partitions: 1
@@ -2443,4 +2437,3 @@ externalZookeeper:
   ## @param externalZookeeper.servers List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'. Must be empty if you use KRaft mode.
   ##
   servers: []
-

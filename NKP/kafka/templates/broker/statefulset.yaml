@@ -189,14 +189,10 @@ spec:
             - name: KAFKA_INTER_BROKER_USER
               value: {{ .Values.sasl.interbroker.user | quote }}
             - name: KAFKA_INTER_BROKER_PASSWORD
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: {{ include "kafka.saslSecretName" . }}
-            #       key: inter-broker-password
               valueFrom:
-                  secretKeyRef:
-                    name: kafka-password
-                    key: password
+                secretKeyRef:
+                  name: {{ include "kafka.saslSecretName" . }}
+                  key: inter-broker-password
             {{- end }}
             {{- if (include "kafka.saslClientSecretsEnabled" .) }}
             - name: KAFKA_INTER_BROKER_CLIENT_ID
