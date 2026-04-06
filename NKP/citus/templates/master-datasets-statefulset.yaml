@@ -87,7 +87,7 @@ spec:
     - metadata:
         name: storage
       spec:
-        storageClassName: nutanix-volume
+        storageClassName: nfs-client
         accessModes:
           - ReadWriteOnce
         resources:

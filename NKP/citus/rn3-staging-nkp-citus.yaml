@@ -55,6 +55,8 @@ pgpool:
     enabled: true
     secretName: citus-secrets
     secretKey: password
-createServiceAccount: true
-createRole: true
-createRoleBinding: true
+##############################################
+createServiceAccount: false
+createRole: false
+createRoleBinding: false
+##############################################
