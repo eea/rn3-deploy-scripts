@@ -20,6 +20,8 @@
 #           # ./pgpool-usr-fix.sh test reportnet ~/.kube/test/config
 #           # ./pgpool-usr-fix.sh dev reportnet ~/.kube/dev/config
 #           # ./pgpool-usr-fix.sh dev reportnet ~/.kube/sandbox/config
+#           # ./pgpool-usr-fix.sh dev reportnet ~/.kube/staging/config 
+
 
 
 ### Using wsl 
