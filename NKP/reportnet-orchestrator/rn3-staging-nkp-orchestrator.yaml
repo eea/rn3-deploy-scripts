@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# Specific Values for Dataflow
+# Specific Values for orchestrator-service
 
 # Environment Variables
 consul:
@@ -10,12 +10,8 @@ consul:
   port: 8500
 
 kafka:
-  bootstrap: bootstrap-kafka.reportnet.svc.cluster.local
+  bootstrap: kafka.reportnet.svc.cluster.local
   port: 9092
-
-metabase:
-    url: jdbc:postgresql://rn3-pg-helm-pgpool.reportnet.svc.cluster.local:5432/metabase
-    user: dataflow
 
 redis:
     ip: redis
@@ -25,14 +21,12 @@ redis:
 file:
     path: /reportnet3-data/input
 
-# fme:
-#     topic: Reportnet3_Test_Topic
-#     integration:
-#         callback:
-#             urlbase: https://rn3api.eionet.europa.eu
+orchestrator:
+    curl: jdbc:postgresql://rn3-pg-helm-pgpool:5432/orchestrator_db
+    user: postgres
 
 tagSufix: 
 replicas: 1
-version: v3.4-SANDBOX
 repo: eeacms
+version: v3.4-SANDBOX
 # Other Variables

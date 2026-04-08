@@ -1,0 +1,26 @@
+# Default values for reportnet.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Specific Values for Api Gateway
+
+# Environment Variables
+consul:
+  server: consul.reportnet.svc.cluster.local
+  port: 8500
+
+kafka:
+  bootstrap: 	kafka-controller-headless.reportnet.svc.cluster.local
+  port: 9092
+
+redis:
+    ip: redis
+    port: 6379
+    sentinel: masterset
+    nodes: redis:26379
+
+tagSufix: 
+replicas: 1
+repo: eeacms
+version: v3.4-SANDBOX
+# Other Variables

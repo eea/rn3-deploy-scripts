@@ -10,7 +10,7 @@ consul:
   port: 8500
 
 kafka:
-  bootstrap: bootstrap-kafka.reportnet.svc.cluster.local
+  bootstrap: kafka.reportnet.svc.cluster.local
   port: 9092
 
 postgres:
