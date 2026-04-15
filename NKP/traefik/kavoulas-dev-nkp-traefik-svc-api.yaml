@@ -1,10 +1,13 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: rn3-api
-  namespace: reportnet3
+  name: kavoulas-api
+  namespace: kavoulas
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
+    #traefik.http.middlewares.frnt.headers.customrequestheaders.X-1: test
+    #traefik.http.middlewares.frnt.headers.customrequestheaders.X-2: "Sotav"
+    #traefik.http.middlewares.frnt.headers.customresponseheaders.X-3: "Sotav"
 spec:
   rules:
     - host: "rn3-frontend.x01dev.eea.europa.eu"
@@ -38,7 +41,7 @@ spec:
                 name: 'rn3-kafka-ui'
                 port:
                   number: 80
-    - host: "rn3-api-t.x01dev.eea.europa.eu"
+    - host: "rn3-api.x01dev.eea.europa.eu"
       http:
         paths:
           - path: /
@@ -49,6 +52,34 @@ spec:
                 port:
                   number: 8010
 
+
+
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: security-headers
+  #name: extra-headers
+  namespace: kavoulas
+spec:
+  headers:
+    customRequestHeaders:
+      X-Script-Name: "test"
+      X-Reportnet-Request-Header: "reportnet" 
+      X-Sotav-Request-Headers: "Success Header Test"
+    customResponseHeaders:
+      X-Reportnet-Response-Header: "Over reportnet"
+      X-Sotav-Response-Header: "Success Header Test"
+    contentTypeNosniff: true  # X-Content-Type-Options nosniff
+    frameDeny: true           # X-Frame-Options DENY
+    browserXssFilter: true    # X-XSS-Protection 1;mode=block
+    contentSecurityPolicy: "default-src 'self' 'unsafe-inline' https://*.europa.eu *.mapbox.com https://reportnet3dev.s3.amazonaws.com https://static.arcgis.com ws:; font-src 'self' data: fonts.gstatic.com; img-src 'self'  data: blob: image.flaticon.com *.mapbox.com https:; child-src blob:" 
+    referrerPolicy: no-referrer
+    stsSeconds: 31536000      # Strict-Transport-Security "max-age=31536000; includeSubDomains; preload;" 
+    stsIncludeSubdomains: true
+    stsPreload: true
+    featurePolicy: "camera 'self'; microphone 'self'"   # (Deprecated in favor of permissionsPolicy)
 
 
 
