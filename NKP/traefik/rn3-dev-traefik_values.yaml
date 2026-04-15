@@ -1,0 +1,484 @@
+  registry: docker.io
+  repository: traefik
+  tag:  
+  pullPolicy: IfNotPresent
+commonLabels: {}
+deployment:
+  enabled: true
+  kind: Deployment
+  replicas: 1
+  revisionHistoryLimit:  
+  terminationGracePeriodSeconds: 60
+  minReadySeconds: 0
+  healthchecksPort:  
+  healthchecksHost: ""
+  healthchecksScheme:   
+  readinessPath: ""
+  livenessPath: ""
+  annotations: {}
+  labels: {}
+  podAnnotations: {}
+  podLabels: {}
+  additionalContainers: []
+  additionalVolumes: []
+  initContainers: []
+  shareProcessNamespace: true
+  dnsPolicy: ""
+  dnsConfig: {}
+  hostAliases: []
+  imagePullSecrets: []
+  lifecycle: {}
+  runtimeClassName: ""
+podDisruptionBudget:  
+  enabled: false
+  maxUnavailable:  
+  minAvailable:    
+ingressClass: "traefik"  
+  enabled: true
+  isDefaultClass: true
+  name: ""
+core:  
+  defaultRuleSyntax: ""
+experimental:
+  abortOnPluginFailure: false
+  fastProxy:
+    enabled: false
+    debug: false
+  kubernetesGateway:
+    enabled: false
+  plugins: {}
+gateway:
+  enabled: true
+  name: ""
+  namespace: ""
+  annotations: {}
+  infrastructure: {}
+  listeners:
+    web:
+      port: 8000
+      hostname: ""
+      protocol: HTTP
+gatewayClass:  
+  enabled: true
+  name: ""
+  labels: {}
+ingressRoute:
+  dashboard:
+    enabled: false
+    annotations: {}
+    labels: {}
+    matchRule: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
+    services:
+      - name: api@internal
+        kind: TraefikService
+    entryPoints: ["traefik"]
+    middlewares: []
+    tls: {}
+  healthcheck:
+    enabled: false
+    annotations: {}
+    labels: {}
+    matchRule: PathPrefix(`/ping`)
+    services:
+      - name: ping@internal
+        kind: TraefikService
+    entryPoints: ["traefik"]
+    middlewares: []
+    tls: {}
+updateStrategy:  
+  type: RollingUpdate
+  rollingUpdate:
+readinessProbe:  
+  failureThreshold: 1
+  initialDelaySeconds: 2
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 2
+livenessProbe:  
+  failureThreshold: 3
+  initialDelaySeconds: 2
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 2
+startupProbe: {}
+providers:  
+  kubernetesCRD:
+    enabled: true
+    allowCrossNamespace: true
+    allowExternalNameServices: true
+    allowEmptyServices: true
+    ingressClass: "traefik"
+    namespaces: []
+    nativeLBByDefault: false
+  kubernetesIngress:
+    enabled: true
+    allowExternalNameServices: false
+    allowEmptyServices: true
+    ingressClass: "traefik"  
+    namespaces: []
+    publishedService:
+      enabled: true
+      pathOverride: ""
+    nativeLBByDefault: false
+  kubernetesGateway:
+    enabled: false
+    experimentalChannel: false
+    namespaces: []
+    labelselector: ""
+    nativeLBByDefault: false
+    statusAddress:
+      ip: ""
+      hostname: ""
+      service:
+        enabled: true
+        name: ""
+        namespace: ""
+  file:
+    enabled: false
+    watch: true
+    content: ""
+volumes: []
+additionalVolumeMounts: []
+logs:
+  general:
+    format:  
+    level: "TRACE"  
+    filePath: ""
+    noColor: false
+  access:
+    enabled: true
+    format:  "json" 
+    bufferingSize:  
+    filters:  
+      statuscodes: ""
+      retryattempts: false
+      minduration: ""
+    addInternals: false
+    fields:
+      general:
+        defaultmode: keep  
+        names: {}
+      headers:
+        defaultmode: drop  
+        names: {}
+metrics:
+  addInternals: true
+  prometheus:
+    entryPoint: metrics
+    addEntryPointsLabels:  
+    addRoutersLabels:  
+    addServicesLabels:  
+    buckets: ""
+    manualRouting: false
+    headerLabels: {}  
+    service:
+      enabled: false
+      labels: {}
+      annotations: {}
+    disableAPICheck: false 
+    serviceMonitor:
+      enabled: false
+      metricRelabelings: []
+      relabelings: []
+      jobLabel: ""
+      interval: ""
+      honorLabels: false
+      scrapeTimeout: ""
+      honorTimestamps: false
+      enableHttp2: false
+      followRedirects: false
+      additionalLabels: {}
+      namespace: ""
+      namespaceSelector: {}
+    prometheusRule:
+      enabled: false
+      additionalLabels: {}
+      namespace: ""
+  otlp:
+    enabled: true
+    addEntryPointsLabels:  
+    addRoutersLabels:  
+    addServicesLabels:  
+    explicitBoundaries: []
+    pushInterval: ""
+    http:
+      enabled: false
+      endpoint: ""
+      headers: {}
+      tls:
+        ca: ""
+        cert: ""
+        key: ""
+        insecureSkipVerify:  
+    grpc:
+      enabled: false
+      endpoint: ""
+      insecure: false
+      tls:
+        ca: ""
+        cert: ""
+        key: ""
+        insecureSkipVerify: false
+tracing:  
+  addInternals: false
+  serviceName:  
+  resourceAttributes: {}
+  capturedRequestHeaders: []
+  capturedResponseHeaders: []
+  safeQueryParams: []
+  sampleRate:  
+  otlp:
+    enabled: true
+    http:
+      enabled: true
+      endpoint: "http://localhost:4318/v1/metrics"
+      headers: {}
+      tls:
+        ca: ""
+        cert: ""
+        key: ""
+        insecureSkipVerify: true
+    grpc:
+      enabled: true
+      endpoint: "http://localhost:4318/v1/metrics"
+      insecure: true
+      tls:
+        ca: ""
+        cert: ""
+        key: ""
+        insecureSkipVerify: false
+globalArguments:
+- "--global.checknewversion"
+- "--global.sendanonymoususage"
+additionalArguments: []
+env: []
+envFrom: []
+ports:
+  traefik:
+    port: 8080
+    hostPort:  
+    hostIP:  
+    expose:
+      default: false
+    exposedPort: 8080
+    protocol: TCP
+  web:
+    port: 8000
+    expose:
+      default: true
+    exposedPort: 80
+    targetPort:  
+    protocol: TCP
+    nodePort:  
+    redirections:
+      entryPoint: {}
+    forwardedHeaders:
+      trustedIPs: []
+      insecure: false
+    proxyProtocol:
+      trustedIPs: []
+      insecure: false
+    transport:
+      respondingTimeouts:
+        readTimeout:  
+        writeTimeout:  
+        idleTimeout:   
+      lifeCycle:
+        requestAcceptGraceTimeout:  
+        graceTimeOut:               
+      keepAliveMaxRequests:         
+      keepAliveMaxTime:             
+  websecure:
+    port: 8443
+    hostPort:  
+    containerPort:  
+    expose:
+      default: true
+    exposedPort: 443
+    targetPort:  
+    protocol: TCP
+    nodePort:  
+    appProtocol:  
+    allowACMEByPass: false
+    http3:
+      enabled: true
+      advertisedPort:  
+    forwardedHeaders:
+      trustedIPs: []
+      insecure: true
+    proxyProtocol:
+      trustedIPs: []
+      insecure: false
+    transport:
+      respondingTimeouts:
+        readTimeout:   
+        writeTimeout:  
+        idleTimeout:   
+      lifeCycle:
+        requestAcceptGraceTimeout:  
+        graceTimeOut:               
+      keepAliveMaxRequests:         
+      keepAliveMaxTime:             
+    tls:
+      enabled: true
+      options: ""
+      certResolver: ""
+      domains: []
+    middlewares: []
+  metrics:
+    port: 9100
+    expose:
+      default: true
+    exposedPort: 9100
+    protocol: TCP
+tlsOptions: {}
+tlsStore: {}
+service:
+  enabled: true
+  single: true
+  type: LoadBalancer
+  annotations: {}
+  annotationsTCP: {}
+  annotationsUDP: {}
+  labels: {}
+  spec: {}
+  loadBalancerSourceRanges: []
+  externalIPs: []
+  additionalServices: {}
+autoscaling:
+  enabled: true
+persistence:
+  enabled: true
+  name: rn3-traefik-data
+  existingClaim: ""
+  accessMode: ReadWriteOnce
+  size: 128Mi
+  storageClass: "nfs-client"
+  volumeName: "rn3-traefik-data"
+  path: /data
+  annotations: {}
+  subPath: ""
+certificatesResolvers: {}
+hostNetwork: false
+  enabled: true
+  namespaced: false
+  aggregateTo: []
+  secretResourceNames: []
+podSecurityPolicy:
+  enabled: false
+serviceAccount:  
+  name: ""
+serviceAccountAnnotations: {}
+resources: {}
+affinity: {}
+nodeSelector: {}
+tolerations: []
+topologySpreadConstraints: []
+priorityClassName: ""
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: [ALL]
+  readOnlyRootFilesystem: true
+podSecurityContext:
+  runAsGroup: 65532
+  runAsNonRoot: true
+  runAsUser: 65532
+extraObjects: []
+namespaceOverride: ""
+instanceLabelOverride: ""
+versionOverride: ""
+hub:
+  token: ""
+  namespaces: []
+  apimanagement:
+    enabled: false
+    admission:
+      listenAddr: ""
+      secretName: ""
+    openApi:
+      validateRequestMethodAndPath: false
+  experimental:
+    aigateway: false
+  providers:
+    consulCatalogEnterprise:
+      enabled: false
+      cache: false
+      connectAware: false
+      connectByDefault: false
+      constraints: ""
+      defaultRule: "Host(`{{ normalize .Name }}`)"
+      endpoint:
+        address: ""
+        datacenter: ""
+        endpointWaitTime: 0
+        httpauth:
+          password: ""
+          username: ""
+        scheme: ""
+        tls:
+          ca: ""
+          cert: ""
+          insecureSkipVerify: false
+          key: ""
+        token: ""
+      exposedByDefault: true
+      namespaces: ""
+      partition: ""
+      prefix: "traefik"
+      refreshInterval: 15
+      requireConsistent: false
+      serviceName: "traefik"
+      stale: false
+      strictChecks: "passing, warning"
+      watch: false
+    microcks:
+      enabled: false
+      auth:
+        clientId: ""
+        clientSecret: ""
+        endpoint: ""
+        token: ""
+      endpoint: ""
+      pollInterval: 30
+      pollTimeout: 5
+      tls:
+        ca: ""
+        cert: ""
+        insecureSkipVerify: false
+        key: ""
+  redis:
+    cluster:    
+    database:   
+    endpoints: ""
+    username: ""
+    password: ""
+    sentinel:
+      masterset: ""
+      username: ""
+      password: ""
+    timeout: ""
+    tls:
+      ca: ""
+      cert: ""
+      key: ""
+      insecureSkipVerify: false
+  sendlogs:  
+  tracing:
+    additionalTraceHeaders:
+      enabled: false
+      traceContext:
+        parentId: ""
+        traceId: ""
+        traceParent: ""
+        traceState: ""
+oci_meta:
+  enabled: false
+  repo: traefik
+  images:
+    proxy:
+      image: traefik
+      tag: latest
+    hub:
+      image: traefik-hub
+      tag: latest

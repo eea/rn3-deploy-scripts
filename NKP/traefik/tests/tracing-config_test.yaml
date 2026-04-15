@@ -1,0 +1,135 @@
+suite: Traefik Tracing configuration
+templates:
+  - deployment.yaml
+capabilities:
+  majorVersion: 1
+  minorVersion: 16
+tests:
+  - it: should be possible to set specific parameters on otlp
+    set:
+      tracing:
+        addInternals: true
+        sampleRate: 0.5
+        serviceName: my-service-name
+        resourceAttributes:
+          attr1: foo
+          attr2: bar
+        capturedRequestHeaders:
+          - X-RequestHeader
+          - X-OtherHeader
+        capturedResponseHeaders:
+          - X-ResponseHeader
+          - X-OtherHeader
+        safeQueryParams:
+          - bar
+          - buz
+        otlp:
+          enabled: true
+          http:
+            enabled: true
+            endpoint: "http://localhost:4318/v1/traces"
+            headers:
+              foo: http
+              test: http
+            tls:
+              ca: path/to/ca.crt
+              cert: path/to/foo.cert
+              key: path/to/foo.key
+              insecureSkipVerify: true
+          grpc:
+            enabled: true
+            endpoint: "http://localhost:4318/v1/traces"
+            insecure: true
+            headers:
+              foo: grpc
+              test: grpc
+            tls:
+              ca: gpath/to/ca.crt
+              cert: gpath/to/foo.cert
+              key: gpath/to/foo.key
+              insecureSkipVerify: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.addinternals"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.sampleRate=0.5"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.serviceName=my-service-name"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.resourceAttributes.attr1=foo"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.resourceAttributes.attr2=bar"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.capturedRequestHeaders=X-RequestHeader,X-OtherHeader"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.capturedResponseHeaders=X-ResponseHeader,X-OtherHeader"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.safeQueryParams=bar,buz"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.http=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.http.endpoint=http://localhost:4318/v1/traces"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.http.headers.foo=http"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.http.headers.test=http"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.http.tls.ca=path/to/ca.crt"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.http.tls.cert=path/to/foo.cert"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.http.tls.key=path/to/foo.key"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.http.tls.insecureSkipVerify=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.grpc=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.grpc.endpoint=http://localhost:4318/v1/traces"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.grpc.insecure=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.grpc.headers.foo=grpc"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.grpc.headers.test=grpc"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.grpc.tls.ca=gpath/to/ca.crt"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.grpc.tls.cert=gpath/to/foo.cert"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.grpc.tls.key=gpath/to/foo.key"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp.grpc.tls.insecureSkipVerify=true"
+  - it: Minimal config should work, without internals
+    set:
+      tracing:
+        otlp:
+          enabled: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--tracing.otlp=true"

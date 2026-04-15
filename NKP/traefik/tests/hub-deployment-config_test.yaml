@@ -1,0 +1,201 @@
+suite: Deployment configuration
+templates:
+  - deployment.yaml
+set:
+  hub:
+    token: "xxx"
+tests:
+  - it: should set minimal required parameters when enabling Traefik Hub API Gateway
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: HUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: token
+                name: xxx
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.token=$(HUB_TOKEN)"
+  - it: should set minimal required parameters when enabling Traefik Hub API Management
+    set:
+      hub:
+        apimanagement:
+          enabled: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: HUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: token
+                name: xxx
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.apimanagement"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.apimanagement.admission.listenAddr=:9943"
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: admission
+            containerPort: 9943
+            protocol: TCP
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: apiportal
+            containerPort: 9903
+            protocol: TCP
+  - it: should fail when trying to set admission parameters without apimanagement
+    set:
+      hub:
+        apimanagement:
+          admission:
+            listenAddr: "10.0.0.1:7500"
+            secretName: "secret"
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: Cannot configure admission without enabling hub.apimanagement"
+  - it: should be possible to set admission parameters (and ignore extra)
+    set:
+      hub:
+        apimanagement:
+          enabled: true
+          admission:
+            listenAddr: "10.0.0.1:7500"
+            secretName: "secret"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.apimanagement.admission.listenAddr=10.0.0.1:7500"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.apimanagement.admission.secretName=secret"
+  - it: should be possible to enforce OAS
+    set:
+      hub:
+        apimanagement:
+          enabled: true
+          openApi:
+            validateRequestMethodAndPath: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.apiManagement.openApi.validateRequestMethodAndPath=true"
+  - it: api management and ai gateway should not be enabled by default
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.apimanagement"
+      - notContains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.experimental.aigateway"
+  - it: should be possible to specify platformUrl
+    set:
+      hub:
+        platformUrl: "fooUrl"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.platformUrl=fooUrl"
+  - it: should be possible to specify ratelimit parameters (and ignore extra)
+    set:
+      hub:
+        redis:
+          cluster: true
+          database: "database"
+          endpoints: "localhost:7000"
+          username: "user"
+          password: "pass"
+          sentinel:
+            masterset: "master"
+            username: "usern"
+            password: "passw"
+          timeout: "30s"
+          tls:
+            ca: "ca"
+            cert: "cert"
+            insecureSkipVerify: true
+            key: "key"
+          test: "test"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.cluster=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.database=database"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.endpoints=localhost:7000"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.username=user"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.password=pass"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.sentinel.masterset=master"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.sentinel.username=usern"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.sentinel.password=passw"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.timeout=30s"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.tls.ca=ca"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.tls.cert=cert"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.tls.insecureSkipVerify=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.tls.key=key"
+      - notContains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.redis.test=test"
+  - it: should be possible to specify sendlogs
+    set:
+      hub:
+        sendlogs: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.sendlogs=true"
+  - it: should be possible to disable sendlogs
+    set:
+      hub:
+        sendlogs: false
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.sendlogs=false"
+  - it: should be possible to enable AI Gateway
+    set:
+      hub:
+        experimental:
+          aigateway: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.experimental.aigateway"
+
+  - it: should be possible to specify namespaces to watch
+    set:
+      hub:
+        namespaces: [one, two, one]
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--hub.namespaces=NAMESPACE,one,two"

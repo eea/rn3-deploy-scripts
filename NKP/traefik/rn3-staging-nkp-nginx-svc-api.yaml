@@ -1,0 +1,112 @@
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-api-gateway
+spec:
+  rules:
+  - host: rn3-api.01dev.eea.europa.eu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api-gateway
+            port:
+              number: 8010
+  ingressClassName: nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-frontend
+spec:
+  rules:
+  - host: rn3-frontend.01dev.eea.europa.eu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80
+  ingressClassName: nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-rn3-consul-ui
+spec:
+  rules:
+  - host: rn3-consul-ui.01dev.eea.europa.eu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rn3-consul-ui
+            port:
+              number: 8500
+  ingressClassName: nginx
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-rn3-traefik-api
+spec:
+  rules:
+  - host: rn3-api-t.01dev.eea.europa.eu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rn3-traefik
+            port:
+              number: 8000
+  ingressClassName: nginx
+####################################################################
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-rn3-traefik-front
+spec:
+  rules:
+  - host: rn3-frn-t.01dev.eea.europa.eu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rn3-traefik
+            port:
+              number: 80
+  ingressClassName: nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-rn3-traefik-api
+spec:
+  rules:
+  - host: rn3-api-t.01dev.eea.europa.eu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rn3-traefik
+            port:
+              number: 80
+  ingressClassName: nginx
+

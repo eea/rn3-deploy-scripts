@@ -1,0 +1,423 @@
+suite: Traefik configuration
+templates:
+  - deployment.yaml
+  - service.yaml
+tests:
+  - it: should have port 8000 of pod published to 80 of service by default, and defined as entrypoint "web"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: web
+            containerPort: 8000
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: web
+            port: 80
+            protocol: TCP
+            targetPort: web
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.web.address=:8000/tcp"
+        template: deployment.yaml
+  - it: should have port 8443 of pod published to 443 of service by default, and defined as entrypoint "websecure"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: websecure
+            containerPort: 8443
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: websecure
+            port: 443
+            protocol: TCP
+            targetPort: websecure
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.websecure.address=:8443/tcp"
+        template: deployment.yaml
+  - it: should have traefik port of pod exposed for probes but NOT published to the service by default
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: traefik
+            containerPort: 8080
+            protocol: TCP
+        template: deployment.yaml
+      - notContains:
+          path: spec.ports
+          content:
+            name: traefik
+            port: 8080
+            targetPort: traefik
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.traefik.address=:8080/tcp"
+        template: deployment.yaml
+  - it: should have a custom port when specified via values
+    set:
+      ports:
+        ssh:
+          port: 22
+          expose:
+            default: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: ssh
+            containerPort: 22
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: ssh
+            port: 22
+            protocol: TCP
+            targetPort: ssh
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.ssh.address=:22/tcp"
+        template: deployment.yaml
+  - it: should have a hostPort when specified via values
+    set:
+      ports:
+        ssh:
+          port: 22
+          expose:
+            default: true
+          hostPort: 22
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: ssh
+            containerPort: 22
+            hostPort: 22
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: ssh
+            port: 22
+            protocol: TCP
+            targetPort: ssh
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.ssh.address=:22/tcp"
+        template: deployment.yaml
+  - it: should have a UDP custom port when specified via values
+    set:
+      ports:
+        udp:
+          port: 51
+          expose:
+            default: true
+          protocol: UDP
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: udp
+            containerPort: 51
+            protocol: UDP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: udp
+            port: 51
+            protocol: UDP
+            targetPort: udp
+        template: service.yaml
+        documentIndex: 0
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.udp.address=:51/udp"
+        template: deployment.yaml
+
+  - it: should set entrypoint to default when configured
+    template: deployment.yaml
+    set:
+      ports:
+        web:
+          asDefault: true
+        websecure:
+          asDefault: false
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.web.asDefault=true"
+      - notContains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.websecure.asDefault=false"
+      - notContains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.websecure.asDefault=true"
+
+  - it: should set entrypoint host when hostIP is configured
+    template: deployment.yaml
+    set:
+      ports:
+        web:
+          hostIP: 127.0.0.1
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.web.address=127.0.0.1:8000/tcp"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.websecure.address=:8443/tcp"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.traefik.address=:8080/tcp"
+
+  - it: should set probes host when hostIP is configured
+    template: deployment.yaml
+    set:
+      ports:
+        traefik:
+          hostIP: localhost
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.traefik.address=localhost:8080/tcp"
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.httpGet.host
+          value: localhost
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.httpGet.host
+          value: localhost
+
+  - it: should be possible to use a different containerPort
+    set:
+      ports:
+        ssh:
+          port: 2222
+          expose:
+            default: true
+          containerPort: 22
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: ssh
+            containerPort: 22
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: ssh
+            port: 2222
+            protocol: TCP
+            targetPort: ssh
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.ssh.address=:2222/tcp"
+        template: deployment.yaml
+  - it: should be possible to use same custom containerPort and keep default exposedPort
+    set:
+      ports:
+        web:
+          port: 666
+          expose:
+            default: true
+          containerPort: 666
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: web
+            containerPort: 666
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: web
+            port: 80
+            protocol: TCP
+            targetPort: web
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entryPoints.web.address=:666/tcp"
+        template: deployment.yaml
+  - it: should be possible to disable traefik & metrics port
+    set:
+      deployment:
+        healthchecksPort: 80
+      ports:
+        web:
+          port: 80
+        websecure:
+          port: 443
+          http3:
+            enabled: true
+            advertisedPort: 443
+        traefik: null
+        metrics: null
+    asserts:
+      - containsDocument:
+          kind: Deployment
+          apiVersion: apps/v1
+        template: deployment.yaml
+      - notContains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: metrics
+            containerPort: 9100
+            protocol: TCP
+        template: deployment.yaml
+      - notContains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: traefik
+            containerPort: 9100
+            protocol: TCP
+        template: deployment.yaml
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+        template: service.yaml
+  - it: should be possible to disable web, metrics & websecure port
+    set:
+      ports:
+        web: null
+        websecure: null
+        metrics: null
+        traefik:
+          port: 8082
+        http-internal:
+          port: 8443
+          tls:
+            enabled: true
+          expose:
+            default: true
+        http-external:
+          port: 8445
+          tls:
+            enabled: true
+          expose:
+            default: true
+    asserts:
+      - containsDocument:
+          kind: Deployment
+          apiVersion: apps/v1
+        template: deployment.yaml
+      - notContains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: metrics
+            containerPort: 9100
+            protocol: TCP
+        template: deployment.yaml
+      - notContains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: traefik
+            containerPort: 9100
+            protocol: TCP
+        template: deployment.yaml
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+        template: service.yaml
+  - it: should fail when disabling traefik port and not specifying an healthcheck port
+    set:
+      ports:
+        traefik: null
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: When disabling traefik port, you need to specify `deployment.healthchecksPort`"
+        template: deployment.yaml
+  - it: should failed when no port nor exposed port are defined
+    set:
+      ports:
+        ssh:
+          expose:
+            default: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: Cannot create ssh port on Service without .port or .exposedPort"
+  - it: should support uppercase letters in entrypoint names
+    set:
+      ports:
+        UPPERCASE:
+          port: 443
+          expose:
+            default: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: uppercase
+            containerPort: 443
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: uppercase
+            port: 443
+            protocol: TCP
+            targetPort: uppercase
+        template: service.yaml
+  - it: should truncate entrypoint names that are too long
+    set:
+      ports:
+        websecure2:
+          port: 444
+          tls:
+            enabled: true
+          http3:
+            enabled: true
+          expose:
+            default: true
+        a-way-too-long-entrypoint-name:
+          port: 1515
+          expose:
+            default: true
+    asserts:
+      - contains:
+          path: spec.ports
+          content:
+            name: websecure2
+            port: 444
+            protocol: TCP
+            targetPort: websecure2
+        template: service.yaml
+      - contains:
+          path: spec.ports
+          content:
+            # -http3 suffix is truncated here
+            name: websecure2-http
+            port: 444
+            protocol: UDP
+            targetPort: websecure2-http
+        template: service.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: a-way-too-long
+            port: 1515
+            protocol: TCP
+            targetPort: a-way-too-long
+        template: service.yaml

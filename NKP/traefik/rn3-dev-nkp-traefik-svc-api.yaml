@@ -1,0 +1,102 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rn3-api
+  namespace: kavoulas
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+    - host: "rn3-frn-t.01dev.eea.europa.eu"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: 'frontend'
+                port:
+                  number: 80
+          - path: /api
+            pathType: Exact
+            backend:
+              service:
+                name:  api-gateway
+                port:
+                  number: 8010
+          - path: /consul
+            pathType: Exact
+            backend:
+              service:
+                name: 'rn3-consul-ui'
+                port:
+                  number: 8500
+          - path: /kafka
+            pathType: Exact
+            backend:
+              service:
+                name: 'rn3-kafka-ui'
+                port:
+                  number: 80
+    - host: "rn3-api-t.01dev.eea.europa.eu"
+      http:
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name:  api-gateway
+                port:
+                  number: 8010
+
+
+
+
+
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: rn3-api
+#   namespace: kavoulas
+# #https://rod3fotis.01dev.eea.europa.eu/
+# spec:
+#   rules:
+#     - host: rn3-api.01dev.eea.europa.eu
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Exact
+#             backend:
+#               service:
+#                 name:  api-gateway
+#                 port:
+#                   number: 8010
+#           - path: /frontend
+#             pathType: Exact
+#             backend:
+#               service:
+#                 name:  frontend
+#                 port:
+#                   number: 80
+#           - path: /consul
+#             pathType: Exact
+#             backend:
+#               service:
+#                 name:  rn3-consul-ui
+#                 port:
+#                   number: 8500
+#           - path: /kafka
+#             pathType: Exact
+#             backend:
+#               service:
+#                 name:  rn3-kafka-ui
+#                 port:
+#                   number: 80
+#           - path: /api
+#             pathType: Exact
+#             backend:
+#               service:
+#                 name:  api-gateway
+#                 port:
+#                   number: 8010

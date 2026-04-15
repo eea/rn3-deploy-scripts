@@ -1,0 +1,190 @@
+suite: NOTES.txt output
+templates:
+  - NOTES.txt
+chart:
+  appVersion: 2.3.0
+capabilities:
+  majorVersion: 1
+  minorVersion: 16
+tests:
+  - it: should use helm managed namespace in release notes output
+    set:
+      rbac:
+        namespaced: true
+    asserts:
+      - equalRaw:
+          value: |2
+
+
+            RELEASE-NAME with docker.io/traefik:2.3.0 has been deployed successfully on NAMESPACE namespace !
+  - it: should use helm managed namespace in release notes output
+    set:
+      namespaceOverride: "traefik-ns-override"
+    asserts:
+      - equalRaw:
+          value: |2
+
+
+            RELEASE-NAME with docker.io/traefik:2.3.0 has been deployed successfully on traefik-ns-override namespace !
+  - it: should use tag version in release notes output if set
+    set:
+      image:
+        tag: v3.0
+    asserts:
+      - equalRaw:
+          value: |2
+
+
+            RELEASE-NAME with docker.io/traefik:v3.0 has been deployed successfully on NAMESPACE namespace !
+  - it: should not display a warning when persistence and initContainer are enabled
+    set:
+      persistence:
+        enabled: true
+      deployment:
+        initContainer:
+          - name: volume-permissions
+            image: busybox:1.35
+            command: ["sh", "-c", "touch /data/acme.json && chmod -Rv 600 /data/* && chown 65532:65532 /data/acme.json"]
+            volumeMounts:
+              - name: data
+                mountPath: /data
+    asserts:
+      - equalRaw:
+          value: |2
+
+
+            RELEASE-NAME with docker.io/traefik:2.3.0 has been deployed successfully on NAMESPACE namespace !
+  - it: should display warning when enabling persistence without initContainer
+    set:
+      persistence:
+        enabled: true
+    asserts:
+      - equalRaw:
+          value: |
+
+
+            RELEASE-NAME with docker.io/traefik:2.3.0 has been deployed successfully on NAMESPACE namespace !
+
+            🚨 When enabling persistence for certificates, permissions on acme.json can be
+            lost when Traefik restarts. You can ensure correct permissions with an
+            initContainer. See https://github.com/traefik/traefik-helm-chart/blob/master/EXAMPLES.md#use-traefik-native-lets-encrypt-integration-without-cert-manager
+            for more info. 🚨
+  - it: should display warning when enabling labelSelector without applying it
+    set:
+      commonLabels:
+        is: here
+      providers:
+        kubernetesCRD:
+          labelSelector: not_here=CRD,is=here
+        kubernetesIngress:
+          labelSelector: not_here=Ingress,is=here
+    asserts:
+      - equalRaw:
+          value: |
+
+
+            RELEASE-NAME with docker.io/traefik:2.3.0 has been deployed successfully on NAMESPACE namespace !
+
+            🚨 Resources populated with this chart don't match with labelSelector `not_here=CRD` applied on kubernetesCRD provider 🚨
+
+            🚨 Resources populated with this chart don't match with labelSelector `not_here=Ingress` applied on kubernetesIngress provider 🚨
+  - it: should display warning when using port names that do not comply with Kubernetes requirements
+    set:
+      ports:
+        myport: # should be fine and not appaer in warnings
+          port: 8080
+        web-http-too-long-name:
+          port: 8081
+        withCaptital:
+          port: 8082
+    asserts:
+      - equalRaw:
+          value: |
+
+
+            RELEASE-NAME with docker.io/traefik:2.3.0 has been deployed successfully on NAMESPACE namespace !
+
+            🚨 Port name `web-http-too-long-name` does not comply with Kubernetes standards and will be renamed to `web-http-too-lo` in services. 🚨
+            ℹ️ See the "traefik.portname" helper in this chart for additional details. ℹ️
+
+            🚨 Port name `withCaptital` does not comply with Kubernetes standards and will be renamed to `withcaptital` in services. 🚨
+            ℹ️ See the "traefik.portname" helper in this chart for additional details. ℹ️
+  - it: should display warning when hub namespaces doesn't match providers ones
+    set:
+      image:
+        tag: v3
+
+      rbac:
+        enabled: true
+        namespaced: true
+
+      hub:
+        token: "token"
+        namespaces: [ns1]
+        apimanagement:
+          enabled: true
+
+      providers:
+        kubernetesCRD:
+          namespaces: [ns1, ns2]
+    asserts:
+      - equalRaw:
+          value: |
+
+
+            RELEASE-NAME with docker.io/traefik:v3 has been deployed successfully on NAMESPACE namespace !
+            WARNING: kubernetesCRD provider is configured to watch namespaces [ns2] but those ones are not watched by Hub provider.
+            WARNING: kubernetesIngress provider is configured to watch all namespaces but Hub provider only watches [ns1].
+  - it: should display warning when hub namespaces doesn't match kubernetesGateway namespaces
+    set:
+      image:
+        tag: v3
+
+      rbac:
+        enabled: true
+        namespaced: true
+
+      hub:
+        token: "token"
+        namespaces: [ns1]
+        apimanagement:
+          enabled: true
+
+      providers:
+        kubernetesGateway:
+          enabled: true
+          namespaces: [ns1, ns2]
+    asserts:
+      - equalRaw:
+          value: |
+
+
+            RELEASE-NAME with docker.io/traefik:v3 has been deployed successfully on NAMESPACE namespace !
+            WARNING: kubernetesCRD provider is configured to watch all namespaces but Hub provider only watches [ns1].
+            WARNING: kubernetesGateway provider is configured to watch namespaces [ns2] but those ones are not watched by Hub provider.
+            WARNING: kubernetesIngress provider is configured to watch all namespaces but Hub provider only watches [ns1].
+
+  - it: should not display any warning when hub watch all namespaces
+    set:
+      image:
+        tag: v3
+
+      rbac:
+        enabled: true
+        namespaced: true
+
+      hub:
+        token: "token"
+        namespaces: []
+        apimanagement:
+          enabled: true
+
+      providers:
+        kubernetesCRD:
+          namespaces: [ns1, ns2]
+    asserts:
+      - equalRaw:
+          value: |
+
+
+            RELEASE-NAME with docker.io/traefik:v3 has been deployed successfully on NAMESPACE namespace !

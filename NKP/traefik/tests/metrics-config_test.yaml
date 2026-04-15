@@ -1,0 +1,412 @@
+suite: Traefik Metrics configuration
+templates:
+  - deployment.yaml
+capabilities:
+  majorVersion: 1
+  minorVersion: 16
+tests:
+  - it: "should support to set prometheus: null"
+    set:
+      metrics:
+        prometheus: null
+    asserts:
+      - hasDocuments:
+          count: 1
+  - it: should be possible to enable metrics for internal resources
+    set:
+      metrics:
+        addInternals: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.addinternals"
+
+  - it: should have prometheus enabled by default on metrics entrypoint
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.entrypoint=metrics"
+  - it: should enable/disable labels on prometheus if set
+    set:
+      metrics:
+        prometheus:
+          addEntryPointsLabels: false
+          addServicesLabels: false
+          addRoutersLabels: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.addEntryPointsLabels=false"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.addServicesLabels=false"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.addRoutersLabels=true"
+  - it: should explicitely enable all labels on prometheus if set
+    set:
+      metrics:
+        prometheus:
+          addEntryPointsLabels: true
+          addServicesLabels: true
+          addRoutersLabels: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.addEntryPointsLabels=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.addServicesLabels=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.addRoutersLabels=true"
+  - it: should be possible to change prometheus buckets
+    set:
+      metrics:
+        prometheus:
+          buckets: "0.5,1.0,2.5"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.buckets=0.5,1.0,2.5"
+  - it: should be possible to enable manualRouting on prometheus
+    set:
+      metrics:
+        prometheus:
+          manualRouting: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.manualrouting=true"
+  - it: should be possible to enable datadog and disable prometheus
+    set:
+      metrics:
+        prometheus: null
+        datadog:
+          address: "localhost:8125"
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus=true"
+      - notContains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.entrypoint=metrics"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.datadog=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.datadog.address=localhost:8125"
+  - it: should enable/disable labels on datadog if set
+    set:
+      metrics:
+        datadog:
+          addEntryPointsLabels: false
+          addServicesLabels: false
+          addRoutersLabels: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.datadog.addEntryPointsLabels=false"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.datadog.addServicesLabels=false"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.datadog.addRoutersLabels=true"
+  - it: should explicitely enable all labels on datadog if set
+    set:
+      metrics:
+        datadog:
+          addEntryPointsLabels: true
+          addServicesLabels: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.datadog.addEntryPointsLabels=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.datadog.addServicesLabels=true"
+      - notContains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.datadog.addRoutersLabels=<nil>"
+
+  - it: should be possible to set pushInterval and prefix on datadog
+    set:
+      metrics:
+        datadog:
+          pushInterval: 30s
+          prefix: foo
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.datadog.pushInterval=30s"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.datadog.prefix=foo"
+  - it: should be possible to set specific parameters on influxdb v2
+    set:
+      metrics:
+        influxdb2:
+          address: "localhost:8089"
+          token: xxx-yyy-zzz
+          org: traefik
+          bucket: metrics
+          pushInterval: 30s
+          additionalLabels:
+            foo: bar
+            env: prod
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.address=localhost:8089"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.token=xxx-yyy-zzz"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.org=traefik"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.bucket=metrics"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.pushInterval=30s"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.additionalLabels.foo=bar"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.additionalLabels.env=prod"
+      - notContains:
+          path: spec.template.spec.containers[0].args
+          pattern: "--metrics.influxdb2.addEntryPointsLabels=<nil>"
+  - it: should enable/disable labels on influxdb v2 if set
+    set:
+      metrics:
+        influxdb2:
+          address: "localhost:8089"
+          token: xxx-yyy-zzz
+          org: traefik
+          bucket: metrics
+          addEntryPointsLabels: false
+          addServicesLabels: false
+          addRoutersLabels: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.addEntryPointsLabels=false"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.addServicesLabels=false"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.addRoutersLabels=true"
+  - it: should explicitely enable all labels on influxdb v2 if set
+    set:
+      metrics:
+        influxdb2:
+          address: "localhost:8089"
+          token: xxx-yyy-zzz
+          org: traefik
+          bucket: metrics
+          addEntryPointsLabels: true
+          addServicesLabels: true
+          addRoutersLabels: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.addEntryPointsLabels=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.addServicesLabels=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.influxdb2.addRoutersLabels=true"
+
+  - it: should be possible to set specific parameters on statsd
+    set:
+      metrics:
+        statsd:
+          address: "localhost:8125"
+          prefix: metrics
+          pushInterval: 30s
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.statsd.address=localhost:8125"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.statsd.prefix=metrics"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.statsd.pushInterval=30s"
+  - it: should enable/disable labels on statsd if set
+    set:
+      metrics:
+        statsd:
+          address: "localhost:8125"
+          addEntryPointsLabels: false
+          addServicesLabels: false
+          addRoutersLabels: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.statsd.addEntryPointsLabels=false"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.statsd.addServicesLabels=false"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.statsd.addRoutersLabels=true"
+  - it: should explicitely enable all labels on statsd if set
+    set:
+      metrics:
+        statsd:
+          address: "localhost:8125"
+          addEntryPointsLabels: true
+          addServicesLabels: true
+          addRoutersLabels: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.statsd.addEntryPointsLabels=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.statsd.addServicesLabels=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.statsd.addRoutersLabels=true"
+  - it: should be possible to set otlp only with required values
+    set:
+      metrics:
+        otlp:
+          enabled: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp=true"
+  - it: should be possible to set specific parameters on otlp
+    set:
+      metrics:
+        otlp:
+          enabled: true
+          addEntryPointsLabels: false
+          addRoutersLabels: true
+          addServicesLabels: false
+          explicitBoundaries:
+            - "0.1"
+            - "0.3"
+            - "1.2"
+            - "5.0"
+          pushInterval: 10s
+          http:
+            enabled: true
+            endpoint: "http://localhost:4318/v1/metrics"
+            headers:
+              foo: http
+              test: http
+            tls:
+              ca: path/to/ca.crt
+              cert: path/to/foo.cert
+              key: path/to/foo.key
+              insecureSkipVerify: true
+          grpc:
+            enabled: true
+            endpoint: "http://localhost:4318/v1/metrics"
+            insecure: true
+            headers:
+              foo: grpc
+              test: grpc
+            tls:
+              ca: gpath/to/ca.crt
+              cert: gpath/to/foo.cert
+              key: gpath/to/foo.key
+              insecureSkipVerify: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.addEntryPointsLabels=false"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.addRoutersLabels=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.addServicesLabels=false"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.explicitBoundaries=0.1,0.3,1.2,5.0"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.pushInterval=10s"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.http=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.http.endpoint=http://localhost:4318/v1/metrics"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.http.headers.foo=http"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.http.headers.test=http"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.http.tls.ca=path/to/ca.crt"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.http.tls.cert=path/to/foo.cert"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.http.tls.key=path/to/foo.key"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.http.tls.insecureSkipVerify=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.grpc=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.grpc.endpoint=http://localhost:4318/v1/metrics"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.grpc.insecure=true"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.grpc.headers.foo=grpc"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.grpc.headers.test=grpc"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.grpc.tls.ca=gpath/to/ca.crt"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.grpc.tls.cert=gpath/to/foo.cert"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.grpc.tls.key=gpath/to/foo.key"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.otlp.grpc.tls.insecureSkipVerify=true"
+  - it: should be possible to set headerLabels on prometheus
+    set:
+      metrics:
+        prometheus:
+          headerLabels:
+            user_id: X-User-Id
+            tenant: X-Tenant
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.headerlabels.user_id=X-User-Id"
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--metrics.prometheus.headerlabels.tenant=X-Tenant"

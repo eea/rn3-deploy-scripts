@@ -1,0 +1,274 @@
+suite: Requirements
+templates:
+  - requirements.yaml
+tests:
+  - it: should fail when trying to use this Chart with Traefik Proxy v2
+    set:
+      image:
+        tag: v2.11.0
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: This version of the Chart only supports Traefik Proxy v3"
+  - it: should pass when trying to use this Chart with Traefik Proxy v3 experimental
+    set:
+      image:
+        repository: traefik/traefik
+        tag: experimental-v3.0
+    asserts:
+      - notFailedTemplate: {}
+  - it: should fail when trying to use this Chart with Traefik Proxy v3 and Hub enabled
+    set:
+      hub:
+        enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: traefik-hub image is required when enabling Traefik Hub"
+  - it: should pass when trying to use this Chart with Traefik API gateway v3 and Hub enabled and providing a token
+    set:
+      image:
+        registry: ghcr.io
+        repository: traefik/traefik-hub
+        tag: latest-v3.0
+      hub:
+        token: "xxx"
+    asserts:
+      - notFailedTemplate: {}
+  - it: should fail when using kubernetesGateway without experimental flag on traefik < 3.1
+    set:
+      image:
+        tag: v3.0.0
+      providers:
+        kubernetesGateway:
+          enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: Before traefik v3.1.0-rc3, kubernetesGateway is experimental. Enable it by setting experimental.kubernetesGateway.enabled to true"
+  - it: should fail when using nativeLBByDefault on kubernetesGateway on traefik < 3.2
+    set:
+      image:
+        tag: v3.1.0
+      providers:
+        kubernetesGateway:
+          enabled: true
+          nativeLBByDefault: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: nativeLBByDefault has been introduced in Kubernetes Gateway provider in v3.2.0"
+  - it: should succeed when using version override with nativeLBByDefault on kubernetesGateway
+    set:
+      image:
+        tag: sha256:xxx
+      versionOverride: v3.3.0
+      providers:
+        kubernetesGateway:
+          enabled: true
+          nativeLBByDefault: true
+    asserts:
+      - notFailedTemplate: {}
+  - it: should not fail when using kubernetesGateway on traefik > 3.1.0-rc3 without experimental flag
+    set:
+      image:
+        tag: v3.1.0-rc3
+      providers:
+        kubernetesGateway:
+          enabled: true
+    asserts:
+      - notFailedTemplate: {}
+  - it: should fail when using traefik-hub API management with namespaced RBACs
+    set:
+      image:
+        registry: "ghcr.io"
+        repository: "traefik/traefik-hub"
+        tag: "v3.15.0"
+      hub:
+        token: xxx
+        apimanagement:
+          enabled: true
+      rbac:
+        namespaced: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: Traefik Hub < v3.16.0 doesn't support namespaced RBACs"
+  - it: should not fail when using traefik-hub API management with namespaced RBACs after v3.16.0
+    set:
+      image:
+        registry: "ghcr.io"
+        repository: "traefik/traefik-hub"
+        tag: "v3.16.0"
+      hub:
+        token: xxx
+        apimanagement:
+          enabled: true
+      rbac:
+        namespaced: true
+    asserts:
+      - notFailedTemplate: {}
+  - it: should not be possible to namespace rbac without one of the required providers
+    set:
+      rbac:
+        namespaced: true
+      providers:
+        kubernetesCRD:
+          enabled: false
+        kubernetesIngress:
+          enabled: false
+      image:
+        tag: v3.1.2
+    asserts:
+      - failedTemplate:
+        errorMessage: "ERROR: namespaced rbac requires Kubernetes CRD or Kubernetes Ingress provider"
+  - it: should fail when enabling Kubernete Gateway provider with namespaced RBACs
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      rbac:
+        namespaced: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: Kubernetes Gateway provider requires ClusterRole. RBAC cannot be namespaced."
+  - it: should fail when trying to use certResolvers
+    set:
+      certResolvers:
+        myAcmeResolver:
+          email: email@example.com
+          dnsChallenge:
+            provider: myProvider
+            resolvers:
+              - 1.1.1.1
+              - 8.8.8.8
+          tlsChallenge: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: certResolvers setting has been removed. See v33.0.0 Changelog."
+  - it: shouldn't have abortOnPluginFailure, when enabled on traefik < 3.3.0
+    set:
+      image:
+        tag: v3.2.0
+      experimental:
+        abortOnPluginFailure: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: abortOnPluginFailure is an experimental feature only available for traefik >= v3.3.0."
+  - it: shouldn't have fastProxy, when enabled on traefik < 3.2.0
+    set:
+      image:
+        tag: v3.1.0
+      experimental:
+        fastProxy:
+          enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: fastProxy is an experimental feature only available for traefik >= v3.2.0."
+  - it: shouldn't have safeQueryParams, when enabled on traefik < 3.1.0
+    set:
+      image:
+        tag: v3.0.0
+      tracing:
+        safeQueryParams:
+         - foo
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: safeQueryParams is a feature only available for traefik >= v3.1.0."
+  - it: should fail when using Traefik Hub without image registry and repository specified.
+    set:
+      hub:
+        token: "xxx"
+    asserts:
+      - failedTemplate:
+          errorMessage: "When using Traefik Hub image tag needs to be specified !"
+  - it: should not fail when using Traefik Hub with tag set for OCI
+    set:
+      hub:
+        token: "xxx"
+      oci_meta:
+        enabled: true
+        images:
+          hub:
+            tag: v3.14.0
+    asserts:
+      - notFailedTemplate: {}
+  - it: should fail when using hub.tracing.additionalTraceHeaders on Traefik Hub < 3.9.0
+    set:
+      image:
+        registry: "ghcr.io"
+        repository: "traefik/traefik-hub"
+        tag: v3.8.0
+      hub:
+        token: "xxx"
+        tracing:
+          additionalTraceHeaders:
+            enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: additionalTraceHeaders is a feature only available for traefik-hub >= v3.9.0."
+  - it: should fail when using hub.tracing.additionalTraceHeaders without tracing.otlp enabled
+    set:
+      image:
+        registry: "ghcr.io"
+        repository: "traefik/traefik-hub"
+        tag: v3.9.0
+      hub:
+        token: "xxx"
+        tracing:
+          additionalTraceHeaders:
+            enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: additionalTraceHeaders needs tracing.otlp to be enabled."
+  - it: should fail when using consulCatalogEnterprise provider on hub < 3.6.0
+    set:
+      image:
+        tag: v3.6.0
+      hub:
+        token: "xxx"
+        providers:
+          microcks:
+            enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: microcks provider is a feature only available for traefik-hub >= v3.7.0."
+  - it: should not fail when using hub.tracing.additionalTraceHeaders on Traefik Hub main builds
+    set:
+      image:
+        registry: "ghcr.io"
+        repository: "traefik/traefik-hub"
+        tag: main-1af57d3-1737730202
+      tracing:
+        otlp:
+          enabled: true
+      hub:
+        token: "xxx"
+        tracing:
+          additionalTraceHeaders:
+            enabled: true
+    asserts:
+      - notFailedTemplate: {}
+  - it: should not fail when using hub.tracing.additionalTraceHeaders on Traefik Hub latest v3 builds
+    set:
+      image:
+        registry: "ghcr.io"
+        repository: "traefik/traefik-hub"
+        tag: latest-v3
+      tracing:
+        otlp:
+          enabled: true
+      hub:
+        token: "xxx"
+        tracing:
+          additionalTraceHeaders:
+            enabled: true
+    asserts:
+      - notFailedTemplate: {}
+  - it: should fail when using consulCatalogEnterprise provider on hub < 3.6.0
+    set:
+      image:
+        tag: v3.5.0
+      hub:
+        token: "xxx"
+        providers:
+          consulCatalogEnterprise:
+            enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: consulCatalogEnterprise provider is a feature only available for traefik-hub >= v3.6.0."

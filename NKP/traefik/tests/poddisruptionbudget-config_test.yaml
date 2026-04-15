@@ -1,0 +1,72 @@
+suite: PodDisruptionBudget configuration
+templates:
+  - poddisruptionbudget.yaml
+capabilities:
+  majorVersion: 1
+  minorVersion: 16
+tests:
+  - it: should be disabled by default
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should have minAvailable set as int
+    set:
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: 2
+    asserts:
+      - equal:
+          path: spec.minAvailable
+          value: 2
+      - isNull:
+          path: spec.maxUnavailable
+  - it: should have maxUnavailable set as int
+    set:
+      podDisruptionBudget:
+        enabled: true
+        maxUnavailable: 1
+    asserts:
+      - equal:
+          path: spec.maxUnavailable
+          value: 1
+      - isNull:
+          path: spec.minAvailable
+  - it: should have minAvailable set as percentage
+    set:
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: 25%
+    asserts:
+      - equal:
+          path: spec.minAvailable
+          value: 25%
+      - isNull:
+          path: spec.maxUnavailable
+  - it: should have maxUnavailable set as percentage
+    set:
+      podDisruptionBudget:
+        enabled: true
+        maxUnavailable: 33%
+    asserts:
+      - equal:
+          path: spec.maxUnavailable
+          value: 33%
+      - isNull:
+          path: spec.minAvailable
+  - it: should use helm managed namespace as default behavior
+    set:
+      podDisruptionBudget:
+        enabled: true
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: NAMESPACE
+  - it: should accept overridden namespace
+    set:
+      namespaceOverride: "traefik-ns-override"
+      podDisruptionBudget:
+        enabled: true
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: "traefik-ns-override"

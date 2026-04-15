@@ -1,0 +1,44 @@
+suite: IngressClass configuration
+templates:
+  - ingressclass.yaml
+tests:
+  - it: should not provide an IngressClass when disabled
+    set:
+      ingressClass:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should provide a default IngressClass by default and prefer v1 api
+    asserts:
+      - isKind:
+          of: IngressClass
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - equal:
+          path: metadata.annotations["ingressclass.kubernetes.io/is-default-class"]
+          value: "true"
+  - it: should be possible to provide a non-default IngressClass
+    set:
+      ingressClass:
+        isDefaultClass: false
+    asserts:
+      - isKind:
+          of: IngressClass
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - equal:
+          path: metadata.annotations["ingressclass.kubernetes.io/is-default-class"]
+          value: "false"
+  - it: should be possible to provide an IngressClass name
+    set:
+      ingressClass:
+        name: nondefaultname
+    asserts:
+      - isKind:
+          of: IngressClass
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - equal:
+          path: metadata.name
+          value: nondefaultname

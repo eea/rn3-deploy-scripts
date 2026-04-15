@@ -1,0 +1,307 @@
+suite: Gateway configuration
+templates:
+  - gateway.yaml
+tests:
+  - it: should have one Gateway with the correct class and an http port
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+    asserts:
+      - containsDocument:
+          kind: Gateway
+          apiVersion: gateway.networking.k8s.io/v1
+      - equal:
+          path: spec.gatewayClassName
+          value: "traefik"
+      - equal:
+          path: spec.listeners[0].port
+          value: 8000
+      - equal:
+          path: metadata.namespace
+          value: "NAMESPACE"
+  - it: should configure namespacePolicy within web listener
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        listeners:
+          web:
+            namespacePolicy: All
+    asserts:
+      - equal:
+          path: spec.listeners[0].allowedRoutes.namespaces.from
+          value: "All"
+  - it: should set expected apiVersion with v3 version
+    set:
+      image:
+        tag: 3.0.0-beta4
+      providers:
+        kubernetesGateway:
+          enabled: true
+    asserts:
+      - containsDocument:
+          kind: Gateway
+          apiVersion: gateway.networking.k8s.io/v1
+  - it: should have one Gateway with the correct class and an http port as well as an https port
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        listeners:
+          websecure:
+            port: 8443
+            certificateRefs:
+              - name: "my-name"
+                group: "my-group"
+                kind: "my-kind"
+    asserts:
+      - equal:
+          path: spec.gatewayClassName
+          value: "traefik"
+      - equal:
+          path: spec.listeners[0].port
+          value: 8000
+      - equal:
+          path: spec.listeners[1].name
+          value: websecure
+      - equal:
+          path: spec.listeners[1].port
+          value: 8443
+      - equal:
+          path: spec.listeners[1].tls.certificateRefs[0].name
+          value: "my-name"
+      - equal:
+          path: spec.listeners[1].tls.certificateRefs[0].group
+          value: "my-group"
+      - equal:
+          path: spec.listeners[1].tls.certificateRefs[0].kind
+          value: "my-kind"
+  - it: should install Gateway in default namespace
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: "NAMESPACE"
+  - it: should install Gateway in namespaceOverride
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      namespaceOverride: "traefik-ns-override"
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: "traefik-ns-override"
+  - it: should install Gateway in defined gateway namespace
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        namespace: "gateway-ns-override"
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: "gateway-ns-override"
+  - it: should have one Gateway with the correct annotations
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        annotations:
+          cert-manager.io/issuer: letsencrypt
+    asserts:
+      - equal:
+          path: metadata.annotations
+          value:
+            cert-manager.io/issuer: letsencrypt
+  - it: should not deploy a gateway if gateway creation is disabled
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should not deploy a gateway if gatewayClass creation is disabled
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should be possible to customize gatewayClass name
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gatewayClass:
+        name: test
+    asserts:
+      - equal:
+          path: spec.gatewayClassName
+          value: test
+  - it: should be possible to customize gateway name
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        name: test
+    asserts:
+      - equal:
+          path: metadata.name
+          value: test
+  - it: should be possible to set tls mode
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        listeners:
+          websecure:
+            port: 8443
+            mode: Terminate
+    asserts:
+      - equal:
+          path: spec.listeners[1].tls.mode
+          value: Terminate
+  - it: should be possible to set protocol
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        listeners:
+          web:
+            protocol: TCP
+    asserts:
+      - equal:
+          path: spec.listeners[0].protocol
+          value: TCP
+  - it: should be possible to set regular hostname
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        listeners:
+          web:
+            hostname: test.docker.localhost
+    asserts:
+      - equal:
+          path: spec.listeners[0].hostname
+          value: test.docker.localhost
+  - it: should be possible to set hostname with wildcard
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        listeners:
+          web:
+            hostname: "*.docker.localhost"
+    asserts:
+      - equal:
+          path: spec.listeners[0].hostname
+          value: "*.docker.localhost"
+  - it: should fail when no listeners are defined
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        listeners: null
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: gateway must have at least one listener or should be disabled"
+  - it: should fail when listener port is not declared in ports
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        listeners:
+          web:
+            port: 8001
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: port 8001 is not declared in ports"
+  - it: should provide listeners by default
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+    asserts:
+      - equal:
+          path: spec.listeners
+          value:
+            - name: web
+              port: 8000
+              protocol: HTTP
+  - it: should fail when no certificateRefs is specified with HTTPS
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        listeners:
+          websecure:
+            port: 8443
+            protocol: HTTPS
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: certificateRefs needs to be specified using HTTPS"
+  - it: should fail when no port is specified
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        listeners:
+          websecure:
+            protocol: HTTPS
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: port needs to be specified"
+  - it: should be possible to configure infrastructure level on the Gateway
+    set:
+      providers:
+        kubernetesGateway:
+          enabled: true
+      gateway:
+        infrastructure:
+          labels:
+            foo: bar
+            tip: top
+          annotations:
+            afoo: abar
+          parametersRef:
+            group: traefik.io
+            kind: TraefikProxy
+            name: custom-config
+    asserts:
+      - isSubset:
+          path: spec.infrastructure
+          content:
+            labels:
+              foo: bar
+              tip: top
+            annotations:
+              afoo: abar
+            parametersRef:
+              group: traefik.io
+              kind: TraefikProxy
+              name: custom-config

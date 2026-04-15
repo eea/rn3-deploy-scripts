@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# Specific Values for Document
+# Specific Values for Communication
 
 # Environment Variables
 consul:
@@ -10,7 +10,7 @@ consul:
   port: 8500
 
 kafka:
-  bootstrap: kafka.reportnet.svc.cluster.local
+  bootstrap: bootstrap-kafka.reportnet.svc.cluster.local
   port: 9092
 
 mongo:
@@ -19,17 +19,13 @@ mongo:
   hosts: mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017/?readPreference=primary&retryWrites=true
 
 redis:
-    ip: redis.reportnet.svc.cluster.local
+    ip: redis
     port: 6379
     sentinel: masterset
     nodes: redis:26379
-
-file:
-    path: /reportnet3-data/input
-
+        
 tagSufix: 
 replicas: 1
-version: v3.4-SANDBOX
 repo: eeacms
+version: v3.4-SANDBOX
 # Other Variables
- 

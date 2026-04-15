@@ -1,0 +1,39 @@
+suite: HPA configuration
+templates:
+  - hpa.yaml
+capabilities:
+  majorVersion: 1
+  minorVersion: 23
+tests:
+  - it: should use autoscaling/v2 when k8s >= 1.23
+    values:
+      - ./values/hpa.yaml
+    asserts:
+      - isAPIVersion:
+          of: autoscaling/v2
+  - it: should use autoscaling/v2beta2 when k8s < 1.23
+    capabilities:
+      majorVersion: 1
+      minorVersion: 22
+    values:
+      - ./values/hpa.yaml
+    asserts:
+      - isAPIVersion:
+          of: autoscaling/v2beta2
+  - it: should fail without maxReplicas
+    set:
+      autoscaling:
+        enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: maxReplicas is required on HPA"
+  - it: should not contains metrics nor behavior when they are not set
+    set:
+      autoscaling:
+        enabled: true
+        maxReplicas: 3
+    asserts:
+      - isNull:
+          path: spec.metrics
+      - isNull:
+          path: spec.behavior
