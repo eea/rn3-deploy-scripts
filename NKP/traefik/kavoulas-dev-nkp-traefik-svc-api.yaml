@@ -5,6 +5,7 @@ metadata:
   namespace: kavoulas
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.middlewares: kavoulas-security-headers@kubernetescrd
     #traefik.http.middlewares.frnt.headers.customrequestheaders.X-1: test
     #traefik.http.middlewares.frnt.headers.customrequestheaders.X-2: "Sotav"
     #traefik.http.middlewares.frnt.headers.customresponseheaders.X-3: "Sotav"
@@ -51,8 +52,16 @@ spec:
                 name:  api-gateway
                 port:
                   number: 8010
-
-
+    # - host: "rn3-kafka.x01dev.eea.europa.eu"
+    #   http:
+    #     paths:
+    #       - path: /kafka
+    #         pathType: Exact
+    #         backend:
+    #           service:
+    #             name:  'rn3-kafka-ui'
+    #             port:
+    #               number: 80
 
 
 ---
@@ -70,7 +79,8 @@ spec:
       X-Sotav-Request-Headers: "Success Header Test"
     customResponseHeaders:
       X-Reportnet-Response-Header: "Over reportnet"
-      X-Sotav-Response-Header: "Success Header Test"
+      X-Sotav-Response-Header: "Success Header Test2"
+      X-Sotav2-Response-Header: "Success Header Test3"
     contentTypeNosniff: true  # X-Content-Type-Options nosniff
     frameDeny: true           # X-Frame-Options DENY
     browserXssFilter: true    # X-XSS-Protection 1;mode=block
