@@ -16,13 +16,19 @@ Replicas: 3
 Image: "consul"
 ImageTag: "1.5.3"
 ImagePullPolicy: "Always"
-Resources: {}
+Resources: 
  # requests:
  #   cpu: "100m"
  #   memory: "256Mi"
  # limits:
  #   cpu: "500m"
  #   memory: "512Mi"
+ requests:
+   #cpu: "100m"
+   memory: "2Gi"
+ limits:
+   #cpu: "500m"
+   memory: "2Gi"
 priorityClassName: ""
 Storage: "1Gi"
 DisableHostNodeId: false

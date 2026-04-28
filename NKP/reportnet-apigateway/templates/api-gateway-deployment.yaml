@@ -24,6 +24,13 @@ spec:
       - name: api-gateway
         image: {{.Values.repo}}/api-gateway:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
+        resources:
+          limits:
+            #cpu: "100m"
+            memory: 5Gi
+          requests:
+            #cpu: "100m"
+            memory: 5Gi
         ports:
         - containerPort: 8010
           protocol: TCP

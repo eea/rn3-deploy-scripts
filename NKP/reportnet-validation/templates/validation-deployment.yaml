@@ -26,6 +26,13 @@ spec:
       - name: validation
         image: {{.Values.repo}}/validation-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
+        resources:
+          limits:
+            #cpu: "100m"
+            memory: 6Gi
+          requests:
+            #cpu: "100m"
+            memory: 6Gi
         ports:
         - containerPort: 8015
           protocol: TCP

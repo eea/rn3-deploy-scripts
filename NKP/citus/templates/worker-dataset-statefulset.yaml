@@ -38,8 +38,10 @@ spec:
       #         - key: db
       #           operator: In
       #           values:
-      #           - "true"      
+      #           - "true"   
+
       containers:
+
         - env:
           - name: PGDATA
             value: /var/lib/postgresql/data/pgdata
@@ -62,6 +64,13 @@ spec:
           image: eeacms/citus-postgis:1.0
           imagePullPolicy: Always
           name: citus-worker
+          resources:
+            limits:
+              #cpu: "100m"
+              memory: 10Gi
+            requests:
+              #cpu: "100m"
+              memory: 10Gi
           volumeMounts:
           - name: storage
             mountPath: /var/lib/postgresql/data

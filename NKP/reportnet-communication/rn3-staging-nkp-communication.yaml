@@ -10,7 +10,7 @@ consul:
   port: 8500
 
 kafka:
-  bootstrap: bootstrap-kafka
+  bootstrap: kafka
   port: 9092
 
 mongo:
@@ -41,3 +41,4 @@ replicas: 1
 repo: eeacms
 version: v3.4-SANDBOX
 # Other Variables
+

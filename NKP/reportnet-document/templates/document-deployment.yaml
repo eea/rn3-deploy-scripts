@@ -45,6 +45,15 @@ spec:
           periodSeconds: 20
           successThreshold: 1
           timeoutSeconds: 5
+        resources:
+          limits:
+            #cpu: "100m"
+            #memory: "3096Mi"
+            memory: 5Gi
+          requests:
+            #cpu: "100m"
+            #memory: "3096Mi"
+            memory: 5Gi
         env:
         - name: CONSUL_HOST
           value: "{{.Values.consul.server}}"

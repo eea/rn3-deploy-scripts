@@ -93,13 +93,20 @@ init:
   resources: {}
   timeout: 900
 
-resources: {}
+resources:
 # limits:
 #   cpu: 500m
 #   memory: 512Mi
 # requests:
 #   cpu: 100m
 #   memory: 256Mi
+
+  limits:
+    #cpu: 500m
+    memory: 4Gi
+  requests:
+    #cpu: 100m
+    memory: 4Gi
 
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector

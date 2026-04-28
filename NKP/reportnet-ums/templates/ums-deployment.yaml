@@ -24,6 +24,13 @@ spec:
       - name: ums
         image: {{.Values.repo}}/user-management-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
+        resources:
+          limits:
+            #cpu: "100m"
+            memory: 5Gi
+          requests:
+            #cpu: "100m"
+            memory: 5Gi
         ports:
         - containerPort: 9010
           protocol: TCP

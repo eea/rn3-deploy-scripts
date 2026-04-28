@@ -185,11 +185,11 @@ controller:
   #resourcesPreset: "small"
   resources:
     requests:
-      cpu: 2
-      memory: 2048Mi
+      #cpu: 2
+      memory: 3Gi
     limits:
-      cpu: 3
-      memory: 3096Mi
+      #cpu: 3
+      memory: 3Gi
   #resources: {}
   podSecurityContext:
     enabled: true

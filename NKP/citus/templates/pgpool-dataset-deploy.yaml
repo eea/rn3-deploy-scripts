@@ -16,6 +16,13 @@ spec:
       - name: rn3-pg-helm-dataset-pgpool
         image: pgpool/pgpool:4.2
         imagePullPolicy: Always
+        resources:
+          limits:
+            #cpu: "100m"
+            memory: 3Gi
+          requests:
+            #cpu: "100m"
+            memory: 3Gi
         env:
         - name: POSTGRES_USERNAME
           value: postgres

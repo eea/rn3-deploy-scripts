@@ -25,6 +25,13 @@ spec:
       - name: frontend
         image: {{.Values.repo}}/reportnet-frontend-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
+        resources:
+          limits:
+            #cpu: "100m"
+            memory: 3Gi
+          requests:
+            #cpu: "100m"
+            memory: 3Gi
         ports:
         - containerPort: 80
           protocol: TCP

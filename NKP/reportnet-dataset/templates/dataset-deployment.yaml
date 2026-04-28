@@ -24,6 +24,13 @@ spec:
       - name: dataset
         image: {{.Values.repo}}/dataset-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
+        resources:
+          limits:
+            #cpu: "100m"
+            memory: 18Gi
+          requests:
+            #cpu: "100m"
+            memory: 18Gi
         ports:
         - containerPort: 8030
           protocol: TCP
