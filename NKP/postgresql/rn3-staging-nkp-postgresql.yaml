@@ -4,21 +4,21 @@ global:
   # imagePullSecrets:
   #   - myRegistryKeySecretName
   # storageClass: myStorageClass
-  # postgresql:
-  #   username: customuser
-  #   password: custompassword
-  #   database: customdatabase
-  #   repmgrUsername: repmgruser
-  #   repmgrPassword: repmgrpassword
-  #   repmgrDatabase: repmgrdatabase
-  #   existingSecret: myExistingSecret
+  postgresql:
+    #username: customuser
+    #password: custompassword
+    #database: customdatabase
+    #repmgrUsername: repmgruser
+    #repmgrPassword: repmgrpassword
+    #repmgrDatabase: repmgrdatabase
+    existingSecret: pg-secret
   # ldap:
   #   bindpw: bindpassword
   #   existingSecret: myExistingSecret
-  # pgpool:
-  #   adminUsername: adminuser
-  #   adminPassword: adminpassword
-  #   existingSecret: myExistingSecret
+  pgpool:
+    #adminUsername: adminuser
+    #adminPassword: adminpassword
+    existingSecret: pg-secret
     
 postgresqlImage:
   registry: docker.io

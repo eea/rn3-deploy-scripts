@@ -1,4 +1,5 @@
 #!/bin/bash
+echo 'postgres:md5a667f81c18c360beb563089097a5b94f' >> /opt/bitnami/pgpool/conf/pool_passwd
 echo 'testuser:md5cdc0ba8c75f2cc98122838c15c470a0d' >> /opt/bitnami/pgpool/conf/pool_passwd
 echo 'dataflow:md554b98b73cfe60e759ef332490d7b7371' >> /opt/bitnami/pgpool/conf/pool_passwd
 echo 'dataset:md5230a13dcd5e8f72ce9ce047e5c69906d' >> /opt/bitnami/pgpool/conf/pool_passwd
