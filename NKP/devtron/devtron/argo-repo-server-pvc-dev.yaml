@@ -1,0 +1,13 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: repo-server-pvc
+  labels:
+    app: argocd
+spec:
+  storageClassName: gp3-retain
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "40Gi"

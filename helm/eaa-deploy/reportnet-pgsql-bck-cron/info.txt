@@ -1,4 +1,7 @@
 export KC=../../../../.kube/dev/config
+
+
+export KC=~/sotav/.kube/dev-r2/config
 export Pname=rn3-pg-helm-postgresql-0
 export NS=reportnet
 echo $KC

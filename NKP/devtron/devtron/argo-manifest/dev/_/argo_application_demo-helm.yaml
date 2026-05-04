@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo
+  namespace: devtroncd
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: >-
+      /services/demo
+      /kubernetes/helm/service
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: apps
+  project: apps
+  source:
+
+    path: kubernetes/helm/service
+    repoURL: https://123:123@git-eea.europa.eu/NKP
+    targetRevision: dev
+    #targetRevision: HEAD
+    helm:
+      valueFiles:
+        - >-
+          /kubernetes/values-dev.yaml
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - Validate=false
+      - PruneLast=true
+      - RespectIgnoreDifferences=true
+      - PrunePropagationPolicy=orphan
+      - CreateNamespace=true

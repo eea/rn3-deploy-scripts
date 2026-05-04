@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argo-cd-ingress
+  namespace: devtroncd
+  #labels:
+    #app.kubernetes.io/name: 'superset-ingress' #{{ include "name" . }}
+    #app.kubernetes.io/instance: {{ .Release.Name }}
+    #app.kubernetes.io/version: "{{ .Release.Revision }}"
+    #app.kubernetes.io/managed-by: {{ .Release.Service }}
+    #helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    #nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/limit-rpm: "10000"
+    nginx.ingress.kubernetes.io/limit-rps: "10000"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      limit_req_status 429;
+spec:
+  ingressClassName: nginx
+  #tls:
+  #- hosts:
+  #  - argocdeea.europa.eu
+    #secretName: hello-app-tls
+  rules:
+  - host: argocd.dev.eea.europa.eu # Replace with your registered domain name.
+    http:
+      paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: argocd-server
+              port:
+                number: 443

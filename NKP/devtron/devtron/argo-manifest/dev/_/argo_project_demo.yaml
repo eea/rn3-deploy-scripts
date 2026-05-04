@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: apps
+  namespace: devtroncd
+spec:
+  clusterResourceWhitelist:
+  - group: "*"
+    kind: "*"
+  destinations:
+  - namespace: apps
+    server: https://kubernetes.default.svc
+  sourceRepos:
+    - https://123:123@git-eea.europa.eu/NKP/reportnet.git
+    - "*"
