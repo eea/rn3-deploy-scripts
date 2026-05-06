@@ -230,7 +230,7 @@ keycloak:
     # The key in the existing secret that stores the password
     existingSecretKey: password
 
-    dbName: rn3-keycloak
+    dbName: keycloak
     dbHost: rn3-pg-helm-pgpool.reportnet.svc.cluster.local
     dbPort: 5432
     dbUser: testuser

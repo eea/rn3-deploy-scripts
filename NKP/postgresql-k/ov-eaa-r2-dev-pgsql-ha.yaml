@@ -1,0 +1,182 @@
+postgresqlImage:
+  registry: docker.io
+  repository: bitnami/postgresql-repmgr
+  tag: 11.7.0-debian-10-r74
+  pullPolicy: IfNotPresent
+  debug: false
+pgpoolImage:
+  registry: docker.io
+  repository: bitnami/pgpool
+  tag: 4.1.1-debian-10-r50
+  pullPolicy: IfNotPresent
+  debug: false
+volumePermissionsImage:
+  registry: docker.io
+  repository: bitnami/minideb
+  tag: buster
+  pullPolicy: Always
+metricsImage:
+  registry: docker.io
+  repository: bitnami/postgres-exporter
+  tag: 0.8.0-debian-10-r71
+  pullPolicy: IfNotPresent
+  debug: false
+clusterDomain: cluster.local
+postgresql:
+  replicaCount: 3
+  updateStrategyType: Parallel
+  podAnnotations: {}
+  affinity: {}
+  nodeSelector: {}
+  priorityClassName: ""
+  tolerations: {}
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  resources:
+    limits: 
+      cpu: 500m
+      memory: 4000Mi
+    requests: 
+      cpu: 250m
+      memory: 3000Mi
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  pdb:
+    create: false
+    minAvailable: 1
+  username: postgres
+  upgradeRepmgrExtension: false
+  pgHbaTrustAll: false
+  repmgrUsername: repmgr
+  repmgrDatabase: repmgr
+  repmgrLogLevel: NOTICE
+  repmgrConnectTimeout: 5
+  repmgrReconnectAttempts: 3
+  repmgrReconnectInterval: 5
+pgpool:
+  replicaCount: 1
+  podAnnotations: {}
+  affinity: {}
+  nodeSelector: {}
+  priorityClassName: ""
+  tolerations: {}
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  resources:
+    limits: 
+      # cpu: 500m
+      # memory: 4000Mi
+    requests: 
+      # cpu: 250m
+      # memory: 3000Mi
+  livenessProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  pdb:
+    create: false
+    minAvailable: 1
+  adminUsername: admin
+  useLoadBalancing: true
+ldap:
+  enabled: false
+  uri:
+  base:
+  binddn:
+  bindpw:
+  bslookup:
+  scope:
+  tlsReqcert:
+  nssInitgroupsIgnoreusers: root,nslcd
+volumePermissions:
+  enabled: false
+  securityContext:
+    runAsUser: 0
+  resources:
+    limits: {}
+    requests: {}
+metrics:
+  enabled: false
+  securityContext:
+    enabled: true
+    runAsUser: 1001
+  resources:
+    limits: 
+      cpu: 100m
+      memory: 40Mi
+    requests: 
+      cpu: 100m
+      memory: 80Mi
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9187"
+  serviceMonitor:
+    enabled: false
+    selector:
+      prometheus: kube-prometheus
+persistence:
+  enabled: true
+  mountPath: /bitnami/postgresql
+  accessModes:
+    - ReadWriteOnce
+  size: 20Gi
+  annotations: {}
+service:
+  type: ClusterIP
+  port: 5432
+  annotations: {}
+ingress:
+  enabled: false
+  certManager: false
+  annotations: {}
+  hosts:
+    - name: postgresql.local
+      path: /
+  tls:
+    - hosts:
+        - postgresql.local
+      secretName: postgresql.local-tls
+  secrets:
+networkPolicy:
+  enabled: false
+  allowExternal: true
