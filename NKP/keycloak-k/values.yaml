@@ -17,9 +17,12 @@ keycloak:
   replicas: 1
 
   image:
-    repository: jboss/keycloak
-    tag: 7.0.0
-    pullPolicy: IfNotPresent
+    #repository: jboss/keycloak
+    #repository: quay.io/keycloak/keycloak
+    #not implemented: media type "application/vnd.docker.distribution.manifest.v1+prettyjws" is no longer supported since containerd v2.1, please rebuild the image as "application/vnd.docker.distribution.manifest.v2+json" or "application/vnd.oci.image.manifest.v1+json"
+    repository: drivereu/keycloak
+    tag: 7.0.0-3
+    pullPolicy: Always
 
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -17,9 +17,19 @@ keycloak:
   replicas: 1
 
   image:
-    repository: jboss/keycloak
-    tag: 7.0.0
-    pullPolicy: IfNotPresent
+    # repository: eeacms/rn3-keycloak
+    # tag: "1.0"
+    # repository: identifiersorg/keycloak
+    # tag: 6.0.1
+    # repository: drivereu/keycloak
+    # tag: 7.0.0-3
+    # repository: infuseaidev/jboss-keycloak
+    # tag: 8.0.1
+    repository: portworx/keycloak
+    tag: 9.0.2
+
+
+    pullPolicy: Always
 
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -70,14 +80,14 @@ keycloak:
   extraArgs: ""
 
   ## Username for the initial Keycloak admin user
-  username: admin
+  username: reportnet_admin
 
   ## Password for the initial Keycloak admin user. Applicable only if existingSecret is not set.
   ## If not set, a random 10 characters password will be used
   password: ""
 
   # Specifies an existing secret to be used for the admin password
-  existingSecret: ""
+  existingSecret: "keycloak-http6"
 
   # The key in the existing secret that stores the password
   existingSecretKey: password
@@ -291,7 +301,8 @@ keycloak:
     deployPostgres: false
 
     # The database vendor. Can be either "postgres", "mysql", "mariadb", or "h2"
-    dbVendor: h2
+    #dbVendor: h2
+    dbVendor: postgres
 
     ## The following values only apply if "deployPostgres" is set to "false"
 
@@ -302,7 +313,7 @@ keycloak:
     existingSecretKey: password
 
     dbName: keycloak
-    dbHost: rn3-pg-kc-pgpool.reportnet.svc.cluster.local
+    dbHost: rn3-pg-kc-postgresql.reportnet.svc.cluster.local
     dbPort: 5432
     dbUser: testuser
 
