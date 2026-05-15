@@ -137,7 +137,7 @@ initContainers: []
 dnsPolicy: ""
 dnsConfig: {}
 controller:
-  replicaCount: 3
+  replicaCount: 1
   controllerOnly: false
   minId: 0
   zookeeperMigrationMode: false
@@ -186,10 +186,12 @@ controller:
   resources:
     requests:
       #cpu: 2
-      memory: 3Gi
+      #memory: 3Gi
+      memory: 512m
     limits:
       #cpu: 3
-      memory: 3Gi
+      #memory: 3Gi
+      memory: 1Gi
   #resources: {}
   podSecurityContext:
     enabled: true
@@ -260,11 +262,12 @@ controller:
   persistence:
     enabled: true
     existingClaim: ""
-    storageClass: "nutanix-volume"
+    storageClass: ""
+    #storageClass: "nutanix-volume"
     #storageClass: "nfs-client"
     accessModes:
       - ReadWriteOnce
-      - ReadWriteMany
+      #- ReadWriteMany
     size: 20Gi
     annotations: {}
     labels: {}

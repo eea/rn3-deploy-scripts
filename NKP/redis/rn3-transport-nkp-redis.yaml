@@ -192,13 +192,13 @@ master:
     automountServiceAccountToken: false
     annotations: {}
   pdb:
-    create: true
+    create: false
     minAvailable: ""
     maxUnavailable: ""
 replica:
   kind: StatefulSet
   replicaCount: 3
-  revisionHistoryLimit: 10
+  revisionHistoryLimit: 3
   configuration: ""
   disableCommands:
     - FLUSHDB
@@ -244,10 +244,10 @@ replica:
   #resourcesPreset: {}
   resources:
     requests:
-      #cpu: 2
+      cpu: 1
       memory: 1024Mi
     limits:
-      #cpu: 3
+      cpu: 1
       memory: 1024Mi
   #resources: {}
   podSecurityContext:
@@ -334,9 +334,9 @@ replica:
     sessionAffinityConfig: {}
   terminationGracePeriodSeconds: 30
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
-    maxReplicas: 11
+    maxReplicas: 3
     targetCPU: ""
     targetMemory: ""
   serviceAccount:
@@ -424,10 +424,10 @@ sentinel:
   #resourcesPreset: {}
   resources:
     requests:
-      cpu: 2
+      cpu: 1
       memory: 512Mi
     limits:
-      cpu: 3
+      cpu: 1
       memory: 1024Mi
   #resources: {}
   containerSecurityContext:

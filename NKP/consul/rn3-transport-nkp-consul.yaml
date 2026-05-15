@@ -12,7 +12,7 @@ ServerPort: 8300
 ConsulDnsPort: 8600
 Domain: consul
 Component: "consul"
-Replicas: 3
+Replicas: 1
 Image: "consul"
 ImageTag: "1.5.3"
 ImagePullPolicy: "Always"
@@ -30,7 +30,13 @@ Resources:
    #cpu: "500m"
    memory: "512m"
 priorityClassName: ""
-Storage: "1Gi"
+Storage: "5Gi"
+accessModes:
+  - ReadWriteOnce
+
+
+
+
 DisableHostNodeId: false
 # DatacenterName: dc1
 joinPeers: []
@@ -40,6 +46,7 @@ Gossip:
   Create: true
 # GossipKey: key
 # StorageClass: "-"
+StorageClass: ""
 maxUnavailable: 1
 # nodeAffinity:
 #   requiredDuringSchedulingIgnoredDuringExecution:
@@ -49,18 +56,42 @@ maxUnavailable: 1
 #         operator: NotIn
 #         values:
 #         - true
+# affinity: |
+#   nodeAffinity:
+#     required:
+#       nodeSelectorTerms:
+#       - matchExpressions:
+#         - key: kubernetes.io/hostname
+#           operator: NotIn
+#           values:
+#           - "nkp-transport-fra-md-0-trjg6-hqw6m-7h9j4"
+#   podAntiAffinity:
+#     preferredDuringSchedulingIgnoredDuringExecution:
+#     - weight: 1
+#       podAffinityTerm:
+#         topologyKey: kubernetes.io/hostname
+#         labelSelector:
+#           matchExpressions:
+#           - key: kubernetes.io/hostname
+#             operator: NotIn
+#             values:
+#             - "nkp-transport-fra-md-0-trjg6-hqw6m-7h9j4"
+
+
+
 affinity: |
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-    - weight: 1
-      podAffinityTerm:
-        topologyKey: kubernetes.io/hostname
-        labelSelector:
-          matchExpressions:
-          - key: component
-            operator: In
-            values:
-            - "{{ .Release.Name }}-{{ .Values.Component }}"
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: NotIn
+          values:
+          - nkp-transport-fra-md-0-trjg6-hqw6m-7h9j4
+
+
+
+
 ui:
   enabled: true
 uiService:
