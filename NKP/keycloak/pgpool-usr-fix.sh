@@ -80,7 +80,7 @@ echo 'recordstore:md5e2a1ff8ce8fe36ca27f6f2212fe025da' >> /opt/bitnami/pgpool/co
 		echo " The script run without the vars set, so i will set the default ones which is for test environment"
 		echo "########################################################"
 		echo "########################################################"
-		ENV="test"
+		ENV=""
 	fi;
 	if [ -z "$2" ]
 	then
@@ -91,11 +91,11 @@ echo 'recordstore:md5e2a1ff8ce8fe36ca27f6f2212fe025da' >> /opt/bitnami/pgpool/co
 		KC=".kube/$ENV/config"
 	fi;
 
-export ENV=$ENV
+#export ENV=$ENV
 export NS=$NS
 export KC=$KC
 
-echo $ENV
+#echo $ENV
 echo $NS
 echo $KC
 

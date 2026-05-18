@@ -60,7 +60,7 @@ spec:
             - name: PGPOOL_SR_CHECK_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "postgresql-ha.postgresqlSecretName" . }}
+                  name: pg-secret
                   key: repmgr-password
             {{- end }}
             - name: PGPOOL_ENABLE_LOAD_BALANCING

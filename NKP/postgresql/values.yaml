@@ -46,6 +46,13 @@ postgresqlImage:
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
+postgresqlImage:
+  registry: ghcr.io
+  repository: eea/postgresql-repmgr
+  tag: 11.7.0-debian-10-r74
+  pullPolicy: IfNotPresent
+  debug: false
+
 
 ## Bitnami Pgpool image
 ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/

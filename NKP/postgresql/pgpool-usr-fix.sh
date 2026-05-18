@@ -19,10 +19,9 @@
 #           # ./pgpool-usr-fix.sh prod2 reportnet ~/.kube/prod2/config
 #           # ./pgpool-usr-fix.sh test reportnet ~/.kube/test/config
 #           # ./pgpool-usr-fix.sh dev reportnet ~/.kube/dev/config
-#           # ./pgpool-usr-fix.sh sandbox reportnet ~/.kube/sandbox/config
-#           # ./pgpool-usr-fix.sh staging reportnet ~/.kube/staging/config 
-#           # ./pgpool-usr-fix.sh transport reportnet 
-
+#           # ./pgpool-usr-fix.sh dev reportnet ~/.kube/sandbox/config
+#           # ./pgpool-usr-fix.sh dev reportnet ~/.kube/staging/config 
+#           # ./pgpool-usr-fix.sh dev reportnet ~/.kube/config 
 
 
 ### Using wsl 
@@ -81,7 +80,7 @@ echo 'recordstore:md5e2a1ff8ce8fe36ca27f6f2212fe025da' >> /opt/bitnami/pgpool/co
 		echo " The script run without the vars set, so i will set the default ones which is for test environment"
 		echo "########################################################"
 		echo "########################################################"
-		ENV="test"
+		ENV=""
 	fi;
 	if [ -z "$2" ]
 	then
@@ -92,11 +91,11 @@ echo 'recordstore:md5e2a1ff8ce8fe36ca27f6f2212fe025da' >> /opt/bitnami/pgpool/co
 		KC=".kube/$ENV/config"
 	fi;
 
-export ENV=$ENV
+#export ENV=$ENV
 export NS=$NS
 export KC=$KC
 
-echo $ENV
+#echo $ENV
 echo $NS
 echo $KC
 
