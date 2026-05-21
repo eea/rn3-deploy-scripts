@@ -67,10 +67,12 @@ spec:
           resources:
             limits:
               #cpu: "100m"
-              memory: 50Gi
+              #memory: 50Gi
+              memory: 5Gi
             requests:
               #cpu: "100m"
-              memory: 50Gi
+              #memory: 50Gi
+              memory: 5Gi
           volumeMounts:
           - name: storage
             mountPath: /var/lib/postgresql/data
@@ -94,7 +96,7 @@ spec:
     - metadata:
         name: storage
       spec:
-        storageClassName: nfs-client
+        #SstorageClassName: ""
         accessModes:
           - ReadWriteOnce
         resources:

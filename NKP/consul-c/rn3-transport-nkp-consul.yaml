@@ -1,0 +1,135 @@
+# Default values for consul.
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+# name: value
+HttpPort: 8500
+RpcPort: 8400
+SerflanPort: 8301
+SerflanUdpPort: 8301
+SerfwanPort: 8302
+SerfwanUdpPort: 8302
+ServerPort: 8300
+ConsulDnsPort: 8600
+Domain: consul
+Component: "consul"
+Replicas: 1
+Image: "consul"
+ImageTag: "1.5.3"
+ImagePullPolicy: "Always"
+Resources: 
+ # requests:
+ #   cpu: "100m"
+ #   memory: "256Mi"
+ # limits:
+ #   cpu: "500m"
+ #   memory: "512Mi"
+ requests:
+   #cpu: "100m"
+   memory: "512m"
+ limits:
+   #cpu: "500m"
+   memory: "512m"
+priorityClassName: ""
+Storage: "5Gi"
+accessModes:
+  - ReadWriteOnce
+
+
+
+
+DisableHostNodeId: false
+# DatacenterName: dc1
+joinPeers: []
+joinWan: []
+Gossip:
+  Encrypt: true
+  Create: true
+# GossipKey: key
+# StorageClass: "-"
+StorageClass: ""
+maxUnavailable: 1
+# nodeAffinity:
+#   requiredDuringSchedulingIgnoredDuringExecution:
+#     nodeSelectorTerms:
+#     - matchExpressions:
+#       - key: cloud.google.com/gke-preemptible
+#         operator: NotIn
+#         values:
+#         - true
+# affinity: |
+#   nodeAffinity:
+#     required:
+#       nodeSelectorTerms:
+#       - matchExpressions:
+#         - key: kubernetes.io/hostname
+#           operator: NotIn
+#           values:
+#           - "nkp-transport-fra-md-0-trjg6-hqw6m-7h9j4"
+#   podAntiAffinity:
+#     preferredDuringSchedulingIgnoredDuringExecution:
+#     - weight: 1
+#       podAffinityTerm:
+#         topologyKey: kubernetes.io/hostname
+#         labelSelector:
+#           matchExpressions:
+#           - key: kubernetes.io/hostname
+#             operator: NotIn
+#             values:
+#             - "nkp-transport-fra-md-0-trjg6-hqw6m-7h9j4"
+
+
+
+affinity: |
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: NotIn
+          values:
+          - nkp-transport-fra-md-0-trjg6-hqw6m-7h9j4
+
+
+
+
+ui:
+  enabled: true
+uiService:
+  enabled: true
+  type: "NodePort"
+  annotations: {}
+ConsulConfig: []
+#  - type: secret
+#    name: consul-defaults
+#  - type: configMap
+#    name: consul-defaults
+uiIngress:
+  enabled: false
+  annotations: {}
+  labels: {}
+  hosts: []
+  path: /
+  tls: []
+acl:
+  enabled: false
+  masterToken: ""
+  agentToken: ""
+test:
+  image: lachlanevenson/k8s-kubectl
+  imageTag: v1.4.8-bash
+  rbac:
+    create: false
+    serviceAccountName: ""
+nodeSelector: {}
+tolerations: []
+additionalLabels: {}
+podAnnotations: {}
+# Lifecycle for StatefulSet
+# lifecycle:
+#   preStop:
+#     exec:
+#       command:
+#       - sh
+#       - -c
+#       - "sleep 60"
+forceIpv6: false

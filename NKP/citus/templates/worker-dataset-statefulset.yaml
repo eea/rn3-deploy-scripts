@@ -87,7 +87,7 @@ spec:
     - metadata:
         name: storage
       spec:
-        storageClassName: nfs-client
+        #storageClassName: ""
         accessModes:
           - ReadWriteOnce
         resources:
