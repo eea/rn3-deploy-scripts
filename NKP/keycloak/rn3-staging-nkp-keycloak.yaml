@@ -68,6 +68,10 @@ keycloak:
 
   ## Allows the specification of additional environment variables for Keycloak
   extraEnv: |
+    - name: KC_HTTP_CLIENT_CONNECTION_TTL_MILLIS
+      value: "240000"
+    - name: KC_HTTP_CLIENT_MAX_IDLE_TIME_MILLIS
+      value: "240000"
     # - name: KEYCLOAK_LOGLEVEL
     #   value: DEBUG
     # - name: WILDFLY_LOGLEVEL
