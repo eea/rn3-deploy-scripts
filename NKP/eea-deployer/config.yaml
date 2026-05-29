@@ -1,21 +1,5 @@
-dry_run: false
-debug: true
-create_namespace: false
-wait: false
-timeout: true # If true, defaults to 20 mins
-charts:
-#################################### CONSUL ######################################
-  - release_name: consul
-    chart_name: consul
-    #version: v3.9.7
-    chart_repo: ../consul
-    values_file: rn3-staging-nkp-consul.yaml
-    namespace: reportnet
-    kc: "~/.kube/staging/config"
-  - release_name: kafka-ui
-    chart_name: kafka-ui
-    #version: v0.7.2
-    chart_repo: ../kafka-ui
-    values_file: rn3-staging-nkp-kafka-ui.yaml
-    namespace: reportnet
-    kc: "~/.kube/staging/config"
+# dry_run: false
+# create_namespace: false
+# wait: false
+# timeout: true # If true, defaults to 20 mins
+# debug: true

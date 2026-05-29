@@ -25,14 +25,14 @@ fi
 
 # Set the path of log and archive logs, these logs are basically eea-deployer logs
 LOG_DEST="logs"
-mkdir -p $LOG_DEST/archive
+#mkdir -p $LOG_DEST/archive
 LOG_FILE="$LOG_DEST/eea-deployer.log"
-ARCHIVE_LOG_FILE="eea-deployer_$(date +'%Y%m%d_%H%M%S').tar.gz"
+#ARCHIVE_LOG_FILE="eea-deployer_$(date +'%Y%m%d_%H%M%S').tar.gz"
 
 # Compress older log file and remove old log file if it already exists
 if [ -f "$LOG_FILE" ]; then
-  tar -czf $ARCHIVE_LOG_FILE "$LOG_FILE"
-  mv $ARCHIVE_LOG_FILE $LOG_DEST/archive
+#  tar -czf $ARCHIVE_LOG_FILE "$LOG_FILE"
+#  mv $ARCHIVE_LOG_FILE $LOG_DEST/archive
   rm "$LOG_FILE"
 fi
 
@@ -72,9 +72,16 @@ check_pod_status() {
       POD_STATUS=$(kubectl --kubeconfig $KC get pods -n $NAMESPACE | grep $RELEASE_NAME  | awk -F " " '{print $2}' | grep -vi running | wc -l)
       if [[ $POD_STATUS != "0" ]]; then
         log_message "INFO" "All Pods for release $RELEASE_NAME are in Running state"
+        log_message "INFO" "Amount of running Pods for release $RELEASE_NAME are $POD_STATUS"
+        POD_AMOUNT=$(kubectl --kubeconfig $KC get pods -n $NAMESPACE | grep $RELEASE_NAME | awk -F " " '{print $2}' | grep -vi running | wc -l)
+        log_message "INFO" "Running Pods are : $POD_AMOUNT"
+
         break
       else
         log_message "WARN" "Pods for release $RELEASE_NAME are not yet in Running state, checking again in 5 seconds"
+        log_message "INFO" "Amount of running Pods for release $RELEASE_NAME are $POD_STATUS"
+        POD_AMOUNT=$(kubectl --kubeconfig $KC get pods -n $NAMESPACE | grep $RELEASE_NAME | awk -F " " '{print $2}' | grep -vi running | wc -l)
+        log_message "INFO" "Running Pods are : $POD_AMOUNT"
         sleep 5
       fi            
       log_message "WARN" "Pods for release $RELEASE_NAME are not yet in Running state, checking again in 5 seconds"
@@ -150,7 +157,9 @@ generic_values() {
   WAIT=$(yq e '.wait' $CONFIG_FILE_NAME)
   TIMEOUT=$(yq e '.timeout' $CONFIG_FILE_NAME)
   KUBECONFIG=$($KC)
-    
+
+
+
   log_message "INFO" "Dry Run: $DRY_RUN"
   log_message "INFO" "Create Namespace: $CREATE_NAMESPACE"
   log_message "INFO" "Wait: $WAIT"
@@ -169,6 +178,7 @@ generic_chart_values() {
   log_message "INFO" "Version: $VERSION"
   log_message "INFO" "Namespace: $NAMESPACE"
   log_message "INFO" "KubeConfig: $KC"
+
   log_message "INFO" "****************************"
 }
 
@@ -202,6 +212,8 @@ perform_action() {
   TIMEOUT=$11
   FULL_REPO=$CHART_REPO/$CHART_NAME
   REPO_TYPE="oci"
+
+
  
 
   if [[ $CHART_REPO == "https://"* ]]; then
@@ -218,7 +230,7 @@ perform_action() {
   if [ "$ACTION" == "install" ]; then
     log_message "INFO" "Installing $CHART_NAME with release name $RELEASE_NAME from $CHART_REPO with version $VERSION using values file: $VALUES_FILE in $NAMESPACE namespace"
     HELM_COMMAND="helm --kubeconfig $KC -n "$NAMESPACE" upgrade --install "$RELEASE_NAME" "$CHART_REPO" -f "$CHART_REPO/$VALUES_FILE""
-                 #helm --kubeconfig $KC -n $NS upgrade --install consul . -f rn3-staging-nkp-consul.yaml --debug
+
 
     if [ "$DRY_RUN" == "true" ]; then
       HELM_COMMAND+=" --dry-run=client"
@@ -246,6 +258,24 @@ perform_action() {
     log_message "INFO" "Executing command: $HELM_COMMAND"
     eval "$HELM_COMMAND" >> "$LOG_FILE" 2>&1
 
+    # run the init or the script
+    ##################################################################
+    # #INIT=$(yq e '.init' $CONFIG_FILE_NAME)
+    # SCRIPT=$(yq e '.charts[].script_shell | select(.script_shell != null )' $CONFIG_FILE_NAME)
+    # #SCRIPT=$(yq e '.charts[].script_shell | select(.script_shell != null )' config-staging-nkp.yaml) $$ echo $SCRIPT
+    # yq e '.charts | key + ": \"" + .script_shell +"\""' config-staging-nkp.yaml
+    # #log_message "INFO" "Init is : $INIT"
+    # log_message "INFO" "Script_shell is : $SCRIPT"
+    # if [ "$init" == "true" ]; then
+    #   log_message "INFO" "Executing command: $INIT"
+    #   eval "$INIT" >> "$LOG_FILE" 2>&1
+    # fi
+
+    # if [ "$script" != null ]; then
+    #   log_message "INFO" "Executing command: $SCRIPT"
+    #   eval "$SCRIPT" >> "$LOG_FILE" 2>&1
+    # fi
+    ##################################################################
 
   elif [ "$ACTION" == "uninstall" ]; then
     log_message "INFO" "Uninstalling $CHART_NAME with release name '$RELEASE_NAME' from $NAMESPACE namespace"
