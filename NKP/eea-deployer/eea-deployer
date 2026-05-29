@@ -1,0 +1,351 @@
+#!/bin/bash
+
+# Author: Tavoulas Sotiris @ eea.europa.eu
+# Version: 1.0.1
+# Date published: 29/05/2026
+# Date updated: 29/05/2026
+# Description: This is a small bash utility which can help to install and uninstall multiple helm charts in one go.
+# Github URL: 
+# usage: 
+#     ./eea-deployer install -f ./config-staging-nkp.yaml
+
+# Enable debug mode
+# set -x
+
+
+# install yq if it does not exists !
+if ! which yq > /dev/null; then
+   echo -e "YQ python not found! Installing ........ \c"
+    sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+    sudo chmod a+x /usr/local/bin/yq
+    yq --version
+    printf "status: success\ndata:\n  - name: Sotav\n    age: 48\n  - name: EEA\n    age: 26" > test.yaml
+    yq e '.' test.yaml
+fi
+
+# Set the path of log and archive logs, these logs are basically eea-deployer logs
+LOG_DEST="logs"
+mkdir -p $LOG_DEST/archive
+LOG_FILE="$LOG_DEST/eea-deployer.log"
+ARCHIVE_LOG_FILE="eea-deployer_$(date +'%Y%m%d_%H%M%S').tar.gz"
+
+# Compress older log file and remove old log file if it already exists
+if [ -f "$LOG_FILE" ]; then
+  tar -czf $ARCHIVE_LOG_FILE "$LOG_FILE"
+  mv $ARCHIVE_LOG_FILE $LOG_DEST/archive
+  rm "$LOG_FILE"
+fi
+
+
+# Function to standardize log messages with LOG_LEVEL and LOG_TIME
+# Plus to make sure they are printed on the STDOUT as well as in the log_file
+log_message() {
+  LOG_TIME=$(date +"%Y-%m-%d %H:%M:%S")
+  LOG_LEVEL=$1
+  MESSAGE=$2
+
+  echo "[$LOG_TIME] [$LOG_LEVEL] $MESSAGE"
+  echo "[$LOG_TIME] [$LOG_LEVEL] $MESSAGE" >> "$LOG_FILE"
+}
+
+
+# Function to check pod health and to make sure pods of a given release are in running state 
+# This script will terminate if the pods are not running for more than 20 minutes, which is something that should ideally not happen.
+check_pod_status() {
+  RELEASE_NAME=$1
+  NAMESPACE=$2
+  START_TIME=$(date +%s)
+  while true; do
+    CURRENT_TIME=$(date +%s)
+    ELAPSED_TIME=$((CURRENT_TIME - START_TIME))
+    if [[ $ELAPSED_TIME -gt 1200 ]]; then
+      log_message "ERROR" "Pods for release $RELEASE_NAME are not in Running state for more than 20 minutes. Exiting"
+      log_message "ERROR" "Error code: 2"
+      exit 2
+    fi
+    TOTAL_PODS=$(kubectl --kubeconfig $KC get pods -n $NAMESPACE |grep $RELEASE_NAME  | wc -l)
+    if [[ $TOTAL_PODS == "0" ]]; then
+      log_message "ERROR" "There are no pods for $RELEASE_NAME"
+      log_message "ERROR" "Error code: 3"
+      exit 3
+    else
+      POD_STATUS=$(kubectl --kubeconfig $KC get pods -n $NAMESPACE | grep $RELEASE_NAME  | awk -F " " '{print $2}' | grep -vi running | wc -l)
+      if [[ $POD_STATUS != "0" ]]; then
+        log_message "INFO" "All Pods for release $RELEASE_NAME are in Running state"
+        break
+      else
+        log_message "WARN" "Pods for release $RELEASE_NAME are not yet in Running state, checking again in 5 seconds"
+        sleep 5
+      fi            
+      log_message "WARN" "Pods for release $RELEASE_NAME are not yet in Running state, checking again in 5 seconds"
+      sleep 5
+    fi
+  done
+}
+
+
+# Function to show help on how to use this utility? and what all options are available
+# It also contains a sample config.yaml file which is a must for this utility to function properly.
+show_help() {
+  echo "Usage: $0 [OPTIONS] [ARGUMENTS - Optional]"
+  echo "--------------------------"
+  echo "Options:"
+  echo "--------------------------"
+  echo "  install      Install multiple helm charts in one go.
+               Just need to have config.yaml file with what all charts needs to be installed.
+               For more information around config.yaml, sample file is a part of base folder."
+  echo "  uninstall    Uninstall multiple helm charts in one go, this command too will consume the
+               same config.yaml."
+  echo "  help         Display help."
+  echo ""
+  echo "--------------------------"
+  echo "Arguments:"
+  echo "--------------------------"
+  echo "  -f | --file  Helps you to mention explicit/specific config.yaml. If not provided it 
+               will consider the default one which is placed in the base folder."
+  echo ""
+  echo "Sample config.yaml:"
+  echo "--------------------------
+dry_run: false
+create_namespace: false
+wait: false
+timeout: true # If true, defaults to 20 mins
+charts:
+##################################### CONSUL ###########################################
+  - release_name: consul
+    chart_name: consul
+    chart_repo: ../consul
+    values_file: rn3-staging-nkp-consul.yaml
+##################################### KAFKA UI ###########################################
+  - release_name: kafka-ui
+    chart_name: kafka-ui
+    chart_repo: ../kafka-ui
+    values_file: rn3-staging-nkp-kafka-ui.yaml
+
+Note: 
+--------------------------
+- Charts is an array, it can contain as many releases as you want.
+- It support both oci:// and https:// registries.
+- All the key value pairs under charts are mandatory except version and namespace.
+  - If not provided it will consider latest chart and default namespace respectively.
+- You can mention explicit/specific config.yaml as well using -f | --file flag. 
+  - If not provided it will consider the default one which is placed in the base folder.
+  - If config.yaml is placed in /tmp directory, it might not work correctly. Ref: 
+- Initial messages are printed using cowsay (It is not necessary though if required, get this installed using apt/yum/brew/dpkg based on your distribution).
+
+Example:
+--------------------------
+$ ./eea-deployer install -f ./env/staging/config.yaml "
+
+  exit 0
+}
+
+
+# Function to log what all generic values we have in our config.yaml file
+generic_values() {
+  log_message "INFO" "Generic/common values based on $CONFIG_FILE_NAME file"
+  
+  DRY_RUN=$(yq e '.dry_run' $CONFIG_FILE_NAME)
+  CREATE_NAMESPACE=$(yq e '.create_namespace' $CONFIG_FILE_NAME)
+  WAIT=$(yq e '.wait' $CONFIG_FILE_NAME)
+  TIMEOUT=$(yq e '.timeout' $CONFIG_FILE_NAME)
+  KUBECONFIG=$($KC)
+    
+  log_message "INFO" "Dry Run: $DRY_RUN"
+  log_message "INFO" "Create Namespace: $CREATE_NAMESPACE"
+  log_message "INFO" "Wait: $WAIT"
+  log_message "INFO" "Timeout: $TIMEOUT"
+  log_message "INFO" "****************************"  
+}
+
+
+# Funtion to log what all chart specific values we have in our config.yaml file
+generic_chart_values() {
+  log_message "INFO" "Chart specific values based on $CONFIG_FILE_NAME file"
+  log_message "INFO" "Release Name: $RELEASE_NAME"
+  log_message "INFO" "Chart Name: $CHART_NAME"
+  log_message "INFO" "Chart Repo: $CHART_REPO"
+  log_message "INFO" "Values File: $VALUES_FILE"
+  log_message "INFO" "Version: $VERSION"
+  log_message "INFO" "Namespace: $NAMESPACE"
+  log_message "INFO" "KubeConfig: $KC"
+  log_message "INFO" "****************************"
+}
+
+
+# Function to show initial message which is created using cowsay
+# It is not necessary though if required, get this installed using apt/yum/brew/dpkg based on your distribution
+eea-deployer() {
+  which cowsay > /dev/null
+  if [[ $? == "0" ]]; then
+    MESSAGE=$1
+    echo -e "\e[5m\e[1;31m$MESSAGE\e[0m" | cowsay -f tux.cow -n
+  else
+    MESSAGE=$1
+    log_message "INFO" "$MESSAGE"
+  fi
+}
+
+
+# Function for the main logic and what all option we have in this utility
+perform_action() {
+  ACTION=$1
+  RELEASE_NAME=$2
+  CHART_NAME=$3
+  CHART_REPO=$4
+  VALUES_FILE=$5
+  VERSION=$6
+  NAMESPACE=$7
+  DRY_RUN=$8
+  CREATE_NAMESPACE=$9
+  WAIT=$10
+  TIMEOUT=$11
+  FULL_REPO=$CHART_REPO/$CHART_NAME
+  REPO_TYPE="oci"
+ 
+
+  if [[ $CHART_REPO == "https://"* ]]; then
+    REPO_NAME=$(echo $CHART_REPO | awk -F/ '{print $3}')
+    helm repo add $REPO_NAME $CHART_REPO > /dev/null
+    FULL_REPO=$REPO_NAME/$CHART_NAME
+    REPO_TYPE="https"
+  fi
+
+  if [[ $NAMESPACE == null ]]; then
+    NAMESPACE="reportnet"
+  fi
+
+  if [ "$ACTION" == "install" ]; then
+    log_message "INFO" "Installing $CHART_NAME with release name $RELEASE_NAME from $CHART_REPO with version $VERSION using values file: $VALUES_FILE in $NAMESPACE namespace"
+    HELM_COMMAND="helm --kubeconfig $KC -n "$NAMESPACE" upgrade --install "$RELEASE_NAME" "$CHART_REPO" -f "$CHART_REPO/$VALUES_FILE""
+                 #helm --kubeconfig $KC -n $NS upgrade --install consul . -f rn3-staging-nkp-consul.yaml --debug
+
+    if [ "$DRY_RUN" == "true" ]; then
+      HELM_COMMAND+=" --dry-run=client"
+    fi
+  
+    if [ "$CREATE_NAMESPACE" == "true" ]; then
+      HELM_COMMAND+=" --create-namespace"
+    fi
+  
+    if [ "$WAIT" == "true" ]; then
+      HELM_COMMAND+=" --wait"
+    fi
+  
+    if [ "$TIMEOUT" == "true" ]; then
+      HELM_COMMAND+=" --timeout=20m"
+    fi
+
+    if [ "$VERSION" != null ]; then
+      HELM_COMMAND+=" --version $VERSION"
+    fi
+    
+    if [ "$DEBUG" == "true" ]; then
+      HELM_COMMAND+=" --debug"
+    fi
+    log_message "INFO" "Executing command: $HELM_COMMAND"
+    eval "$HELM_COMMAND" >> "$LOG_FILE" 2>&1
+
+
+  elif [ "$ACTION" == "uninstall" ]; then
+    log_message "INFO" "Uninstalling $CHART_NAME with release name '$RELEASE_NAME' from $NAMESPACE namespace"
+    helm --kubeconfig $KC uninstall "$RELEASE_NAME" -n "$NAMESPACE" >> "$LOG_FILE" 2>&1
+
+  else
+    eea-deployer "Uh-oh! something is wrong"  
+    log_message "INFO" "Usage: $0 [OPTIONS] [ARGUMENTS - Optional]"
+    log_message "ERROR" "Invalid action, please see help using './eea-deployer help'"
+    log_message "ERROR" "Error code: 4"
+    exit 4
+  fi
+
+
+  # Check the status of last executed command
+  if [ $? -eq 0 ]; then
+    log_message "INFO" "$ACTION with release name '$RELEASE_NAME' completed successfully in $NAMESPACE namespace"
+    log_message "INFO" "****************************"
+  else
+    log_message "ERROR" "Failed to $ACTION $CHART_NAME with release name '$RELEASE_NAME' from/in $NAMESPACE namespace"
+    log_message "ERROR" "Check $LOG_FILE for details."
+    log_message "INFO" "****************************"
+    log_message "ERROR" "Error code: 5"
+    exit 5
+  fi
+}
+
+# Default config file
+CONFIG_FILE_NAME=$3
+
+# Define ACTION i.e. the option which this utility is capable of
+ACTION=$1
+# Move past the first argument
+shift
+
+# Parse command line arguments for the explicit config file path
+while [[ "$#" -gt 0 ]]; do
+    if [[ "$1" == "-f" || "$1" == "--file" ]]; then
+        CONFIG_FILE_NAME="$2"
+        echo $CONFIG_FILE_NAME
+        # Move past the flag and its value
+        shift 2
+    else
+        log_message "ERROR" "Unknown or unsupported flag: $1"
+        log_message "ERROR" "Error code: 7"
+        exit 7
+    fi
+done
+
+# Check if the file exists
+if [ ! -f "$CONFIG_FILE_NAME" ]; then
+    log_message "ERROR" "File '$CONFIG_FILE_NAME' does not exist"
+    log_message "ERROR" "Error code: 8"
+    exit 8
+fi
+
+log_message "INFO" "Using file: $CONFIG_FILE_NAME"
+
+###########################################################################################
+# Based on the action install, uninstall, etc perform it and provide indented results and logs
+if [ "$ACTION" == "install" ]; then
+  eea-deployer "eea-deployer, Install charts!"
+  generic_values
+  while IFS=$'\t' read -r RELEASE_NAME CHART_NAME CHART_REPO VALUES_FILE VERSION NAMESPACE; do
+    generic_chart_values
+    perform_action "$ACTION" "$RELEASE_NAME" "$CHART_NAME" "$CHART_REPO" "$VALUES_FILE" "$VERSION" "$NAMESPACE" "$DRY_RUN" "$CREATE_NAMESPACE" "$WAIT" "$TIMEOUT"
+
+    if [ "$DRY_RUN" != "true" ]; then
+      check_pod_status "$RELEASE_NAME" "$NAMESPACE"
+      
+    else
+      log_message "INFO" "Skipping $perform_action due to DRY_RUN=true for release $RELEASE_NAME"
+      
+    fi
+
+    sleep 2s
+  done < <(yq e '.charts[] | [.release_name, .chart_name, .chart_repo, .values_file, .version, .namespace] | @tsv' $CONFIG_FILE_NAME)
+
+###########################################################################################
+elif [ "$ACTION" == "uninstall" ]; then
+  eea-deployer "eea-deployer, Uninstall charts!"
+  generic_values
+  while IFS=$'\t' read -r RELEASE_NAME CHART_NAME CHART_REPO VALUES_FILE VERSION NAMESPACE; do
+    generic_chart_values
+    perform_action "$ACTION" "$RELEASE_NAME" "$CHART_NAME" "$CHART_REPO" "$VALUES_FILE" "$VERSION" "$NAMESPACE" "$DRY_RUN" "$CREATE_NAMESPACE" "$WAIT" "$TIMEOUT"
+    
+    sleep 2s
+  done < <(yq e '.charts[] | [.release_name, .chart_name, .chart_repo, .values_file, .version, .namespace] | @tsv' $CONFIG_FILE_NAME)
+###########################################################################################
+
+elif [ "$ACTION" == "help" ]; then
+  eea-deployer "eea-deployer, Show help!"
+  show_help
+
+
+else
+  eea-deployer "Uh-oh! something is wrong"  
+  log_message "ERROR" "Invalid action, please see help using 'eea-deployer help'"
+  log_message "ERROR" "Error code: 9"
+  exit 9
+fi
+
+log_message "INFO" "All actions completed successfully"

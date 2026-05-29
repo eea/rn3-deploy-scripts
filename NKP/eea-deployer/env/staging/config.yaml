@@ -1,0 +1,23 @@
+charts:
+#################################### CONSUL ######################################
+  - release_name: consul
+    chart_name: consul
+    #version: v3.9.7
+    chart_repo: ../consul
+    values_file: rn3-staging-nkp-consul.yaml
+    namespace: reportnet
+    kc: "~/.kube/staging/config"
+  - release_name: kafka-ui
+    chart_name: kafka-ui
+    #version: v0.7.2
+    chart_repo: ../kafka-ui
+    values_file: rn3-staging-nkp-kafka-ui.yaml
+    namespace: reportnet
+    kc: "~/.kube/staging/config"
+#################################### ARGO-CD ######################################
+  # - release_name: argocd
+  #   chart_name: argo-cd
+  #   chart_repo: https://argoproj.github.io/argo-helm
+  #   values_file: values/argo-cd.yaml
+  #   version: 6.4.0
+  #   namespace: reportnet
