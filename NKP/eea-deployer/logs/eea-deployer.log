@@ -1,251 +1,77 @@
-[2026-05-29 17:57:51] [INFO] Using file: config-staging-nkp.yaml
-[2026-05-29 17:57:51] [INFO] eea-deployer, Install charts!
-[2026-05-29 17:57:51] [INFO] Generic/common values based on config-staging-nkp.yaml file
-[2026-05-29 17:57:51] [INFO] Dry Run: false
-[2026-05-29 17:57:51] [INFO] Create Namespace: false
-[2026-05-29 17:57:51] [INFO] Wait: false
-[2026-05-29 17:57:51] [INFO] Timeout: true
-[2026-05-29 17:57:51] [INFO] ****************************
-[2026-05-29 17:57:51] [INFO] Chart specific values based on config-staging-nkp.yaml file
-[2026-05-29 17:57:51] [INFO] Release Name: consul
-[2026-05-29 17:57:51] [INFO] Chart Name: consul
-[2026-05-29 17:57:51] [INFO] Chart Repo: ../consul
-[2026-05-29 17:57:51] [INFO] Values File: rn3-staging-nkp-consul.yaml
-[2026-05-29 17:57:51] [INFO] Version: null
-[2026-05-29 17:57:51] [INFO] Namespace: reportnet
-[2026-05-29 17:57:51] [INFO] KubeConfig: /home/sotav/.kube/staging/config
-[2026-05-29 17:57:51] [INFO] ****************************
-[2026-05-29 17:57:51] [INFO] Installing consul with release name consul from ../consul with version null using values file: rn3-staging-nkp-consul.yaml in reportnet namespace
-[2026-05-29 17:57:51] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install consul ../consul -f ../consul/rn3-staging-nkp-consul.yaml
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-Release "consul" has been upgraded. Happy Helming!
-NAME: consul
-LAST DEPLOYED: Fri May 29 17:57:55 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 45
-NOTES:
-1. Watch all cluster members come up.
-  $ kubectl get pods --namespace=reportnet -w
-2. Test cluster health using Helm test.
-  $ helm test consul
-3. (Optional) Manually confirm consul cluster is healthy.
-  $ CONSUL_POD=$(kubectl get pods -l='release=consul' --output=jsonpath={.items[0].metadata.name})
-  $ kubectl exec $CONSUL_POD consul members --namespace=reportnet | grep server
-[2026-05-29 17:58:04] [INFO] install with release name 'consul' completed successfully in reportnet namespace
-[2026-05-29 17:58:04] [INFO] ****************************
-[2026-05-29 17:58:07] [INFO] All Pods for release consul are in Running state
-[2026-05-29 17:58:07] [INFO] Amount of running Pods for release consul are 3
-[2026-05-29 17:58:08] [INFO] Running Pods are : 3
-[2026-05-29 17:58:10] [INFO] Chart specific values based on config-staging-nkp.yaml file
-[2026-05-29 17:58:10] [INFO] Release Name: kafka
-[2026-05-29 17:58:10] [INFO] Chart Name: kafka
-[2026-05-29 17:58:10] [INFO] Chart Repo: ../kafka
-[2026-05-29 17:58:10] [INFO] Values File: rn3-staging-nkp-kafka.yaml
-[2026-05-29 17:58:10] [INFO] Version: null
-[2026-05-29 17:58:10] [INFO] Namespace: reportnet
-[2026-05-29 17:58:10] [INFO] KubeConfig: /home/sotav/.kube/staging/config
-[2026-05-29 17:58:10] [INFO] ****************************
-[2026-05-29 17:58:10] [INFO] Installing kafka with release name kafka from ../kafka with version null using values file: rn3-staging-nkp-kafka.yaml in reportnet namespace
-[2026-05-29 17:58:10] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install kafka ../kafka -f ../kafka/rn3-staging-nkp-kafka.yaml
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-Release "kafka" has been upgraded. Happy Helming!
-NAME: kafka
-LAST DEPLOYED: Fri May 29 17:58:15 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 21
-TEST SUITE: None
-NOTES:
-CHART NAME: kafka
-CHART VERSION: 29.3.13
-APP VERSION: 3.7.1
-
-** Please be patient while the chart is being deployed **
-
-Kafka can be accessed by consumers via port 9092 on the following DNS name from within your cluster:
-
-    kafka.reportnet.svc.cluster.local
-
-Each Kafka broker can be accessed by producers via port 9092 on the following DNS name(s) from within your cluster:
-
-    kafka-controller-0.kafka-controller-headless.reportnet.svc.cluster.local:9092
-    kafka-controller-1.kafka-controller-headless.reportnet.svc.cluster.local:9092
-    kafka-controller-2.kafka-controller-headless.reportnet.svc.cluster.local:9092
-
-To create a pod that you can use as a Kafka client run the following commands:
-
-    kubectl run kafka-client --restart='Never' --image docker.io/bitnamilegacy/kafka:3.7.1-debian-12-r4 --namespace reportnet --command -- sleep infinity
-    kubectl exec --tty -i kafka-client --namespace reportnet -- bash
-
-    PRODUCER:
-        kafka-console-producer.sh \
-            --broker-list kafka-controller-0.kafka-controller-headless.reportnet.svc.cluster.local:9092,kafka-controller-1.kafka-controller-headless.reportnet.svc.cluster.local:9092,kafka-controller-2.kafka-controller-headless.reportnet.svc.cluster.local:9092 \
-            --topic test
-
-    CONSUMER:
-        kafka-console-consumer.sh \
-            --bootstrap-server kafka.reportnet.svc.cluster.local:9092 \
-            --topic test \
-            --from-beginning
-
-WARNING: There are "resources" sections in the chart not set. Using "resourcesPreset" is not recommended for production. For production installations, please set the following values according to your workload needs:
-  - metrics.jmx.resources
-  - provisioning.resources
-+info https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-
-⚠ SECURITY WARNING: Original containers have been substituted. This Helm chart was designed, tested, and validated on multiple platforms using a specific set of Bitnami and Tanzu Application Catalog containers. Substituting other containers is likely to cause degraded security and performance, broken chart features, and missing environment variables.
-
-Substituted images detected:
-  - docker.io/bitnamilegacy/kafka:3.7.1-debian-12-r4
-  - docker.io/bitnamilegacy/kubectl:1.30.3-debian-12-r3
-  - docker.io/bitnamilegacy/os-shell:12-debian-12-r26
-  - docker.io/bitnamilegacy/jmx-exporter:1.0.1-debian-12-r5
-[2026-05-29 17:58:38] [INFO] install with release name 'kafka' completed successfully in reportnet namespace
-[2026-05-29 17:58:38] [INFO] ****************************
-[2026-05-29 17:58:40] [INFO] All Pods for release kafka are in Running state
-[2026-05-29 17:58:40] [INFO] Amount of running Pods for release kafka are 4
-[2026-05-29 17:58:42] [INFO] Running Pods are : 4
-[2026-05-29 17:58:44] [INFO] Chart specific values based on config-staging-nkp.yaml file
-[2026-05-29 17:58:44] [INFO] Release Name: kafka-ui
-[2026-05-29 17:58:44] [INFO] Chart Name: kafka-ui
-[2026-05-29 17:58:44] [INFO] Chart Repo: ../kafka-ui
-[2026-05-29 17:58:44] [INFO] Values File: rn3-staging-nkp-kafka-ui.yaml
-[2026-05-29 17:58:44] [INFO] Version: null
-[2026-05-29 17:58:44] [INFO] Namespace: reportnet
-[2026-05-29 17:58:44] [INFO] KubeConfig: /home/sotav/.kube/staging/config
-[2026-05-29 17:58:44] [INFO] ****************************
-[2026-05-29 17:58:44] [INFO] Installing kafka-ui with release name kafka-ui from ../kafka-ui with version null using values file: rn3-staging-nkp-kafka-ui.yaml in reportnet namespace
-[2026-05-29 17:58:44] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install kafka-ui ../kafka-ui -f ../kafka-ui/rn3-staging-nkp-kafka-ui.yaml
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
+[2026-06-02 15:03:59] [INFO] Using file: ./config-staging-nkp.yaml
+[2026-06-02 15:03:59] [INFO] Generic/common values based on ./config-staging-nkp.yaml file
+[2026-06-02 15:03:59] [INFO] Dry Run: false
+[2026-06-02 15:03:59] [INFO] Create Namespace: false
+[2026-06-02 15:03:59] [INFO] Wait: false
+[2026-06-02 15:03:59] [INFO] Timeout: true
+[2026-06-02 15:03:59] [INFO] ****************************
+[2026-06-02 15:03:59] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-02 15:03:59] [INFO] Release Name: consul
+[2026-06-02 15:03:59] [INFO] Chart Name: consul
+[2026-06-02 15:03:59] [INFO] Chart Repo: ../consul
+[2026-06-02 15:03:59] [INFO] Values File: rn3-staging-nkp-consul.yaml
+[2026-06-02 15:03:59] [INFO] Version: null
+[2026-06-02 15:03:59] [INFO] Namespace: reportnet
+[2026-06-02 15:03:59] [INFO] KubeConfig: /home/sotav/.kube/config
+[2026-06-02 15:03:59] [INFO] Deployment type is statefull
+[2026-06-02 15:03:59] [INFO] ****************************
+[2026-06-02 15:03:59] [INFO] Deployment type is statefull execution will end !
+[2026-06-02 15:03:59] [INFO] Executing command: 
+[2026-06-02 15:03:59] [INFO] ****************************
+[2026-06-02 15:03:59] [INFO] ****************************
+[2026-06-02 15:03:59] [INFO] ****************************
+[2026-06-02 15:03:59] [INFO] install with release name 'consul' completed successfully in reportnet namespace
+[2026-06-02 15:03:59] [INFO] ****************************
+[2026-06-02 15:04:01] [INFO] All Pods for release consul are in Running state
+[2026-06-02 15:04:01] [INFO] Amount of running Pods for release consul are 3
+[2026-06-02 15:04:02] [INFO] Running Pods are : 3
+[2026-06-02 15:04:05] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-02 15:04:05] [INFO] Release Name: kafka
+[2026-06-02 15:04:05] [INFO] Chart Name: kafka
+[2026-06-02 15:04:05] [INFO] Chart Repo: ../kafka
+[2026-06-02 15:04:05] [INFO] Values File: rn3-staging-nkp-kafka.yaml
+[2026-06-02 15:04:05] [INFO] Version: null
+[2026-06-02 15:04:05] [INFO] Namespace: reportnet
+[2026-06-02 15:04:05] [INFO] KubeConfig: /home/sotav/.kube/config
+[2026-06-02 15:04:05] [INFO] Deployment type is statefull
+[2026-06-02 15:04:05] [INFO] ****************************
+[2026-06-02 15:04:05] [INFO] Deployment type is statefull execution will end !
+[2026-06-02 15:04:05] [INFO] Executing command: 
+[2026-06-02 15:04:05] [INFO] ****************************
+[2026-06-02 15:04:05] [INFO] ****************************
+[2026-06-02 15:04:05] [INFO] ****************************
+[2026-06-02 15:04:05] [INFO] install with release name 'kafka' completed successfully in reportnet namespace
+[2026-06-02 15:04:05] [INFO] ****************************
+[2026-06-02 15:04:07] [INFO] All Pods for release kafka are in Running state
+[2026-06-02 15:04:07] [INFO] Amount of running Pods for release kafka are 2
+[2026-06-02 15:04:08] [INFO] Running Pods are : 2
+[2026-06-02 15:04:10] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-02 15:04:10] [INFO] Release Name: kafka-ui
+[2026-06-02 15:04:10] [INFO] Chart Name: kafka-ui
+[2026-06-02 15:04:10] [INFO] Chart Repo: ../kafka-ui
+[2026-06-02 15:04:10] [INFO] Values File: rn3-staging-nkp-kafka-ui.yaml
+[2026-06-02 15:04:10] [INFO] Version: null
+[2026-06-02 15:04:10] [INFO] Namespace: reportnet
+[2026-06-02 15:04:10] [INFO] KubeConfig: /home/sotav/.kube/config
+[2026-06-02 15:04:10] [INFO] Deployment type is deployment
+[2026-06-02 15:04:10] [INFO] ****************************
+[2026-06-02 15:04:10] [INFO] Deployment type is deployment  execution will proceed 
+[2026-06-02 15:04:10] [INFO] Installing kafka-ui with release name kafka-ui from ../kafka-ui with version null using values file: rn3-staging-nkp-kafka-ui.yaml in reportnet namespace
+[2026-06-02 15:04:10] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/config -n reportnet upgrade --install kafka-ui ../kafka-ui -f ../kafka-ui/rn3-staging-nkp-kafka-ui.yaml
+[2026-06-02 15:04:10] [INFO] ****************************
+[2026-06-02 15:04:10] [INFO] ****************************
+[2026-06-02 15:04:10] [INFO] ****************************
 Release "kafka-ui" has been upgraded. Happy Helming!
 NAME: kafka-ui
-LAST DEPLOYED: Fri May 29 17:58:48 2026
+LAST DEPLOYED: Tue Jun  2 15:04:13 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 23
+REVISION: 12
 TEST SUITE: None
 NOTES:
 1. Get the application URL by running these commands:
   export POD_NAME=$(kubectl get pods --namespace reportnet -l "app.kubernetes.io/name=kafka-ui,app.kubernetes.io/instance=kafka-ui" -o jsonpath="{.items[0].metadata.name}")
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl --namespace reportnet port-forward $POD_NAME 8080:8080
-[2026-05-29 17:58:56] [INFO] install with release name 'kafka-ui' completed successfully in reportnet namespace
-[2026-05-29 17:58:56] [INFO] ****************************
-[2026-05-29 17:58:59] [INFO] All Pods for release kafka-ui are in Running state
-[2026-05-29 17:58:59] [INFO] Amount of running Pods for release kafka-ui are 1
-[2026-05-29 17:59:00] [INFO] Running Pods are : 1
-[2026-05-29 17:59:02] [INFO] Chart specific values based on config-staging-nkp.yaml file
-[2026-05-29 17:59:02] [INFO] Release Name: keycloak6
-[2026-05-29 17:59:02] [INFO] Chart Name: keycloak6
-[2026-05-29 17:59:02] [INFO] Chart Repo: ../keycloak-k
-[2026-05-29 17:59:02] [INFO] Values File: rn3-staging-nkp-keycloak6.yaml
-[2026-05-29 17:59:02] [INFO] Version: null
-[2026-05-29 17:59:02] [INFO] Namespace: reportnet
-[2026-05-29 17:59:02] [INFO] KubeConfig: /home/sotav/.kube/staging/config
-[2026-05-29 17:59:02] [INFO] ****************************
-[2026-05-29 17:59:02] [INFO] Installing keycloak6 with release name keycloak6 from ../keycloak-k with version null using values file: rn3-staging-nkp-keycloak6.yaml in reportnet namespace
-[2026-05-29 17:59:02] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install keycloak6 ../keycloak-k -f ../keycloak-k/rn3-staging-nkp-keycloak6.yaml
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-Release "keycloak6" has been upgraded. Happy Helming!
-NAME: keycloak6
-LAST DEPLOYED: Fri May 29 17:59:05 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 8
-TEST SUITE: None
-NOTES:
-Keycloak can be accessed:
-
-* Within your cluster, at the following DNS name at port 80:
-
-  keycloak6-http.reportnet.svc.cluster.local
-
-* From outside the cluster, run these commands in the same shell:
-
-  export POD_NAME=$(kubectl get pods --namespace reportnet -l app.kubernetes.io/instance=keycloak6 -o jsonpath="{.items[0].metadata.name}")
-  echo "Visit http://127.0.0.1:8080 to use Keycloak"
-  kubectl port-forward --namespace reportnet $POD_NAME 8080
-
-Login with the following credentials:
-Username: reportnet_admin
-
-To retrieve the initial user password run:
-kubectl get secret --namespace reportnet keycloak6-http -o jsonpath="{.data.password}" | base64 --decode; echo
-[2026-05-29 17:59:14] [INFO] install with release name 'keycloak6' completed successfully in reportnet namespace
-[2026-05-29 17:59:14] [INFO] ****************************
-[2026-05-29 17:59:16] [INFO] All Pods for release keycloak6 are in Running state
-[2026-05-29 17:59:16] [INFO] Amount of running Pods for release keycloak6 are 1
-[2026-05-29 17:59:17] [INFO] Running Pods are : 1
-[2026-05-29 17:59:19] [INFO] Chart specific values based on config-staging-nkp.yaml file
-[2026-05-29 17:59:19] [INFO] Release Name: mongo
-[2026-05-29 17:59:19] [INFO] Chart Name: mongo
-[2026-05-29 17:59:19] [INFO] Chart Repo: ../mongodb
-[2026-05-29 17:59:19] [INFO] Values File: rn3-staging-nkp-mongo.yaml
-[2026-05-29 17:59:19] [INFO] Version: null
-[2026-05-29 17:59:19] [INFO] Namespace: reportnet
-[2026-05-29 17:59:19] [INFO] KubeConfig: /home/sotav/.kube/staging/config
-[2026-05-29 17:59:19] [INFO] ****************************
-[2026-05-29 17:59:19] [INFO] Installing mongo with release name mongo from ../mongodb with version null using values file: rn3-staging-nkp-mongo.yaml in reportnet namespace
-[2026-05-29 17:59:19] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install mongo ../mongodb -f ../mongodb/rn3-staging-nkp-mongo.yaml
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: This chart is deprecated
-Release "mongo" has been upgraded. Happy Helming!
-NAME: mongo
-LAST DEPLOYED: Fri May 29 17:59:22 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 8
-NOTES:
-*******************
-****DEPRECATED*****
-*******************
-*
-* This chart is deprecated and no longer maintained.
-*
-* It is recommended to use the Bitnami maintained MongoDB chart
-* (https://github.com/bitnami/charts/tree/master/bitnami/mongodb)
-* which has a similar feature set.
-
-
-1. After the statefulset is created completely, one can check which instance is primary by running:
-
-    $ for ((i = 0; i < 3; ++i)); do kubectl exec --namespace reportnet mongo-mongodb-replicaset-$i -- sh -c 'mongo --eval="printjson(rs.isMaster())"'; done
-
-2. One can insert a key into the primary instance of the mongodb replica set by running the following:
-    MASTER_POD_NAME must be replaced with the name of the master found from the previous step.
-
-    $ kubectl exec --namespace reportnet MASTER_POD_NAME -- mongo --eval="printjson(db.test.insert({key1: 'value1'}))"
-
-3. One can fetch the keys stored in the primary or any of the slave nodes in the following manner.
-    POD_NAME must be replaced by the name of the pod being queried.
-
-    $ kubectl exec --namespace reportnet POD_NAME -- mongo --eval="rs.slaveOk(); db.test.find().forEach(printjson)"
-[2026-05-29 17:59:30] [INFO] install with release name 'mongo' completed successfully in reportnet namespace
-[2026-05-29 17:59:30] [INFO] ****************************
-[2026-05-29 17:59:33] [INFO] All Pods for release mongo are in Running state
-[2026-05-29 17:59:33] [INFO] Amount of running Pods for release mongo are 3
-[2026-05-29 17:59:34] [INFO] Running Pods are : 3
-[2026-05-29 17:59:36] [INFO] Chart specific values based on config-staging-nkp.yaml file
-[2026-05-29 17:59:36] [INFO] Release Name: rn3-pg-helm
-[2026-05-29 17:59:36] [INFO] Chart Name: rn3-pg-helm
-[2026-05-29 17:59:36] [INFO] Chart Repo: ../postgresql
-[2026-05-29 17:59:36] [INFO] Values File: rn3-staging-nkp-postgresql.yaml
-[2026-05-29 17:59:36] [INFO] Version: null
-[2026-05-29 17:59:36] [INFO] Namespace: reportnet
-[2026-05-29 17:59:36] [INFO] KubeConfig: /home/sotav/.kube/staging/config
-[2026-05-29 17:59:36] [INFO] ****************************
-[2026-05-29 17:59:36] [INFO] Installing rn3-pg-helm with release name rn3-pg-helm from ../postgresql with version null using values file: rn3-staging-nkp-postgresql.yaml in reportnet namespace
-[2026-05-29 17:59:36] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install rn3-pg-helm ../postgresql -f ../postgresql/rn3-staging-nkp-postgresql.yaml
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-Error: UPGRADE FAILED: cannot patch "rn3-pg-helm-pgpool" with kind Deployment: Deployment.apps "rn3-pg-helm-pgpool" is invalid: spec.selector: Invalid value: v1.LabelSelector{MatchLabels:map[string]string{"app.kubernetes.io/component":"pgpool", "app.kubernetes.io/instance":"rn3-pg-helm", "app.kubernetes.io/name":"helm"}, MatchExpressions:[]v1.LabelSelectorRequirement(nil)}: field is immutable && cannot patch "rn3-pg-helm-postgresql" with kind StatefulSet: StatefulSet.apps "rn3-pg-helm-postgresql" is invalid: spec: Forbidden: updates to statefulset spec for fields other than 'replicas', 'ordinals', 'template', 'updateStrategy', 'revisionHistoryLimit', 'persistentVolumeClaimRetentionPolicy' and 'minReadySeconds' are forbidden
-[2026-05-29 17:59:50] [ERROR] Failed to install rn3-pg-helm with release name 'rn3-pg-helm' from/in reportnet namespace
-[2026-05-29 17:59:50] [ERROR] Check logs/eea-deployer.log for details.
-[2026-05-29 17:59:50] [INFO] ****************************
-[2026-05-29 17:59:50] [ERROR] Error code: 5
+[2026-06-02 15:04:18] [INFO] install with release name 'kafka-ui' completed successfully in reportnet namespace
+[2026-06-02 15:04:18] [INFO] ****************************

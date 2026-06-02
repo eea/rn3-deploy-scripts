@@ -67,7 +67,7 @@ check_pod_status() {
     if [[ $TOTAL_PODS == "0" ]]; then
       log_message "ERROR" "There are no pods for $RELEASE_NAME"
       log_message "ERROR" "Error code: 3"
-      exit 3
+      #exit 3
     else
       POD_STATUS=$(kubectl --kubeconfig $KC get pods -n $NAMESPACE | grep $RELEASE_NAME  | awk -F " " '{print $2}' | grep -vi running | wc -l)
       if [[ $POD_STATUS != "0" ]]; then
@@ -157,8 +157,7 @@ generic_values() {
   WAIT=$(yq e '.wait' $CONFIG_FILE_NAME)
   TIMEOUT=$(yq e '.timeout' $CONFIG_FILE_NAME)
   KUBECONFIG=$($KC)
-
-
+  
 
   log_message "INFO" "Dry Run: $DRY_RUN"
   log_message "INFO" "Create Namespace: $CREATE_NAMESPACE"
@@ -178,8 +177,7 @@ generic_chart_values() {
   log_message "INFO" "Version: $VERSION"
   log_message "INFO" "Namespace: $NAMESPACE"
   log_message "INFO" "KubeConfig: $KC"
-
-  log_message "INFO" "****************************"
+  
 }
 
 
@@ -206,16 +204,16 @@ perform_action() {
   VALUES_FILE=$5
   VERSION=$6
   NAMESPACE=$7
-  DRY_RUN=$8
-  CREATE_NAMESPACE=$9
-  WAIT=$10
-  TIMEOUT=$11
+  DEPLOY_TYPE=$8
+  SCRIPT_SHELL=$9
+  INIT_SHELL=$10
+  DRY_RUN=$11
+  CREATE_NAMESPACE=$12
+  WAIT=$13
+  TIMEOUT=$14
   FULL_REPO=$CHART_REPO/$CHART_NAME
   REPO_TYPE="oci"
-
-
  
-
   if [[ $CHART_REPO == "https://"* ]]; then
     REPO_NAME=$(echo $CHART_REPO | awk -F/ '{print $3}')
     helm repo add $REPO_NAME $CHART_REPO > /dev/null
@@ -228,9 +226,21 @@ perform_action() {
   fi
 
   if [ "$ACTION" == "install" ]; then
-    log_message "INFO" "Installing $CHART_NAME with release name $RELEASE_NAME from $CHART_REPO with version $VERSION using values file: $VALUES_FILE in $NAMESPACE namespace"
-    HELM_COMMAND="helm --kubeconfig $KC -n "$NAMESPACE" upgrade --install "$RELEASE_NAME" "$CHART_REPO" -f "$CHART_REPO/$VALUES_FILE""
+    log_message "INFO" "Deployment type is $DEPLOY_TYPE"
+    log_message "INFO" "****************************"
 
+
+    if [ "$DEPLOY_TYPE" == "statefull" ]; then
+        log_message "INFO" "Deployment type is $DEPLOY_TYPE execution will end !"
+        #HELM_COMMAND="Deployment type is $DEPLOY_TYPE execution will end ! "
+      else
+
+      if [ "$DEPLOY_TYPE" == "deployment" ]; then
+        log_message "INFO" "Deployment type is $DEPLOY_TYPE  execution will proceed "
+        log_message "INFO" "Installing $CHART_NAME with release name $RELEASE_NAME from $CHART_REPO with version $VERSION using values file: $VALUES_FILE in $NAMESPACE namespace"
+        HELM_COMMAND="helm --kubeconfig $KC -n "$NAMESPACE" upgrade --install "$RELEASE_NAME" "$CHART_REPO" -f "$CHART_REPO/$VALUES_FILE""
+      fi
+    fi
 
     if [ "$DRY_RUN" == "true" ]; then
       HELM_COMMAND+=" --dry-run=client"
@@ -256,6 +266,9 @@ perform_action() {
       HELM_COMMAND+=" --debug"
     fi
     log_message "INFO" "Executing command: $HELM_COMMAND"
+    log_message "INFO" "****************************"
+    log_message "INFO" "****************************"
+    log_message "INFO" "****************************"
     eval "$HELM_COMMAND" >> "$LOG_FILE" 2>&1
 
     # run the init or the script
@@ -299,7 +312,7 @@ perform_action() {
     log_message "ERROR" "Check $LOG_FILE for details."
     log_message "INFO" "****************************"
     log_message "ERROR" "Error code: 5"
-    exit 5
+    #exit 5
   fi
 }
 
@@ -339,10 +352,9 @@ log_message "INFO" "Using file: $CONFIG_FILE_NAME"
 if [ "$ACTION" == "install" ]; then
   eea-deployer "eea-deployer, Install charts!"
   generic_values
-  while IFS=$'\t' read -r RELEASE_NAME CHART_NAME CHART_REPO VALUES_FILE VERSION NAMESPACE; do
+  while IFS=$'\t' read -r RELEASE_NAME CHART_NAME CHART_REPO VALUES_FILE VERSION NAMESPACE DEPLOY_TYPE SCRIPT_SHELL INIT_SHELL; do
     generic_chart_values
-    perform_action "$ACTION" "$RELEASE_NAME" "$CHART_NAME" "$CHART_REPO" "$VALUES_FILE" "$VERSION" "$NAMESPACE" "$DRY_RUN" "$CREATE_NAMESPACE" "$WAIT" "$TIMEOUT"
-
+    perform_action "$ACTION" "$RELEASE_NAME" "$CHART_NAME" "$CHART_REPO" "$VALUES_FILE" "$VERSION" "$NAMESPACE" "$DEPLOY_TYPE" "$SCRIPT_SHELL" "$INIT_SHELL" "$DRY_RUN" "$CREATE_NAMESPACE" "$WAIT" "$TIMEOUT" 
     if [ "$DRY_RUN" != "true" ]; then
       check_pod_status "$RELEASE_NAME" "$NAMESPACE"
       
@@ -352,7 +364,7 @@ if [ "$ACTION" == "install" ]; then
     fi
 
     sleep 2s
-  done < <(yq e '.charts[] | [.release_name, .chart_name, .chart_repo, .values_file, .version, .namespace] | @tsv' $CONFIG_FILE_NAME)
+  done < <(yq e '.charts[] | [.release_name, .chart_name, .chart_repo, .values_file, .version, .namespace, .deploy_type, .script_shell, .init_shell] | @tsv' $CONFIG_FILE_NAME)
 
 ###########################################################################################
 elif [ "$ACTION" == "uninstall" ]; then

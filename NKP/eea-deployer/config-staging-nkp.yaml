@@ -15,12 +15,13 @@ charts:
         chart_repo: ../consul
         values_file: rn3-staging-nkp-consul.yaml
         namespace: reportnet
+        deploy_type: statefull
         script_shell: >-
           date=$(date '+%Y-%m-%d %H:%M:%S') && \
           echo "hello from init " $date >> /tmp/hello.txt && \
           cat /tmp/hello.txt && \
           exit;
-        init_shell: |-
+        init_shell: >-
           date=$(date '+%Y-%m-%d %H:%M:%S') && \
           echo "hello from init " $date >> /tmp/hello.txt && \
           cat /tmp/hello.txt && \
@@ -28,37 +29,44 @@ charts:
     ################################### KAFKA ######################################
       - release_name: kafka
         chart_name: kafka
-        #version: v0.0.1
+        #version: 29.3.13
         chart_repo: ../kafka
         values_file: rn3-staging-nkp-kafka.yaml
         namespace: reportnet
+        deploy_type: statefull
         script_shell: 
         init_shell: 
     #################################### KAFKA-UI ######################################
       - release_name: kafka-ui
         chart_name: kafka-ui
-        #version: v0.0.1
         chart_repo: ../kafka-ui
         values_file: rn3-staging-nkp-kafka-ui.yaml
+        #version: v0.0.1
         namespace: reportnet
+        deploy_type: deployment
         script_shell: 
         init_shell: 
     # #################################### KEYCLOAK ######################################
-    #   # - release_name: keycloak
-    #   #   chart_name: keycloak
-    #   #   #version: v0.0.1
-    #   #   chart_repo: ../keycloak
-    #   #   values_file: rn3-staging-nkp-keycloak.yaml
-    #   #   namespace: reportnet
-    # #################################### KEYCLOAK 6-9 ######################################
-      - release_name: keycloak6
-        chart_name: keycloak6
+      - release_name: keycloak
+        chart_name: keycloak
         #version: v0.0.1
-        chart_repo: ../keycloak-k
-        values_file: rn3-staging-nkp-keycloak6.yaml
+        chart_repo: ../keycloak
+        values_file: rn3-staging-nkp-keycloak.yaml
         namespace: reportnet
-        script: []
-        init: []
+        deploy_type: statefull
+        script_shell: 
+        init_shell:
+
+    # #################################### KEYCLOAK 6-9 ######################################
+      # - release_name: keycloak6
+      #   chart_name: keycloak6
+      #   #version: v0.0.1
+      #   chart_repo: ../keycloak-k
+      #   values_file: rn3-staging-nkp-keycloak6.yaml
+      #   namespace: reportnet
+      #   deploy_type: statefull
+      #   #script_shell: 
+      #   #init_shell:
     # #################################### MONGO ######################################
       - release_name: mongo
         chart_name: mongo
@@ -66,8 +74,9 @@ charts:
         chart_repo: ../mongodb
         values_file: rn3-staging-nkp-mongo.yaml
         namespace: reportnet
-        script: []
-        init: []
+        deploy_type: statefull
+        #script_shell: 
+        #init_shell:
     # ################################### POSTGRESQL ######################################
       - release_name: rn3-pg-helm
         chart_name: rn3-pg-helm
@@ -75,7 +84,8 @@ charts:
         chart_repo: ../postgresql
         values_file: rn3-staging-nkp-postgresql.yaml
         namespace: reportnet
-        scripts: |
+        deploy_type: statefull
+        script_shell: >-
           export dbpass=53p057n373.0!
           export repmgrpass=OWI9xc2s6R
           export adminpass=1ieiAGPu8i
@@ -87,7 +97,7 @@ charts:
           --from-literal repmgr-password=$repmgrpass
           export REPMGR_PASSWORD=$(kubectl get secret --namespace reportnet pg-secret -o jsonpath="{.data.repmgr-password}" | base64 --decode) && echo $REPMGR_PASSWORD
           pgpgpool-usr-fix.sh
-        init: |
+        init_shell: >-
           date=$(date '+%Y-%m-%d %H:%M:%S')
           echo "hello from init " $date >> /tmp/hello.txt
           cat /tmp/hello.txt
