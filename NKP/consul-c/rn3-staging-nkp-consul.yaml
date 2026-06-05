@@ -12,7 +12,7 @@ ServerPort: 8300
 ConsulDnsPort: 8600
 Domain: consul
 Component: "consul"
-DatacenterName: reportnet
+DatacenterName: dc1
 Replicas: 3
 Image: "hashicorp/consul"
 ImageTag: "1.10.0"

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: reportnet3-data
+  namespace: reportnet
+  labels:
+    app: reportnet3-data
+spec:
+  storageClassName: nutanix-file-static
+  persistentVolumeReclaimPolicy: Retain
+  capacity:
+    storage: 200Gi
+  accessModes:
+    - ReadWriteMany
+  mountOptions:
+    - nolock

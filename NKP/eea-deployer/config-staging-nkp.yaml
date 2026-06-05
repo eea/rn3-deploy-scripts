@@ -3,11 +3,12 @@ create_namespace: false
 wait: false
 timeout: true # If true, defaults to 20 mins
 debug: true
-kc: "~/.kube/staging/config"
+kc: /home/sotav/.kube/staging/config
+ns: reportnet
 init: true
 script: true
 charts:
-      #################################### CONSUL ######################################
+      # #################################### CONSUL ######################################
       - release_name: consul
         chart_name: consul
         debug: true
@@ -16,60 +17,63 @@ charts:
         values_file: rn3-staging-nkp-consul.yaml
         namespace: reportnet
         deploy_type: statefull
-        script_shell: >-
-          date=$(date '+%Y-%m-%d %H:%M:%S') && \
-          echo "hello from init " $date >> /tmp/hello.txt && \
-          cat /tmp/hello.txt && \
-          exit;
-        init_shell: >-
-          date=$(date '+%Y-%m-%d %H:%M:%S') && \
-          echo "hello from init " $date >> /tmp/hello.txt && \
-          cat /tmp/hello.txt && \
-          exit;
-    ################################### KAFKA ######################################
+        #script_shell: >-
+        #  echo $(ls -la) > test.txt;
+        #  cat test.txt
+        #init_shell: >-
+        #  echo $(ls -la) > test1.txt;
+        #  cat test1.txt
+        #custom_deployment: 
+    # ################################### KAFKA ######################################
       - release_name: kafka
         chart_name: kafka
-        #version: 29.3.13
+        debug: true
+        #version: v0.0.1
         chart_repo: ../kafka
         values_file: rn3-staging-nkp-kafka.yaml
         namespace: reportnet
         deploy_type: statefull
-        script_shell: 
-        init_shell: 
-    #################################### KAFKA-UI ######################################
-      - release_name: kafka-ui
-        chart_name: kafka-ui
-        chart_repo: ../kafka-ui
-        values_file: rn3-staging-nkp-kafka-ui.yaml
-        #version: v0.0.1
-        namespace: reportnet
-        deploy_type: deployment
-        script_shell: 
-        init_shell: 
-    # #################################### KEYCLOAK ######################################
+        #script_shell: 
+        #init_shell: 
+        custom_deployment: >-
+          export INTER_BROKER_PASSWORD=$(grep "INTER_BROKER_PASSWORD" .secrets.prv | cut -d '=' -f2);
+          export CONTROLLER_PASSWORD=$(grep "CONTROLLER_PASSWORD" .secrets.prv | cut -d '=' -f2);
+          export KRAFT_CLUSTER_ID="nkp-stg-kafka-01";
+          export chart_repo="../kafka";
+          export release_name="kafka";
+          export chart_name="kafka";
+          export values_file="rn3-staging-nkp-kafka.yaml";
+          export NS="reportnet";
+          export KC="~/.kube/staging/config";
+          helm --kubeconfig $KC -n $NS upgrade --install kafka ../kafka -f ../kafka/rn3-staging-nkp-kafka.yaml --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;
+
+
+    # # #################################### KEYCLOAK ######################################
       - release_name: keycloak
         chart_name: keycloak
+        debug: true
         #version: v0.0.1
         chart_repo: ../keycloak
         values_file: rn3-staging-nkp-keycloak.yaml
         namespace: reportnet
         deploy_type: statefull
-        script_shell: 
-        init_shell:
-
-    # #################################### KEYCLOAK 6-9 ######################################
-      # - release_name: keycloak6
-      #   chart_name: keycloak6
-      #   #version: v0.0.1
-      #   chart_repo: ../keycloak-k
-      #   values_file: rn3-staging-nkp-keycloak6.yaml
-      #   namespace: reportnet
-      #   deploy_type: statefull
-      #   #script_shell: 
-      #   #init_shell:
-    # #################################### MONGO ######################################
+        #script_shell: 
+        #init_shell: 
+        #custom_deployment: 
+    # # #################################### KEYCLOAK 6-9 ######################################
+    #   # - release_name: keycloak6
+    #   #   chart_name: keycloak6
+    #   #   #version: v0.0.1
+    #   #   chart_repo: ../keycloak-k
+    #   #   values_file: rn3-staging-nkp-keycloak6.yaml
+    #   #   namespace: reportnet
+    #   #   deploy_type: statefull
+    #   #   #script_shell: 
+    #   #   #init_shell:
+    # # #################################### MONGO ######################################
       - release_name: mongo
         chart_name: mongo
+        debug: true
         #version: v0.0.1
         chart_repo: ../mongodb
         values_file: rn3-staging-nkp-mongo.yaml
@@ -77,36 +81,207 @@ charts:
         deploy_type: statefull
         #script_shell: 
         #init_shell:
+        #custom_deployment:
     # ################################### POSTGRESQL ######################################
       - release_name: rn3-pg-helm
-        chart_name: rn3-pg-helm
+        chart_name: helm
         #version: v0.0.1
         chart_repo: ../postgresql
         values_file: rn3-staging-nkp-postgresql.yaml
         namespace: reportnet
         deploy_type: statefull
-        script_shell: >-
-          export dbpass=53p057n373.0!
-          export repmgrpass=OWI9xc2s6R
-          export adminpass=1ieiAGPu8i
-          kubectl --kubeconfig $KC -n $NS create secret generic pg-secret \
-          --from-literal admin-password=$adminpass \
-          --from-literal pg-pass=$dbpass \
-          --from-literal pg-sand-data-pass=postgres \
-          --from-literal postgresql-password=$dbpass \
-          --from-literal repmgr-password=$repmgrpass
-          export REPMGR_PASSWORD=$(kubectl get secret --namespace reportnet pg-secret -o jsonpath="{.data.repmgr-password}" | base64 --decode) && echo $REPMGR_PASSWORD
-          pgpgpool-usr-fix.sh
-        init_shell: >-
-          date=$(date '+%Y-%m-%d %H:%M:%S')
-          echo "hello from init " $date >> /tmp/hello.txt
-          cat /tmp/hello.txt
-    # ################################### ARGO-CD ######################################
+        #script_shell: |
+        #  export KC=~/.kube/staging/config
+        #  export NAMESPACE=reportnet
+        #  export CHART_REPO=../postgresql
+        #  export VALUES_FILE=rn3-staging-nkp-postgresql.yaml
+        #  echo $(../postgresql/pgpool-usr-fix.sh dev $NAMESPACE $CHART_REPO/$VALUES_FILE);
+
+        # init_shell: >-
+        #   echo $(kubectl --kubeconfig $KC -n $NS delete secret pg-secret);
+        #   echo $(export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2));
+        #   echo $(export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2));
+        #   echo $(export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2));
+        #   kubectl --kubeconfig $KC -n $NS create secret generic pg-secret --from-literal admin-password=$adminpass --from-literal pg-pass=$dbpass --from-literal pg-sand-data-pass=postgres --from-literal postgresql-password=$dbpass --from-literal repmgr-password=$repmgrpass
+        custom_deployment: >-
+          export chart_repo=../postgresql
+          export release_name=helm
+          export chart_name=rn3-pg
+          export values_file=../postgresql/rn3-staging-nkp-postgresql.yaml
+          export NS=reportnet
+          export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
+          export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
+          export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
+          kubectl --kubeconfig $KC -n $NS delete secret pg-secret;
+          kubectl --kubeconfig $KC -n $NS create secret generic pg-secret --from-literal admin-password=$adminpass --from-literal pg-pass=$dbpass --from-literal pg-sand-data-pass=postgres --from-literal postgresql-password=$dbpass --from-literal repmgr-password=$repmgrpass;
+          helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
+
+      ################################### ARGO-CD ######################################
+      # - release_name: argocd
+      #   chart_name: argo-cd
+      #   chart_repo: https://argoproj.github.io/argo-helm
+      #   values_file: values/argo-cd.yaml
+      #   version: 6.4.0
+      #   namespace: reportnet
+      #   deploy_type: deployment
+      #   #script_shell: 
+      #   #init_shell:
+      #   #custom_deployment:
 
 
-# - release_name: argocd
-#   chart_name: argo-cd
-#   chart_repo: https://argoproj.github.io/argo-helm
-#   values_file: values/argo-cd.yaml
-#   version: 6.4.0
-#   namespace: reportnet
+      #####################################################################################
+      ####################                                           ######################
+      ####################                                           ######################
+      ####################              DEPLOYMENTS                  ######################
+      ####################                                           ######################
+      ####################                                           ######################
+      ####################                                           ######################
+      #####################################################################################
+
+      #################################### KAFKA-UI ######################################
+      - release_name: kafka-ui
+        chart_name: kafka-ui
+        debug: true
+        #version: v0.0.1
+        chart_repo: ../kafka-ui
+        values_file: rn3-staging-nkp-kafka-ui.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell: 
+        #custom_deployment: 
+
+
+
+      ################################### RECORDSTORE #####################################
+      - release_name: recordstore
+        chart_name: helm
+        #version: v0.0.1
+        chart_repo: ../reportnet-recordstore
+        values_file: rn3-staging-nkp-recordstore.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:
+      ################################### APIGATEWAY ######################################
+      - release_name: api-gateway
+        chart_name: reportnet-api-gateway
+        #version: v0.0.1
+        chart_repo: ../reportnet-apigateway
+        values_file: rn3-staging-nkp-api-gateway.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:
+      ################################### COLLABORATION ######################################
+      - release_name: collaboration
+        chart_name: reportnet-collaboration
+        #version: v0.0.1
+        chart_repo: ../reportnet-collaboration
+        values_file: rn3-staging-nkp-collaboration.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:
+      ################################### COMMUNICATION ######################################
+      - release_name: communication
+        chart_name: reportnet-communication
+        #version: v0.0.1
+        chart_repo: ../reportnet-communication
+        values_file: rn3-staging-nkp-communication.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:
+      ################################### DATAFLOW ######################################
+      - release_name: dataflow
+        chart_name: reportnet-dataflow
+        #version: v0.0.1
+        chart_repo: ../reportnet-dataflow
+        values_file: rn3-staging-nkp-dataflow.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:
+      ################################### DATASET ######################################
+      - release_name: dataset
+        chart_name: reportnet-dataset
+        #version: v0.0.1
+        chart_repo: ../reportnet-dataset
+        values_file: rn3-staging-nkp-dataset.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:
+      ################################### DOCUMENT ######################################
+      - release_name: document
+        chart_name: reportnet-document
+        #version: v0.0.1
+        chart_repo: ../reportnet-document
+        values_file: rn3-staging-nkp-document.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:
+      ################################### FRONTEND ######################################
+      - release_name: frontend
+        chart_name: reportnet-frontend
+        #version: v0.0.1
+        chart_repo: ../reportnet-frontend
+        values_file: rn3-staging-nkp-frontend.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:
+      ################################### ORCHESTRATOR ######################################
+      - release_name: orchestrator
+        chart_name: reportnet-orchestrator
+        #version: v0.0.1
+        chart_repo: ../reportnet-orchestrator
+        values_file: rn3-staging-nkp-orchestrator.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:
+      ################################### ROD ######################################
+      - release_name: rod
+        chart_name: reportnet-rod
+        #version: v0.0.1
+        chart_repo: ../reportnet-rod
+        values_file: rn3-staging-nkp-rod.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:
+      ################################### UMS ######################################
+      - release_name: ums
+        chart_name: reportnet-ums
+        #version: v0.0.1
+        chart_repo: ../reportnet-ums
+        values_file: rn3-staging-nkp-ums.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:
+      ################################### VALIDATION ######################################
+      - release_name: validation
+        chart_name: reportnet-validation
+        #version: v0.0.1
+        chart_repo: ../reportnet-validation
+        values_file: rn3-staging-nkp-validation.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        #script_shell: 
+        #init_shell:
+        #custom_deployment:

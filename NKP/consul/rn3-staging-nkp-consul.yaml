@@ -23,14 +23,14 @@ Resources:
  # limits:
  #   cpu: "500m"
  #   memory: "512Mi"
- requests:
-   #cpu: "100m"
-   memory: "2Gi"
- limits:
-   #cpu: "500m"
-   memory: "2Gi"
+#  requests:
+#    #cpu: "100m"
+#    memory: "2Gi"
+#  limits:
+#    #cpu: "500m"
+#    memory: "2Gi"
 priorityClassName: ""
-Storage: "1Gi"
+Storage: "20Gi"
 DisableHostNodeId: false
 # DatacenterName: dc1
 joinPeers: []
@@ -49,18 +49,18 @@ maxUnavailable: 1
 #         operator: NotIn
 #         values:
 #         - true
-affinity: |
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-    - weight: 1
-      podAffinityTerm:
-        topologyKey: kubernetes.io/hostname
-        labelSelector:
-          matchExpressions:
-          - key: component
-            operator: In
-            values:
-            - "{{ .Release.Name }}-{{ .Values.Component }}"
+# affinity: |
+#   podAntiAffinity:
+#     preferredDuringSchedulingIgnoredDuringExecution:
+#     - weight: 1
+#       podAffinityTerm:
+#         topologyKey: kubernetes.io/hostname
+#         labelSelector:
+#           matchExpressions:
+#           - key: component
+#             operator: In
+#             values:
+#             - "{{ .Release.Name }}-{{ .Values.Component }}"
 ui:
   enabled: true
 uiService:

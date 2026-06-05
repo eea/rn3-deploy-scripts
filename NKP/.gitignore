@@ -9,3 +9,6 @@ ingress/
 
 # Ignore any file named *.sql anywhere in the repo
 *.sql
+
+# Ignore any file named *.prv anywhere in the repo
+*.prv

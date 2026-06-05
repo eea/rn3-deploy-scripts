@@ -1,77 +1,103 @@
-[2026-06-02 15:03:59] [INFO] Using file: ./config-staging-nkp.yaml
-[2026-06-02 15:03:59] [INFO] Generic/common values based on ./config-staging-nkp.yaml file
-[2026-06-02 15:03:59] [INFO] Dry Run: false
-[2026-06-02 15:03:59] [INFO] Create Namespace: false
-[2026-06-02 15:03:59] [INFO] Wait: false
-[2026-06-02 15:03:59] [INFO] Timeout: true
-[2026-06-02 15:03:59] [INFO] ****************************
-[2026-06-02 15:03:59] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-02 15:03:59] [INFO] Release Name: consul
-[2026-06-02 15:03:59] [INFO] Chart Name: consul
-[2026-06-02 15:03:59] [INFO] Chart Repo: ../consul
-[2026-06-02 15:03:59] [INFO] Values File: rn3-staging-nkp-consul.yaml
-[2026-06-02 15:03:59] [INFO] Version: null
-[2026-06-02 15:03:59] [INFO] Namespace: reportnet
-[2026-06-02 15:03:59] [INFO] KubeConfig: /home/sotav/.kube/config
-[2026-06-02 15:03:59] [INFO] Deployment type is statefull
-[2026-06-02 15:03:59] [INFO] ****************************
-[2026-06-02 15:03:59] [INFO] Deployment type is statefull execution will end !
-[2026-06-02 15:03:59] [INFO] Executing command: 
-[2026-06-02 15:03:59] [INFO] ****************************
-[2026-06-02 15:03:59] [INFO] ****************************
-[2026-06-02 15:03:59] [INFO] ****************************
-[2026-06-02 15:03:59] [INFO] install with release name 'consul' completed successfully in reportnet namespace
-[2026-06-02 15:03:59] [INFO] ****************************
-[2026-06-02 15:04:01] [INFO] All Pods for release consul are in Running state
-[2026-06-02 15:04:01] [INFO] Amount of running Pods for release consul are 3
-[2026-06-02 15:04:02] [INFO] Running Pods are : 3
-[2026-06-02 15:04:05] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-02 15:04:05] [INFO] Release Name: kafka
-[2026-06-02 15:04:05] [INFO] Chart Name: kafka
-[2026-06-02 15:04:05] [INFO] Chart Repo: ../kafka
-[2026-06-02 15:04:05] [INFO] Values File: rn3-staging-nkp-kafka.yaml
-[2026-06-02 15:04:05] [INFO] Version: null
-[2026-06-02 15:04:05] [INFO] Namespace: reportnet
-[2026-06-02 15:04:05] [INFO] KubeConfig: /home/sotav/.kube/config
-[2026-06-02 15:04:05] [INFO] Deployment type is statefull
-[2026-06-02 15:04:05] [INFO] ****************************
-[2026-06-02 15:04:05] [INFO] Deployment type is statefull execution will end !
-[2026-06-02 15:04:05] [INFO] Executing command: 
-[2026-06-02 15:04:05] [INFO] ****************************
-[2026-06-02 15:04:05] [INFO] ****************************
-[2026-06-02 15:04:05] [INFO] ****************************
-[2026-06-02 15:04:05] [INFO] install with release name 'kafka' completed successfully in reportnet namespace
-[2026-06-02 15:04:05] [INFO] ****************************
-[2026-06-02 15:04:07] [INFO] All Pods for release kafka are in Running state
-[2026-06-02 15:04:07] [INFO] Amount of running Pods for release kafka are 2
-[2026-06-02 15:04:08] [INFO] Running Pods are : 2
-[2026-06-02 15:04:10] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-02 15:04:10] [INFO] Release Name: kafka-ui
-[2026-06-02 15:04:10] [INFO] Chart Name: kafka-ui
-[2026-06-02 15:04:10] [INFO] Chart Repo: ../kafka-ui
-[2026-06-02 15:04:10] [INFO] Values File: rn3-staging-nkp-kafka-ui.yaml
-[2026-06-02 15:04:10] [INFO] Version: null
-[2026-06-02 15:04:10] [INFO] Namespace: reportnet
-[2026-06-02 15:04:10] [INFO] KubeConfig: /home/sotav/.kube/config
-[2026-06-02 15:04:10] [INFO] Deployment type is deployment
-[2026-06-02 15:04:10] [INFO] ****************************
-[2026-06-02 15:04:10] [INFO] Deployment type is deployment  execution will proceed 
-[2026-06-02 15:04:10] [INFO] Installing kafka-ui with release name kafka-ui from ../kafka-ui with version null using values file: rn3-staging-nkp-kafka-ui.yaml in reportnet namespace
-[2026-06-02 15:04:10] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/config -n reportnet upgrade --install kafka-ui ../kafka-ui -f ../kafka-ui/rn3-staging-nkp-kafka-ui.yaml
-[2026-06-02 15:04:10] [INFO] ****************************
-[2026-06-02 15:04:10] [INFO] ****************************
-[2026-06-02 15:04:10] [INFO] ****************************
-Release "kafka-ui" has been upgraded. Happy Helming!
-NAME: kafka-ui
-LAST DEPLOYED: Tue Jun  2 15:04:13 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 12
-TEST SUITE: None
-NOTES:
-1. Get the application URL by running these commands:
-  export POD_NAME=$(kubectl get pods --namespace reportnet -l "app.kubernetes.io/name=kafka-ui,app.kubernetes.io/instance=kafka-ui" -o jsonpath="{.items[0].metadata.name}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace reportnet port-forward $POD_NAME 8080:8080
-[2026-06-02 15:04:18] [INFO] install with release name 'kafka-ui' completed successfully in reportnet namespace
-[2026-06-02 15:04:18] [INFO] ****************************
+[2026-06-05 09:51:45] [INFO] Using file: ./config-staging-nkp.yaml
+[2026-06-05 09:51:45] [INFO] Generic/common values based on ./config-staging-nkp.yaml file
+[2026-06-05 09:51:45] [INFO] Dry Run: false
+[2026-06-05 09:51:45] [INFO] Create Namespace: false
+[2026-06-05 09:51:45] [INFO] Wait: false
+[2026-06-05 09:51:45] [INFO] Timeout: true
+[2026-06-05 09:51:45] [INFO] KubeConfig: /home/sotav/.kube/staging/config
+[2026-06-05 09:51:45] [INFO] ****************************
+[2026-06-05 09:51:45] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-05 09:51:45] [INFO] Release Name: consul
+[2026-06-05 09:51:45] [INFO] Chart Name: consul
+[2026-06-05 09:51:45] [INFO] Chart Repo: ../consul
+[2026-06-05 09:51:45] [INFO] Values File: rn3-staging-nkp-consul.yaml
+[2026-06-05 09:51:45] [INFO] Version: null
+[2026-06-05 09:51:45] [INFO] Namespace: reportnet
+[2026-06-05 09:51:45] [INFO] Deployment type is *** statefull *** 
+[2026-06-05 09:51:45] [INFO] NO Custom deployment detected - Deploying the default helm command 
+[2026-06-05 09:51:45] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
+[2026-06-05 09:51:45] [INFO] Executing command: echo hello from a statefull deployment  --wait
+[2026-06-05 09:51:45] [INFO] ****************************
+[2026-06-05 09:51:45] [INFO] ****************************
+[2026-06-05 09:51:45] [INFO] ****************************
+hello from a statefull deployment --wait
+[2026-06-05 09:51:45] [INFO] install with release name 'consul' completed successfully in reportnet namespace
+[2026-06-05 09:51:45] [INFO] ****************************
+[2026-06-05 09:51:47] [INFO] Checking for pods status with ( RELEASE_NAME: consul, NAMESPACE: reportnet,  KUBECONFIG: /home/sotav/.kube/staging/config )
+[2026-06-05 09:51:48] [INFO] All Pods for release consul are in Running state
+[2026-06-05 09:51:48] [INFO] Amount of running Pods for release consul are 3
+[2026-06-05 09:51:49] [INFO] Running Pods are : 3
+[2026-06-05 09:51:49] [INFO] ##############################
+[2026-06-05 09:51:49] [INFO] ##############################
+[2026-06-05 09:51:51] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-05 09:51:51] [INFO] Release Name: kafka
+[2026-06-05 09:51:51] [INFO] Chart Name: kafka
+[2026-06-05 09:51:51] [INFO] Chart Repo: ../kafka
+[2026-06-05 09:51:51] [INFO] Values File: rn3-staging-nkp-kafka.yaml
+[2026-06-05 09:51:51] [INFO] Version: null
+[2026-06-05 09:51:51] [INFO] Namespace: reportnet
+[2026-06-05 09:51:51] [INFO] Deployment type is *** statefull *** 
+[2026-06-05 09:51:51] [INFO] Custom deployment detected
+[2026-06-05 09:51:51] [INFO] Executing custom deployment command: "export INTER_BROKER_PASSWORD=$(grep ""INTER_BROKER_PASSWORD"" .secrets.prv | cut -d '=' -f2); export CONTROLLER_PASSWORD=$(grep ""CONTROLLER_PASSWORD"" .secrets.prv | cut -d '=' -f2); export KRAFT_CLUSTER_ID=""nkp-stg-kafka-01""; export chart_repo=""../kafka""; export release_name=""kafka""; export chart_name=""kafka""; export values_file=""rn3-staging-nkp-kafka.yaml""; export NS=""reportnet""; export KC=""~/.kube/staging/config""; helm --kubeconfig $KC -n $NS upgrade --install kafka ../kafka -f ../kafka/rn3-staging-nkp-kafka.yaml --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;"
+[2026-06-05 09:51:51] [INFO] ****************************
+./eea-deployer: line 356: export INTER_BROKER_PASSWORD=Summer_24_Kafk@; export CONTROLLER_PASSWORD=Summer_24_K_Contr01l3r; export KRAFT_CLUSTER_ID=nkp-stg-kafka-01; export chart_repo=../kafka; export release_name=kafka; export chart_name=kafka; export values_file=rn3-staging-nkp-kafka.yaml; export NS=reportnet; export KC=~/.kube/staging/config; helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install kafka ../kafka -f ../kafka/rn3-staging-nkp-kafka.yaml --set sasl.interbroker.password= --set sasl.controller.password= --set kraft.clusterId= --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;: No such file or directory
+[2026-06-05 09:51:51] [INFO] install with release name 'kafka' completed successfully in reportnet namespace
+[2026-06-05 09:51:51] [INFO] ****************************
+[2026-06-05 09:51:53] [INFO] Checking for pods status with ( RELEASE_NAME: kafka, NAMESPACE: reportnet,  KUBECONFIG: /home/sotav/.kube/staging/config )
+[2026-06-05 09:51:54] [INFO] All Pods for release kafka are in Running state
+[2026-06-05 09:51:54] [INFO] Amount of running Pods for release kafka are 4
+[2026-06-05 09:51:55] [INFO] Running Pods are : 4
+[2026-06-05 09:51:55] [INFO] ##############################
+[2026-06-05 09:51:55] [INFO] ##############################
+[2026-06-05 09:51:57] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-05 09:51:57] [INFO] Release Name: keycloak
+[2026-06-05 09:51:57] [INFO] Chart Name: keycloak
+[2026-06-05 09:51:57] [INFO] Chart Repo: ../keycloak
+[2026-06-05 09:51:57] [INFO] Values File: rn3-staging-nkp-keycloak.yaml
+[2026-06-05 09:51:57] [INFO] Version: null
+[2026-06-05 09:51:57] [INFO] Namespace: reportnet
+[2026-06-05 09:51:57] [INFO] Deployment type is *** statefull *** 
+[2026-06-05 09:51:57] [INFO] NO Custom deployment detected - Deploying the default helm command 
+[2026-06-05 09:51:57] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
+[2026-06-05 09:51:57] [INFO] Executing command: echo hello from a statefull deployment  --dry-run=client
+[2026-06-05 09:51:57] [INFO] ****************************
+[2026-06-05 09:51:57] [INFO] ****************************
+[2026-06-05 09:51:57] [INFO] ****************************
+hello from a statefull deployment --dry-run=client
+[2026-06-05 09:51:57] [INFO] install with release name 'keycloak' completed successfully in reportnet namespace
+[2026-06-05 09:51:57] [INFO] ****************************
+[2026-06-05 09:51:57] [INFO] Skipping  due to DRY_RUN=true for release keycloak
+[2026-06-05 09:51:59] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-05 09:51:59] [INFO] Release Name: mongo
+[2026-06-05 09:51:59] [INFO] Chart Name: mongo
+[2026-06-05 09:51:59] [INFO] Chart Repo: ../mongodb
+[2026-06-05 09:51:59] [INFO] Values File: rn3-staging-nkp-mongo.yaml
+[2026-06-05 09:51:59] [INFO] Version: null
+[2026-06-05 09:51:59] [INFO] Namespace: reportnet
+[2026-06-05 09:51:59] [INFO] Deployment type is *** statefull *** 
+[2026-06-05 09:51:59] [INFO] NO Custom deployment detected - Deploying the default helm command 
+[2026-06-05 09:51:59] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
+[2026-06-05 09:51:59] [INFO] Executing command: echo hello from a statefull deployment 
+[2026-06-05 09:51:59] [INFO] ****************************
+[2026-06-05 09:51:59] [INFO] ****************************
+[2026-06-05 09:51:59] [INFO] ****************************
+hello from a statefull deployment
+[2026-06-05 09:51:59] [INFO] install with release name 'mongo' completed successfully in reportnet namespace
+[2026-06-05 09:51:59] [INFO] ****************************
+[2026-06-05 09:52:01] [INFO] Checking for pods status with ( RELEASE_NAME: mongo, NAMESPACE: reportnet,  KUBECONFIG: /home/sotav/.kube/staging/config )
+[2026-06-05 09:52:02] [INFO] All Pods for release mongo are in Running state
+[2026-06-05 09:52:02] [INFO] Amount of running Pods for release mongo are 3
+[2026-06-05 09:52:02] [INFO] Running Pods are : 3
+[2026-06-05 09:52:02] [INFO] ##############################
+[2026-06-05 09:52:02] [INFO] ##############################
+[2026-06-05 09:52:04] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-05 09:52:04] [INFO] Release Name: rn3-pg-helm
+[2026-06-05 09:52:04] [INFO] Chart Name: helm
+[2026-06-05 09:52:04] [INFO] Chart Repo: ../postgresql
+[2026-06-05 09:52:04] [INFO] Values File: rn3-staging-nkp-postgresql.yaml
+[2026-06-05 09:52:04] [INFO] Version: null
+[2026-06-05 09:52:04] [INFO] Namespace: reportnet
+[2026-06-05 09:52:04] [INFO] Deployment type is *** statefull *** 
+[2026-06-05 09:52:04] [INFO] Custom deployment detected
+[2026-06-05 09:52:04] [INFO] Executing custom deployment command: export chart_repo=../postgresql export release_name=helm export chart_name=rn3-pg export values_file=../postgresql/rn3-staging-nkp-postgresql.yaml export NS=reportnet export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS delete secret pg-secret; kubectl --kubeconfig $KC -n $NS create secret generic pg-secret --from-literal admin-password=$adminpass --from-literal pg-pass=$dbpass --from-literal pg-sand-data-pass=postgres --from-literal postgresql-password=$dbpass --from-literal repmgr-password=$repmgrpass; helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
+[2026-06-05 09:52:04] [INFO] ****************************

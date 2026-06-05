@@ -1,0 +1,45 @@
+# Default values for reportnet.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Specific Values for Recordstore
+
+# Environment Variables
+consul:
+  server: consul.reportnet.svc.cluster.local
+  port: 8500
+
+kafka:
+  bootstrap: kafka.reportnet.svc.cluster.local
+  port: 9092
+
+postgres:
+    ip: postgres-cluster-beta.eea-test
+    url: jdbc:postgresql://rn3-pg-helm-dataset-pgpool.reportnet.svc.cluster.local:5432/datasets?reWriteBatchedInserts=true
+    metabase: 
+        url: jdbc:postgresql://rn3-pg-helm-pgpool.reportnet.svc.cluster.local:5432/metabase?reWriteBatchedInserts=true
+    user: recordstore
+
+datasets:
+    user: postgres
+
+redis:
+    ip: redis
+    port: 6379
+    sentinel: masterset
+    nodes: redis:26379
+    
+dataset:
+    creation:
+        notification:
+            ms: 5000
+    users: postgres
+
+snapshot:
+    bufferSize: 65536
+
+tagSufix: 
+replicas: 1
+version: v3.4-SANDBOX
+repo: eeacms
+# Other Variables
