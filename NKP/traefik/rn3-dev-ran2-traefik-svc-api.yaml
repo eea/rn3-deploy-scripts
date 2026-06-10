@@ -1,0 +1,143 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: reportnet-api
+  namespace: reportnet
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.middlewares: reportnet-security-headers@kubernetescrd
+    #traefik.http.middlewares.frnt.headers.customrequestheaders.X-1: test
+    #traefik.http.middlewares.frnt.headers.customrequestheaders.X-2: "Sotav"
+    #traefik.http.middlewares.frnt.headers.customresponseheaders.X-3: "Sotav"
+spec:
+  rules:
+    - host: "rn3-frontend.x01dev.eea.europa.eu"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: 'frontend'
+                port:
+                  number: 80
+          - path: /api
+            pathType: Exact
+            backend:
+              service:
+                name:  api-gateway
+                port:
+                  number: 8010
+          - path: /consul
+            pathType: Exact
+            backend:
+              service:
+                name: 'rn3-consul-ui'
+                port:
+                  number: 8500
+          - path: /kafka
+            pathType: Exact
+            backend:
+              service:
+                name: 'rn3-kafka-ui'
+                port:
+                  number: 80
+    - host: "rn3-api.x01dev.eea.europa.eu"
+      http:
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name:  api-gateway
+                port:
+                  number: 8010
+    # - host: "rn3-kafka.x01dev.eea.europa.eu"
+    #   http:
+    #     paths:
+    #       - path: /kafka
+    #         pathType: Exact
+    #         backend:
+    #           service:
+    #             name:  'rn3-kafka-ui'
+    #             port:
+    #               number: 80
+
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: security-headers
+  #name: extra-headers
+  namespace: reportnet
+spec:
+  headers:
+    customRequestHeaders:
+      X-Script-Name: "test"
+      X-Reportnet-Request-Header: "reportnet" 
+      X-Sotav-Request-Headers: "Success Header Test"
+    customResponseHeaders:
+      X-Reportnet-Response-Header: "Over reportnet"
+      X-Sotav-Response-Header: "Success Header Test2"
+      X-Sotav2-Response-Header: "Success Header Test3"
+    contentTypeNosniff: true  # X-Content-Type-Options nosniff
+    frameDeny: true           # X-Frame-Options DENY
+    browserXssFilter: true    # X-XSS-Protection 1;mode=block
+    contentSecurityPolicy: "default-src 'self' 'unsafe-inline' https://*.europa.eu *.mapbox.com https://reportnet3dev.s3.amazonaws.com https://static.arcgis.com ws:; font-src 'self' data: fonts.gstatic.com; img-src 'self'  data: blob: image.flaticon.com *.mapbox.com https:; child-src blob:" 
+    referrerPolicy: no-referrer
+    stsSeconds: 31536000      # Strict-Transport-Security "max-age=31536000; includeSubDomains; preload;" 
+    stsIncludeSubdomains: true
+    stsPreload: true
+    featurePolicy: "camera 'self'; microphone 'self'"   # (Deprecated in favor of permissionsPolicy)
+
+
+
+
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: rn3-api
+#   namespace: reportnet
+# #https://rod3fotis.01dev.eea.europa.eu/
+# spec:
+#   rules:
+#     - host: rn3-api.01dev.eea.europa.eu
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Exact
+#             backend:
+#               service:
+#                 name:  api-gateway
+#                 port:
+#                   number: 8010
+#           - path: /frontend
+#             pathType: Exact
+#             backend:
+#               service:
+#                 name:  frontend
+#                 port:
+#                   number: 80
+#           - path: /consul
+#             pathType: Exact
+#             backend:
+#               service:
+#                 name:  rn3-consul-ui
+#                 port:
+#                   number: 8500
+#           - path: /kafka
+#             pathType: Exact
+#             backend:
+#               service:
+#                 name:  rn3-kafka-ui
+#                 port:
+#                   number: 80
+#           - path: /api
+#             pathType: Exact
+#             backend:
+#               service:
+#                 name:  api-gateway
+#                 port:
+#                   number: 8010

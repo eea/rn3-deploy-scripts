@@ -3,7 +3,7 @@ create_namespace: false
 wait: false
 timeout: true # If true, defaults to 20 mins
 debug: true
-kc: /home/sotav/.kube/staging/config
+kc: /home/sotav/.kube/dev/config
 ns: reportnet
 init: true
 script: true
@@ -43,7 +43,7 @@ charts:
         chart_name: consul
         version: v0.0.1
         chart_repo: ../consul
-        values_file: rn3-staging-nkp-consul.yaml
+        values_file: rn3-dev-ran2-consul.yaml
         namespace: reportnet
         deploy_type: "-"
         script_shell: "-"
@@ -54,7 +54,7 @@ charts:
         chart_name: kafka
         version: v0.0.1
         chart_repo: ../kafka
-        values_file: rn3-staging-nkp-kafka.yaml
+        values_file: rn3-dev-ran2-kafka.yaml
         namespace: reportnet
         deploy_type: "-"
         script_shell: "-"
@@ -66,10 +66,10 @@ charts:
           export chart_repo="../kafka";
           export release_name="kafka";
           export chart_name="kafka";
-          export values_file="rn3-staging-nkp-kafka.yaml";
+          export values_file="rn3-dev-ran2-kafka.yaml";
           export NS="reportnet";
           export KC="~/.kube/staging/config";
-          helm --kubeconfig $KC -n $NS upgrade --install kafka ../kafka -f ../kafka/rn3-staging-nkp-kafka.yaml --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;
+          helm --kubeconfig $KC -n $NS upgrade --install kafka ../kafka -f ../kafka/rn3-dev-ran2-kafka.yaml --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;
 
 
       #################################### KEYCLOAK ######################################
@@ -77,7 +77,7 @@ charts:
         chart_name: keycloak
         version: v0.0.1
         chart_repo: ../keycloak
-        values_file: rn3-staging-nkp-keycloak.yaml
+        values_file: rn3-dev-ran2-keycloak.yaml
         namespace: reportnet
         deploy_type: "-"
         script_shell: "-"
@@ -88,7 +88,7 @@ charts:
       #   chart_name: keycloak6
       #   #version: v0.0.1
       #   chart_repo: ../keycloak-k
-      #   values_file: rn3-staging-nkp-keycloak6.yaml
+      #   values_file: rn3-dev-ran2-keycloak6.yaml
       #   namespace: reportnet
       #   deploy_type: "-"
       #   #script_shell: 
@@ -98,7 +98,7 @@ charts:
         chart_name: mongo
         version: v0.0.1
         chart_repo: ../mongodb
-        values_file: rn3-staging-nkp-mongo.yaml
+        values_file: rn3-dev-ran2-mongo.yaml
         namespace: reportnet
         deploy_type: "-"
         script_shell: "-"
@@ -109,7 +109,7 @@ charts:
         chart_name: redis
         version: v0.0.1
         chart_repo: ../redis
-        values_file: rn3-staging-nkp-redis.yaml
+        values_file: rn3-dev-ran2-redis.yaml
         namespace: reportnet
         deploy_type: "-"
         script_shell: "-"
@@ -120,7 +120,7 @@ charts:
         chart_name: helm
         version: v0.0.1
         chart_repo: ../postgresql
-        values_file: rn3-staging-nkp-postgresql.yaml
+        values_file: rn3-dev-ran2-postgresql.yaml
         namespace: reportnet
         deploy_type: "-" #statefull
         script_shell: >-
@@ -144,13 +144,12 @@ charts:
           export chart_repo=../postgresql
           export release_name=helm
           export chart_name=rn3-pg
-          export values_file=../postgresql/rn3-staging-nkp-postgresql.yaml
+          export values_file=../postgresql/rn3-dev-ran2-postgresql.yaml
           export NS=reportnet
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
           export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
           helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
-
 
 
       #####################################################################################
@@ -179,13 +178,17 @@ charts:
         chart_name: traefik
         version: v0.0.1
         chart_repo: ../traefik
-        values_file: rn3-staging-nkp-traefik_values.yaml
+        values_file: rn3-dev-ran2-traefik_values.yaml
         namespace: reportnet
         deploy_type: "-"
         script_shell: >-
-          kubectl --kubeconfig $KC apply -f  ../traefik/rn3-staging-nkp-traefik-svc-api.yaml
+          kubectl --kubeconfig $KC apply -f  ../traefik/rn3-dev-ran2-traefik-svc-api.yaml
         init_shell: "-"
         custom_deployment: "-"
+
+
+
+
 
 
       #####################################################################################
@@ -203,7 +206,7 @@ charts:
         debug: true
         version: v0.0.1
         chart_repo: ../kafka-ui
-        values_file: rn3-staging-nkp-kafka-ui.yaml
+        values_file: rn3-dev-ran2-kafka-ui.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -214,7 +217,7 @@ charts:
         chart_name: helm
         version: v0.0.1
         chart_repo: ../reportnet-recordstore
-        values_file: rn3-staging-nkp-recordstore.yaml
+        values_file: rn3-dev-ran2-recordstore.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -225,7 +228,7 @@ charts:
         chart_name: reportnet-api-gateway
         version: v0.0.1
         chart_repo: ../reportnet-apigateway
-        values_file: rn3-staging-nkp-api-gateway.yaml
+        values_file: rn3-dev-ran2-api-gateway.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -236,7 +239,7 @@ charts:
         chart_name: reportnet-collaboration
         version: v0.0.1
         chart_repo: ../reportnet-collaboration
-        values_file: rn3-staging-nkp-collaboration.yaml
+        values_file: rn3-dev-ran2-collaboration.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -247,7 +250,7 @@ charts:
         chart_name: reportnet-communication
         version: v0.0.1
         chart_repo: ../reportnet-communication
-        values_file: rn3-staging-nkp-communication.yaml
+        values_file: rn3-dev-ran2-communication.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -258,7 +261,7 @@ charts:
         chart_name: reportnet-dataflow
         version: v0.0.1
         chart_repo: ../reportnet-dataflow
-        values_file: rn3-staging-nkp-dataflow.yaml
+        values_file: rn3-dev-ran2-dataflow.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -269,7 +272,7 @@ charts:
         chart_name: reportnet-dataset
         version: v0.0.1
         chart_repo: ../reportnet-dataset
-        values_file: rn3-staging-nkp-dataset.yaml
+        values_file: rn3-dev-ran2-dataset.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -280,7 +283,7 @@ charts:
         chart_name: reportnet-document
         version: v0.0.1
         chart_repo: ../reportnet-document
-        values_file: rn3-staging-nkp-document.yaml
+        values_file: rn3-dev-ran2-document.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -291,7 +294,7 @@ charts:
         chart_name: reportnet-frontend
         version: v0.0.1
         chart_repo: ../reportnet-frontend
-        values_file: rn3-staging-nkp-frontend.yaml
+        values_file: rn3-dev-ran2-frontend.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -302,7 +305,7 @@ charts:
         chart_name: reportnet-orchestrator
         version: v0.0.1
         chart_repo: ../reportnet-orchestrator
-        values_file: rn3-staging-nkp-orchestrator.yaml
+        values_file: rn3-dev-ran2-orchestrator.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -313,7 +316,7 @@ charts:
         chart_name: reportnet-rod
         version: v0.0.1
         chart_repo: ../reportnet-rod
-        values_file: rn3-staging-nkp-rod.yaml
+        values_file: rn3-dev-ran2-rod.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -324,7 +327,7 @@ charts:
         chart_name: reportnet-ums
         version: v0.0.1
         chart_repo: ../reportnet-ums
-        values_file: rn3-staging-nkp-ums.yaml
+        values_file: rn3-dev-ran2-ums.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -335,9 +338,10 @@ charts:
         chart_name: reportnet-validation
         version: v0.0.1
         chart_repo: ../reportnet-validation
-        values_file: rn3-staging-nkp-validation.yaml
+        values_file: rn3-dev-ran2-validation.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
+
