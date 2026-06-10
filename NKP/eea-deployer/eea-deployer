@@ -1,20 +1,17 @@
 #!/bin/bash
 
-# Author: Tavoulas Sotiris @ eea.europa.eu
+# Author: Tavoulas Sotiris @ eea.europa.eu (sotirios.tavoulas-kavoulas@trasys.gr)
+# feel free to edit up to your liking !
 # Version: 1.0.1
 # Date published: 29/05/2026
 # Date updated: 29/05/2026
 # Description: This is a small bash utility which can help to install and uninstall multiple helm charts in one go.
-# Github URL: 
+# Github URL: https://github.com/eea/rn3-deploy-scripts.git
 # usage: 
 #     ./eea-deployer install -f ./config-staging-nkp.yaml
 
-# Enable debug mode
+# Enable debug mode for the currect script (only for development needs ! )
 # set -x
-
-
-
-
 
 show_menu(){
     normal=`echo "\033[m"`
@@ -99,29 +96,7 @@ $ ./eea-deployer install -f ./config-staging-nkp.yaml "
   #exit 0
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# The FUN PART !!!
 eea_master() {
 # install yq if it does not exists !
 if ! which yq > /dev/null; then
@@ -132,7 +107,7 @@ if ! which yq > /dev/null; then
     printf "status: success\ndata:\n  - name: Sotav\n    age: 48\n  - name: EEA\n    age: 26" > test.yaml
     yq e '.' test.yaml
 fi
-# The FUN PART !!! 
+# The FUNNY PART !!!
 # Reset
 Color_Off='\033[0m'       # Text Reset
 # Regular Colors
@@ -453,8 +428,6 @@ perform_action() {
       log_message "INFO" "Custom SHELL SCRIPT  detected"
       printf "${Red} Custom SHELL SCRIPT  detected ${Color_Off} \n"
       log_message "INFO" "Executing SHELL SCRIPT command: $SCRIPT_SHELL"
-      #log_message "INFO" "****************************"
-      #eval $SCRIPT_SHELL
       eval $SCRIPT_SHELL >> $LOG_FILE 2>&1
     fi
 
@@ -476,7 +449,6 @@ perform_action() {
 
   # Check the status of last executed command
   if [ $? -eq 0 ]; then
-    #log_message "INFO" "$ACTION with release name '$RELEASE_NAME' completed successfully in $NAMESPACE namespace"
     log_message "INFO" "All Actions have been completed successfully"
     log_message "INFO" "****************************"
   else
