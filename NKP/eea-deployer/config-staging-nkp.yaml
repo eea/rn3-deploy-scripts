@@ -45,7 +45,7 @@ charts:
         chart_repo: ../consul
         values_file: rn3-staging-nkp-consul.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "-"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -56,7 +56,7 @@ charts:
         chart_repo: ../kafka
         values_file: rn3-staging-nkp-kafka.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "-"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: >-
@@ -79,7 +79,7 @@ charts:
         chart_repo: ../keycloak
         values_file: rn3-staging-nkp-keycloak.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "-"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -90,7 +90,7 @@ charts:
       #   chart_repo: ../keycloak-k
       #   values_file: rn3-staging-nkp-keycloak6.yaml
       #   namespace: reportnet
-      #   deploy_type: statefull
+      #   deploy_type: "-"
       #   #script_shell: 
       #   #init_shell:
       #################################### MONGO ######################################
@@ -100,7 +100,7 @@ charts:
         chart_repo: ../mongodb
         values_file: rn3-staging-nkp-mongo.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "-"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -111,7 +111,7 @@ charts:
         chart_repo: ../redis
         values_file: rn3-staging-nkp-redis.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "-"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -150,12 +150,6 @@ charts:
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
           export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
           helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
-
-
-
-
-
-
 
       #####################################################################################
       ####################                                           ######################

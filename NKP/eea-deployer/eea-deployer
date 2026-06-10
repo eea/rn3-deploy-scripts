@@ -230,13 +230,13 @@ cowthinker "Default values are: $KC $NS $WD"
 # Set the path of log and archive logs, these logs are basically eea-deployer logs
 LOG_DEST="logs"
 mkdir -p $LOG_DEST/archive
-#LOG_FILE="$LOG_DEST/eea-deployer.log"
-#ARCHIVE_LOG_FILE="eea-deployer_$(date +'%Y%m%d_%H%M%S').tar.gz"
+LOG_FILE="$LOG_DEST/eea-deployer.log"
+ARCHIVE_LOG_FILE="eea-deployer_$(date +'%Y%m%d_%H%M%S').tar.gz"
 
 # Compress older log file and remove old log file if it already exists
 if [ -f "$LOG_FILE" ]; then
-#  tar -czf $ARCHIVE_LOG_FILE "$LOG_FILE"
-#  mv $ARCHIVE_LOG_FILE $LOG_DEST/archive
+  tar -czf $ARCHIVE_LOG_FILE "$LOG_FILE"
+  mv $ARCHIVE_LOG_FILE $LOG_DEST/archive
   rm "$LOG_FILE"
 fi
 

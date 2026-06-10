@@ -1,658 +1,486 @@
-[2026-06-10 12:51:51] [INFO] Using file: ./config-staging-nkp.yaml
-[2026-06-10 12:51:51] [INFO] Generic/common values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:51:51] [INFO] Dry Run: false
-[2026-06-10 12:51:51] [INFO] Create Namespace: false
-[2026-06-10 12:51:51] [INFO] Wait: false
-[2026-06-10 12:51:51] [INFO] Timeout: true
-[2026-06-10 12:51:51] [INFO] KubeConfig: /home/sotav/.kube/staging/config
-[2026-06-10 12:51:51] [INFO] ****************************
-[2026-06-10 12:51:51] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:51:51] [INFO] Release Name: argocd
-[2026-06-10 12:51:51] [INFO] Chart Name: argo-cd
-[2026-06-10 12:51:51] [INFO] Debug: 
-[2026-06-10 12:51:51] [INFO] Version: 6.4.0
-[2026-06-10 12:51:51] [INFO] Chart Repo: https://argoproj.github.io/argo-helm
-[2026-06-10 12:51:51] [INFO] Values File: values/argo-cd.yaml
-[2026-06-10 12:51:51] [INFO] Namespace: reportnet
-[2026-06-10 12:51:51] [INFO] Deploy type: -
-[2026-06-10 12:51:51] [INFO] Script_shell: -
-[2026-06-10 12:51:51] [INFO] Init_shell: -
-[2026-06-10 12:51:51] [INFO] Custom_deployment: -
-[2026-06-10 12:51:51] [INFO] Deployment type is '-' deployment will not be executed 
-[2026-06-10 12:51:51] [INFO] Executing command:  --timeout=20m --version 6.4.0
-[2026-06-10 12:51:51] [INFO] ****************************
+[2026-06-10 14:09:17] [INFO] Using file: ./config-staging-nkp.yaml
+[2026-06-10 14:09:17] [INFO] Generic/common values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:18] [INFO] Dry Run: false
+[2026-06-10 14:09:18] [INFO] Create Namespace: false
+[2026-06-10 14:09:18] [INFO] Wait: false
+[2026-06-10 14:09:18] [INFO] Timeout: true
+[2026-06-10 14:09:18] [INFO] KubeConfig: /home/sotav/.kube/staging/config
+[2026-06-10 14:09:18] [INFO] ****************************
+[2026-06-10 14:09:18] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:18] [INFO] Release Name: argocd
+[2026-06-10 14:09:18] [INFO] Chart Name: argo-cd
+[2026-06-10 14:09:18] [INFO] Debug: 
+[2026-06-10 14:09:18] [INFO] Version: 6.4.0
+[2026-06-10 14:09:18] [INFO] Chart Repo: https://argoproj.github.io/argo-helm
+[2026-06-10 14:09:18] [INFO] Values File: values/argo-cd.yaml
+[2026-06-10 14:09:18] [INFO] Namespace: reportnet
+[2026-06-10 14:09:18] [INFO] Deploy type: -
+[2026-06-10 14:09:18] [INFO] Script_shell: -
+[2026-06-10 14:09:18] [INFO] Init_shell: -
+[2026-06-10 14:09:18] [INFO] Custom_deployment: -
+[2026-06-10 14:09:18] [INFO] Deployment type is '-' deployment will not be executed 
+[2026-06-10 14:09:18] [INFO] Executing command:  --timeout=20m --version 6.4.0
+[2026-06-10 14:09:18] [INFO] ****************************
 ./eea-deployer: line 448: --timeout=20m: command not found
-[2026-06-10 12:51:51] [INFO] All Actions have been completed successfully
-[2026-06-10 12:51:51] [INFO] ****************************
-[2026-06-10 12:51:51] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:51:51] [INFO] Release Name: consul
-[2026-06-10 12:51:51] [INFO] Chart Name: consul
-[2026-06-10 12:51:51] [INFO] Debug: 
-[2026-06-10 12:51:51] [INFO] Version: v0.0.1
-[2026-06-10 12:51:51] [INFO] Chart Repo: ../consul
-[2026-06-10 12:51:51] [INFO] Values File: rn3-staging-nkp-consul.yaml
-[2026-06-10 12:51:51] [INFO] Namespace: reportnet
-[2026-06-10 12:51:51] [INFO] Deploy type: statefull
-[2026-06-10 12:51:51] [INFO] Script_shell: -
-[2026-06-10 12:51:51] [INFO] Init_shell: -
-[2026-06-10 12:51:51] [INFO] Custom_deployment: -
-[2026-06-10 12:51:51] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
-[2026-06-10 12:51:51] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade consul ../consul -f ../consul/rn3-staging-nkp-consul.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:51:51] [INFO] ****************************
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-Release "consul" has been upgraded. Happy Helming!
-NAME: consul
-LAST DEPLOYED: Wed Jun 10 12:51:55 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 5
-NOTES:
-1. Watch all cluster members come up.
-  $ kubectl get pods --namespace=reportnet -w
-2. Test cluster health using Helm test.
-  $ helm test consul
-3. (Optional) Manually confirm consul cluster is healthy.
-  $ CONSUL_POD=$(kubectl get pods -l='release=consul' --output=jsonpath={.items[0].metadata.name})
-  $ kubectl exec $CONSUL_POD consul members --namespace=reportnet | grep server
-[2026-06-10 12:52:09] [INFO] All Actions have been completed successfully
-[2026-06-10 12:52:09] [INFO] ****************************
-[2026-06-10 12:52:09] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:52:09] [INFO] Release Name: kafka
-[2026-06-10 12:52:09] [INFO] Chart Name: kafka
-[2026-06-10 12:52:09] [INFO] Debug: 
-[2026-06-10 12:52:09] [INFO] Version: v0.0.1
-[2026-06-10 12:52:09] [INFO] Chart Repo: ../kafka
-[2026-06-10 12:52:09] [INFO] Values File: rn3-staging-nkp-kafka.yaml
-[2026-06-10 12:52:09] [INFO] Namespace: reportnet
-[2026-06-10 12:52:09] [INFO] Deploy type: statefull
-[2026-06-10 12:52:09] [INFO] Script_shell: -
-[2026-06-10 12:52:09] [INFO] Init_shell: -
-[2026-06-10 12:52:09] [INFO] Custom_deployment: "export INTER_BROKER_PASSWORD=$(grep ""INTER_BROKER_PASSWORD"" .secrets.prv | cut -d '=' -f2); export CONTROLLER_PASSWORD=$(grep ""CONTROLLER_PASSWORD"" .secrets.prv | cut -d '=' -f2); export KRAFT_CLUSTER_ID=""nkp-stg-kafka-01""; export chart_repo=""../kafka""; export release_name=""kafka""; export chart_name=""kafka""; export values_file=""rn3-staging-nkp-kafka.yaml""; export NS=""reportnet""; export KC=""~/.kube/staging/config""; helm --kubeconfig $KC -n $NS upgrade --install kafka ../kafka -f ../kafka/rn3-staging-nkp-kafka.yaml --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;"
-[2026-06-10 12:52:09] [INFO] Custom deployment detected
-[2026-06-10 12:52:09] [INFO] Executing custom deployment command: "export INTER_BROKER_PASSWORD=$(grep ""INTER_BROKER_PASSWORD"" .secrets.prv | cut -d '=' -f2); export CONTROLLER_PASSWORD=$(grep ""CONTROLLER_PASSWORD"" .secrets.prv | cut -d '=' -f2); export KRAFT_CLUSTER_ID=""nkp-stg-kafka-01""; export chart_repo=""../kafka""; export release_name=""kafka""; export chart_name=""kafka""; export values_file=""rn3-staging-nkp-kafka.yaml""; export NS=""reportnet""; export KC=""~/.kube/staging/config""; helm --kubeconfig $KC -n $NS upgrade --install kafka ../kafka -f ../kafka/rn3-staging-nkp-kafka.yaml --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;"
-./eea-deployer: line 400: export INTER_BROKER_PASSWORD=Summer_24_Kafk@; export CONTROLLER_PASSWORD=Summer_24_K_Contr01l3r; export KRAFT_CLUSTER_ID=nkp-stg-kafka-01; export chart_repo=../kafka; export release_name=kafka; export chart_name=kafka; export values_file=rn3-staging-nkp-kafka.yaml; export NS=reportnet; export KC=~/.kube/staging/config; helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install kafka ../kafka -f ../kafka/rn3-staging-nkp-kafka.yaml --set sasl.interbroker.password= --set sasl.controller.password= --set kraft.clusterId= --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;: No such file or directory
-[2026-06-10 12:52:09] [INFO] All Actions have been completed successfully
-[2026-06-10 12:52:09] [INFO] ****************************
-[2026-06-10 12:52:09] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:52:09] [INFO] Release Name: keycloak
-[2026-06-10 12:52:09] [INFO] Chart Name: keycloak
-[2026-06-10 12:52:09] [INFO] Debug: 
-[2026-06-10 12:52:09] [INFO] Version: v0.0.1
-[2026-06-10 12:52:09] [INFO] Chart Repo: ../keycloak
-[2026-06-10 12:52:09] [INFO] Values File: rn3-staging-nkp-keycloak.yaml
-[2026-06-10 12:52:09] [INFO] Namespace: reportnet
-[2026-06-10 12:52:09] [INFO] Deploy type: statefull
-[2026-06-10 12:52:09] [INFO] Script_shell: -
-[2026-06-10 12:52:09] [INFO] Init_shell: -
-[2026-06-10 12:52:09] [INFO] Custom_deployment: -
-[2026-06-10 12:52:09] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
-[2026-06-10 12:52:09] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade keycloak ../keycloak -f ../keycloak/rn3-staging-nkp-keycloak.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:52:09] [INFO] ****************************
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-Release "keycloak" has been upgraded. Happy Helming!
-NAME: keycloak
-LAST DEPLOYED: Wed Jun 10 12:52:12 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 21
-TEST SUITE: None
-NOTES:
-**********************************************************************
-This chart has been DEPRECATED and moved to its new home:
-
-* GitHub repo: https://github.com/codecentric/helm-charts
-* Charts repo: https://codecentric.github.io/helm-charts
-
-**********************************************************************
-
-Keycloak can be accessed:
-
-* Within your cluster, at the following DNS name at port 80:
-
-  keycloak-http.reportnet.svc.cluster.local
-
-* From outside the cluster, run these commands in the same shell:
-
-  export POD_NAME=$(kubectl get pods --namespace reportnet -l app=keycloak,release=keycloak -o jsonpath="{.items[0].metadata.name}")
-  echo "Visit http://127.0.0.1:8080 to use Keycloak"
-  kubectl port-forward --namespace reportnet $POD_NAME 8080
-[2026-06-10 12:52:25] [INFO] All Actions have been completed successfully
-[2026-06-10 12:52:25] [INFO] ****************************
-[2026-06-10 12:52:25] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:52:25] [INFO] Release Name: mongo
-[2026-06-10 12:52:25] [INFO] Chart Name: mongo
-[2026-06-10 12:52:25] [INFO] Debug: 
-[2026-06-10 12:52:25] [INFO] Version: v0.0.1
-[2026-06-10 12:52:25] [INFO] Chart Repo: ../mongodb
-[2026-06-10 12:52:25] [INFO] Values File: rn3-staging-nkp-mongo.yaml
-[2026-06-10 12:52:25] [INFO] Namespace: reportnet
-[2026-06-10 12:52:25] [INFO] Deploy type: statefull
-[2026-06-10 12:52:25] [INFO] Script_shell: -
-[2026-06-10 12:52:25] [INFO] Init_shell: -
-[2026-06-10 12:52:25] [INFO] Custom_deployment: -
-[2026-06-10 12:52:25] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
-[2026-06-10 12:52:25] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade mongo ../mongodb -f ../mongodb/rn3-staging-nkp-mongo.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:52:25] [INFO] ****************************
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: This chart is deprecated
-Release "mongo" has been upgraded. Happy Helming!
-NAME: mongo
-LAST DEPLOYED: Wed Jun 10 12:52:27 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 27
-NOTES:
-*******************
-****DEPRECATED*****
-*******************
-*
-* This chart is deprecated and no longer maintained.
-*
-* It is recommended to use the Bitnami maintained MongoDB chart
-* (https://github.com/bitnami/charts/tree/master/bitnami/mongodb)
-* which has a similar feature set.
-
-
-1. After the statefulset is created completely, one can check which instance is primary by running:
-
-    $ for ((i = 0; i < 3; ++i)); do kubectl exec --namespace reportnet mongo-mongodb-replicaset-$i -- sh -c 'mongo --eval="printjson(rs.isMaster())"'; done
-
-2. One can insert a key into the primary instance of the mongodb replica set by running the following:
-    MASTER_POD_NAME must be replaced with the name of the master found from the previous step.
-
-    $ kubectl exec --namespace reportnet MASTER_POD_NAME -- mongo --eval="printjson(db.test.insert({key1: 'value1'}))"
-
-3. One can fetch the keys stored in the primary or any of the slave nodes in the following manner.
-    POD_NAME must be replaced by the name of the pod being queried.
-
-    $ kubectl exec --namespace reportnet POD_NAME -- mongo --eval="rs.slaveOk(); db.test.find().forEach(printjson)"
-[2026-06-10 12:52:39] [INFO] All Actions have been completed successfully
-[2026-06-10 12:52:39] [INFO] ****************************
-[2026-06-10 12:52:39] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:52:39] [INFO] Release Name: redis
-[2026-06-10 12:52:39] [INFO] Chart Name: redis
-[2026-06-10 12:52:39] [INFO] Debug: 
-[2026-06-10 12:52:39] [INFO] Version: v0.0.1
-[2026-06-10 12:52:39] [INFO] Chart Repo: ../redis
-[2026-06-10 12:52:39] [INFO] Values File: rn3-staging-nkp-redis.yaml
-[2026-06-10 12:52:39] [INFO] Namespace: reportnet
-[2026-06-10 12:52:39] [INFO] Deploy type: statefull
-[2026-06-10 12:52:39] [INFO] Script_shell: -
-[2026-06-10 12:52:39] [INFO] Init_shell: -
-[2026-06-10 12:52:39] [INFO] Custom_deployment: -
-[2026-06-10 12:52:39] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
-[2026-06-10 12:52:39] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade redis ../redis -f ../redis/rn3-staging-nkp-redis.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:52:39] [INFO] ****************************
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-Release "redis" has been upgraded. Happy Helming!
-NAME: redis
-LAST DEPLOYED: Wed Jun 10 12:52:42 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 5
-TEST SUITE: None
-NOTES:
-CHART NAME: redis
-CHART VERSION: 19.6.4
-APP VERSION: 7.2.5
-
-** Please be patient while the chart is being deployed **
-
-Redis&reg; can be accessed via port 6379 on the following DNS name from within your cluster:
-
-    redis.reportnet.svc.cluster.local for read only operations
-
-For read/write operations, first access the Redis&reg; Sentinel cluster, which is available in port 26379 using the same domain name above.
-
-
-
-To connect to your Redis&reg; server:
-
-1. Run a Redis&reg; pod that you can use as a client:
-
-   kubectl run --namespace reportnet redis-client --restart='Never'  --image docker.io/bitnamilegacy/redis:7.2.5-debian-12-r4 --command -- sleep infinity
-
-   Use the following command to attach to the pod:
-
-   kubectl exec --tty -i redis-client \
-   --namespace reportnet -- bash
-
-2. Connect using the Redis&reg; CLI:
-   redis-cli -h redis -p 6379 # Read only operations
-   redis-cli -h redis -p 26379 # Sentinel access
-
-To connect to your database from outside the cluster execute the following commands:
-
-    kubectl port-forward --namespace reportnet svc/redis 6379:6379 &
-    redis-cli -h 127.0.0.1 -p 6379
-
-⚠ SECURITY WARNING: Original containers have been substituted. This Helm chart was designed, tested, and validated on multiple platforms using a specific set of Bitnami and Tanzu Application Catalog containers. Substituting other containers is likely to cause degraded security and performance, broken chart features, and missing environment variables.
-
-Substituted images detected:
-  - docker.io/bitnamilegacy/redis:7.2.5-debian-12-r4
-  - docker.io/bitnamilegacy/redis-sentinel:7.2.5-debian-12-r4
-[2026-06-10 12:53:00] [INFO] All Actions have been completed successfully
-[2026-06-10 12:53:00] [INFO] ****************************
-[2026-06-10 12:53:00] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:53:00] [INFO] Release Name: rn3-pg-helm
-[2026-06-10 12:53:00] [INFO] Chart Name: helm
-[2026-06-10 12:53:00] [INFO] Debug: 
-[2026-06-10 12:53:00] [INFO] Version: v0.0.1
-[2026-06-10 12:53:00] [INFO] Chart Repo: ../postgresql
-[2026-06-10 12:53:00] [INFO] Values File: rn3-staging-nkp-postgresql.yaml
-[2026-06-10 12:53:00] [INFO] Namespace: reportnet
-[2026-06-10 12:53:00] [INFO] Deploy type: -
-[2026-06-10 12:53:00] [INFO] Script_shell: export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'rm -Rf  /tmp/migration'; kubectl --kubeconfig $KC -n $NS cp ../postgresql/migration rn3-pg-helm-postgresql-0:/tmp/; kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'ls -la  /tmp/migration'; chmod a+x ./scripts/migrate.sh; ./scripts/migrate.sh; chmod a+x ./scripts/./scripts/pgpool-usr-fix.sh; ./scripts/pgpool-usr-fix.sh dev $NS $KC
-[2026-06-10 12:53:00] [INFO] Init_shell: kubectl --kubeconfig $KC -n $NS delete secret pg-secret; export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS create secret generic pg-secret --from-literal admin-password=$adminpass --from-literal pg-pass=$dbpass --from-literal pg-sand-data-pass=postgres --from-literal postgresql-password=$dbpass --from-literal repmgr-password=$repmgrpass;
-[2026-06-10 12:53:00] [INFO] Custom_deployment: export chart_repo=../postgresql export release_name=helm export chart_name=rn3-pg export values_file=../postgresql/rn3-staging-nkp-postgresql.yaml export NS=reportnet export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
-[2026-06-10 12:53:00] [INFO] Deployment type is '-' deployment will not be executed 
-[2026-06-10 12:53:00] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade redis ../redis -f ../redis/rn3-staging-nkp-redis.yaml --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1
-[2026-06-10 12:53:00] [INFO] ****************************
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-Release "redis" has been upgraded. Happy Helming!
-NAME: redis
-LAST DEPLOYED: Wed Jun 10 12:53:04 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 6
-TEST SUITE: None
-NOTES:
-CHART NAME: redis
-CHART VERSION: 19.6.4
-APP VERSION: 7.2.5
-
-** Please be patient while the chart is being deployed **
-
-Redis&reg; can be accessed via port 6379 on the following DNS name from within your cluster:
-
-    redis.reportnet.svc.cluster.local for read only operations
-
-For read/write operations, first access the Redis&reg; Sentinel cluster, which is available in port 26379 using the same domain name above.
-
-
-
-To connect to your Redis&reg; server:
-
-1. Run a Redis&reg; pod that you can use as a client:
-
-   kubectl run --namespace reportnet redis-client --restart='Never'  --image docker.io/bitnamilegacy/redis:7.2.5-debian-12-r4 --command -- sleep infinity
-
-   Use the following command to attach to the pod:
-
-   kubectl exec --tty -i redis-client \
-   --namespace reportnet -- bash
-
-2. Connect using the Redis&reg; CLI:
-   redis-cli -h redis -p 6379 # Read only operations
-   redis-cli -h redis -p 26379 # Sentinel access
-
-To connect to your database from outside the cluster execute the following commands:
-
-    kubectl port-forward --namespace reportnet svc/redis 6379:6379 &
-    redis-cli -h 127.0.0.1 -p 6379
-
-⚠ SECURITY WARNING: Original containers have been substituted. This Helm chart was designed, tested, and validated on multiple platforms using a specific set of Bitnami and Tanzu Application Catalog containers. Substituting other containers is likely to cause degraded security and performance, broken chart features, and missing environment variables.
-
-Substituted images detected:
-  - docker.io/bitnamilegacy/redis:7.2.5-debian-12-r4
-  - docker.io/bitnamilegacy/redis-sentinel:7.2.5-debian-12-r4
-[2026-06-10 12:53:19] [INFO] All Actions have been completed successfully
-[2026-06-10 12:53:19] [INFO] ****************************
-[2026-06-10 12:53:19] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:53:19] [INFO] Release Name: kafka-ui
-[2026-06-10 12:53:19] [INFO] Chart Name: kafka-ui
-[2026-06-10 12:53:19] [INFO] Debug: 
-[2026-06-10 12:53:19] [INFO] Version: v0.0.1
-[2026-06-10 12:53:19] [INFO] Chart Repo: ../kafka-ui
-[2026-06-10 12:53:19] [INFO] Values File: rn3-staging-nkp-kafka-ui.yaml
-[2026-06-10 12:53:19] [INFO] Namespace: reportnet
-[2026-06-10 12:53:19] [INFO] Deploy type: deployment
-[2026-06-10 12:53:19] [INFO] Script_shell: -
-[2026-06-10 12:53:19] [INFO] Init_shell: -
-[2026-06-10 12:53:19] [INFO] Custom_deployment: -
-[2026-06-10 12:53:19] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:53:19] [INFO] Installing kafka-ui with release name kafka-ui from ../kafka-ui with version v0.0.1 using values file: rn3-staging-nkp-kafka-ui.yaml in reportnet namespace
-[2026-06-10 12:53:19] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install kafka-ui ../kafka-ui -f ../kafka-ui/rn3-staging-nkp-kafka-ui.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:53:19] [INFO] ****************************
+[2026-06-10 14:09:18] [INFO] All Actions have been completed successfully
+[2026-06-10 14:09:18] [INFO] ****************************
+[2026-06-10 14:09:18] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:18] [INFO] Release Name: consul
+[2026-06-10 14:09:18] [INFO] Chart Name: consul
+[2026-06-10 14:09:18] [INFO] Debug: 
+[2026-06-10 14:09:18] [INFO] Version: v0.0.1
+[2026-06-10 14:09:18] [INFO] Chart Repo: ../consul
+[2026-06-10 14:09:18] [INFO] Values File: rn3-staging-nkp-consul.yaml
+[2026-06-10 14:09:18] [INFO] Namespace: reportnet
+[2026-06-10 14:09:18] [INFO] Deploy type: -
+[2026-06-10 14:09:18] [INFO] Script_shell: -
+[2026-06-10 14:09:18] [INFO] Init_shell: -
+[2026-06-10 14:09:18] [INFO] Custom_deployment: -
+[2026-06-10 14:09:18] [INFO] Deployment type is '-' deployment will not be executed 
+[2026-06-10 14:09:18] [INFO] Executing command:  --timeout=20m --version 6.4.0 --timeout=20m --version v0.0.1
+[2026-06-10 14:09:18] [INFO] ****************************
+./eea-deployer: line 448: --timeout=20m: command not found
+[2026-06-10 14:09:18] [INFO] All Actions have been completed successfully
+[2026-06-10 14:09:18] [INFO] ****************************
+[2026-06-10 14:09:18] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:18] [INFO] Release Name: kafka
+[2026-06-10 14:09:18] [INFO] Chart Name: kafka
+[2026-06-10 14:09:18] [INFO] Debug: 
+[2026-06-10 14:09:18] [INFO] Version: v0.0.1
+[2026-06-10 14:09:18] [INFO] Chart Repo: ../kafka
+[2026-06-10 14:09:18] [INFO] Values File: rn3-staging-nkp-kafka.yaml
+[2026-06-10 14:09:18] [INFO] Namespace: reportnet
+[2026-06-10 14:09:18] [INFO] Deploy type: -
+[2026-06-10 14:09:18] [INFO] Script_shell: -
+[2026-06-10 14:09:18] [INFO] Init_shell: -
+[2026-06-10 14:09:18] [INFO] Custom_deployment: "export INTER_BROKER_PASSWORD=$(grep ""INTER_BROKER_PASSWORD"" .secrets.prv | cut -d '=' -f2); export CONTROLLER_PASSWORD=$(grep ""CONTROLLER_PASSWORD"" .secrets.prv | cut -d '=' -f2); export KRAFT_CLUSTER_ID=""nkp-stg-kafka-01""; export chart_repo=""../kafka""; export release_name=""kafka""; export chart_name=""kafka""; export values_file=""rn3-staging-nkp-kafka.yaml""; export NS=""reportnet""; export KC=""~/.kube/staging/config""; helm --kubeconfig $KC -n $NS upgrade --install kafka ../kafka -f ../kafka/rn3-staging-nkp-kafka.yaml --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;"
+[2026-06-10 14:09:18] [INFO] Deployment type is '-' deployment will not be executed 
+[2026-06-10 14:09:18] [INFO] Executing command:  --timeout=20m --version 6.4.0 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1
+[2026-06-10 14:09:18] [INFO] ****************************
+./eea-deployer: line 448: --timeout=20m: command not found
+[2026-06-10 14:09:18] [INFO] All Actions have been completed successfully
+[2026-06-10 14:09:18] [INFO] ****************************
+[2026-06-10 14:09:18] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:18] [INFO] Release Name: keycloak
+[2026-06-10 14:09:18] [INFO] Chart Name: keycloak
+[2026-06-10 14:09:18] [INFO] Debug: 
+[2026-06-10 14:09:18] [INFO] Version: v0.0.1
+[2026-06-10 14:09:18] [INFO] Chart Repo: ../keycloak
+[2026-06-10 14:09:18] [INFO] Values File: rn3-staging-nkp-keycloak.yaml
+[2026-06-10 14:09:18] [INFO] Namespace: reportnet
+[2026-06-10 14:09:18] [INFO] Deploy type: -
+[2026-06-10 14:09:18] [INFO] Script_shell: -
+[2026-06-10 14:09:18] [INFO] Init_shell: -
+[2026-06-10 14:09:18] [INFO] Custom_deployment: -
+[2026-06-10 14:09:18] [INFO] Deployment type is '-' deployment will not be executed 
+[2026-06-10 14:09:18] [INFO] Executing command:  --timeout=20m --version 6.4.0 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1
+[2026-06-10 14:09:18] [INFO] ****************************
+./eea-deployer: line 448: --timeout=20m: command not found
+[2026-06-10 14:09:18] [INFO] All Actions have been completed successfully
+[2026-06-10 14:09:18] [INFO] ****************************
+[2026-06-10 14:09:18] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:18] [INFO] Release Name: mongo
+[2026-06-10 14:09:18] [INFO] Chart Name: mongo
+[2026-06-10 14:09:18] [INFO] Debug: 
+[2026-06-10 14:09:18] [INFO] Version: v0.0.1
+[2026-06-10 14:09:18] [INFO] Chart Repo: ../mongodb
+[2026-06-10 14:09:18] [INFO] Values File: rn3-staging-nkp-mongo.yaml
+[2026-06-10 14:09:18] [INFO] Namespace: reportnet
+[2026-06-10 14:09:18] [INFO] Deploy type: -
+[2026-06-10 14:09:18] [INFO] Script_shell: -
+[2026-06-10 14:09:18] [INFO] Init_shell: -
+[2026-06-10 14:09:18] [INFO] Custom_deployment: -
+[2026-06-10 14:09:18] [INFO] Deployment type is '-' deployment will not be executed 
+[2026-06-10 14:09:18] [INFO] Executing command:  --timeout=20m --version 6.4.0 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1
+[2026-06-10 14:09:18] [INFO] ****************************
+./eea-deployer: line 448: --timeout=20m: command not found
+[2026-06-10 14:09:18] [INFO] All Actions have been completed successfully
+[2026-06-10 14:09:18] [INFO] ****************************
+[2026-06-10 14:09:18] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:18] [INFO] Release Name: redis
+[2026-06-10 14:09:18] [INFO] Chart Name: redis
+[2026-06-10 14:09:18] [INFO] Debug: 
+[2026-06-10 14:09:18] [INFO] Version: v0.0.1
+[2026-06-10 14:09:18] [INFO] Chart Repo: ../redis
+[2026-06-10 14:09:18] [INFO] Values File: rn3-staging-nkp-redis.yaml
+[2026-06-10 14:09:18] [INFO] Namespace: reportnet
+[2026-06-10 14:09:18] [INFO] Deploy type: -
+[2026-06-10 14:09:18] [INFO] Script_shell: -
+[2026-06-10 14:09:18] [INFO] Init_shell: -
+[2026-06-10 14:09:18] [INFO] Custom_deployment: -
+[2026-06-10 14:09:18] [INFO] Deployment type is '-' deployment will not be executed 
+[2026-06-10 14:09:18] [INFO] Executing command:  --timeout=20m --version 6.4.0 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1
+[2026-06-10 14:09:18] [INFO] ****************************
+./eea-deployer: line 448: --timeout=20m: command not found
+[2026-06-10 14:09:18] [INFO] All Actions have been completed successfully
+[2026-06-10 14:09:18] [INFO] ****************************
+[2026-06-10 14:09:18] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:18] [INFO] Release Name: rn3-pg-helm
+[2026-06-10 14:09:18] [INFO] Chart Name: helm
+[2026-06-10 14:09:18] [INFO] Debug: 
+[2026-06-10 14:09:18] [INFO] Version: v0.0.1
+[2026-06-10 14:09:18] [INFO] Chart Repo: ../postgresql
+[2026-06-10 14:09:18] [INFO] Values File: rn3-staging-nkp-postgresql.yaml
+[2026-06-10 14:09:18] [INFO] Namespace: reportnet
+[2026-06-10 14:09:18] [INFO] Deploy type: -
+[2026-06-10 14:09:18] [INFO] Script_shell: export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'rm -Rf  /tmp/migration'; kubectl --kubeconfig $KC -n $NS cp ../postgresql/migration rn3-pg-helm-postgresql-0:/tmp/; kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'ls -la  /tmp/migration'; chmod a+x ./scripts/migrate.sh; ./scripts/migrate.sh; chmod a+x ./scripts/./scripts/pgpool-usr-fix.sh; ./scripts/pgpool-usr-fix.sh dev $NS $KC
+[2026-06-10 14:09:18] [INFO] Init_shell: kubectl --kubeconfig $KC -n $NS delete secret pg-secret; export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS create secret generic pg-secret --from-literal admin-password=$adminpass --from-literal pg-pass=$dbpass --from-literal pg-sand-data-pass=postgres --from-literal postgresql-password=$dbpass --from-literal repmgr-password=$repmgrpass;
+[2026-06-10 14:09:18] [INFO] Custom_deployment: export chart_repo=../postgresql export release_name=helm export chart_name=rn3-pg export values_file=../postgresql/rn3-staging-nkp-postgresql.yaml export NS=reportnet export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
+[2026-06-10 14:09:18] [INFO] Deployment type is '-' deployment will not be executed 
+[2026-06-10 14:09:18] [INFO] Executing command:  --timeout=20m --version 6.4.0 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1
+[2026-06-10 14:09:18] [INFO] ****************************
+./eea-deployer: line 448: --timeout=20m: command not found
+[2026-06-10 14:09:18] [INFO] All Actions have been completed successfully
+[2026-06-10 14:09:18] [INFO] ****************************
+[2026-06-10 14:09:18] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:18] [INFO] Release Name: kafka-ui
+[2026-06-10 14:09:18] [INFO] Chart Name: kafka-ui
+[2026-06-10 14:09:18] [INFO] Debug: 
+[2026-06-10 14:09:18] [INFO] Version: v0.0.1
+[2026-06-10 14:09:18] [INFO] Chart Repo: ../kafka-ui
+[2026-06-10 14:09:18] [INFO] Values File: rn3-staging-nkp-kafka-ui.yaml
+[2026-06-10 14:09:18] [INFO] Namespace: reportnet
+[2026-06-10 14:09:18] [INFO] Deploy type: deployment
+[2026-06-10 14:09:18] [INFO] Script_shell: -
+[2026-06-10 14:09:18] [INFO] Init_shell: -
+[2026-06-10 14:09:18] [INFO] Custom_deployment: -
+[2026-06-10 14:09:18] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:09:18] [INFO] Installing kafka-ui with release name kafka-ui from ../kafka-ui with version v0.0.1 using values file: rn3-staging-nkp-kafka-ui.yaml in reportnet namespace
+[2026-06-10 14:09:18] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install kafka-ui ../kafka-ui -f ../kafka-ui/rn3-staging-nkp-kafka-ui.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:09:18] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "kafka-ui" has been upgraded. Happy Helming!
 NAME: kafka-ui
-LAST DEPLOYED: Wed Jun 10 12:53:22 2026
+LAST DEPLOYED: Wed Jun 10 14:09:22 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 77
+REVISION: 94
 TEST SUITE: None
 NOTES:
 1. Get the application URL by running these commands:
   export POD_NAME=$(kubectl get pods --namespace reportnet -l "app.kubernetes.io/name=kafka-ui,app.kubernetes.io/instance=kafka-ui" -o jsonpath="{.items[0].metadata.name}")
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl --namespace reportnet port-forward $POD_NAME 8080:8080
-[2026-06-10 12:53:45] [INFO] All Actions have been completed successfully
-[2026-06-10 12:53:45] [INFO] ****************************
-[2026-06-10 12:53:45] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:53:45] [INFO] Release Name: recordstore
-[2026-06-10 12:53:45] [INFO] Chart Name: helm
-[2026-06-10 12:53:45] [INFO] Debug: 
-[2026-06-10 12:53:45] [INFO] Version: v0.0.1
-[2026-06-10 12:53:45] [INFO] Chart Repo: ../reportnet-recordstore
-[2026-06-10 12:53:45] [INFO] Values File: rn3-staging-nkp-recordstore.yaml
-[2026-06-10 12:53:45] [INFO] Namespace: reportnet
-[2026-06-10 12:53:45] [INFO] Deploy type: deployment
-[2026-06-10 12:53:45] [INFO] Script_shell: -
-[2026-06-10 12:53:45] [INFO] Init_shell: -
-[2026-06-10 12:53:45] [INFO] Custom_deployment: -
-[2026-06-10 12:53:45] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:53:45] [INFO] Installing helm with release name recordstore from ../reportnet-recordstore with version v0.0.1 using values file: rn3-staging-nkp-recordstore.yaml in reportnet namespace
-[2026-06-10 12:53:45] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install recordstore ../reportnet-recordstore -f ../reportnet-recordstore/rn3-staging-nkp-recordstore.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:53:45] [INFO] ****************************
+[2026-06-10 14:09:35] [INFO] All Actions have been completed successfully
+[2026-06-10 14:09:35] [INFO] ****************************
+[2026-06-10 14:09:35] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:35] [INFO] Release Name: recordstore
+[2026-06-10 14:09:35] [INFO] Chart Name: helm
+[2026-06-10 14:09:35] [INFO] Debug: 
+[2026-06-10 14:09:35] [INFO] Version: v0.0.1
+[2026-06-10 14:09:35] [INFO] Chart Repo: ../reportnet-recordstore
+[2026-06-10 14:09:35] [INFO] Values File: rn3-staging-nkp-recordstore.yaml
+[2026-06-10 14:09:35] [INFO] Namespace: reportnet
+[2026-06-10 14:09:35] [INFO] Deploy type: deployment
+[2026-06-10 14:09:35] [INFO] Script_shell: -
+[2026-06-10 14:09:35] [INFO] Init_shell: -
+[2026-06-10 14:09:35] [INFO] Custom_deployment: -
+[2026-06-10 14:09:35] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:09:35] [INFO] Installing helm with release name recordstore from ../reportnet-recordstore with version v0.0.1 using values file: rn3-staging-nkp-recordstore.yaml in reportnet namespace
+[2026-06-10 14:09:35] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install recordstore ../reportnet-recordstore -f ../reportnet-recordstore/rn3-staging-nkp-recordstore.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:09:35] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "recordstore" has been upgraded. Happy Helming!
 NAME: recordstore
-LAST DEPLOYED: Wed Jun 10 12:53:48 2026
+LAST DEPLOYED: Wed Jun 10 14:09:38 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 43
+REVISION: 47
 TEST SUITE: None
-[2026-06-10 12:53:56] [INFO] All Actions have been completed successfully
-[2026-06-10 12:53:56] [INFO] ****************************
-[2026-06-10 12:53:56] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:53:56] [INFO] Release Name: api-gateway
-[2026-06-10 12:53:56] [INFO] Chart Name: reportnet-api-gateway
-[2026-06-10 12:53:56] [INFO] Debug: 
-[2026-06-10 12:53:56] [INFO] Version: v0.0.1
-[2026-06-10 12:53:56] [INFO] Chart Repo: ../reportnet-apigateway
-[2026-06-10 12:53:56] [INFO] Values File: rn3-staging-nkp-api-gateway.yaml
-[2026-06-10 12:53:56] [INFO] Namespace: reportnet
-[2026-06-10 12:53:56] [INFO] Deploy type: deployment
-[2026-06-10 12:53:56] [INFO] Script_shell: -
-[2026-06-10 12:53:56] [INFO] Init_shell: -
-[2026-06-10 12:53:56] [INFO] Custom_deployment: -
-[2026-06-10 12:53:56] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:53:56] [INFO] Installing reportnet-api-gateway with release name api-gateway from ../reportnet-apigateway with version v0.0.1 using values file: rn3-staging-nkp-api-gateway.yaml in reportnet namespace
-[2026-06-10 12:53:56] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install api-gateway ../reportnet-apigateway -f ../reportnet-apigateway/rn3-staging-nkp-api-gateway.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:53:56] [INFO] ****************************
+[2026-06-10 14:09:45] [INFO] All Actions have been completed successfully
+[2026-06-10 14:09:45] [INFO] ****************************
+[2026-06-10 14:09:45] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:45] [INFO] Release Name: api-gateway
+[2026-06-10 14:09:45] [INFO] Chart Name: reportnet-api-gateway
+[2026-06-10 14:09:45] [INFO] Debug: 
+[2026-06-10 14:09:45] [INFO] Version: v0.0.1
+[2026-06-10 14:09:45] [INFO] Chart Repo: ../reportnet-apigateway
+[2026-06-10 14:09:45] [INFO] Values File: rn3-staging-nkp-api-gateway.yaml
+[2026-06-10 14:09:45] [INFO] Namespace: reportnet
+[2026-06-10 14:09:45] [INFO] Deploy type: deployment
+[2026-06-10 14:09:45] [INFO] Script_shell: -
+[2026-06-10 14:09:45] [INFO] Init_shell: -
+[2026-06-10 14:09:45] [INFO] Custom_deployment: -
+[2026-06-10 14:09:45] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:09:45] [INFO] Installing reportnet-api-gateway with release name api-gateway from ../reportnet-apigateway with version v0.0.1 using values file: rn3-staging-nkp-api-gateway.yaml in reportnet namespace
+[2026-06-10 14:09:45] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install api-gateway ../reportnet-apigateway -f ../reportnet-apigateway/rn3-staging-nkp-api-gateway.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:09:45] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "api-gateway" has been upgraded. Happy Helming!
 NAME: api-gateway
-LAST DEPLOYED: Wed Jun 10 12:53:59 2026
+LAST DEPLOYED: Wed Jun 10 14:09:48 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 45
+TEST SUITE: None
+[2026-06-10 14:09:54] [INFO] All Actions have been completed successfully
+[2026-06-10 14:09:54] [INFO] ****************************
+[2026-06-10 14:09:54] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:09:54] [INFO] Release Name: collaboration
+[2026-06-10 14:09:54] [INFO] Chart Name: reportnet-collaboration
+[2026-06-10 14:09:54] [INFO] Debug: 
+[2026-06-10 14:09:54] [INFO] Version: v0.0.1
+[2026-06-10 14:09:54] [INFO] Chart Repo: ../reportnet-collaboration
+[2026-06-10 14:09:54] [INFO] Values File: rn3-staging-nkp-collaboration.yaml
+[2026-06-10 14:09:54] [INFO] Namespace: reportnet
+[2026-06-10 14:09:54] [INFO] Deploy type: deployment
+[2026-06-10 14:09:54] [INFO] Script_shell: -
+[2026-06-10 14:09:54] [INFO] Init_shell: -
+[2026-06-10 14:09:54] [INFO] Custom_deployment: -
+[2026-06-10 14:09:54] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:09:54] [INFO] Installing reportnet-collaboration with release name collaboration from ../reportnet-collaboration with version v0.0.1 using values file: rn3-staging-nkp-collaboration.yaml in reportnet namespace
+[2026-06-10 14:09:54] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install collaboration ../reportnet-collaboration -f ../reportnet-collaboration/rn3-staging-nkp-collaboration.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:09:54] [INFO] ****************************
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
+WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
+Release "collaboration" has been upgraded. Happy Helming!
+NAME: collaboration
+LAST DEPLOYED: Wed Jun 10 14:09:58 2026
 NAMESPACE: reportnet
 STATUS: deployed
 REVISION: 41
 TEST SUITE: None
-[2026-06-10 12:54:03] [INFO] All Actions have been completed successfully
-[2026-06-10 12:54:03] [INFO] ****************************
-[2026-06-10 12:54:03] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:54:03] [INFO] Release Name: collaboration
-[2026-06-10 12:54:03] [INFO] Chart Name: reportnet-collaboration
-[2026-06-10 12:54:03] [INFO] Debug: 
-[2026-06-10 12:54:03] [INFO] Version: v0.0.1
-[2026-06-10 12:54:03] [INFO] Chart Repo: ../reportnet-collaboration
-[2026-06-10 12:54:03] [INFO] Values File: rn3-staging-nkp-collaboration.yaml
-[2026-06-10 12:54:03] [INFO] Namespace: reportnet
-[2026-06-10 12:54:03] [INFO] Deploy type: deployment
-[2026-06-10 12:54:03] [INFO] Script_shell: -
-[2026-06-10 12:54:03] [INFO] Init_shell: -
-[2026-06-10 12:54:03] [INFO] Custom_deployment: -
-[2026-06-10 12:54:03] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:54:03] [INFO] Installing reportnet-collaboration with release name collaboration from ../reportnet-collaboration with version v0.0.1 using values file: rn3-staging-nkp-collaboration.yaml in reportnet namespace
-[2026-06-10 12:54:03] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install collaboration ../reportnet-collaboration -f ../reportnet-collaboration/rn3-staging-nkp-collaboration.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:54:03] [INFO] ****************************
-WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
-W0610 12:54:16.033470  119108 warnings.go:70] spec.template.spec.containers[0].env[11]: hides previous definition of "METABASE_CONNECTION_PASSWORD", which may be dropped when using apply
-Release "collaboration" has been upgraded. Happy Helming!
-NAME: collaboration
-LAST DEPLOYED: Wed Jun 10 12:54:07 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 37
-TEST SUITE: None
-[2026-06-10 12:54:16] [INFO] All Actions have been completed successfully
-[2026-06-10 12:54:16] [INFO] ****************************
-[2026-06-10 12:54:16] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:54:16] [INFO] Release Name: communication
-[2026-06-10 12:54:16] [INFO] Chart Name: reportnet-communication
-[2026-06-10 12:54:16] [INFO] Debug: 
-[2026-06-10 12:54:16] [INFO] Version: v0.0.1
-[2026-06-10 12:54:16] [INFO] Chart Repo: ../reportnet-communication
-[2026-06-10 12:54:16] [INFO] Values File: rn3-staging-nkp-communication.yaml
-[2026-06-10 12:54:16] [INFO] Namespace: reportnet
-[2026-06-10 12:54:16] [INFO] Deploy type: deployment
-[2026-06-10 12:54:16] [INFO] Script_shell: -
-[2026-06-10 12:54:16] [INFO] Init_shell: -
-[2026-06-10 12:54:16] [INFO] Custom_deployment: -
-[2026-06-10 12:54:16] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:54:16] [INFO] Installing reportnet-communication with release name communication from ../reportnet-communication with version v0.0.1 using values file: rn3-staging-nkp-communication.yaml in reportnet namespace
-[2026-06-10 12:54:16] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install communication ../reportnet-communication -f ../reportnet-communication/rn3-staging-nkp-communication.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:54:16] [INFO] ****************************
+[2026-06-10 14:10:04] [INFO] All Actions have been completed successfully
+[2026-06-10 14:10:04] [INFO] ****************************
+[2026-06-10 14:10:04] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:10:04] [INFO] Release Name: communication
+[2026-06-10 14:10:04] [INFO] Chart Name: reportnet-communication
+[2026-06-10 14:10:04] [INFO] Debug: 
+[2026-06-10 14:10:04] [INFO] Version: v0.0.1
+[2026-06-10 14:10:04] [INFO] Chart Repo: ../reportnet-communication
+[2026-06-10 14:10:04] [INFO] Values File: rn3-staging-nkp-communication.yaml
+[2026-06-10 14:10:04] [INFO] Namespace: reportnet
+[2026-06-10 14:10:04] [INFO] Deploy type: deployment
+[2026-06-10 14:10:04] [INFO] Script_shell: -
+[2026-06-10 14:10:04] [INFO] Init_shell: -
+[2026-06-10 14:10:04] [INFO] Custom_deployment: -
+[2026-06-10 14:10:04] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:10:04] [INFO] Installing reportnet-communication with release name communication from ../reportnet-communication with version v0.0.1 using values file: rn3-staging-nkp-communication.yaml in reportnet namespace
+[2026-06-10 14:10:04] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install communication ../reportnet-communication -f ../reportnet-communication/rn3-staging-nkp-communication.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:10:04] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "communication" has been upgraded. Happy Helming!
 NAME: communication
-LAST DEPLOYED: Wed Jun 10 12:54:20 2026
+LAST DEPLOYED: Wed Jun 10 14:10:08 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 39
+REVISION: 43
 TEST SUITE: None
-[2026-06-10 12:54:35] [INFO] All Actions have been completed successfully
-[2026-06-10 12:54:35] [INFO] ****************************
-[2026-06-10 12:54:35] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:54:35] [INFO] Release Name: dataflow
-[2026-06-10 12:54:35] [INFO] Chart Name: reportnet-dataflow
-[2026-06-10 12:54:35] [INFO] Debug: 
-[2026-06-10 12:54:35] [INFO] Version: v0.0.1
-[2026-06-10 12:54:35] [INFO] Chart Repo: ../reportnet-dataflow
-[2026-06-10 12:54:35] [INFO] Values File: rn3-staging-nkp-dataflow.yaml
-[2026-06-10 12:54:35] [INFO] Namespace: reportnet
-[2026-06-10 12:54:35] [INFO] Deploy type: deployment
-[2026-06-10 12:54:35] [INFO] Script_shell: -
-[2026-06-10 12:54:35] [INFO] Init_shell: -
-[2026-06-10 12:54:35] [INFO] Custom_deployment: -
-[2026-06-10 12:54:35] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:54:35] [INFO] Installing reportnet-dataflow with release name dataflow from ../reportnet-dataflow with version v0.0.1 using values file: rn3-staging-nkp-dataflow.yaml in reportnet namespace
-[2026-06-10 12:54:35] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install dataflow ../reportnet-dataflow -f ../reportnet-dataflow/rn3-staging-nkp-dataflow.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:54:35] [INFO] ****************************
+[2026-06-10 14:10:14] [INFO] All Actions have been completed successfully
+[2026-06-10 14:10:14] [INFO] ****************************
+[2026-06-10 14:10:14] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:10:14] [INFO] Release Name: dataflow
+[2026-06-10 14:10:14] [INFO] Chart Name: reportnet-dataflow
+[2026-06-10 14:10:14] [INFO] Debug: 
+[2026-06-10 14:10:14] [INFO] Version: v0.0.1
+[2026-06-10 14:10:14] [INFO] Chart Repo: ../reportnet-dataflow
+[2026-06-10 14:10:14] [INFO] Values File: rn3-staging-nkp-dataflow.yaml
+[2026-06-10 14:10:14] [INFO] Namespace: reportnet
+[2026-06-10 14:10:14] [INFO] Deploy type: deployment
+[2026-06-10 14:10:14] [INFO] Script_shell: -
+[2026-06-10 14:10:14] [INFO] Init_shell: -
+[2026-06-10 14:10:14] [INFO] Custom_deployment: -
+[2026-06-10 14:10:14] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:10:14] [INFO] Installing reportnet-dataflow with release name dataflow from ../reportnet-dataflow with version v0.0.1 using values file: rn3-staging-nkp-dataflow.yaml in reportnet namespace
+[2026-06-10 14:10:14] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install dataflow ../reportnet-dataflow -f ../reportnet-dataflow/rn3-staging-nkp-dataflow.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:10:14] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "dataflow" has been upgraded. Happy Helming!
 NAME: dataflow
-LAST DEPLOYED: Wed Jun 10 12:54:40 2026
+LAST DEPLOYED: Wed Jun 10 14:10:17 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 35
+REVISION: 39
 TEST SUITE: None
-[2026-06-10 12:54:49] [INFO] All Actions have been completed successfully
-[2026-06-10 12:54:49] [INFO] ****************************
-[2026-06-10 12:54:49] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:54:49] [INFO] Release Name: dataset
-[2026-06-10 12:54:49] [INFO] Chart Name: reportnet-dataset
-[2026-06-10 12:54:49] [INFO] Debug: 
-[2026-06-10 12:54:49] [INFO] Version: v0.0.1
-[2026-06-10 12:54:49] [INFO] Chart Repo: ../reportnet-dataset
-[2026-06-10 12:54:49] [INFO] Values File: rn3-staging-nkp-dataset.yaml
-[2026-06-10 12:54:49] [INFO] Namespace: reportnet
-[2026-06-10 12:54:49] [INFO] Deploy type: deployment
-[2026-06-10 12:54:49] [INFO] Script_shell: -
-[2026-06-10 12:54:49] [INFO] Init_shell: -
-[2026-06-10 12:54:49] [INFO] Custom_deployment: -
-[2026-06-10 12:54:49] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:54:49] [INFO] Installing reportnet-dataset with release name dataset from ../reportnet-dataset with version v0.0.1 using values file: rn3-staging-nkp-dataset.yaml in reportnet namespace
-[2026-06-10 12:54:49] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install dataset ../reportnet-dataset -f ../reportnet-dataset/rn3-staging-nkp-dataset.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:54:49] [INFO] ****************************
+[2026-06-10 14:10:23] [INFO] All Actions have been completed successfully
+[2026-06-10 14:10:23] [INFO] ****************************
+[2026-06-10 14:10:23] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:10:23] [INFO] Release Name: dataset
+[2026-06-10 14:10:23] [INFO] Chart Name: reportnet-dataset
+[2026-06-10 14:10:23] [INFO] Debug: 
+[2026-06-10 14:10:23] [INFO] Version: v0.0.1
+[2026-06-10 14:10:23] [INFO] Chart Repo: ../reportnet-dataset
+[2026-06-10 14:10:23] [INFO] Values File: rn3-staging-nkp-dataset.yaml
+[2026-06-10 14:10:23] [INFO] Namespace: reportnet
+[2026-06-10 14:10:23] [INFO] Deploy type: deployment
+[2026-06-10 14:10:23] [INFO] Script_shell: -
+[2026-06-10 14:10:23] [INFO] Init_shell: -
+[2026-06-10 14:10:23] [INFO] Custom_deployment: -
+[2026-06-10 14:10:23] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:10:23] [INFO] Installing reportnet-dataset with release name dataset from ../reportnet-dataset with version v0.0.1 using values file: rn3-staging-nkp-dataset.yaml in reportnet namespace
+[2026-06-10 14:10:23] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install dataset ../reportnet-dataset -f ../reportnet-dataset/rn3-staging-nkp-dataset.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:10:23] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "dataset" has been upgraded. Happy Helming!
 NAME: dataset
-LAST DEPLOYED: Wed Jun 10 12:54:53 2026
+LAST DEPLOYED: Wed Jun 10 14:10:27 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 32
+REVISION: 36
 TEST SUITE: None
-[2026-06-10 12:55:03] [INFO] All Actions have been completed successfully
-[2026-06-10 12:55:03] [INFO] ****************************
-[2026-06-10 12:55:03] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:55:03] [INFO] Release Name: document
-[2026-06-10 12:55:03] [INFO] Chart Name: reportnet-document
-[2026-06-10 12:55:03] [INFO] Debug: 
-[2026-06-10 12:55:03] [INFO] Version: v0.0.1
-[2026-06-10 12:55:03] [INFO] Chart Repo: ../reportnet-document
-[2026-06-10 12:55:03] [INFO] Values File: rn3-staging-nkp-document.yaml
-[2026-06-10 12:55:03] [INFO] Namespace: reportnet
-[2026-06-10 12:55:03] [INFO] Deploy type: deployment
-[2026-06-10 12:55:03] [INFO] Script_shell: -
-[2026-06-10 12:55:03] [INFO] Init_shell: -
-[2026-06-10 12:55:03] [INFO] Custom_deployment: -
-[2026-06-10 12:55:03] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:55:03] [INFO] Installing reportnet-document with release name document from ../reportnet-document with version v0.0.1 using values file: rn3-staging-nkp-document.yaml in reportnet namespace
-[2026-06-10 12:55:03] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install document ../reportnet-document -f ../reportnet-document/rn3-staging-nkp-document.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:55:03] [INFO] ****************************
+[2026-06-10 14:10:36] [INFO] All Actions have been completed successfully
+[2026-06-10 14:10:36] [INFO] ****************************
+[2026-06-10 14:10:36] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:10:36] [INFO] Release Name: document
+[2026-06-10 14:10:36] [INFO] Chart Name: reportnet-document
+[2026-06-10 14:10:36] [INFO] Debug: 
+[2026-06-10 14:10:36] [INFO] Version: v0.0.1
+[2026-06-10 14:10:36] [INFO] Chart Repo: ../reportnet-document
+[2026-06-10 14:10:36] [INFO] Values File: rn3-staging-nkp-document.yaml
+[2026-06-10 14:10:36] [INFO] Namespace: reportnet
+[2026-06-10 14:10:36] [INFO] Deploy type: deployment
+[2026-06-10 14:10:36] [INFO] Script_shell: -
+[2026-06-10 14:10:36] [INFO] Init_shell: -
+[2026-06-10 14:10:36] [INFO] Custom_deployment: -
+[2026-06-10 14:10:36] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:10:36] [INFO] Installing reportnet-document with release name document from ../reportnet-document with version v0.0.1 using values file: rn3-staging-nkp-document.yaml in reportnet namespace
+[2026-06-10 14:10:36] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install document ../reportnet-document -f ../reportnet-document/rn3-staging-nkp-document.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:10:36] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "document" has been upgraded. Happy Helming!
 NAME: document
-LAST DEPLOYED: Wed Jun 10 12:55:06 2026
+LAST DEPLOYED: Wed Jun 10 14:10:39 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 33
+REVISION: 37
 TEST SUITE: None
-[2026-06-10 12:55:12] [INFO] All Actions have been completed successfully
-[2026-06-10 12:55:12] [INFO] ****************************
-[2026-06-10 12:55:12] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:55:12] [INFO] Release Name: frontend
-[2026-06-10 12:55:12] [INFO] Chart Name: reportnet-frontend
-[2026-06-10 12:55:12] [INFO] Debug: 
-[2026-06-10 12:55:12] [INFO] Version: v0.0.1
-[2026-06-10 12:55:12] [INFO] Chart Repo: ../reportnet-frontend
-[2026-06-10 12:55:12] [INFO] Values File: rn3-staging-nkp-frontend.yaml
-[2026-06-10 12:55:12] [INFO] Namespace: reportnet
-[2026-06-10 12:55:12] [INFO] Deploy type: deployment
-[2026-06-10 12:55:12] [INFO] Script_shell: -
-[2026-06-10 12:55:12] [INFO] Init_shell: -
-[2026-06-10 12:55:12] [INFO] Custom_deployment: -
-[2026-06-10 12:55:12] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:55:12] [INFO] Installing reportnet-frontend with release name frontend from ../reportnet-frontend with version v0.0.1 using values file: rn3-staging-nkp-frontend.yaml in reportnet namespace
-[2026-06-10 12:55:12] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install frontend ../reportnet-frontend -f ../reportnet-frontend/rn3-staging-nkp-frontend.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:55:12] [INFO] ****************************
+[2026-06-10 14:10:46] [INFO] All Actions have been completed successfully
+[2026-06-10 14:10:46] [INFO] ****************************
+[2026-06-10 14:10:46] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:10:46] [INFO] Release Name: frontend
+[2026-06-10 14:10:46] [INFO] Chart Name: reportnet-frontend
+[2026-06-10 14:10:46] [INFO] Debug: 
+[2026-06-10 14:10:46] [INFO] Version: v0.0.1
+[2026-06-10 14:10:46] [INFO] Chart Repo: ../reportnet-frontend
+[2026-06-10 14:10:46] [INFO] Values File: rn3-staging-nkp-frontend.yaml
+[2026-06-10 14:10:46] [INFO] Namespace: reportnet
+[2026-06-10 14:10:46] [INFO] Deploy type: deployment
+[2026-06-10 14:10:46] [INFO] Script_shell: -
+[2026-06-10 14:10:46] [INFO] Init_shell: -
+[2026-06-10 14:10:46] [INFO] Custom_deployment: -
+[2026-06-10 14:10:46] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:10:46] [INFO] Installing reportnet-frontend with release name frontend from ../reportnet-frontend with version v0.0.1 using values file: rn3-staging-nkp-frontend.yaml in reportnet namespace
+[2026-06-10 14:10:46] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install frontend ../reportnet-frontend -f ../reportnet-frontend/rn3-staging-nkp-frontend.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:10:46] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "frontend" has been upgraded. Happy Helming!
 NAME: frontend
-LAST DEPLOYED: Wed Jun 10 12:55:15 2026
+LAST DEPLOYED: Wed Jun 10 14:10:49 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 31
+REVISION: 35
 TEST SUITE: None
-[2026-06-10 12:55:23] [INFO] All Actions have been completed successfully
-[2026-06-10 12:55:23] [INFO] ****************************
-[2026-06-10 12:55:23] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:55:23] [INFO] Release Name: orchestrator
-[2026-06-10 12:55:23] [INFO] Chart Name: reportnet-orchestrator
-[2026-06-10 12:55:23] [INFO] Debug: 
-[2026-06-10 12:55:23] [INFO] Version: v0.0.1
-[2026-06-10 12:55:23] [INFO] Chart Repo: ../reportnet-orchestrator
-[2026-06-10 12:55:23] [INFO] Values File: rn3-staging-nkp-orchestrator.yaml
-[2026-06-10 12:55:23] [INFO] Namespace: reportnet
-[2026-06-10 12:55:23] [INFO] Deploy type: deployment
-[2026-06-10 12:55:23] [INFO] Script_shell: -
-[2026-06-10 12:55:23] [INFO] Init_shell: -
-[2026-06-10 12:55:23] [INFO] Custom_deployment: -
-[2026-06-10 12:55:23] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:55:23] [INFO] Installing reportnet-orchestrator with release name orchestrator from ../reportnet-orchestrator with version v0.0.1 using values file: rn3-staging-nkp-orchestrator.yaml in reportnet namespace
-[2026-06-10 12:55:23] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install orchestrator ../reportnet-orchestrator -f ../reportnet-orchestrator/rn3-staging-nkp-orchestrator.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:55:23] [INFO] ****************************
+[2026-06-10 14:11:02] [INFO] All Actions have been completed successfully
+[2026-06-10 14:11:02] [INFO] ****************************
+[2026-06-10 14:11:02] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:11:02] [INFO] Release Name: orchestrator
+[2026-06-10 14:11:02] [INFO] Chart Name: reportnet-orchestrator
+[2026-06-10 14:11:02] [INFO] Debug: 
+[2026-06-10 14:11:02] [INFO] Version: v0.0.1
+[2026-06-10 14:11:02] [INFO] Chart Repo: ../reportnet-orchestrator
+[2026-06-10 14:11:02] [INFO] Values File: rn3-staging-nkp-orchestrator.yaml
+[2026-06-10 14:11:02] [INFO] Namespace: reportnet
+[2026-06-10 14:11:02] [INFO] Deploy type: deployment
+[2026-06-10 14:11:02] [INFO] Script_shell: -
+[2026-06-10 14:11:02] [INFO] Init_shell: -
+[2026-06-10 14:11:02] [INFO] Custom_deployment: -
+[2026-06-10 14:11:02] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:11:02] [INFO] Installing reportnet-orchestrator with release name orchestrator from ../reportnet-orchestrator with version v0.0.1 using values file: rn3-staging-nkp-orchestrator.yaml in reportnet namespace
+[2026-06-10 14:11:02] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install orchestrator ../reportnet-orchestrator -f ../reportnet-orchestrator/rn3-staging-nkp-orchestrator.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:11:02] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "orchestrator" has been upgraded. Happy Helming!
 NAME: orchestrator
-LAST DEPLOYED: Wed Jun 10 12:55:26 2026
+LAST DEPLOYED: Wed Jun 10 14:11:06 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 28
+REVISION: 32
 TEST SUITE: None
-[2026-06-10 12:55:32] [INFO] All Actions have been completed successfully
-[2026-06-10 12:55:32] [INFO] ****************************
-[2026-06-10 12:55:32] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:55:32] [INFO] Release Name: rod
-[2026-06-10 12:55:32] [INFO] Chart Name: reportnet-rod
-[2026-06-10 12:55:32] [INFO] Debug: 
-[2026-06-10 12:55:32] [INFO] Version: v0.0.1
-[2026-06-10 12:55:32] [INFO] Chart Repo: ../reportnet-rod
-[2026-06-10 12:55:32] [INFO] Values File: rn3-staging-nkp-rod.yaml
-[2026-06-10 12:55:32] [INFO] Namespace: reportnet
-[2026-06-10 12:55:32] [INFO] Deploy type: deployment
-[2026-06-10 12:55:32] [INFO] Script_shell: -
-[2026-06-10 12:55:32] [INFO] Init_shell: -
-[2026-06-10 12:55:32] [INFO] Custom_deployment: -
-[2026-06-10 12:55:32] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:55:32] [INFO] Installing reportnet-rod with release name rod from ../reportnet-rod with version v0.0.1 using values file: rn3-staging-nkp-rod.yaml in reportnet namespace
-[2026-06-10 12:55:32] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install rod ../reportnet-rod -f ../reportnet-rod/rn3-staging-nkp-rod.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:55:32] [INFO] ****************************
+[2026-06-10 14:11:23] [INFO] All Actions have been completed successfully
+[2026-06-10 14:11:23] [INFO] ****************************
+[2026-06-10 14:11:23] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:11:23] [INFO] Release Name: rod
+[2026-06-10 14:11:23] [INFO] Chart Name: reportnet-rod
+[2026-06-10 14:11:23] [INFO] Debug: 
+[2026-06-10 14:11:23] [INFO] Version: v0.0.1
+[2026-06-10 14:11:23] [INFO] Chart Repo: ../reportnet-rod
+[2026-06-10 14:11:23] [INFO] Values File: rn3-staging-nkp-rod.yaml
+[2026-06-10 14:11:23] [INFO] Namespace: reportnet
+[2026-06-10 14:11:23] [INFO] Deploy type: deployment
+[2026-06-10 14:11:23] [INFO] Script_shell: -
+[2026-06-10 14:11:23] [INFO] Init_shell: -
+[2026-06-10 14:11:23] [INFO] Custom_deployment: -
+[2026-06-10 14:11:23] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:11:23] [INFO] Installing reportnet-rod with release name rod from ../reportnet-rod with version v0.0.1 using values file: rn3-staging-nkp-rod.yaml in reportnet namespace
+[2026-06-10 14:11:23] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install rod ../reportnet-rod -f ../reportnet-rod/rn3-staging-nkp-rod.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:11:23] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "rod" does not exist. Installing it now.
 Error: open ../reportnet-rod/rn3-staging-nkp-rod.yaml: no such file or directory
-[2026-06-10 12:55:34] [INFO] All Actions have been completed successfully
-[2026-06-10 12:55:34] [INFO] ****************************
-[2026-06-10 12:55:34] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:55:34] [INFO] Release Name: ums
-[2026-06-10 12:55:34] [INFO] Chart Name: reportnet-ums
-[2026-06-10 12:55:34] [INFO] Debug: 
-[2026-06-10 12:55:34] [INFO] Version: v0.0.1
-[2026-06-10 12:55:34] [INFO] Chart Repo: ../reportnet-ums
-[2026-06-10 12:55:34] [INFO] Values File: rn3-staging-nkp-ums.yaml
-[2026-06-10 12:55:34] [INFO] Namespace: reportnet
-[2026-06-10 12:55:34] [INFO] Deploy type: deployment
-[2026-06-10 12:55:34] [INFO] Script_shell: -
-[2026-06-10 12:55:34] [INFO] Init_shell: -
-[2026-06-10 12:55:34] [INFO] Custom_deployment: -
-[2026-06-10 12:55:34] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:55:34] [INFO] Installing reportnet-ums with release name ums from ../reportnet-ums with version v0.0.1 using values file: rn3-staging-nkp-ums.yaml in reportnet namespace
-[2026-06-10 12:55:34] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install ums ../reportnet-ums -f ../reportnet-ums/rn3-staging-nkp-ums.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:55:34] [INFO] ****************************
+[2026-06-10 14:11:24] [INFO] All Actions have been completed successfully
+[2026-06-10 14:11:24] [INFO] ****************************
+[2026-06-10 14:11:24] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:11:24] [INFO] Release Name: ums
+[2026-06-10 14:11:24] [INFO] Chart Name: reportnet-ums
+[2026-06-10 14:11:24] [INFO] Debug: 
+[2026-06-10 14:11:24] [INFO] Version: v0.0.1
+[2026-06-10 14:11:24] [INFO] Chart Repo: ../reportnet-ums
+[2026-06-10 14:11:24] [INFO] Values File: rn3-staging-nkp-ums.yaml
+[2026-06-10 14:11:24] [INFO] Namespace: reportnet
+[2026-06-10 14:11:24] [INFO] Deploy type: deployment
+[2026-06-10 14:11:24] [INFO] Script_shell: -
+[2026-06-10 14:11:24] [INFO] Init_shell: -
+[2026-06-10 14:11:24] [INFO] Custom_deployment: -
+[2026-06-10 14:11:24] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:11:24] [INFO] Installing reportnet-ums with release name ums from ../reportnet-ums with version v0.0.1 using values file: rn3-staging-nkp-ums.yaml in reportnet namespace
+[2026-06-10 14:11:24] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install ums ../reportnet-ums -f ../reportnet-ums/rn3-staging-nkp-ums.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:11:24] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "ums" has been upgraded. Happy Helming!
 NAME: ums
-LAST DEPLOYED: Wed Jun 10 12:55:36 2026
+LAST DEPLOYED: Wed Jun 10 14:11:28 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 28
+REVISION: 32
 TEST SUITE: None
-[2026-06-10 12:55:43] [INFO] All Actions have been completed successfully
-[2026-06-10 12:55:43] [INFO] ****************************
-[2026-06-10 12:55:43] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
-[2026-06-10 12:55:43] [INFO] Release Name: validation
-[2026-06-10 12:55:43] [INFO] Chart Name: reportnet-validation
-[2026-06-10 12:55:43] [INFO] Debug: 
-[2026-06-10 12:55:43] [INFO] Version: v0.0.1
-[2026-06-10 12:55:43] [INFO] Chart Repo: ../reportnet-validation
-[2026-06-10 12:55:43] [INFO] Values File: rn3-staging-nkp-validation.yaml
-[2026-06-10 12:55:43] [INFO] Namespace: reportnet
-[2026-06-10 12:55:43] [INFO] Deploy type: deployment
-[2026-06-10 12:55:43] [INFO] Script_shell: -
-[2026-06-10 12:55:43] [INFO] Init_shell: -
-[2026-06-10 12:55:43] [INFO] Custom_deployment: -
-[2026-06-10 12:55:43] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-10 12:55:43] [INFO] Installing reportnet-validation with release name validation from ../reportnet-validation with version v0.0.1 using values file: rn3-staging-nkp-validation.yaml in reportnet namespace
-[2026-06-10 12:55:43] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install validation ../reportnet-validation -f ../reportnet-validation/rn3-staging-nkp-validation.yaml --timeout=20m --version v0.0.1
-[2026-06-10 12:55:43] [INFO] ****************************
+[2026-06-10 14:11:37] [INFO] All Actions have been completed successfully
+[2026-06-10 14:11:37] [INFO] ****************************
+[2026-06-10 14:11:37] [INFO] Chart specific values based on ./config-staging-nkp.yaml file
+[2026-06-10 14:11:37] [INFO] Release Name: validation
+[2026-06-10 14:11:37] [INFO] Chart Name: reportnet-validation
+[2026-06-10 14:11:37] [INFO] Debug: 
+[2026-06-10 14:11:37] [INFO] Version: v0.0.1
+[2026-06-10 14:11:37] [INFO] Chart Repo: ../reportnet-validation
+[2026-06-10 14:11:37] [INFO] Values File: rn3-staging-nkp-validation.yaml
+[2026-06-10 14:11:37] [INFO] Namespace: reportnet
+[2026-06-10 14:11:37] [INFO] Deploy type: deployment
+[2026-06-10 14:11:37] [INFO] Script_shell: -
+[2026-06-10 14:11:37] [INFO] Init_shell: -
+[2026-06-10 14:11:37] [INFO] Custom_deployment: -
+[2026-06-10 14:11:37] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-10 14:11:37] [INFO] Installing reportnet-validation with release name validation from ../reportnet-validation with version v0.0.1 using values file: rn3-staging-nkp-validation.yaml in reportnet namespace
+[2026-06-10 14:11:37] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/staging/config -n reportnet upgrade --install validation ../reportnet-validation -f ../reportnet-validation/rn3-staging-nkp-validation.yaml --timeout=20m --version v0.0.1
+[2026-06-10 14:11:37] [INFO] ****************************
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /home/sotav/.kube/staging/config
 Release "validation" has been upgraded. Happy Helming!
 NAME: validation
-LAST DEPLOYED: Wed Jun 10 12:55:47 2026
+LAST DEPLOYED: Wed Jun 10 14:11:40 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 29
+REVISION: 34
 TEST SUITE: None
-[2026-06-10 12:55:56] [INFO] All Actions have been completed successfully
-[2026-06-10 12:55:56] [INFO] ****************************
-[2026-06-10 12:55:56] [INFO] All actions completed successfully
+[2026-06-10 14:11:50] [INFO] All Actions have been completed successfully
+[2026-06-10 14:11:50] [INFO] ****************************
+[2026-06-10 14:11:50] [INFO] All actions completed successfully
