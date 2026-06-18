@@ -112,3 +112,4 @@ done
 
 
 echo "Done"
+exit;

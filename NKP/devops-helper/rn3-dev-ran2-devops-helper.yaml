@@ -1,0 +1,11 @@
+podName: devops-helper
+
+image:
+  repository: debian
+  tag: trixie
+  pullPolicy: IfNotPresent
+
+persistence:
+  enabled: true
+  storageClassName: "nfs-client"
+  accessMode: ReadWriteMany

@@ -60,17 +60,16 @@ charts:
         script_shell: "-"
         init_shell: "-"
         custom_deployment: >-
-          export INTER_BROKER_PASSWORD=$(grep "INTER_BROKER_PASSWORD" .secrets.prv | cut -d '=' -f2);
-          export CONTROLLER_PASSWORD=$(grep "CONTROLLER_PASSWORD" .secrets.prv | cut -d '=' -f2);
-          export KRAFT_CLUSTER_ID="nkp-stg-kafka-01";
-          export chart_repo="../kafka";
-          export release_name="kafka";
-          export chart_name="kafka";
-          export values_file="rn3-staging-nkp-kafka.yaml";
-          export NS="reportnet";
-          export KC="~/.kube/staging/config";
-          helm --kubeconfig $KC -n $NS upgrade --install kafka ../kafka -f ../kafka/rn3-staging-nkp-kafka.yaml --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;
-
+          export chart_repo=../kafka
+          export release_name=kafka
+          export chart_name=kafka
+          export values_file=rn3-staging-nkp-kafka.yaml
+          export NS=reportnet
+          export KC=~/.kube/staging/config
+          export KRAFT_CLUSTER_ID=staging-nkp-kafka-01
+          export INTER_BROKER_PASSWORD=$(grep "INTER_BROKER_PASSWORD" .secrets.prv | cut -d '=' -f2)
+          export CONTROLLER_PASSWORD=$(grep "CONTROLLER_PASSWORD" .secrets.prv | cut -d '=' -f2)
+          helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f ../kafka/$values_file --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi --debug ;
 
       #################################### KEYCLOAK ######################################
       - release_name: keycloak
@@ -150,7 +149,22 @@ charts:
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
           export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
           helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
-
+      #################################### CITUS ######################################
+      - release_name: citus
+        chart_name: citus
+        version: v0.0.1
+        chart_repo: ../citus
+        values_file: rn3-staging-nkp-citus.yaml
+        namespace: reportnet
+        deploy_type: statefull
+        script_shell: "-"
+        init_shell: >-
+          export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
+          export pass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
+          kubectl --kubeconfig $KC -n $NS delete secret citus-secrets;
+          kubectl --kubeconfig $KC -n $NS create secret generic citus-secrets --from-literal password=$pass --from-literal userpass=$dbpass ;
+        custom_deployment: "-"
+          #helm --kubeconfig $KC -n $NS upgrade --install citus . -f rn3-staging-nkp-citus.yaml --set fullnameOverride=citus,metrics.enabled=true --debug
 
 
       #####################################################################################
@@ -336,6 +350,17 @@ charts:
         version: v0.0.1
         chart_repo: ../reportnet-validation
         values_file: rn3-staging-nkp-validation.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        script_shell: "-"
+        init_shell: "-"
+        custom_deployment: "-"
+      ################################### MAINTENANCE ######################################
+      - release_name: maintenance
+        chart_name: reportnet-maintenance
+        version: v0.0.1
+        chart_repo: ../reportnet-maintenance
+        values_file: rn3-staging-nkp-maintenance.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"

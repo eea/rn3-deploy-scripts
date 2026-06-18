@@ -4,7 +4,7 @@
 # feel free to edit up to your liking !
 # Version: 1.0.1
 # Date published: 29/05/2026
-# Date updated: 29/05/2026
+# Date updated: 18/06/2026
 # Description: This is a small bash utility which can help to install and uninstall multiple helm charts in one go.
 # Github URL: https://github.com/eea/rn3-deploy-scripts.git
 # usage: 
@@ -20,12 +20,12 @@ show_menu(){
     bgred=`echo "\033[41m"`
     fgred=`echo "\033[31m"`
     printf "\n${menu}*********************************************${normal}\n"
-    printf "${menu}**${number} 1)${menu} Show what will get deployed ${normal}\n"
+    printf "${menu}**${number} 1)${menu} Show what will get deployed (If selection 3 is chosen...) ${normal}\n"
     printf "${menu}**${number} 2)${menu} Show Help - Config ${normal}\n"
     printf "${menu}**${number} 3)${menu} *** DEPLOY ALL *** ${normal}\n"
-    printf "${menu}**${number} 4)${menu} to be -- Deploy only Statefull ${normal}\n"
-    printf "${menu}**${number} 5)${menu} to be -- Deploy only Deployments ${normal}\n"
-    printf "${menu}**${number} 6)${menu} to be -- Deploy only an app ${normal}\n"
+    printf "${menu}**${number} 4)${menu} Deploy only Statefull ${normal}\n"
+    printf "${menu}**${number} 5)${menu} Deploy only Deployments ${normal}\n"
+    printf "${menu}**${number} 6)${menu} Deploy only an app ${normal}\n"
     printf "${menu}*********************************************${normal}\n"
     printf "Please enter a menu option and enter or ${fgred}x to exit. ${normal}"
     read opt
@@ -67,16 +67,28 @@ create_namespace: false
 wait: false
 timeout: true # If true, defaults to 20 mins
 charts:
-##################################### CONSUL ###########################################
-  - release_name: consul
-    chart_name: consul
-    chart_repo: ../consul
-    values_file: rn3-staging-nkp-consul.yaml
-##################################### KAFKA UI ###########################################
-  - release_name: kafka-ui
-    chart_name: kafka-ui
-    chart_repo: ../kafka-ui
-    values_file: rn3-staging-nkp-kafka-ui.yaml
+      #################################### MONGO ######################################
+      - release_name: mongo
+        chart_name: mongo
+        version: v0.0.1
+        chart_repo: ../mongodb
+        values_file: rn3-dev-ran2-mongo.yaml
+        namespace: reportnet
+        deploy_type: statefull
+        script_shell: "-"
+        init_shell: "-"
+        custom_deployment: "-"
+      #################################### REDIS ######################################
+      - release_name: redis
+        chart_name: redis
+        version: v0.0.1
+        chart_repo: ../redis
+        values_file: rn3-dev-ran2-redis.yaml
+        namespace: reportnet
+        deploy_type: statefull
+        script_shell: "-"
+        init_shell: "-"
+        custom_deployment: "-"
 
 Note: 
 --------------------------
@@ -351,6 +363,16 @@ perform_action() {
 
 
 
+
+
+
+
+
+
+
+
+
+
     ##################################################################
     # run before the deployment
     if [ "$DEPLOY_TYPE" != "-" ] && [ "$INIT_SHELL" != "-" ]; then
@@ -382,17 +404,35 @@ perform_action() {
       # fi
       
 
-      if [ "$DEPLOY_TYPE" == "statefull" ] && [ "$CUSTOM_DEPLOYMENT" == "-" ] ; then
+
+
+
+
+      # if [ "$ACTION" == "app" ] && [ "$DEPLOY_TYPE" != "-" ] ; then
+      #     log_message "INFO" "Deployment type is *** $DEPLOY_TYPE ***  execution will only upgrade "
+      #     HELM_COMMAND="helm --kubeconfig $KC -n "$NAMESPACE" upgrade --install "$RELEASE_NAME" "$CHART_REPO" -f "$CHART_REPO/$VALUES_FILE""
+      #     #HELM_COMMAND="echo hello from a statefull deployment "
+      # fi
+
+      if [ "$DEPLOY_TYPE" == "statefull" ] ; then
           log_message "INFO" "Deployment type is *** $DEPLOY_TYPE ***  execution will only upgrade "
-          HELM_COMMAND="helm --kubeconfig $KC -n "$NAMESPACE" upgrade "$RELEASE_NAME" "$CHART_REPO" -f "$CHART_REPO/$VALUES_FILE""
+          HELM_COMMAND="helm --kubeconfig $KC -n "$NAMESPACE" upgrade --install "$RELEASE_NAME" "$CHART_REPO" -f "$CHART_REPO/$VALUES_FILE""
           #HELM_COMMAND="echo hello from a statefull deployment "
         else
-        if [ "$DEPLOY_TYPE" == "deployment" ] && [ "$CUSTOM_DEPLOYMENT" == "-" ] ; then
+        if [ "$DEPLOY_TYPE" == "deployment" ] ; then
           log_message "INFO" "Deployment type is  *** $DEPLOY_TYPE ***  execution will proceed "
           log_message "INFO" "Installing $CHART_NAME with release name $RELEASE_NAME from $CHART_REPO with version $VERSION using values file: $VALUES_FILE in $NAMESPACE namespace"
           HELM_COMMAND="helm --kubeconfig $KC -n "$NAMESPACE" upgrade --install "$RELEASE_NAME" "$CHART_REPO" -f "$CHART_REPO/$VALUES_FILE""
         fi
       fi
+      
+
+
+
+
+
+
+
 
 
       if [ "$DRY_RUN" == "true" ]; then
@@ -490,7 +530,70 @@ fi
 
 ###########################################################################################
 # Based on the action install, uninstall, etc perform it and provide indented results and logs
-if [ "$ACTION" == "install" ]; then
+# selection menu 6
+if [ "$ACTION" == "app" ]; then
+  eea-deployer "Starting deployments of chart $app_name !"
+  log_message "INFO" "Using file: $CONFIG_FILE_NAME"
+  generic_values
+  while IFS=$'\t' read -r RELEASE_NAME CHART_NAME VERSION CHART_REPO VALUES_FILE NAMESPACE DEPLOY_TYPE SCRIPT_SHELL INIT_SHELL CUSTOM_DEPLOYMENT; do
+    generic_chart_values
+    perform_action "install" "$RELEASE_NAME" "$CHART_NAME" "$CHART_REPO" "$VALUES_FILE" "$VERSION" "$NAMESPACE"  "$DEPLOY_TYPE" "$SCRIPT_SHELL" "$INIT_SHELL" "$CUSTOM_DEPLOYMENT"
+    if [ "$DRY_RUN" == "true" ]; then
+      log_message "INFO" "Skipping $perform_action due to DRY_RUN=true for release $RELEASE_NAME"
+    else
+      echo -e "${Green}-------------------------------------------------------------${Color_Off}"
+      # or 
+      #echo -e "${Green}Waiting for 2 seconds to check the pods ${Color_Off}"
+      #sleep 2s
+      #check_pod_status "$RELEASE_NAME" "$NAMESPACE" "$CONFIG_FILE_NAME"      
+    fi
+    #sleep 2s
+  done < <(yq e '.charts[] | [.release_name, .chart_name, .version, .chart_repo, .values_file, .namespace, .deploy_type, .script_shell, .init_shell, .custom_deployment] | @tsv' $CONFIG_FILE_NAME | grep $app_name)
+
+# selection menu 4
+elif [ "$ACTION" == "statefull" ]; then
+  eea-deployer "Starting deployments of chart $app_name !"
+  log_message "INFO" "Using file: $CONFIG_FILE_NAME"
+  generic_values
+  while IFS=$'\t' read -r RELEASE_NAME CHART_NAME VERSION CHART_REPO VALUES_FILE NAMESPACE DEPLOY_TYPE SCRIPT_SHELL INIT_SHELL CUSTOM_DEPLOYMENT; do
+    generic_chart_values
+    perform_action "install" "$RELEASE_NAME" "$CHART_NAME" "$CHART_REPO" "$VALUES_FILE" "$VERSION" "$NAMESPACE"  "$DEPLOY_TYPE" "$SCRIPT_SHELL" "$INIT_SHELL" "$CUSTOM_DEPLOYMENT"
+    if [ "$DRY_RUN" == "true" ]; then
+      log_message "INFO" "Skipping $perform_action due to DRY_RUN=true for release $RELEASE_NAME"
+    else
+      echo -e "${Green}-------------------------------------------------------------${Color_Off}"
+      # or 
+      #echo -e "${Green}Waiting for 2 seconds to check the pods ${Color_Off}"
+      #sleep 2s
+      #check_pod_status "$RELEASE_NAME" "$NAMESPACE" "$CONFIG_FILE_NAME"      
+    fi
+    #sleep 2s
+  done < <(yq e '.charts[] | [.release_name, .chart_name, .version, .chart_repo, .values_file, .namespace, .deploy_type, .script_shell, .init_shell, .custom_deployment] | @tsv' $CONFIG_FILE_NAME | grep $type_sel)
+
+
+
+# selection menu 5
+elif [ "$ACTION" == "deployment" ]; then
+  eea-deployer "Starting deployments of chart $app_name !"
+  log_message "INFO" "Using file: $CONFIG_FILE_NAME"
+  generic_values
+  while IFS=$'\t' read -r RELEASE_NAME CHART_NAME VERSION CHART_REPO VALUES_FILE NAMESPACE DEPLOY_TYPE SCRIPT_SHELL INIT_SHELL CUSTOM_DEPLOYMENT; do
+    generic_chart_values
+    perform_action "install" "$RELEASE_NAME" "$CHART_NAME" "$CHART_REPO" "$VALUES_FILE" "$VERSION" "$NAMESPACE"  "$DEPLOY_TYPE" "$SCRIPT_SHELL" "$INIT_SHELL" "$CUSTOM_DEPLOYMENT"
+    if [ "$DRY_RUN" == "true" ]; then
+      log_message "INFO" "Skipping $perform_action due to DRY_RUN=true for release $RELEASE_NAME"
+    else
+      echo -e "${Green}-------------------------------------------------------------${Color_Off}"
+      # or 
+      #echo -e "${Green}Waiting for 2 seconds to check the pods ${Color_Off}"
+      #sleep 2s
+      #check_pod_status "$RELEASE_NAME" "$NAMESPACE" "$CONFIG_FILE_NAME"      
+    fi
+    #sleep 2s
+  done < <(yq e '.charts[] | [.release_name, .chart_name, .version, .chart_repo, .values_file, .namespace, .deploy_type, .script_shell, .init_shell, .custom_deployment] | @tsv' $CONFIG_FILE_NAME | grep $type_sel)
+
+# selection menu 3
+elif [ "$ACTION" == "install" ]; then
   eea-deployer "Starting deployments of charts !"
   log_message "INFO" "Using file: $CONFIG_FILE_NAME"
   generic_values
@@ -597,13 +700,24 @@ while [ $opt != '' ]
             show_menu;
         ;;
         4) clear;
-            option_picked "Option 4 Picked";
-            printf "Option 4 Picked";
+            option_picked "Option selected (4) = STATEFULL ONLY ";
+            type_sel=statefull
+            printf "$1 $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15}";
+            eea_master statefull $2 $3 ;
             show_menu;
         ;;
         5) clear;
-            option_picked "Option 5 Picked";
-            printf "Option 5 Picked";
+            option_picked "Option selected (5) = DEPLOYMENTS ONLY ";
+            type_sel=deployment
+            printf "$1 $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15}";
+            eea_master deployment $2 $3 ;
+            show_menu;
+        ;;
+        6) clear;
+            option_picked "Option selected (6) = DEPLOY AN APP";
+            read -p "Please give me the name of the deployment app: " app_name
+            printf "$1 $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15}";
+            eea_master app $2 $3 ;
             show_menu;
         ;;
         x)exit;

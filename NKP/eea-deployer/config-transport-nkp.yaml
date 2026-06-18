@@ -150,10 +150,22 @@ charts:
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
           export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
           helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
-
-
-
-
+      #################################### CITUS ######################################
+      - release_name: citus
+        chart_name: citus
+        version: v0.0.1
+        chart_repo: ../citus
+        values_file: rn3-transport-nkp-citus.yaml
+        namespace: reportnet
+        deploy_type: statefull
+        script_shell: "-"
+        init_shell: >-
+          export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
+          export pass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
+          kubectl --kubeconfig $KC -n $NS delete secret citus-secrets;
+          kubectl --kubeconfig $KC -n $NS create secret generic citus-secrets --from-literal password=$pass --from-literal userpass=$dbpass ;
+        custom_deployment: "-"
+          #helm --kubeconfig $KC -n $NS upgrade --install citus . -f rn3-staging-nkp-citus.yaml --set fullnameOverride=citus,metrics.enabled=true --debug
 
 
 
@@ -305,6 +317,17 @@ charts:
         version: v0.0.1
         chart_repo: ../reportnet-validation
         values_file: rn3-transport-nkp-validation.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        script_shell: "-"
+        init_shell: "-"
+        custom_deployment: "-"
+      ################################### MAINTENANCE ######################################
+      - release_name: maintenance
+        chart_name: reportnet-maintenance
+        version: v0.0.1
+        chart_repo: ../reportnet-maintenance
+        values_file: rn3-trasnport-nkp-maintenance.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"

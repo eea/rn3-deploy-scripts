@@ -145,11 +145,11 @@ keycloak:
     limits:
       #cpu: "100m"
       #memory: "3096Mi"
-      memory: 3Gi
+      memory: 2Gi
     requests:
       #cpu: "100m"
       #memory: "3096Mi"
-      memory: 3Gi
+      memory: 2Gi
 
   ## WildFly CLI configurations. They all end up in the file 'keycloak.cli' configured in the configmap which is
   ## executed on server startup.

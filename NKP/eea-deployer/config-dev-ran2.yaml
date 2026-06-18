@@ -27,7 +27,25 @@ charts:
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
-
+      #####################################################################################
+      ####################                                           ######################
+      ####################                                           ######################
+      ####################             DEVOPS HELPER TOOLS           ######################
+      ####################                                           ######################
+      ####################                                           ######################
+      ####################                                           ######################
+      #####################################################################################
+      ################################### DEVOPS-HELPER ######################################
+      - release_name: devops-helper
+        chart_name: devops-helper
+        version: v0.0.1
+        chart_repo: ../devops-helper
+        values_file: rn3-dev-ran2-devops-helper.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        script_shell: "-"
+        init_shell: "-"
+        custom_deployment: "-"
 
       #####################################################################################
       ####################                                           ######################
@@ -45,7 +63,7 @@ charts:
         chart_repo: ../consul
         values_file: rn3-dev-ran2-consul.yaml
         namespace: reportnet
-        deploy_type: "-"
+        deploy_type: statefull
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -56,20 +74,20 @@ charts:
         chart_repo: ../kafka
         values_file: rn3-dev-ran2-kafka.yaml
         namespace: reportnet
-        deploy_type: "-"
+        deploy_type: statefull
         script_shell: "-"
         init_shell: "-"
         custom_deployment: >-
-          export INTER_BROKER_PASSWORD=$(grep "INTER_BROKER_PASSWORD" .secrets.prv | cut -d '=' -f2);
-          export CONTROLLER_PASSWORD=$(grep "CONTROLLER_PASSWORD" .secrets.prv | cut -d '=' -f2);
-          export KRAFT_CLUSTER_ID="nkp-stg-kafka-01";
-          export chart_repo="../kafka";
-          export release_name="kafka";
-          export chart_name="kafka";
-          export values_file="rn3-dev-ran2-kafka.yaml";
-          export NS="reportnet";
-          export KC="~/.kube/staging/config";
-          helm --kubeconfig $KC -n $NS upgrade --install kafka ../kafka -f ../kafka/rn3-dev-ran2-kafka.yaml --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;
+          export chart_repo=../kafka
+          export release_name=kafka
+          export chart_name=kafka
+          export values_file=rn3-dev-ran2-kafka.yaml
+          export NS=reportnet
+          export KC=~/.kube/dev/config
+          export KRAFT_CLUSTER_ID=dev-ran2-kafka-01
+          export INTER_BROKER_PASSWORD=$(grep "INTER_BROKER_PASSWORD" .secrets.prv | cut -d '=' -f2)
+          export CONTROLLER_PASSWORD=$(grep "CONTROLLER_PASSWORD" .secrets.prv | cut -d '=' -f2)
+          helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f ../kafka/$values_file --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi --debug ;
 
 
       #################################### KEYCLOAK ######################################
@@ -79,7 +97,7 @@ charts:
         chart_repo: ../keycloak
         values_file: rn3-dev-ran2-keycloak.yaml
         namespace: reportnet
-        deploy_type: "-"
+        deploy_type: statefull
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -100,7 +118,7 @@ charts:
         chart_repo: ../mongodb
         values_file: rn3-dev-ran2-mongo.yaml
         namespace: reportnet
-        deploy_type: "-"
+        deploy_type: statefull
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -111,7 +129,7 @@ charts:
         chart_repo: ../redis
         values_file: rn3-dev-ran2-redis.yaml
         namespace: reportnet
-        deploy_type: "-"
+        deploy_type: statefull
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -132,7 +150,7 @@ charts:
           kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'ls -la  /tmp/migration';
           chmod a+x ./scripts/migrate.sh;
           ./scripts/migrate.sh;
-          chmod a+x ./scripts/./scripts/pgpool-usr-fix.sh;
+          chmod a+x ./scripts/pgpool-usr-fix.sh;
           ./scripts/pgpool-usr-fix.sh dev $NS $KC
         init_shell: >-
           kubectl --kubeconfig $KC -n $NS delete secret pg-secret;
@@ -150,7 +168,22 @@ charts:
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
           export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
           helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
-
+      #################################### CITUS ######################################
+      - release_name: citus
+        chart_name: citus
+        version: v0.0.1
+        chart_repo: ../citus
+        values_file: rn3-dev-ran2-citus.yaml
+        namespace: reportnet
+        deploy_type: statefull
+        script_shell: "-"
+        init_shell: >-
+          export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
+          export pass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
+          kubectl --kubeconfig $KC -n $NS delete secret citus-secrets;
+          kubectl --kubeconfig $KC -n $NS create secret generic citus-secrets --from-literal password=$pass --from-literal userpass=$dbpass ;
+        custom_deployment: "-"
+          #helm --kubeconfig $KC -n $NS upgrade --install citus . -f rn3-staging-nkp-citus.yaml --set fullnameOverride=citus,metrics.enabled=true --debug
 
       #####################################################################################
       ####################                                           ######################
@@ -186,11 +219,6 @@ charts:
         init_shell: "-"
         custom_deployment: "-"
 
-
-
-
-
-
       #####################################################################################
       ####################                                           ######################
       ####################                                           ######################
@@ -221,7 +249,8 @@ charts:
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
-        init_shell: "-"
+        init_shell: >-
+          kubectl --kubeconfig $KC apply -f  ../reportnet-recordstore/rn3-dev-ran2-data-pvc-nfs.yaml
         custom_deployment: "-"
       ################################### APIGATEWAY ######################################
       - release_name: api-gateway
@@ -344,4 +373,32 @@ charts:
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
+      ################################### MAINTENANCE ######################################
+      - release_name: maintenance
+        chart_name: reportnet-maintenance
+        version: v0.0.1
+        chart_repo: ../reportnet-maintenance
+        values_file: rn3-dev-ran2-maintenance.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        script_shell: "-"
+        init_shell: "-"
+        custom_deployment: "-"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
