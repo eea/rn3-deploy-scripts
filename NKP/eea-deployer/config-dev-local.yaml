@@ -3,7 +3,7 @@ create_namespace: false
 wait: false
 timeout: true # If true, defaults to 20 mins
 debug: true
-kc: /home/sotav/.kube/dev/config
+kc: /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig
 ns: reportnet
 init: true
 script: true
@@ -40,7 +40,7 @@ charts:
         chart_name: devops-helper
         version: v0.0.1
         chart_repo: ../devops-helper
-        values_file: rn3-dev-ran2-devops-helper.yaml
+        values_file: rn3-dev-local-devops-helper.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -61,7 +61,7 @@ charts:
         chart_name: consul
         version: v0.0.1
         chart_repo: ../consul
-        values_file: rn3-dev-ran2-consul.yaml
+        values_file: rn3-dev-local-consul.yaml
         namespace: reportnet
         deploy_type: statefull
         script_shell: "-"
@@ -72,7 +72,7 @@ charts:
         chart_name: kafka
         version: v0.0.1
         chart_repo: ../kafka
-        values_file: rn3-dev-ran2-kafka.yaml
+        values_file: rn3-dev-local-kafka.yaml
         namespace: reportnet
         deploy_type: statefull
         script_shell: "-"
@@ -81,10 +81,10 @@ charts:
           export chart_repo=../kafka
           export release_name=kafka
           export chart_name=kafka
-          export values_file=rn3-dev-ran2-kafka.yaml
+          export values_file=rn3-dev-local-kafka.yaml
           export NS=reportnet
           export KC=~/.kube/dev/config
-          export KRAFT_CLUSTER_ID=dev-ran2-kafka-01
+          export KRAFT_CLUSTER_ID=dev-local-kafka-01
           export INTER_BROKER_PASSWORD=$(grep "INTER_BROKER_PASSWORD" .secrets.prv | cut -d '=' -f2)
           export CONTROLLER_PASSWORD=$(grep "CONTROLLER_PASSWORD" .secrets.prv | cut -d '=' -f2)
           helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f ../kafka/$values_file --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi --debug ;
@@ -95,7 +95,7 @@ charts:
         chart_name: keycloak
         version: v0.0.1
         chart_repo: ../keycloak
-        values_file: rn3-dev-ran2-keycloak.yaml
+        values_file: rn3-dev-local-keycloak.yaml
         namespace: reportnet
         deploy_type: statefull
         script_shell: "-"
@@ -106,7 +106,7 @@ charts:
       #   chart_name: keycloak6
       #   #version: v0.0.1
       #   chart_repo: ../keycloak-k
-      #   values_file: rn3-dev-ran2-keycloak6.yaml
+      #   values_file: rn3-dev-local-keycloak6.yaml
       #   namespace: reportnet
       #   deploy_type: "-"
       #   #script_shell: 
@@ -116,7 +116,7 @@ charts:
         chart_name: mongo
         version: v0.0.1
         chart_repo: ../mongodb
-        values_file: rn3-dev-ran2-mongo.yaml
+        values_file: rn3-dev-local-mongo.yaml
         namespace: reportnet
         deploy_type: statefull
         script_shell: "-"
@@ -127,7 +127,7 @@ charts:
         chart_name: redis
         version: v0.0.1
         chart_repo: ../redis
-        values_file: rn3-dev-ran2-redis.yaml
+        values_file: rn3-dev-local-redis.yaml
         namespace: reportnet
         deploy_type: statefull
         script_shell: "-"
@@ -138,9 +138,9 @@ charts:
         chart_name: helm
         version: v0.0.1
         chart_repo: ../postgresql
-        values_file: rn3-dev-ran2-postgresql.yaml
+        values_file: rn3-dev-local-postgresql.yaml
         namespace: reportnet
-        deploy_type: "-" #statefull
+        deploy_type: statefull
         script_shell: >-
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
@@ -162,7 +162,7 @@ charts:
           export chart_repo=../postgresql
           export release_name=helm
           export chart_name=rn3-pg
-          export values_file=../postgresql/rn3-dev-ran2-postgresql.yaml
+          export values_file=../postgresql/rn3-dev-local-postgresql.yaml
           export NS=reportnet
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
@@ -173,7 +173,7 @@ charts:
         chart_name: citus
         version: v0.0.1
         chart_repo: ../citus
-        values_file: rn3-dev-ran2-citus.yaml
+        values_file: rn3-dev-local-citus.yaml
         namespace: reportnet
         deploy_type: statefull
         script_shell: "-"
@@ -200,7 +200,7 @@ charts:
       #   chart_name: nginx
       #   version: v0.0.1
       #   chart_repo: ../traefik
-      #   values_file: rn3-dev-ran2-nginx-svc-api.yaml
+      #   values_file: rn3-dev-local-nginx-svc-api.yaml
       #   namespace: reportnet
       #   deploy_type: "-"
       #   script_shell: "-"
@@ -211,11 +211,11 @@ charts:
         chart_name: traefik
         version: v0.0.1
         chart_repo: ../traefik
-        values_file: rn3-dev-ran2-traefik_values.yaml
+        values_file: rn3-dev-local-traefik_values.yaml
         namespace: reportnet
         deploy_type: "-"
         script_shell: >-
-          kubectl --kubeconfig $KC apply -f  ../traefik/rn3-dev-ran2-traefik-svc-api.yaml
+          kubectl --kubeconfig $KC apply -f  ../traefik/rn3-dev-local-traefik-svc-api.yaml
         init_shell: "-"
         custom_deployment: "-"
 
@@ -234,7 +234,7 @@ charts:
         debug: true
         version: v0.0.1
         chart_repo: ../kafka-ui
-        values_file: rn3-dev-ran2-kafka-ui.yaml
+        values_file: rn3-dev-local-kafka-ui.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -245,19 +245,19 @@ charts:
         chart_name: helm
         version: v0.0.1
         chart_repo: ../reportnet-recordstore
-        values_file: rn3-dev-ran2-recordstore.yaml
+        values_file: rn3-dev-local-recordstore.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
         init_shell: >-
-          kubectl --kubeconfig $KC apply -f  ../reportnet-recordstore/rn3-dev-ran2-data-pvc-nfs.yaml
+          kubectl --kubeconfig $KC apply -f  ../reportnet-recordstore/rn3-dev-local-data-pvc-nfs.yaml
         custom_deployment: "-"
       ################################### APIGATEWAY ######################################
       - release_name: api-gateway
         chart_name: reportnet-api-gateway
         version: v0.0.1
         chart_repo: ../reportnet-apigateway
-        values_file: rn3-dev-ran2-api-gateway.yaml
+        values_file: rn3-dev-local-api-gateway.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -268,7 +268,7 @@ charts:
         chart_name: reportnet-collaboration
         version: v0.0.1
         chart_repo: ../reportnet-collaboration
-        values_file: rn3-dev-ran2-collaboration.yaml
+        values_file: rn3-dev-local-collaboration.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -279,7 +279,7 @@ charts:
         chart_name: reportnet-communication
         version: v0.0.1
         chart_repo: ../reportnet-communication
-        values_file: rn3-dev-ran2-communication.yaml
+        values_file: rn3-dev-local-communication.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -290,7 +290,7 @@ charts:
         chart_name: reportnet-dataflow
         version: v0.0.1
         chart_repo: ../reportnet-dataflow
-        values_file: rn3-dev-ran2-dataflow.yaml
+        values_file: rn3-dev-local-dataflow.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -301,7 +301,7 @@ charts:
         chart_name: reportnet-dataset
         version: v0.0.1
         chart_repo: ../reportnet-dataset
-        values_file: rn3-dev-ran2-dataset.yaml
+        values_file: rn3-dev-local-dataset.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -312,7 +312,7 @@ charts:
         chart_name: reportnet-document
         version: v0.0.1
         chart_repo: ../reportnet-document
-        values_file: rn3-dev-ran2-document.yaml
+        values_file: rn3-dev-local-document.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -323,7 +323,7 @@ charts:
         chart_name: reportnet-frontend
         version: v0.0.1
         chart_repo: ../reportnet-frontend
-        values_file: rn3-dev-ran2-frontend.yaml
+        values_file: rn3-dev-local-frontend.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -334,7 +334,7 @@ charts:
         chart_name: reportnet-orchestrator
         version: v0.0.1
         chart_repo: ../reportnet-orchestrator
-        values_file: rn3-dev-ran2-orchestrator.yaml
+        values_file: rn3-dev-local-orchestrator.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -345,7 +345,7 @@ charts:
         chart_name: reportnet-rod
         version: v0.0.1
         chart_repo: ../reportnet-rod
-        values_file: rn3-dev-ran2-rod.yaml
+        values_file: rn3-dev-local-rod.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -356,7 +356,7 @@ charts:
         chart_name: reportnet-ums
         version: v0.0.1
         chart_repo: ../reportnet-ums
-        values_file: rn3-dev-ran2-ums.yaml
+        values_file: rn3-dev-local-ums.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -367,7 +367,7 @@ charts:
         chart_name: reportnet-validation
         version: v0.0.1
         chart_repo: ../reportnet-validation
-        values_file: rn3-dev-ran2-validation.yaml
+        values_file: rn3-dev-local-validation.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -378,7 +378,7 @@ charts:
         chart_name: reportnet-maintenance
         version: v0.0.1
         chart_repo: ../reportnet-maintenance
-        values_file: rn3-dev-ran2-maintenance.yaml
+        values_file: rn3-dev-local-maintenance.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"

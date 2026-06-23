@@ -26,6 +26,7 @@ show_menu(){
     printf "${menu}**${number} 4)${menu} Deploy only Statefull ${normal}\n"
     printf "${menu}**${number} 5)${menu} Deploy only Deployments ${normal}\n"
     printf "${menu}**${number} 6)${menu} Deploy only an app ${normal}\n"
+    printf "${menu}**${number} 7)${menu} New environment ${normal}\n"
     printf "${menu}*********************************************${normal}\n"
     printf "Please enter a menu option and enter or ${fgred}x to exit. ${normal}"
     read opt
@@ -37,6 +38,20 @@ option_picked(){
     message=${@:-"${normal}Error: No message passed"}
     printf "${msgcolor}${message}${normal}\n"
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -238,6 +253,56 @@ log_message() {
   echo "[$LOG_TIME] [$LOG_LEVEL] $MESSAGE"
   echo "[$LOG_TIME] [$LOG_LEVEL] $MESSAGE" >> "$LOG_FILE"
 }
+
+
+
+new_env(){
+  echo -e "${Green}-------------------------------------------------------------${Color_Off}"
+  echo -e "${Red}This action will only replicate the existing var files from the current env to a new env of your choice"
+  echo -e "you will need to change any variables in case of a deployment on the new environment ${Color_Off}"
+  echo -e "${Green}-------------------------------------------------------------${Color_Off}"
+  NEWENV=$env_name
+  cd $CHART_REPO
+  BASE_ENV_FILE=$(echo $VALUES_FILE | awk -F "-" '{print $2 "-" $3}')
+  NEW_ENV_FILE=$(echo $VALUES_FILE | sed "s/$BASE_ENV_FILE/$env_name/g")
+  FILE=$NEW_ENV_FILE    
+  if [ -f $FILE ]; then
+    echo -e "${Green} File ${Red} $FILE ${Color_Off} ${Green} is already there. ${Color_Off}"
+    echo -e "${Green} The file will NOT be created from ${Red}$BASE_ENV_FILE ${Color_Off} ${Green} with the name ${Color_Off} ${Red} $NEW_ENV_FILE ${Color_Off}"
+  else
+    echo -e "${Green} File ${Red} $FILE ${Color_Off} ${Green} does not exist. ${Color_Off}"
+    echo -e "${Green} a file will be created from ${Red} $BASE_ENV_FILE${Color_Off} ${Red} with the name  $NEW_ENV_FILE ${Color_Off}"
+    cp $VALUES_FILE $(echo $VALUES_FILE | sed "s/$BASE_ENV_FILE/$env_name/g")
+  fi
+  cd ../eea-deployer
+
+
+  OLDENVCONF=$CONFIG_FILE_NAME
+  echo $OLDENVCONF
+  #cd $CHART_REPO
+  CONF_ENV_FILE=$(echo $OLDENVCONF |awk -F "." '{print $1}' |awk -F "-" '{print $2 "-" $3}')
+  #echo "current conf file is "$CONF_ENV_FILE
+  NEW_ENV_CONF=$(echo $OLDENVCONF| sed "s/$CONF_ENV_FILE/$env_name/g")
+  FILE_ENV=$NEW_ENV_CONF   
+  echo "new file name is "$FILE_ENV
+  if [ -f $FILE_ENV ]; then
+    echo "${Green} File ${Red} $FILE_ENV ${Color_Off} ${Green} is already there. ${Color_Off}"
+    echo "${Green} The file will NOT  be created from ${Red} $OLDENVCONF ${Color_Off} ${Red} with the name $NEW_ENV_CONF ${Color_Off}"
+  else
+    echo "File $FILE_ENV does not exist."
+    echo "a file will be created from $OLDENVCONF with the name $NEW_ENV_CONF"
+    cp $OLDENVCONF $(echo $OLDENVCONF | sed "s/$CONF_ENV_FILE/$env_name/g")
+  fi
+
+}
+
+
+
+
+
+
+
+
 # Function to check pod health and to make sure pods of a given release are in running state 
 # This script will terminate if the pods are not running for more than 20 minutes, which is something that should ideally not happen.
 check_pod_status() {
@@ -354,25 +419,47 @@ perform_action() {
     NAMESPACE="reportnet"
   fi
 
+
+
+
+
+
+  if [ "$ACTION" == "new-env" ]; then
+
+    #eea-deployer "Starting deployments of chart $app_name !"
+    log_message "INFO" "Using file: $CONFIG_FILE_NAME"
+    generic_values
+    while IFS=$'\t' read -r CHART_REPO VALUES_FILE; do
+      echo $env_name $base_env
+      generic_chart_values
+      #perform_action "new-env" "$RELEASE_NAME" "$CHART_NAME" "$CHART_REPO" "$VALUES_FILE" "$VERSION" "$NAMESPACE"  "$DEPLOY_TYPE" "$SCRIPT_SHELL" "$INIT_SHELL" "$CUSTOM_DEPLOYMENT"
+      #echo "inside action new-env"
+      #echo "$env_name" "$base_env" "$CHART_REPO" "$VALUES_FILE"
+      echo $1
+      echo $2
+      echo $3
+      echo $4
+      echo $5
+
+      new_env "$CHART_REPO" "$VALUES_FILE"
+
+    done < <(yq e '.charts[] | [.chart_repo, .values_file] | @tsv' $CONFIG_FILE_NAME)
+  fi
+
+
+
+
+
+
+
+
+
   if [ "$ACTION" == "install" ]; then
 
     if [ "$DEPLOY_TYPE" == "-" ]; then
       log_message "INFO" "Deployment type is '-' deployment will not be executed "
       printf "${Red} Deployment type is '-' deployment will not be executed  ${Color_Off} \n"
     fi
-
-
-
-
-
-
-
-
-
-
-
-
-
     ##################################################################
     # run before the deployment
     if [ "$DEPLOY_TYPE" != "-" ] && [ "$INIT_SHELL" != "-" ]; then
@@ -384,11 +471,7 @@ perform_action() {
       eval $INIT_SHELL >> $LOG_FILE 2>&1
     fi
     ##################################################################
-
     #log_message "INFO" "Deployment type is *** $DEPLOY_TYPE *** "
-
-
-
     if [ "$DEPLOY_TYPE" != "-" ] && [ "$CUSTOM_DEPLOYMENT" != "-" ] ; then
       log_message "INFO" "Custom deployment detected"
       printf "${Red} Custom deployment detected  ${Color_Off} \n"
@@ -402,11 +485,6 @@ perform_action() {
       #   else
       #   log_message "INFO" "Custom deployment detected"
       # fi
-      
-
-
-
-
 
       # if [ "$ACTION" == "app" ] && [ "$DEPLOY_TYPE" != "-" ] ; then
       #     log_message "INFO" "Deployment type is *** $DEPLOY_TYPE ***  execution will only upgrade "
@@ -426,15 +504,6 @@ perform_action() {
         fi
       fi
       
-
-
-
-
-
-
-
-
-
       if [ "$DRY_RUN" == "true" ]; then
         HELM_COMMAND+=" --dry-run=client"
       fi
@@ -549,6 +618,23 @@ if [ "$ACTION" == "app" ]; then
     fi
     #sleep 2s
   done < <(yq e '.charts[] | [.release_name, .chart_name, .version, .chart_repo, .values_file, .namespace, .deploy_type, .script_shell, .init_shell, .custom_deployment] | @tsv' $CONFIG_FILE_NAME | grep $app_name)
+
+
+
+elif [ "$ACTION" == "new-env" ]; then
+  eea-deployer "Starting deployments of chart $app_name !"
+  log_message "INFO" "Using file: $CONFIG_FILE_NAME"
+  generic_values
+
+  while IFS=$'\t' read -r RELEASE_NAME CHART_NAME VERSION CHART_REPO VALUES_FILE NAMESPACE DEPLOY_TYPE SCRIPT_SHELL INIT_SHELL CUSTOM_DEPLOYMENT; do
+    generic_chart_values
+    perform_action "new-env" "$RELEASE_NAME" "$CHART_NAME" "$CHART_REPO" "$VALUES_FILE" "$VERSION" "$NAMESPACE"  "$DEPLOY_TYPE" "$SCRIPT_SHELL" "$INIT_SHELL" "$CUSTOM_DEPLOYMENT"
+    #new-env "$env_name" "$env_base" "$CHART_REPO" "$VALUES_FILE" 
+    #echo "hello there - new env $new_env old_env $base_env"
+  done < <(yq e '.charts[] | [.release_name, .chart_name, .version, .chart_repo, .values_file, .namespace, .deploy_type, .script_shell, .init_shell, .custom_deployment] | @tsv' $CONFIG_FILE_NAME )
+
+
+
 
 # selection menu 4
 elif [ "$ACTION" == "statefull" ]; then
@@ -718,6 +804,14 @@ while [ $opt != '' ]
             read -p "Please give me the name of the deployment app: " app_name
             printf "$1 $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15}";
             eea_master app $2 $3 ;
+            show_menu;
+        ;;
+        7) clear;
+            option_picked "Option selected (6) = New env";
+            read -p "Please give me the name of the new environment: " env_name
+            #read -p "Please give me the name of the base environment to copy from: " env_base
+            #printf "$1 $2 $3";
+            eea_master new-env $2 $3;
             show_menu;
         ;;
         x)exit;

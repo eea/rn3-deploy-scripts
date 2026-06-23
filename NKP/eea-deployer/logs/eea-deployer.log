@@ -1,0 +1,1765 @@
+[2026-06-23 20:13:29] [INFO] Using file: config-dev-local.yaml
+[2026-06-23 20:13:29] [INFO] Generic/common values based on config-dev-local.yaml file
+[2026-06-23 20:13:29] [INFO] Dry Run: false
+[2026-06-23 20:13:29] [INFO] Create Namespace: false
+[2026-06-23 20:13:29] [INFO] Wait: false
+[2026-06-23 20:13:29] [INFO] Timeout: true
+[2026-06-23 20:13:29] [INFO] KubeConfig: /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig
+[2026-06-23 20:13:29] [INFO] ****************************
+[2026-06-23 20:13:29] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:13:29] [INFO] Release Name: devops-helper
+[2026-06-23 20:13:29] [INFO] Chart Name: devops-helper
+[2026-06-23 20:13:29] [INFO] Debug: 
+[2026-06-23 20:13:29] [INFO] Version: v0.0.1
+[2026-06-23 20:13:29] [INFO] Chart Repo: ../devops-helper
+[2026-06-23 20:13:29] [INFO] Values File: rn3-dev-local-devops-helper.yaml
+[2026-06-23 20:13:29] [INFO] Namespace: reportnet
+[2026-06-23 20:13:29] [INFO] Deploy type: deployment
+[2026-06-23 20:13:29] [INFO] Script_shell: -
+[2026-06-23 20:13:29] [INFO] Init_shell: -
+[2026-06-23 20:13:29] [INFO] Custom_deployment: -
+[2026-06-23 20:13:29] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:13:29] [INFO] Installing devops-helper with release name devops-helper from ../devops-helper with version v0.0.1 using values file: rn3-dev-local-devops-helper.yaml in reportnet namespace
+[2026-06-23 20:13:29] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install devops-helper ../devops-helper -f ../devops-helper/rn3-dev-local-devops-helper.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:13:29] [INFO] ****************************
+W0623 20:13:30.365762  311580 warnings.go:70] unknown field "spec.persistentVolumeReclaimPolicy"
+W0623 20:13:30.383800  311580 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "linux" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "linux" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "linux" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "linux" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "devops-helper" has been upgraded. Happy Helming!
+NAME: devops-helper
+LAST DEPLOYED: Tue Jun 23 20:13:30 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 5
+TEST SUITE: None
+[2026-06-23 20:13:30] [INFO] All Actions have been completed successfully
+[2026-06-23 20:13:30] [INFO] ****************************
+[2026-06-23 20:13:30] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:13:30] [INFO] Release Name: consul
+[2026-06-23 20:13:30] [INFO] Chart Name: consul
+[2026-06-23 20:13:30] [INFO] Debug: 
+[2026-06-23 20:13:30] [INFO] Version: v0.0.1
+[2026-06-23 20:13:30] [INFO] Chart Repo: ../consul
+[2026-06-23 20:13:30] [INFO] Values File: rn3-dev-local-consul.yaml
+[2026-06-23 20:13:30] [INFO] Namespace: reportnet
+[2026-06-23 20:13:30] [INFO] Deploy type: statefull
+[2026-06-23 20:13:30] [INFO] Script_shell: -
+[2026-06-23 20:13:30] [INFO] Init_shell: -
+[2026-06-23 20:13:30] [INFO] Custom_deployment: -
+[2026-06-23 20:13:30] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
+[2026-06-23 20:13:30] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install consul ../consul -f ../consul/rn3-dev-local-consul.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:13:30] [INFO] ****************************
+W0623 20:13:32.351411  311636 warnings.go:70] spec.template.spec.containers[0].resources.limits[memory]: fractional byte value "214748364800m" is invalid, must be an integer
+W0623 20:13:32.351532  311636 warnings.go:70] spec.template.spec.containers[0].resources.requests[memory]: fractional byte value "214748364800m" is invalid, must be an integer
+W0623 20:13:32.351557  311636 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "consul" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "consul" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "consul" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "consul" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "consul" has been upgraded. Happy Helming!
+NAME: consul
+LAST DEPLOYED: Tue Jun 23 20:13:31 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 6
+NOTES:
+1. Watch all cluster members come up.
+  $ kubectl get pods --namespace=reportnet -w
+2. Test cluster health using Helm test.
+  $ helm test consul
+3. (Optional) Manually confirm consul cluster is healthy.
+  $ CONSUL_POD=$(kubectl get pods -l='release=consul' --output=jsonpath={.items[0].metadata.name})
+  $ kubectl exec $CONSUL_POD consul members --namespace=reportnet | grep server
+[2026-06-23 20:13:32] [INFO] All Actions have been completed successfully
+[2026-06-23 20:13:32] [INFO] ****************************
+[2026-06-23 20:13:32] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:13:32] [INFO] Release Name: kafka
+[2026-06-23 20:13:32] [INFO] Chart Name: kafka
+[2026-06-23 20:13:32] [INFO] Debug: 
+[2026-06-23 20:13:32] [INFO] Version: v0.0.1
+[2026-06-23 20:13:32] [INFO] Chart Repo: ../kafka
+[2026-06-23 20:13:32] [INFO] Values File: rn3-dev-local-kafka.yaml
+[2026-06-23 20:13:32] [INFO] Namespace: reportnet
+[2026-06-23 20:13:32] [INFO] Deploy type: statefull
+[2026-06-23 20:13:32] [INFO] Script_shell: -
+[2026-06-23 20:13:32] [INFO] Init_shell: -
+[2026-06-23 20:13:32] [INFO] Custom_deployment: "export chart_repo=../kafka export release_name=kafka export chart_name=kafka export values_file=rn3-dev-local-kafka.yaml export NS=reportnet export KC=~/.kube/dev/config export KRAFT_CLUSTER_ID=dev-local-kafka-01 export INTER_BROKER_PASSWORD=$(grep ""INTER_BROKER_PASSWORD"" .secrets.prv | cut -d '=' -f2) export CONTROLLER_PASSWORD=$(grep ""CONTROLLER_PASSWORD"" .secrets.prv | cut -d '=' -f2) helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f ../kafka/$values_file --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi --debug ;"
+[2026-06-23 20:13:32] [INFO] Custom deployment detected
+[2026-06-23 20:13:32] [INFO] Executing custom deployment command: "export chart_repo=../kafka export release_name=kafka export chart_name=kafka export values_file=rn3-dev-local-kafka.yaml export NS=reportnet export KC=~/.kube/dev/config export KRAFT_CLUSTER_ID=dev-local-kafka-01 export INTER_BROKER_PASSWORD=$(grep ""INTER_BROKER_PASSWORD"" .secrets.prv | cut -d '=' -f2) export CONTROLLER_PASSWORD=$(grep ""CONTROLLER_PASSWORD"" .secrets.prv | cut -d '=' -f2) helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f ../kafka/$values_file --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi --debug ;"
+./eea-deployer: line 480: export chart_repo=../kafka export release_name=kafka export chart_name=kafka export values_file=rn3-dev-local-kafka.yaml export NS=reportnet export KC=~/.kube/dev/config export KRAFT_CLUSTER_ID=dev-local-kafka-01 export INTER_BROKER_PASSWORD=Summer_24_Kafk@ export CONTROLLER_PASSWORD=Summer_24_K_Contr01l3r helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install helm ../postgresql/. -f ../kafka/../postgresql/rn3-dev-local-postgresql.yaml --set sasl.interbroker.password= --set sasl.controller.password= --set kraft.clusterId= --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi --debug ;: No such file or directory
+[2026-06-23 20:13:32] [INFO] All Actions have been completed successfully
+[2026-06-23 20:13:32] [INFO] ****************************
+[2026-06-23 20:13:32] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:13:32] [INFO] Release Name: keycloak
+[2026-06-23 20:13:32] [INFO] Chart Name: keycloak
+[2026-06-23 20:13:32] [INFO] Debug: 
+[2026-06-23 20:13:32] [INFO] Version: v0.0.1
+[2026-06-23 20:13:32] [INFO] Chart Repo: ../keycloak
+[2026-06-23 20:13:32] [INFO] Values File: rn3-dev-local-keycloak.yaml
+[2026-06-23 20:13:32] [INFO] Namespace: reportnet
+[2026-06-23 20:13:32] [INFO] Deploy type: statefull
+[2026-06-23 20:13:32] [INFO] Script_shell: -
+[2026-06-23 20:13:32] [INFO] Init_shell: -
+[2026-06-23 20:13:32] [INFO] Custom_deployment: -
+[2026-06-23 20:13:32] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
+[2026-06-23 20:13:32] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install keycloak ../keycloak -f ../keycloak/rn3-dev-local-keycloak.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:13:32] [INFO] ****************************
+Release "keycloak" does not exist. Installing it now.
+Error: create: failed to create: Request entity too large: limit is 3145728
+[2026-06-23 20:13:36] [INFO] All Actions have been completed successfully
+[2026-06-23 20:13:36] [INFO] ****************************
+[2026-06-23 20:13:36] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:13:36] [INFO] Release Name: mongo
+[2026-06-23 20:13:36] [INFO] Chart Name: mongo
+[2026-06-23 20:13:36] [INFO] Debug: 
+[2026-06-23 20:13:36] [INFO] Version: v0.0.1
+[2026-06-23 20:13:36] [INFO] Chart Repo: ../mongodb
+[2026-06-23 20:13:36] [INFO] Values File: rn3-dev-local-mongo.yaml
+[2026-06-23 20:13:36] [INFO] Namespace: reportnet
+[2026-06-23 20:13:36] [INFO] Deploy type: statefull
+[2026-06-23 20:13:36] [INFO] Script_shell: -
+[2026-06-23 20:13:36] [INFO] Init_shell: -
+[2026-06-23 20:13:36] [INFO] Custom_deployment: -
+[2026-06-23 20:13:36] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
+[2026-06-23 20:13:36] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install mongo ../mongodb -f ../mongodb/rn3-dev-local-mongo.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:13:36] [INFO] ****************************
+WARNING: This chart is deprecated
+W0623 20:13:38.089542  311816 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (containers "copy-config", "install", "bootstrap", "mongodb-replicaset", "metrics" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (containers "copy-config", "install", "bootstrap", "mongodb-replicaset", "metrics" must set securityContext.capabilities.drop=["ALL"]), seccompProfile (pod or containers "copy-config", "install", "bootstrap", "mongodb-replicaset", "metrics" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "mongo" has been upgraded. Happy Helming!
+NAME: mongo
+LAST DEPLOYED: Tue Jun 23 20:13:37 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 8
+NOTES:
+*******************
+****DEPRECATED*****
+*******************
+*
+* This chart is deprecated and no longer maintained.
+*
+* It is recommended to use the Bitnami maintained MongoDB chart
+* (https://github.com/bitnami/charts/tree/master/bitnami/mongodb)
+* which has a similar feature set.
+
+
+1. After the statefulset is created completely, one can check which instance is primary by running:
+
+    $ for ((i = 0; i < 3; ++i)); do kubectl exec --namespace reportnet mongo-mongodb-replicaset-$i -- sh -c 'mongo --eval="printjson(rs.isMaster())"'; done
+
+2. One can insert a key into the primary instance of the mongodb replica set by running the following:
+    MASTER_POD_NAME must be replaced with the name of the master found from the previous step.
+
+    $ kubectl exec --namespace reportnet MASTER_POD_NAME -- mongo --eval="printjson(db.test.insert({key1: 'value1'}))"
+
+3. One can fetch the keys stored in the primary or any of the slave nodes in the following manner.
+    POD_NAME must be replaced by the name of the pod being queried.
+
+    $ kubectl exec --namespace reportnet POD_NAME -- mongo --eval="rs.slaveOk(); db.test.find().forEach(printjson)"
+[2026-06-23 20:13:38] [INFO] All Actions have been completed successfully
+[2026-06-23 20:13:38] [INFO] ****************************
+[2026-06-23 20:13:38] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:13:38] [INFO] Release Name: redis
+[2026-06-23 20:13:38] [INFO] Chart Name: redis
+[2026-06-23 20:13:38] [INFO] Debug: 
+[2026-06-23 20:13:38] [INFO] Version: v0.0.1
+[2026-06-23 20:13:38] [INFO] Chart Repo: ../redis
+[2026-06-23 20:13:38] [INFO] Values File: rn3-dev-local-redis.yaml
+[2026-06-23 20:13:38] [INFO] Namespace: reportnet
+[2026-06-23 20:13:38] [INFO] Deploy type: statefull
+[2026-06-23 20:13:38] [INFO] Script_shell: -
+[2026-06-23 20:13:38] [INFO] Init_shell: -
+[2026-06-23 20:13:38] [INFO] Custom_deployment: -
+[2026-06-23 20:13:38] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
+[2026-06-23 20:13:38] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install redis ../redis -f ../redis/rn3-dev-local-redis.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:13:38] [INFO] ****************************
+Release "redis" has been upgraded. Happy Helming!
+NAME: redis
+LAST DEPLOYED: Tue Jun 23 20:13:39 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 7
+TEST SUITE: None
+NOTES:
+CHART NAME: redis
+CHART VERSION: 19.6.4
+APP VERSION: 7.2.5
+
+** Please be patient while the chart is being deployed **
+
+Redis&reg; can be accessed via port 6379 on the following DNS name from within your cluster:
+
+    redis.reportnet.svc.cluster.local for read only operations
+
+For read/write operations, first access the Redis&reg; Sentinel cluster, which is available in port 26379 using the same domain name above.
+
+
+
+To connect to your Redis&reg; server:
+
+1. Run a Redis&reg; pod that you can use as a client:
+
+   kubectl run --namespace reportnet redis-client --restart='Never'  --image docker.io/bitnamilegacy/redis:7.2.5-debian-12-r4 --command -- sleep infinity
+
+   Use the following command to attach to the pod:
+
+   kubectl exec --tty -i redis-client \
+   --namespace reportnet -- bash
+
+2. Connect using the Redis&reg; CLI:
+   redis-cli -h redis -p 6379 # Read only operations
+   redis-cli -h redis -p 26379 # Sentinel access
+
+To connect to your database from outside the cluster execute the following commands:
+
+    kubectl port-forward --namespace reportnet svc/redis 6379:6379 &
+    redis-cli -h 127.0.0.1 -p 6379
+
+⚠ SECURITY WARNING: Original containers have been substituted. This Helm chart was designed, tested, and validated on multiple platforms using a specific set of Bitnami and Tanzu Application Catalog containers. Substituting other containers is likely to cause degraded security and performance, broken chart features, and missing environment variables.
+
+Substituted images detected:
+  - docker.io/bitnamilegacy/redis:7.2.5-debian-12-r4
+  - docker.io/bitnamilegacy/redis-sentinel:7.2.5-debian-12-r4
+[2026-06-23 20:13:40] [INFO] All Actions have been completed successfully
+[2026-06-23 20:13:40] [INFO] ****************************
+[2026-06-23 20:13:40] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:13:40] [INFO] Release Name: rn3-pg-helm
+[2026-06-23 20:13:40] [INFO] Chart Name: helm
+[2026-06-23 20:13:40] [INFO] Debug: 
+[2026-06-23 20:13:40] [INFO] Version: v0.0.1
+[2026-06-23 20:13:40] [INFO] Chart Repo: ../postgresql
+[2026-06-23 20:13:40] [INFO] Values File: rn3-dev-local-postgresql.yaml
+[2026-06-23 20:13:40] [INFO] Namespace: reportnet
+[2026-06-23 20:13:40] [INFO] Deploy type: statefull
+[2026-06-23 20:13:40] [INFO] Script_shell: export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'rm -Rf  /tmp/migration'; kubectl --kubeconfig $KC -n $NS cp ../postgresql/migration rn3-pg-helm-postgresql-0:/tmp/; kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'ls -la  /tmp/migration'; chmod a+x ./scripts/migrate.sh; ./scripts/migrate.sh; chmod a+x ./scripts/pgpool-usr-fix.sh; ./scripts/pgpool-usr-fix.sh dev $NS $KC
+[2026-06-23 20:13:40] [INFO] Init_shell: kubectl --kubeconfig $KC -n $NS delete secret pg-secret; export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS create secret generic pg-secret --from-literal admin-password=$adminpass --from-literal pg-pass=$dbpass --from-literal pg-sand-data-pass=postgres --from-literal postgresql-password=$dbpass --from-literal repmgr-password=$repmgrpass;
+[2026-06-23 20:13:40] [INFO] Custom_deployment: export chart_repo=../postgresql export release_name=helm export chart_name=rn3-pg export values_file=../postgresql/rn3-dev-local-postgresql.yaml export NS=reportnet export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
+[2026-06-23 20:13:40] [INFO] Custom SHELL INIT  detected
+[2026-06-23 20:13:40] [INFO] Executing SHELL INIT command: kubectl --kubeconfig $KC -n $NS delete secret pg-secret; export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS create secret generic pg-secret --from-literal admin-password=$adminpass --from-literal pg-pass=$dbpass --from-literal pg-sand-data-pass=postgres --from-literal postgresql-password=$dbpass --from-literal repmgr-password=$repmgrpass;
+secret "pg-secret" deleted
+secret/pg-secret created
+[2026-06-23 20:13:41] [INFO] Custom deployment detected
+[2026-06-23 20:13:41] [INFO] Executing custom deployment command: export chart_repo=../postgresql export release_name=helm export chart_name=rn3-pg export values_file=../postgresql/rn3-dev-local-postgresql.yaml export NS=reportnet export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
+history.go:56: [debug] getting history for release rn3-pg-helm
+upgrade.go:155: [debug] preparing upgrade for rn3-pg-helm
+upgrade.go:163: [debug] performing update for rn3-pg-helm
+upgrade.go:356: [debug] creating upgraded release for rn3-pg-helm
+client.go:393: [debug] checking 8 resources for changes
+client.go:684: [debug] Looks like there are no changes for ConfigMap "rn3-pg-helm-pgpool-initdb-scripts"
+client.go:684: [debug] Looks like there are no changes for ConfigMap "rn3-pg-helm-postgresql-initdb-scripts"
+client.go:693: [debug] Patch Service "rn3-pg-helm-pgpool" in namespace reportnet
+client.go:684: [debug] Looks like there are no changes for Service "rn3-pg-helm-postgresql-metrics"
+client.go:684: [debug] Looks like there are no changes for Service "rn3-pg-helm-postgresql-headless"
+client.go:684: [debug] Looks like there are no changes for Service "rn3-pg-helm-postgresql"
+W0623 20:13:43.345775  312018 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "pgpool" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "pgpool" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "pgpool" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "pgpool" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+client.go:414: [debug] Created a new Deployment called "rn3-pg-helm-pgpool" in reportnet
+
+W0623 20:13:43.399786  312018 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (containers "postgresql", "metrics" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (containers "postgresql", "metrics" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or containers "postgresql", "metrics" must set securityContext.runAsNonRoot=true), seccompProfile (pod or containers "postgresql", "metrics" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+client.go:414: [debug] Created a new StatefulSet called "rn3-pg-helm-postgresql" in reportnet
+
+upgrade.go:171: [debug] updating status for upgraded release for rn3-pg-helm
+Release "rn3-pg-helm" has been upgraded. Happy Helming!
+NAME: rn3-pg-helm
+LAST DEPLOYED: Tue Jun 23 20:13:42 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 7
+TEST SUITE: None
+USER-SUPPLIED VALUES:
+clusterDomain: cluster.local
+fullnameOverride: rn3-pg-helm
+global:
+  fullnameOverride: rn3-pg-helm
+  pgpool:
+    existingSecret: pg-secret
+  postgresql:
+    existingSecret: pg-secret
+  storageClass: nfs-storage
+ingress:
+  annotations: {}
+  certManager: false
+  enabled: false
+  hosts:
+  - name: postgresql.local
+    path: /
+  secrets: null
+  tls:
+  - hosts:
+    - postgresql.local
+    secretName: postgresql.local-tls
+ldap:
+  base: null
+  binddn: null
+  bindpw: null
+  bslookup: null
+  enabled: false
+  nssInitgroupsIgnoreusers: root,nslcd
+  scope: null
+  tlsReqcert: null
+  uri: null
+metrics:
+  annotations:
+    prometheus.io/port: "9187"
+    prometheus.io/scrape: "true"
+  enabled: true
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  readinessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  resources:
+    limits:
+      cpu: 100m
+      memory: 160Mi
+    requests:
+      cpu: 100m
+      memory: 80Mi
+  securityContext:
+    enabled: true
+    runAsUser: 1001
+  serviceMonitor:
+    enabled: false
+    selector:
+      prometheus: kube-prometheus
+metricsImage:
+  debug: false
+  pullPolicy: IfNotPresent
+  registry: docker.io
+  repository: bitnami/postgres-exporter
+  tag: latest
+networkPolicy:
+  allowExternal: true
+  enabled: false
+persistence:
+  accessModes:
+  - ReadWriteOnce
+  annotations: {}
+  enabled: true
+  mountPath: /bitnami/postgresql
+  size: 20Gi
+pgpool:
+  adminUsername: admin
+  affinity: {}
+  livenessProbe:
+    enabled: false
+    failureThreshold: 5
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  nodeSelector: {}
+  pdb:
+    create: false
+    minAvailable: 1
+  podAnnotations: {}
+  priorityClassName: ""
+  readinessProbe:
+    enabled: false
+    failureThreshold: 5
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 5
+  replicaCount: 1
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 1Gi
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  tolerations: {}
+  useLoadBalancing: true
+pgpoolImage:
+  debug: false
+  pullPolicy: IfNotPresent
+  registry: docker.io
+  repository: bitnamilegacy/pgpool
+  tag: 4.1.1
+postgresql:
+  affinity: {}
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  nodeSelector: {}
+  pdb:
+    create: false
+    minAvailable: 1
+  pgHbaTrustAll: false
+  podAnnotations: {}
+  priorityClassName: ""
+  readinessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  replicaCount: 3
+  repmgrConnectTimeout: 5
+  repmgrDatabase: repmgr
+  repmgrLogLevel: NOTICE
+  repmgrReconnectAttempts: 3
+  repmgrReconnectInterval: 5
+  repmgrUsername: repmgr
+  resources:
+    limits:
+      memory: 14Gi
+    requests:
+      memory: 14Gi
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  tolerations: {}
+  updateStrategyType: RollingUpdate
+  upgradeRepmgrExtension: false
+  username: postgres
+postgresqlImage:
+  debug: false
+  pullPolicy: IfNotPresent
+  registry: docker.io
+  repository: bitnamilegacy/postgresql
+  tag: 11.7.0
+service:
+  annotations: {}
+  port: 5432
+  type: ClusterIP
+volumePermissions:
+  enabled: false
+  resources:
+    limits: {}
+    requests: {}
+  securityContext:
+    runAsUser: 0
+volumePermissionsImage:
+  pullPolicy: Always
+  registry: docker.io
+  repository: bitnami/minideb
+  tag: buster
+
+COMPUTED VALUES:
+clusterDomain: cluster.local
+fullnameOverride: rn3-pg-helm
+global:
+  fullnameOverride: rn3-pg-helm
+  pgpool:
+    existingSecret: pg-secret
+  postgresql:
+    existingSecret: pg-secret
+  storageClass: nfs-storage
+ingress:
+  annotations: {}
+  certManager: false
+  enabled: false
+  hosts:
+  - name: postgresql.local
+    path: /
+  tls:
+  - hosts:
+    - postgresql.local
+    secretName: postgresql.local-tls
+ldap:
+  enabled: false
+  nssInitgroupsIgnoreusers: root,nslcd
+metrics:
+  annotations:
+    prometheus.io/port: "9187"
+    prometheus.io/scrape: "true"
+  enabled: true
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  readinessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  resources:
+    limits:
+      cpu: 100m
+      memory: 160Mi
+    requests:
+      cpu: 100m
+      memory: 80Mi
+  securityContext:
+    enabled: true
+    runAsUser: 1001
+  serviceMonitor:
+    enabled: false
+    selector:
+      prometheus: kube-prometheus
+metricsImage:
+  debug: false
+  pullPolicy: IfNotPresent
+  registry: docker.io
+  repository: bitnami/postgres-exporter
+  tag: latest
+networkPolicy:
+  allowExternal: true
+  enabled: false
+persistence:
+  accessModes:
+  - ReadWriteOnce
+  annotations: {}
+  enabled: true
+  mountPath: /bitnami/postgresql
+  size: 20Gi
+pgpool:
+  adminUsername: admin
+  affinity: {}
+  livenessProbe:
+    enabled: false
+    failureThreshold: 5
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  nodeSelector: {}
+  pdb:
+    create: false
+    minAvailable: 1
+  podAnnotations: {}
+  priorityClassName: ""
+  readinessProbe:
+    enabled: false
+    failureThreshold: 5
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 5
+  replicaCount: 1
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 1Gi
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  tolerations: {}
+  useLoadBalancing: true
+pgpoolImage:
+  debug: false
+  pullPolicy: IfNotPresent
+  registry: docker.io
+  repository: bitnamilegacy/pgpool
+  tag: 4.1.1
+postgresql:
+  affinity: {}
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  nodeSelector: {}
+  pdb:
+    create: false
+    minAvailable: 1
+  pgHbaTrustAll: false
+  podAnnotations: {}
+  priorityClassName: ""
+  readinessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  replicaCount: 3
+  repmgrConnectTimeout: 5
+  repmgrDatabase: repmgr
+  repmgrLogLevel: NOTICE
+  repmgrReconnectAttempts: 3
+  repmgrReconnectInterval: 5
+  repmgrUsername: repmgr
+  resources:
+    limits:
+      memory: 14Gi
+    requests:
+      memory: 14Gi
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  tolerations: {}
+  updateStrategyType: RollingUpdate
+  upgradeRepmgrExtension: false
+  username: postgres
+postgresqlImage:
+  debug: false
+  pullPolicy: IfNotPresent
+  registry: docker.io
+  repository: bitnamilegacy/postgresql
+  tag: 11.7.0
+service:
+  annotations: {}
+  port: 5432
+  type: ClusterIP
+volumePermissions:
+  enabled: false
+  resources:
+    limits: {}
+    requests: {}
+  securityContext:
+    runAsUser: 0
+volumePermissionsImage:
+  pullPolicy: Always
+  registry: docker.io
+  repository: bitnami/minideb
+  tag: buster
+
+HOOKS:
+MANIFEST:
+---
+# Source: helm/templates/pgpool/initdb-scripts-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rn3-pg-helm-pgpool-initdb-scripts
+  labels:
+    app.kubernetes.io/name: helm
+    helm.sh/chart: helm-2.2.2
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: pgpool
+data:
+  pgpoolConfig.sh: "#!/bin/bash\r\necho 'postgres:md5a667f81c18c360beb563089097a5b94f'
+    >> /opt/bitnami/pgpool/conf/pool_passwd\r\necho 'testuser:md5cdc0ba8c75f2cc98122838c15c470a0d'
+    >> /opt/bitnami/pgpool/conf/pool_passwd\r\necho 'dataflow:md554b98b73cfe60e759ef332490d7b7371'
+    >> /opt/bitnami/pgpool/conf/pool_passwd\r\necho 'dataset:md5230a13dcd5e8f72ce9ce047e5c69906d'
+    >> /opt/bitnami/pgpool/conf/pool_passwd\r\necho 'validation:md5b6e17a172ec57d0cdc9a14553410b8ef'
+    >> /opt/bitnami/pgpool/conf/pool_passwd\r\necho 'recordstore:md5e2a1ff8ce8fe36ca27f6f2212fe025da'
+    >> /opt/bitnami/pgpool/conf/pool_passwd\r\nsed -i 's/client_idle_limit = 0/client_idle_limit
+    = 1200/g' /opt/bitnami/pgpool/conf/pgpool.conf"
+---
+# Source: helm/templates/postgresql/initdb-scripts-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rn3-pg-helm-postgresql-initdb-scripts
+  labels:
+    app.kubernetes.io/name: helm
+    helm.sh/chart: helm-2.2.2
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: postgresql
+data:
+  postgresPreconfigDatabase.sql: "ALTER SYSTEM SET max_connections = '500';\r\nALTER
+    SYSTEM SET shared_buffers = '1GB';\r\nALTER SYSTEM SET maintenance_work_mem = '256MB';\r\nALTER
+    SYSTEM SET work_mem = '64MB';\r\nALTER SYSTEM SET checkpoint_completion_target =
+    '0.9';\r\nALTER SYSTEM SET random_page_cost = '1.1';\r\nALTER SYSTEM SET effective_io_concurrency
+    = '300';\r\nALTER SYSTEM SET min_wal_size = '1GB';\r\nALTER SYSTEM SET max_wal_size
+    = '4GB';\r\nALTER SYSTEM SET synchronous_commit='remote_apply';\r\n\r\n\r\nCREATE
+    extension if not exists postgis;\r\nCREATE extension if not exists fuzzystrmatch;\r\nCREATE
+    EXTENSION if not exists postgis_tiger_geocoder;\r\nCREATE USER testuser WITH PASSWORD
+    '53p057n373.0!';\r\nCREATE USER dataset WITH PASSWORD '53p057n373.0!';\r\nCREATE
+    USER dataflow WITH PASSWORD '53p057n373.0!';\r\nCREATE USER recordstore WITH PASSWORD
+    '53p057n373.0!';\r\nCREATE USER validation WITH PASSWORD '53p057n373.0!';\r\n\r\nDROP
+    DATABASE IF EXISTS datasets;\r\nDROP DATABASE IF EXISTS metabase;\r\nDROP DATABASE
+    IF EXISTS keycloak;\r\n\r\nCREATE DATABASE datasets\r\n    WITH\r\n    OWNER = postgres\r\n
+    \   ENCODING = 'UTF8'\r\n    TEMPLATE = template0\r\n    TABLESPACE = pg_default\r\n
+    \   CONNECTION LIMIT = -1;\r\n\r\nCREATE DATABASE metabase\r\n    WITH\r\n    OWNER
+    = postgres\r\n    ENCODING = 'UTF8'\r\n    TEMPLATE = template0\r\n    TABLESPACE
+    = pg_default\r\n    CONNECTION LIMIT = -1;\r\n\r\nCREATE DATABASE keycloak\r\n    WITH\r\n
+    \   OWNER = postgres\r\n    ENCODING = 'UTF8'\r\n    TEMPLATE = template0\r\n    TABLESPACE
+    = pg_default\r\n    CONNECTION LIMIT = -1;\r\nGRANT ALL PRIVILEGES ON DATABASE datasets
+    TO testuser,dataflow,dataset,recordstore,validation;\r\nGRANT ALL PRIVILEGES ON
+    DATABASE metabase TO testuser,dataflow,dataset,recordstore,validation;\r\nGRANT
+    ALL PRIVILEGES ON DATABASE keycloak TO testuser,dataflow,dataset,recordstore,validation;\r\n\r\n\\c
+    keycloak\r\nGRANT ALL PRIVILEGES ON ALL tables in schema public to testuser,dataflow,dataset,recordstore,validation;\r\ngrant
+    all privileges on all sequences in schema public to testuser,dataflow,dataset,recordstore,validation;\r\n\\c
+    metabase\r\nGRANT ALL PRIVILEGES ON ALL tables in schema public to testuser,dataflow,dataset,recordstore,validation;\r\ngrant
+    all privileges on all sequences in schema public to testuser,dataflow,dataset,recordstore,validation;"
+---
+# Source: helm/templates/pgpool/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rn3-pg-helm-pgpool
+  labels:
+    app.kubernetes.io/name: helm
+    helm.sh/chart: helm-2.2.2
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: postgresql
+      port: 5432
+      targetPort: postgresql
+      protocol: TCP
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: helm
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/component: pgpool
+---
+# Source: helm/templates/postgresql/metrics-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rn3-pg-helm-postgresql-metrics
+  labels:
+    app.kubernetes.io/name: helm
+    helm.sh/chart: helm-2.2.2
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: postgresql
+  annotations:
+    prometheus.io/port: "9187"
+    prometheus.io/scrape: "true"
+spec:
+  type: ClusterIP
+  ports:
+    - name: metrics
+      port: 9187
+      targetPort: metrics
+  selector:
+    app.kubernetes.io/name: helm
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/component: postgresql
+---
+# Source: helm/templates/postgresql/service-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rn3-pg-helm-postgresql-headless
+  labels:
+    app.kubernetes.io/name: helm
+    helm.sh/chart: helm-2.2.2
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: postgresql
+      port: 5432
+      targetPort: postgresql
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: helm
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/component: postgresql
+---
+# Source: helm/templates/postgresql/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rn3-pg-helm-postgresql
+  labels:
+    app.kubernetes.io/name: helm
+    helm.sh/chart: helm-2.2.2
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: postgresql
+spec:
+  type: ClusterIP
+  ports:
+    - name: postgresql
+      port: 5432
+      targetPort: postgresql
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: helm
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/component: postgresql
+---
+# Source: helm/templates/pgpool/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rn3-pg-helm-pgpool
+  labels: 
+    app.kubernetes.io/name: helm
+    helm.sh/chart: helm-2.2.2
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: pgpool
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app.kubernetes.io/name: helm
+      app.kubernetes.io/instance: rn3-pg-helm
+      app.kubernetes.io/component: pgpool
+  template:
+    metadata:
+      labels: 
+        app.kubernetes.io/name: helm
+        helm.sh/chart: helm-2.2.2
+        app.kubernetes.io/instance: rn3-pg-helm
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: pgpool
+    spec:      
+      priorityClassName: 
+      securityContext:
+        fsGroup: 1001
+      # Auxiliar vars to populate environment variables
+      containers:
+        - name: pgpool
+          image: docker.io/bitnamilegacy/pgpool:4.1.1
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsUser: 1001
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: PGPOOL_BACKEND_NODES
+              value: 0:rn3-pg-helm-postgresql-0.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local:5432,1:rn3-pg-helm-postgresql-1.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local:5432,2:rn3-pg-helm-postgresql-2.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local:5432,
+            - name: PGPOOL_SR_CHECK_USER
+              value: "repmgr"
+            - name: PGPOOL_SR_CHECK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-secret
+                  key: repmgr-password
+            - name: PGPOOL_ENABLE_LOAD_BALANCING
+              value: "yes"
+            - name: PGPOOL_ENABLE_LDAP
+              value: "no"
+            - name: PGPOOL_POSTGRES_USERNAME
+              value: "postgres"
+            - name: PGPOOL_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-secret
+                  key: postgresql-password
+            - name: PGPOOL_ADMIN_USERNAME
+              value: "admin"
+            - name: PGPOOL_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-secret
+                  key: admin-password
+          ports:
+            - name: postgresql
+              containerPort: 5432
+              protocol: TCP
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              memory: 1Gi
+          volumeMounts:
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/
+      volumes:
+        - name: custom-init-scripts
+          configMap:
+            name: rn3-pg-helm-pgpool-initdb-scripts
+---
+# Source: helm/templates/postgresql/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rn3-pg-helm-postgresql
+  labels:
+    app.kubernetes.io/name: helm
+    helm.sh/chart: helm-2.2.2
+    app.kubernetes.io/instance: rn3-pg-helm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: postgresql
+spec:
+  serviceName: rn3-pg-helm-postgresql-headless
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: helm
+      app.kubernetes.io/instance: rn3-pg-helm
+      app.kubernetes.io/component: postgresql
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: helm
+        helm.sh/chart: helm-2.2.2
+        app.kubernetes.io/instance: rn3-pg-helm
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: postgresql
+    spec:      
+      priorityClassName: 
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: postgresql
+          image: docker.io/bitnamilegacy/postgresql:11.7.0
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsUser: 1001
+          # Auxiliar vars to populate environment variables
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            # PostgreSQL configuration
+            - name: POSTGRESQL_VOLUME_DIR
+              value: "/bitnami/postgresql"
+            - name: PGDATA
+              value: "/bitnami/postgresql/data"
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-secret
+                  key: postgresql-password
+            - name: POSTGRES_DB
+              value: "postgres"
+            # Repmgr configuration
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: REPMGR_UPGRADE_EXTENSION
+              value: "no"
+            - name: REPMGR_PGHBA_TRUST_ALL
+              value: "no"
+            - name: REPMGR_MOUNTED_CONF_DIR
+              value: "/bitnami/repmgr/conf"
+            - name: REPMGR_PARTNER_NODES
+              value: rn3-pg-helm-postgresql-0.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local,rn3-pg-helm-postgresql-1.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local,rn3-pg-helm-postgresql-2.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local,
+            - name: REPMGR_PRIMARY_HOST
+              value: "rn3-pg-helm-postgresql-0.rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local"
+            - name: REPMGR_NODE_NAME
+              value: "$(MY_POD_NAME)"
+            - name: REPMGR_NODE_NETWORK_NAME
+              value: "$(MY_POD_NAME).rn3-pg-helm-postgresql-headless.reportnet.svc.cluster.local"
+            - name: REPMGR_LOG_LEVEL
+              value: "NOTICE"
+            - name: REPMGR_CONNECT_TIMEOUT
+              value: "5"
+            - name: REPMGR_RECONNECT_ATTEMPTS
+              value: "3"
+            - name: REPMGR_RECONNECT_INTERVAL
+              value: "5"
+            - name: REPMGR_USERNAME
+              value: "repmgr"
+            - name: REPMGR_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-secret
+                  key: repmgr-password
+            - name: REPMGR_DATABASE
+              value: "repmgr"
+          ports:
+            - name: postgresql
+              containerPort: 5432
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - 'PGPASSWORD=$POSTGRES_PASSWORD psql -w -U "postgres" -d "postgres"  -h 127.0.0.1 -c "SELECT 1"'
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - 'PGPASSWORD=$POSTGRES_PASSWORD psql -w -U "postgres" -d "postgres"  -h 127.0.0.1 -c "SELECT 1"'
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          resources:
+            limits:
+              memory: 14Gi
+            requests:
+              memory: 14Gi
+          volumeMounts:
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/
+            - name: data
+              mountPath: /bitnami/postgresql
+        - name: metrics
+          image: docker.io/bitnami/postgres-exporter:latest
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsUser: 1001
+          env:
+            - name: DATA_SOURCE_URI
+              value: "127.0.0.1:5432/postgres?sslmode=disable"
+            - name: DATA_SOURCE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: pg-secret
+                  key: postgresql-password
+            - name: DATA_SOURCE_USER
+              value: "postgres"
+          ports:
+            - name: metrics
+              containerPort: 9187
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: metrics
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /
+              port: metrics
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          resources:
+            limits:
+              cpu: 100m
+              memory: 160Mi
+            requests:
+              cpu: 100m
+              memory: 80Mi
+          volumeMounts:
+      volumes:
+        - name: custom-init-scripts
+          configMap:
+            name: rn3-pg-helm-postgresql-initdb-scripts
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "20Gi"
+        storageClassName: nfs-storage
+
+NOTES:
+** Please be patient while the chart is being deployed **
+
+PostgreSQL can be accessed through Pgpool via port 5432 on the following DNS name from within your cluster:
+
+    rn3-pg-helm-pgpool.reportnet.svc.cluster.local
+
+Pgpool acts as a load balancer for PostgreSQL and forward read/write connections to the primary node while read-only connections are forwarded to standby nodes.
+
+To get the password for "postgres" run:
+
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace reportnet pg-secret -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+
+To get the password for "repmgr" run:
+
+    export REPMGR_PASSWORD=$(kubectl get secret --namespace reportnet pg-secret -o jsonpath="{.data.repmgr-password}" | base64 --decode)
+
+To connect to your database run the following command:
+
+    kubectl run rn3-pg-helm-client --rm --tty -i --restart='Never' --namespace reportnet --image bitnami/postgresql:11 --env="PGPASSWORD=$POSTGRES_PASSWORD"  \
+        --command -- psql -h rn3-pg-helm-pgpool -p 5432 -U postgres -d postgres
+
+To connect to your database from outside the cluster execute the following commands:
+
+    kubectl port-forward --namespace reportnet svc/rn3-pg-helm-pgpool 5432:5432 &
+    psql -h 127.0.0.1 -p 5432 -U postgres -d postgres
+WARNING: Rolling tag detected (bitnami/postgres-exporter:latest), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
+[2026-06-23 20:13:43] [INFO] Custom SHELL SCRIPT  detected
+[2026-06-23 20:13:43] [INFO] Executing SHELL SCRIPT command: export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2); export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'rm -Rf  /tmp/migration'; kubectl --kubeconfig $KC -n $NS cp ../postgresql/migration rn3-pg-helm-postgresql-0:/tmp/; kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'ls -la  /tmp/migration'; chmod a+x ./scripts/migrate.sh; ./scripts/migrate.sh; chmod a+x ./scripts/pgpool-usr-fix.sh; ./scripts/pgpool-usr-fix.sh dev $NS $KC
+Unable to use a TTY - input is not a terminal or the right kind of file
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+Defaulting container name to postgresql.
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+Unable to use a TTY - input is not a terminal or the right kind of file
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+V1__Init_Metabase_BD.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V1__Init_Metabase_BD.sql was imported     #######################
+V2__Alter_Codelist.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V2__Alter_Codelist.sql was imported     #######################
+V3__Alter_Representative.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V3__Alter_Representative.sql was imported     #######################
+V4__Alter_Snapshot.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V4__Alter_Snapshot.sql was imported     #######################
+V5__Alter_Dataset_foreign_keys.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V5__Alter_Dataset_foreign_keys.sql was imported     #######################
+V6__Foreing_Relations.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V6__Foreing_Relations.sql was imported     #######################
+V7__Delete_Codelist.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V7__Delete_Codelist.sql was imported     #######################
+V8__Alter_Representative.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V8__Alter_Representative.sql was imported     #######################
+V9__Alter_FK_Dataflow.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V9__Alter_FK_Dataflow.sql was imported     #######################
+V10__Alter_Dataflow.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V10__Alter_Dataflow.sql was imported     #######################
+V11__Alter_FK_Dataset.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V11__Alter_FK_Dataset.sql was imported     #######################
+V12__CreateRepresentativeSequence.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V12__CreateRepresentativeSequence.sql was imported     #######################
+V13__CreateUniqueConstraintDataProviderCode.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V13__CreateUniqueConstraintDataProviderCode.sql was imported     #######################
+V14__Create_Integration.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V14__Create_Integration.sql was imported     #######################
+V15__Drop_unnecessary_columns_Eudataset.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V15__Drop_unnecessary_columns_Eudataset.sql was imported     #######################
+V16__Create_FME_Persistance.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V16__Create_FME_Persistance.sql was imported     #######################
+V17__Alter_FME_Jobs.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V17__Alter_FME_Jobs.sql was imported     #######################
+V18__Alter_Snapshot_Add_EUDataset.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V18__Alter_Snapshot_Add_EUDataset.sql was imported     #######################
+V19__Create_Message.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V19__Create_Message.sql was imported     #######################
+V20__Alter_snapshot_Add_automatic.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V20__Alter_snapshot_Add_automatic.sql was imported     #######################
+V21__Alter_Representative_Add_releasing.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V21__Alter_Representative_Add_releasing.sql was imported     #######################
+V22__Create_MessageIndex.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V22__Create_MessageIndex.sql was imported     #######################
+V23__Alter_Dattaflow_Add_MANUAL_ACCEPTANCE.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V23__Alter_Dattaflow_Add_MANUAL_ACCEPTANCE.sql was imported     #######################
+V24__Delete_column_blocked_snapshot.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V24__Delete_column_blocked_snapshot.sql was imported     #######################
+V25__Move_releasing_between_tables.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V25__Move_releasing_between_tables.sql was imported     #######################
+V26__Alter_Dataflow_Add_Releaseable.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V26__Alter_Dataflow_Add_Releaseable.sql was imported     #######################
+V27__Alter_Releasable.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V27__Alter_Releasable.sql was imported     #######################
+V28__Alter_Representatives_add_multiple_reporters.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V28__Alter_Representatives_add_multiple_reporters.sql was imported     #######################
+V29__public_alter_dataset_and_alter_dataflow.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V29__public_alter_dataset_and_alter_dataflow.sql was imported     #######################
+V30__Alter_repesentative_and_Dataset.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V30__Alter_repesentative_and_Dataset.sql was imported     #######################
+V31__public_alter_dataset_file_name.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V31__public_alter_dataset_file_name.sql was imported     #######################
+V32__modify_representative_tables.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V32__modify_representative_tables.sql was imported     #######################
+V33__delete_column_available_in_public.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V33__delete_column_available_in_public.sql was imported     #######################
+V34__create_test_dataset.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V34__create_test_dataset.sql was imported     #######################
+V35__delete_user_request.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V35__delete_user_request.sql was imported     #######################
+V36__create_reference_dataset.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V36__create_reference_dataset.sql was imported     #######################
+V37__create_column_type_in_dataflow.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V37__create_column_type_in_dataflow.sql was imported     #######################
+V38__create_updatable_colum_reference_dataset.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V38__create_updatable_colum_reference_dataset.sql was imported     #######################
+V39__create_data_provider_group_table.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V39__create_data_provider_group_table.sql was imported     #######################
+V40__Create_FME_User.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V40__Create_FME_User.sql was imported     #######################
+V41__Alter_data_provider_fk.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V41__Alter_data_provider_fk.sql was imported     #######################
+V42__Remove_User_fk.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V42__Remove_User_fk.sql was imported     #######################
+V43__create_table_messageAttachment.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V43__create_table_messageAttachment.sql was imported     #######################
+V44__alter_table_message.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V44__alter_table_message.sql was imported     #######################
+V45__alter_table_message_attachment_grant_sequence.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V45__alter_table_message_attachment_grant_sequence.sql was imported     #######################
+V46__update_dataflows_type.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V46__update_dataflows_type.sql was imported     #######################
+V47__create_is_public_column_weblink.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V47__create_is_public_column_weblink.sql was imported     #######################
+V48__alter_table_message_automatic.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V48__alter_table_message_automatic.sql was imported     #######################
+V49__alter_table_message_attachment_file_size.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V49__alter_table_message_attachment_file_size.sql was imported     #######################
+V50__drop_table_message_attachment.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V50__drop_table_message_attachment.sql was imported     #######################
+V51__create_table_webforms.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V51__create_table_webforms.sql was imported     #######################
+V52__alter_table_webforms.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V52__alter_table_webforms.sql was imported     #######################
+V53__add_column_restrict_from_public_in_snapshot.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V53__add_column_restrict_from_public_in_snapshot.sql was imported     #######################
+V54__add_column_invalid_leadReporter.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V54__add_column_invalid_leadReporter.sql was imported     #######################
+V55__create_table_temp_user.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V55__create_table_temp_user.sql was imported     #######################
+V56__alter_table_temp_user.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V56__alter_table_temp_user.sql was imported     #######################
+V57__alter_table_temp_user_grant_sequence.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V57__alter_table_temp_user_grant_sequence.sql was imported     #######################
+V58__alter_table_temp_user_grant_permit_sequence.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V58__alter_table_temp_user_grant_permit_sequence.sql was imported     #######################
+V59__alter_table_representative_leadreporter.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V59__alter_table_representative_leadreporter.sql was imported     #######################
+V60__grant_sequence_webform.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V60__grant_sequence_webform.sql was imported     #######################
+V61__add_column_automatic_reporting_deletion_in_dataflow.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V61__add_column_automatic_reporting_deletion_in_dataflow.sql was imported     #######################
+V62__Add_column_webform.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V62__Add_column_webform.sql was imported     #######################
+V63__add_column_enabled_in_snapshot.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V63__add_column_enabled_in_snapshot.sql was imported     #######################
+V64__add_column_dataset_running_status.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V64__add_column_dataset_running_status.sql was imported     #######################
+V65__create_table_process.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V65__create_table_process.sql was imported     #######################
+V66__add_column_priority_and_create_task.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V66__add_column_priority_and_create_task.sql was imported     #######################
+V67__changes_between_dc_and_eu.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V67__changes_between_dc_and_eu.sql was imported     #######################
+V68__add_column_process_released.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V68__add_column_process_released.sql was imported     #######################
+V69__add_column_process_version.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V69__add_column_process_version.sql was imported     #######################
+V70__add_columns_saga_transaction_id_and_aggregate_id.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V70__add_columns_saga_transaction_id_and_aggregate_id.sql was imported     #######################
+V71__add_table_internal_process.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V71__add_table_internal_process.sql was imported     #######################
+V72__add_sequence_for_internal_process_table.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V72__add_sequence_for_internal_process_table.sql was imported     #######################
+V73__add_column_task_type.sql
+Error from server (BadRequest): pod rn3-pg-helm-postgresql-0 does not have a host assigned
+########################     V73__add_column_task_type.sql was imported     #######################
+reportnet
+/home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig
+rn3-pg-helm-pgpool-776f8dcbbc-dl82q
+Unable to use a TTY - input is not a terminal or the right kind of file
+Error from server (BadRequest): pod rn3-pg-helm-pgpool-776f8dcbbc-dl82q does not have a host assigned
+the contents of the file on rn3-pg-helm-pgpool-776f8dcbbc-dl82q is :
+Unable to use a TTY - input is not a terminal or the right kind of file
+Error from server (BadRequest): pod rn3-pg-helm-pgpool-776f8dcbbc-dl82q does not have a host assigned
+########################################################
+Done
+[2026-06-23 20:13:52] [INFO] All Actions have been completed successfully
+[2026-06-23 20:13:52] [INFO] ****************************
+[2026-06-23 20:13:52] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:13:52] [INFO] Release Name: citus
+[2026-06-23 20:13:52] [INFO] Chart Name: citus
+[2026-06-23 20:13:52] [INFO] Debug: 
+[2026-06-23 20:13:52] [INFO] Version: v0.0.1
+[2026-06-23 20:13:52] [INFO] Chart Repo: ../citus
+[2026-06-23 20:13:52] [INFO] Values File: rn3-dev-local-citus.yaml
+[2026-06-23 20:13:52] [INFO] Namespace: reportnet
+[2026-06-23 20:13:52] [INFO] Deploy type: statefull
+[2026-06-23 20:13:52] [INFO] Script_shell: -
+[2026-06-23 20:13:52] [INFO] Init_shell: export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export pass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS delete secret citus-secrets; kubectl --kubeconfig $KC -n $NS create secret generic citus-secrets --from-literal password=$pass --from-literal userpass=$dbpass ;
+[2026-06-23 20:13:52] [INFO] Custom_deployment: -
+[2026-06-23 20:13:52] [INFO] Custom SHELL INIT  detected
+[2026-06-23 20:13:52] [INFO] Executing SHELL INIT command: export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); export pass=$(grep DBPASS .secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS delete secret citus-secrets; kubectl --kubeconfig $KC -n $NS create secret generic citus-secrets --from-literal password=$pass --from-literal userpass=$dbpass ;
+secret "citus-secrets" deleted
+secret/citus-secrets created
+[2026-06-23 20:13:52] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
+[2026-06-23 20:13:52] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install citus ../citus -f ../citus/rn3-dev-local-citus.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:13:52] [INFO] ****************************
+W0623 20:13:54.512718  313768 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "citus-manager-container" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "citus-manager-container" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "citus-manager-container" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "citus-manager-container" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+W0623 20:13:54.561232  313768 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "rn3-pg-helm-dataset-pgpool" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "rn3-pg-helm-dataset-pgpool" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "rn3-pg-helm-dataset-pgpool" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "rn3-pg-helm-dataset-pgpool" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+W0623 20:13:54.647116  313768 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "citus-master" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "citus-master" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "citus-master" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "citus-master" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+W0623 20:13:55.023857  313768 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "citus-worker" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "citus-worker" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "citus-worker" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "citus-worker" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "citus" has been upgraded. Happy Helming!
+NAME: citus
+LAST DEPLOYED: Tue Jun 23 20:13:53 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 4
+TEST SUITE: None
+[2026-06-23 20:13:55] [INFO] All Actions have been completed successfully
+[2026-06-23 20:13:55] [INFO] ****************************
+[2026-06-23 20:13:55] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:13:55] [INFO] Release Name: traefik
+[2026-06-23 20:13:55] [INFO] Chart Name: traefik
+[2026-06-23 20:13:55] [INFO] Debug: 
+[2026-06-23 20:13:55] [INFO] Version: v0.0.1
+[2026-06-23 20:13:55] [INFO] Chart Repo: ../traefik
+[2026-06-23 20:13:55] [INFO] Values File: rn3-dev-local-traefik_values.yaml
+[2026-06-23 20:13:55] [INFO] Namespace: reportnet
+[2026-06-23 20:13:55] [INFO] Deploy type: -
+[2026-06-23 20:13:55] [INFO] Script_shell: kubectl --kubeconfig $KC apply -f  ../traefik/rn3-dev-local-traefik-svc-api.yaml
+[2026-06-23 20:13:55] [INFO] Init_shell: -
+[2026-06-23 20:13:55] [INFO] Custom_deployment: -
+[2026-06-23 20:13:55] [INFO] Deployment type is '-' deployment will not be executed 
+[2026-06-23 20:13:55] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install citus ../citus -f ../citus/rn3-dev-local-citus.yaml --timeout=20m --version v0.0.1 --timeout=20m --version v0.0.1
+[2026-06-23 20:13:55] [INFO] ****************************
+W0623 20:13:57.423583  313840 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "citus-master" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "citus-master" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "citus-master" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "citus-master" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+W0623 20:13:57.455432  313840 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "citus-worker" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "citus-worker" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "citus-worker" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "citus-worker" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "citus" has been upgraded. Happy Helming!
+NAME: citus
+LAST DEPLOYED: Tue Jun 23 20:13:56 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 5
+TEST SUITE: None
+[2026-06-23 20:13:57] [INFO] All Actions have been completed successfully
+[2026-06-23 20:13:57] [INFO] ****************************
+[2026-06-23 20:13:57] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:13:57] [INFO] Release Name: kafka-ui
+[2026-06-23 20:13:57] [INFO] Chart Name: kafka-ui
+[2026-06-23 20:13:57] [INFO] Debug: 
+[2026-06-23 20:13:57] [INFO] Version: v0.0.1
+[2026-06-23 20:13:57] [INFO] Chart Repo: ../kafka-ui
+[2026-06-23 20:13:57] [INFO] Values File: rn3-dev-local-kafka-ui.yaml
+[2026-06-23 20:13:57] [INFO] Namespace: reportnet
+[2026-06-23 20:13:57] [INFO] Deploy type: deployment
+[2026-06-23 20:13:57] [INFO] Script_shell: -
+[2026-06-23 20:13:57] [INFO] Init_shell: -
+[2026-06-23 20:13:57] [INFO] Custom_deployment: -
+[2026-06-23 20:13:57] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:13:57] [INFO] Installing kafka-ui with release name kafka-ui from ../kafka-ui with version v0.0.1 using values file: rn3-dev-local-kafka-ui.yaml in reportnet namespace
+[2026-06-23 20:13:57] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install kafka-ui ../kafka-ui -f ../kafka-ui/rn3-dev-local-kafka-ui.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:13:57] [INFO] ****************************
+W0623 20:13:59.012723  313894 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "kafka-ui" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "kafka-ui" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "kafka-ui" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "kafka-ui" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "kafka-ui" has been upgraded. Happy Helming!
+NAME: kafka-ui
+LAST DEPLOYED: Tue Jun 23 20:13:58 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 5
+TEST SUITE: None
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace reportnet -l "app.kubernetes.io/name=kafka-ui,app.kubernetes.io/instance=kafka-ui" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace reportnet port-forward $POD_NAME 8080:8080
+[2026-06-23 20:13:59] [INFO] All Actions have been completed successfully
+[2026-06-23 20:13:59] [INFO] ****************************
+[2026-06-23 20:13:59] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:13:59] [INFO] Release Name: recordstore
+[2026-06-23 20:13:59] [INFO] Chart Name: helm
+[2026-06-23 20:13:59] [INFO] Debug: 
+[2026-06-23 20:13:59] [INFO] Version: v0.0.1
+[2026-06-23 20:13:59] [INFO] Chart Repo: ../reportnet-recordstore
+[2026-06-23 20:13:59] [INFO] Values File: rn3-dev-local-recordstore.yaml
+[2026-06-23 20:13:59] [INFO] Namespace: reportnet
+[2026-06-23 20:13:59] [INFO] Deploy type: deployment
+[2026-06-23 20:13:59] [INFO] Script_shell: -
+[2026-06-23 20:13:59] [INFO] Init_shell: kubectl --kubeconfig $KC apply -f  ../reportnet-recordstore/rn3-dev-local-data-pvc-nfs.yaml
+[2026-06-23 20:13:59] [INFO] Custom_deployment: -
+[2026-06-23 20:13:59] [INFO] Custom SHELL INIT  detected
+[2026-06-23 20:13:59] [INFO] Executing SHELL INIT command: kubectl --kubeconfig $KC apply -f  ../reportnet-recordstore/rn3-dev-local-data-pvc-nfs.yaml
+persistentvolumeclaim/reportnet3-data created
+[2026-06-23 20:13:59] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:13:59] [INFO] Installing helm with release name recordstore from ../reportnet-recordstore with version v0.0.1 using values file: rn3-dev-local-recordstore.yaml in reportnet namespace
+[2026-06-23 20:13:59] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install recordstore ../reportnet-recordstore -f ../reportnet-recordstore/rn3-dev-local-recordstore.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:13:59] [INFO] ****************************
+W0623 20:14:00.667297  314001 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "recordstore" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "recordstore" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "recordstore" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "recordstore" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "recordstore" has been upgraded. Happy Helming!
+NAME: recordstore
+LAST DEPLOYED: Tue Jun 23 20:14:00 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+[2026-06-23 20:14:00] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:00] [INFO] ****************************
+[2026-06-23 20:14:00] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:00] [INFO] Release Name: api-gateway
+[2026-06-23 20:14:00] [INFO] Chart Name: reportnet-api-gateway
+[2026-06-23 20:14:00] [INFO] Debug: 
+[2026-06-23 20:14:00] [INFO] Version: v0.0.1
+[2026-06-23 20:14:00] [INFO] Chart Repo: ../reportnet-apigateway
+[2026-06-23 20:14:00] [INFO] Values File: rn3-dev-local-api-gateway.yaml
+[2026-06-23 20:14:00] [INFO] Namespace: reportnet
+[2026-06-23 20:14:00] [INFO] Deploy type: deployment
+[2026-06-23 20:14:00] [INFO] Script_shell: -
+[2026-06-23 20:14:00] [INFO] Init_shell: -
+[2026-06-23 20:14:00] [INFO] Custom_deployment: -
+[2026-06-23 20:14:00] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:00] [INFO] Installing reportnet-api-gateway with release name api-gateway from ../reportnet-apigateway with version v0.0.1 using values file: rn3-dev-local-api-gateway.yaml in reportnet namespace
+[2026-06-23 20:14:00] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install api-gateway ../reportnet-apigateway -f ../reportnet-apigateway/rn3-dev-local-api-gateway.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:00] [INFO] ****************************
+W0623 20:14:01.976200  314057 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "api-gateway" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "api-gateway" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "api-gateway" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "api-gateway" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "api-gateway" has been upgraded. Happy Helming!
+NAME: api-gateway
+LAST DEPLOYED: Tue Jun 23 20:14:01 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 5
+TEST SUITE: None
+[2026-06-23 20:14:02] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:02] [INFO] ****************************
+[2026-06-23 20:14:02] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:02] [INFO] Release Name: collaboration
+[2026-06-23 20:14:02] [INFO] Chart Name: reportnet-collaboration
+[2026-06-23 20:14:02] [INFO] Debug: 
+[2026-06-23 20:14:02] [INFO] Version: v0.0.1
+[2026-06-23 20:14:02] [INFO] Chart Repo: ../reportnet-collaboration
+[2026-06-23 20:14:02] [INFO] Values File: rn3-dev-local-collaboration.yaml
+[2026-06-23 20:14:02] [INFO] Namespace: reportnet
+[2026-06-23 20:14:02] [INFO] Deploy type: deployment
+[2026-06-23 20:14:02] [INFO] Script_shell: -
+[2026-06-23 20:14:02] [INFO] Init_shell: -
+[2026-06-23 20:14:02] [INFO] Custom_deployment: -
+[2026-06-23 20:14:02] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:02] [INFO] Installing reportnet-collaboration with release name collaboration from ../reportnet-collaboration with version v0.0.1 using values file: rn3-dev-local-collaboration.yaml in reportnet namespace
+[2026-06-23 20:14:02] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install collaboration ../reportnet-collaboration -f ../reportnet-collaboration/rn3-dev-local-collaboration.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:02] [INFO] ****************************
+W0623 20:14:03.229293  314107 warnings.go:70] spec.template.spec.containers[0].env[11]: hides previous definition of "METABASE_CONNECTION_PASSWORD", which may be dropped when using apply
+W0623 20:14:03.229409  314107 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "collaboration" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "collaboration" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "collaboration" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "collaboration" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "collaboration" has been upgraded. Happy Helming!
+NAME: collaboration
+LAST DEPLOYED: Tue Jun 23 20:14:02 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+[2026-06-23 20:14:03] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:03] [INFO] ****************************
+[2026-06-23 20:14:03] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:03] [INFO] Release Name: communication
+[2026-06-23 20:14:03] [INFO] Chart Name: reportnet-communication
+[2026-06-23 20:14:03] [INFO] Debug: 
+[2026-06-23 20:14:03] [INFO] Version: v0.0.1
+[2026-06-23 20:14:03] [INFO] Chart Repo: ../reportnet-communication
+[2026-06-23 20:14:03] [INFO] Values File: rn3-dev-local-communication.yaml
+[2026-06-23 20:14:03] [INFO] Namespace: reportnet
+[2026-06-23 20:14:03] [INFO] Deploy type: deployment
+[2026-06-23 20:14:03] [INFO] Script_shell: -
+[2026-06-23 20:14:03] [INFO] Init_shell: -
+[2026-06-23 20:14:03] [INFO] Custom_deployment: -
+[2026-06-23 20:14:03] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:03] [INFO] Installing reportnet-communication with release name communication from ../reportnet-communication with version v0.0.1 using values file: rn3-dev-local-communication.yaml in reportnet namespace
+[2026-06-23 20:14:03] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install communication ../reportnet-communication -f ../reportnet-communication/rn3-dev-local-communication.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:03] [INFO] ****************************
+W0623 20:14:04.733058  314151 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "communication" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "communication" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "communication" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "communication" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "communication" has been upgraded. Happy Helming!
+NAME: communication
+LAST DEPLOYED: Tue Jun 23 20:14:04 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+[2026-06-23 20:14:04] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:04] [INFO] ****************************
+[2026-06-23 20:14:04] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:04] [INFO] Release Name: dataflow
+[2026-06-23 20:14:04] [INFO] Chart Name: reportnet-dataflow
+[2026-06-23 20:14:04] [INFO] Debug: 
+[2026-06-23 20:14:04] [INFO] Version: v0.0.1
+[2026-06-23 20:14:04] [INFO] Chart Repo: ../reportnet-dataflow
+[2026-06-23 20:14:04] [INFO] Values File: rn3-dev-local-dataflow.yaml
+[2026-06-23 20:14:04] [INFO] Namespace: reportnet
+[2026-06-23 20:14:04] [INFO] Deploy type: deployment
+[2026-06-23 20:14:04] [INFO] Script_shell: -
+[2026-06-23 20:14:04] [INFO] Init_shell: -
+[2026-06-23 20:14:04] [INFO] Custom_deployment: -
+[2026-06-23 20:14:04] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:04] [INFO] Installing reportnet-dataflow with release name dataflow from ../reportnet-dataflow with version v0.0.1 using values file: rn3-dev-local-dataflow.yaml in reportnet namespace
+[2026-06-23 20:14:04] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install dataflow ../reportnet-dataflow -f ../reportnet-dataflow/rn3-dev-local-dataflow.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:04] [INFO] ****************************
+W0623 20:14:06.418322  314228 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "dataflow" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "dataflow" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "dataflow" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "dataflow" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "dataflow" has been upgraded. Happy Helming!
+NAME: dataflow
+LAST DEPLOYED: Tue Jun 23 20:14:06 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+[2026-06-23 20:14:06] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:06] [INFO] ****************************
+[2026-06-23 20:14:06] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:06] [INFO] Release Name: dataset
+[2026-06-23 20:14:06] [INFO] Chart Name: reportnet-dataset
+[2026-06-23 20:14:06] [INFO] Debug: 
+[2026-06-23 20:14:06] [INFO] Version: v0.0.1
+[2026-06-23 20:14:06] [INFO] Chart Repo: ../reportnet-dataset
+[2026-06-23 20:14:06] [INFO] Values File: rn3-dev-local-dataset.yaml
+[2026-06-23 20:14:06] [INFO] Namespace: reportnet
+[2026-06-23 20:14:06] [INFO] Deploy type: deployment
+[2026-06-23 20:14:06] [INFO] Script_shell: -
+[2026-06-23 20:14:06] [INFO] Init_shell: -
+[2026-06-23 20:14:06] [INFO] Custom_deployment: -
+[2026-06-23 20:14:06] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:06] [INFO] Installing reportnet-dataset with release name dataset from ../reportnet-dataset with version v0.0.1 using values file: rn3-dev-local-dataset.yaml in reportnet namespace
+[2026-06-23 20:14:06] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install dataset ../reportnet-dataset -f ../reportnet-dataset/rn3-dev-local-dataset.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:06] [INFO] ****************************
+W0623 20:14:07.670286  314290 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "dataset" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "dataset" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "dataset" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "dataset" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "dataset" has been upgraded. Happy Helming!
+NAME: dataset
+LAST DEPLOYED: Tue Jun 23 20:14:07 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+[2026-06-23 20:14:07] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:07] [INFO] ****************************
+[2026-06-23 20:14:07] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:07] [INFO] Release Name: document
+[2026-06-23 20:14:07] [INFO] Chart Name: reportnet-document
+[2026-06-23 20:14:07] [INFO] Debug: 
+[2026-06-23 20:14:07] [INFO] Version: v0.0.1
+[2026-06-23 20:14:07] [INFO] Chart Repo: ../reportnet-document
+[2026-06-23 20:14:07] [INFO] Values File: rn3-dev-local-document.yaml
+[2026-06-23 20:14:07] [INFO] Namespace: reportnet
+[2026-06-23 20:14:07] [INFO] Deploy type: deployment
+[2026-06-23 20:14:07] [INFO] Script_shell: -
+[2026-06-23 20:14:07] [INFO] Init_shell: -
+[2026-06-23 20:14:07] [INFO] Custom_deployment: -
+[2026-06-23 20:14:07] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:07] [INFO] Installing reportnet-document with release name document from ../reportnet-document with version v0.0.1 using values file: rn3-dev-local-document.yaml in reportnet namespace
+[2026-06-23 20:14:07] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install document ../reportnet-document -f ../reportnet-document/rn3-dev-local-document.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:07] [INFO] ****************************
+W0623 20:14:08.830333  314332 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "document" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "document" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "document" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "document" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "document" has been upgraded. Happy Helming!
+NAME: document
+LAST DEPLOYED: Tue Jun 23 20:14:08 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+[2026-06-23 20:14:08] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:08] [INFO] ****************************
+[2026-06-23 20:14:08] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:08] [INFO] Release Name: frontend
+[2026-06-23 20:14:08] [INFO] Chart Name: reportnet-frontend
+[2026-06-23 20:14:08] [INFO] Debug: 
+[2026-06-23 20:14:08] [INFO] Version: v0.0.1
+[2026-06-23 20:14:08] [INFO] Chart Repo: ../reportnet-frontend
+[2026-06-23 20:14:08] [INFO] Values File: rn3-dev-local-frontend.yaml
+[2026-06-23 20:14:08] [INFO] Namespace: reportnet
+[2026-06-23 20:14:08] [INFO] Deploy type: deployment
+[2026-06-23 20:14:08] [INFO] Script_shell: -
+[2026-06-23 20:14:08] [INFO] Init_shell: -
+[2026-06-23 20:14:08] [INFO] Custom_deployment: -
+[2026-06-23 20:14:08] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:08] [INFO] Installing reportnet-frontend with release name frontend from ../reportnet-frontend with version v0.0.1 using values file: rn3-dev-local-frontend.yaml in reportnet namespace
+[2026-06-23 20:14:08] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install frontend ../reportnet-frontend -f ../reportnet-frontend/rn3-dev-local-frontend.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:08] [INFO] ****************************
+W0623 20:14:09.943424  314392 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "frontend" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "frontend" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "frontend" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "frontend" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "frontend" has been upgraded. Happy Helming!
+NAME: frontend
+LAST DEPLOYED: Tue Jun 23 20:14:09 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+[2026-06-23 20:14:09] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:10] [INFO] ****************************
+[2026-06-23 20:14:10] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:10] [INFO] Release Name: orchestrator
+[2026-06-23 20:14:10] [INFO] Chart Name: reportnet-orchestrator
+[2026-06-23 20:14:10] [INFO] Debug: 
+[2026-06-23 20:14:10] [INFO] Version: v0.0.1
+[2026-06-23 20:14:10] [INFO] Chart Repo: ../reportnet-orchestrator
+[2026-06-23 20:14:10] [INFO] Values File: rn3-dev-local-orchestrator.yaml
+[2026-06-23 20:14:10] [INFO] Namespace: reportnet
+[2026-06-23 20:14:10] [INFO] Deploy type: deployment
+[2026-06-23 20:14:10] [INFO] Script_shell: -
+[2026-06-23 20:14:10] [INFO] Init_shell: -
+[2026-06-23 20:14:10] [INFO] Custom_deployment: -
+[2026-06-23 20:14:10] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:10] [INFO] Installing reportnet-orchestrator with release name orchestrator from ../reportnet-orchestrator with version v0.0.1 using values file: rn3-dev-local-orchestrator.yaml in reportnet namespace
+[2026-06-23 20:14:10] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install orchestrator ../reportnet-orchestrator -f ../reportnet-orchestrator/rn3-dev-local-orchestrator.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:10] [INFO] ****************************
+W0623 20:14:11.068287  314441 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "orchestrator" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "orchestrator" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "orchestrator" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "orchestrator" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "orchestrator" has been upgraded. Happy Helming!
+NAME: orchestrator
+LAST DEPLOYED: Tue Jun 23 20:14:10 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+[2026-06-23 20:14:11] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:11] [INFO] ****************************
+[2026-06-23 20:14:11] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:11] [INFO] Release Name: rod
+[2026-06-23 20:14:11] [INFO] Chart Name: reportnet-rod
+[2026-06-23 20:14:11] [INFO] Debug: 
+[2026-06-23 20:14:11] [INFO] Version: v0.0.1
+[2026-06-23 20:14:11] [INFO] Chart Repo: ../reportnet-rod
+[2026-06-23 20:14:11] [INFO] Values File: rn3-dev-local-rod.yaml
+[2026-06-23 20:14:11] [INFO] Namespace: reportnet
+[2026-06-23 20:14:11] [INFO] Deploy type: deployment
+[2026-06-23 20:14:11] [INFO] Script_shell: -
+[2026-06-23 20:14:11] [INFO] Init_shell: -
+[2026-06-23 20:14:11] [INFO] Custom_deployment: -
+[2026-06-23 20:14:11] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:11] [INFO] Installing reportnet-rod with release name rod from ../reportnet-rod with version v0.0.1 using values file: rn3-dev-local-rod.yaml in reportnet namespace
+[2026-06-23 20:14:11] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install rod ../reportnet-rod -f ../reportnet-rod/rn3-dev-local-rod.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:11] [INFO] ****************************
+W0623 20:14:12.199031  314491 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "rod" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "rod" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "rod" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "rod" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "rod" has been upgraded. Happy Helming!
+NAME: rod
+LAST DEPLOYED: Tue Jun 23 20:14:11 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+[2026-06-23 20:14:12] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:12] [INFO] ****************************
+[2026-06-23 20:14:12] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:12] [INFO] Release Name: ums
+[2026-06-23 20:14:12] [INFO] Chart Name: reportnet-ums
+[2026-06-23 20:14:12] [INFO] Debug: 
+[2026-06-23 20:14:12] [INFO] Version: v0.0.1
+[2026-06-23 20:14:12] [INFO] Chart Repo: ../reportnet-ums
+[2026-06-23 20:14:12] [INFO] Values File: rn3-dev-local-ums.yaml
+[2026-06-23 20:14:12] [INFO] Namespace: reportnet
+[2026-06-23 20:14:12] [INFO] Deploy type: deployment
+[2026-06-23 20:14:12] [INFO] Script_shell: -
+[2026-06-23 20:14:12] [INFO] Init_shell: -
+[2026-06-23 20:14:12] [INFO] Custom_deployment: -
+[2026-06-23 20:14:12] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:12] [INFO] Installing reportnet-ums with release name ums from ../reportnet-ums with version v0.0.1 using values file: rn3-dev-local-ums.yaml in reportnet namespace
+[2026-06-23 20:14:12] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install ums ../reportnet-ums -f ../reportnet-ums/rn3-dev-local-ums.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:12] [INFO] ****************************
+W0623 20:14:13.397834  314540 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "ums" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "ums" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "ums" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "ums" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "ums" has been upgraded. Happy Helming!
+NAME: ums
+LAST DEPLOYED: Tue Jun 23 20:14:13 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+[2026-06-23 20:14:13] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:13] [INFO] ****************************
+[2026-06-23 20:14:13] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:13] [INFO] Release Name: validation
+[2026-06-23 20:14:13] [INFO] Chart Name: reportnet-validation
+[2026-06-23 20:14:13] [INFO] Debug: 
+[2026-06-23 20:14:13] [INFO] Version: v0.0.1
+[2026-06-23 20:14:13] [INFO] Chart Repo: ../reportnet-validation
+[2026-06-23 20:14:13] [INFO] Values File: rn3-dev-local-validation.yaml
+[2026-06-23 20:14:13] [INFO] Namespace: reportnet
+[2026-06-23 20:14:13] [INFO] Deploy type: deployment
+[2026-06-23 20:14:13] [INFO] Script_shell: -
+[2026-06-23 20:14:13] [INFO] Init_shell: -
+[2026-06-23 20:14:13] [INFO] Custom_deployment: -
+[2026-06-23 20:14:13] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:13] [INFO] Installing reportnet-validation with release name validation from ../reportnet-validation with version v0.0.1 using values file: rn3-dev-local-validation.yaml in reportnet namespace
+[2026-06-23 20:14:13] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install validation ../reportnet-validation -f ../reportnet-validation/rn3-dev-local-validation.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:13] [INFO] ****************************
+W0623 20:14:14.470677  314584 warnings.go:70] spec.template.spec.containers[0].env[14]: hides previous definition of "MONGO_DB_HOST", which may be dropped when using apply
+W0623 20:14:14.470741  314584 warnings.go:70] spec.template.spec.containers[0].env[15]: hides previous definition of "MONGO_DB_PORT", which may be dropped when using apply
+W0623 20:14:14.470746  314584 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "validation" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "validation" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "validation" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "validation" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "validation" has been upgraded. Happy Helming!
+NAME: validation
+LAST DEPLOYED: Tue Jun 23 20:14:14 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+[2026-06-23 20:14:14] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:14] [INFO] ****************************
+[2026-06-23 20:14:14] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-23 20:14:14] [INFO] Release Name: maintenance
+[2026-06-23 20:14:14] [INFO] Chart Name: reportnet-maintenance
+[2026-06-23 20:14:14] [INFO] Debug: 
+[2026-06-23 20:14:14] [INFO] Version: v0.0.1
+[2026-06-23 20:14:14] [INFO] Chart Repo: ../reportnet-maintenance
+[2026-06-23 20:14:14] [INFO] Values File: rn3-dev-local-maintenance.yaml
+[2026-06-23 20:14:14] [INFO] Namespace: reportnet
+[2026-06-23 20:14:14] [INFO] Deploy type: deployment
+[2026-06-23 20:14:14] [INFO] Script_shell: -
+[2026-06-23 20:14:14] [INFO] Init_shell: -
+[2026-06-23 20:14:14] [INFO] Custom_deployment: -
+[2026-06-23 20:14:14] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-06-23 20:14:14] [INFO] Installing reportnet-maintenance with release name maintenance from ../reportnet-maintenance with version v0.0.1 using values file: rn3-dev-local-maintenance.yaml in reportnet namespace
+[2026-06-23 20:14:14] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install maintenance ../reportnet-maintenance -f ../reportnet-maintenance/rn3-dev-local-maintenance.yaml --timeout=20m --version v0.0.1
+[2026-06-23 20:14:14] [INFO] ****************************
+W0623 20:14:15.736691  314644 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "maintenance" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "maintenance" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "maintenance" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "maintenance" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+Release "maintenance" has been upgraded. Happy Helming!
+NAME: maintenance
+LAST DEPLOYED: Tue Jun 23 20:14:15 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 3
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace reportnet -l "app.kubernetes.io/name=maintenance,app.kubernetes.io/instance=maintenance" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace reportnet port-forward $POD_NAME 8080:80
+[2026-06-23 20:14:15] [INFO] All Actions have been completed successfully
+[2026-06-23 20:14:15] [INFO] ****************************
+[2026-06-23 20:14:15] [INFO] All actions completed successfully

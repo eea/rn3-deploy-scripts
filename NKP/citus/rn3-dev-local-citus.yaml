@@ -1,0 +1,77 @@
+citus-master:
+  StorageClassName: nfs-storage
+#   resources:
+#     limits: 
+#       #cpu: 8
+#       memory: 50Gi
+#     requests:
+#       #cpu: 2
+#       memory: 50Gi
+
+citus-worker:
+  StorageClassName: nfs-storage
+#   resources:
+#     limits: 
+#       #cpu: 8
+#       memory: 3Gi
+#     requests:
+#       #cpu: 2
+#       memory: 3Gi
+  
+pgpool:
+  replicaCount: 1
+  podAnnotations: {}
+  affinity: {}
+  nodeSelector: {}
+  priorityClassName: ""
+  tolerations: {}
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  StorageClassName: nfs-storage
+  # resources:
+  #   limits: 
+  #     memory: 3Gi
+  #   requests:
+  #     memory: 3Gi
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  pdb:
+    create: false
+    minAvailable: 1
+    # maxUnavailable: 1
+  adminUsername: admin
+  # adminPassword:
+  # numInitChildren:
+  # maxPools:
+  # configuration:
+  # configurationCM:
+  # initdbScripts:
+  #   my_init_script.sh: |
+  #      #!/bin/sh
+  #      echo "Do something."
+  # initdbScriptsCM:
+  useLoadBalancing: true
+  cituspassword:
+    passwordFromSecret:
+    enabled: true
+    secretName: citus-secrets
+    secretKey: password
+##############################################
+createServiceAccount: false
+createRole: false
+createRoleBinding: false
+##############################################

@@ -96,7 +96,7 @@ spec:
     - metadata:
         name: storage
       spec:
-        #SstorageClassName: ""
+        #StorageClassName: ""
         accessModes:
           - ReadWriteOnce
         resources:
