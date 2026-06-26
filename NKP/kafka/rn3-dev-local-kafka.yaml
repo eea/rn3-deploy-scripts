@@ -183,14 +183,13 @@ controller:
     limits: {}
     requests: {}
   #resourcesPreset: "small"
-  resources:
-    requests:
-      #cpu: 2
-      memory: 3Gi
-    limits:
-      #cpu: 3
-      memory: 3Gi
-  #resources: {}
+  resources: {}
+    # requests:
+    #   cpu: 0.2
+    #   memory: 0.3Gi
+    # limits:
+    #   cpu: 0.2
+    #   memory: 0.3Gi
   podSecurityContext:
     enabled: true
     fsGroupChangePolicy: Always
@@ -265,7 +264,7 @@ controller:
     accessModes:
       - ReadWriteOnce
       - ReadWriteMany
-    size: 20Gi
+    size: 5Gi
     annotations: {}
     labels: {}
     selector: {}
@@ -276,7 +275,7 @@ controller:
     storageClass: "nfs-storage"
     accessModes:
       - ReadWriteOnce
-    size: 8Gi
+    size: 3Gi
     annotations: {}
     selector: {}
     mountPath: /opt/bitnamilegacy/kafka/logs
@@ -399,7 +398,7 @@ broker:
     storageClass: "nfs-storage"
     accessModes:
       - ReadWriteOnce
-    size: 8Gi
+    size: 3Gi
     annotations: {}
     labels: {}
     selector: {}
@@ -410,7 +409,7 @@ broker:
     storageClass: "nfs-storage"
     accessModes:
       - ReadWriteOnce
-    size: 8Gi
+    size: 2Gi
     annotations: {}
     selector: {}
     mountPath: /opt/bitnamilegacy/kafka/logs
@@ -560,13 +559,13 @@ metrics:
     containerPorts:
       metrics: 5556
     # resourcesPreset: "micro"
-    resources:
-      requests:
-        cpu: 2
-        memory: 512Mi
-      limits:
-        cpu: 3
-        memory: 1024Mi
+    # resources:
+    #   requests:
+    #     cpu: 1
+    #     memory: 512Mi
+    #   limits:
+    #     cpu: 1
+    #     memory: 512Mi
     resources: {}
     service:
       ports:
@@ -698,6 +697,6 @@ zookeeper:
     storageClass: "nfs-storage"
     accessModes:
       - ReadWriteOnce
-    size: 8Gi
+    size: 2Gi
 externalZookeeper:
   servers: []

@@ -4,16 +4,16 @@ machine:
       partitions:
         # Database storage - fast random I/O
         - mountpoint: /var/mnt/data
-          size: 10GB
-        # Application data
-        - mountpoint: /var/mnt/app-data
-          size: 5GB
-        # Logs
-        - mountpoint: /var/mnt/logs
-          size: 5GB  # ~1GB
-        # Longhorn
-        - mountpoint: /var/mnt/longhorn
-          size: 0  # Remaining disk space
+          size: 0
+        # # Application data
+        # - mountpoint: /var/mnt/app-data
+        #   size: 5GB
+        # # Logs
+        # - mountpoint: /var/mnt/logs
+        #   size: 5GB  # ~1GB
+        # # Longhorn
+        # - mountpoint: /var/mnt/longhorn
+        #   size: 0  # Remaining disk space
   # volumes:
   #   - name: user
   #     provisioning:

@@ -23,7 +23,7 @@ tests:
     set:
       resources:
         limits:
-          memory: "4"
+          memory: "2Gi"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env

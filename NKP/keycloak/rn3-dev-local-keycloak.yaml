@@ -135,21 +135,21 @@ keycloak:
     initialDelaySeconds: 30
     timeoutSeconds: 1
 
-  resources:
+  resources: {}
     # limits:
     #   cpu: "100m"
     #   memory: "1024Mi"
     # requests:
     #   cpu: "100m"
     #   memory: "1024Mi"
-    limits:
-      #cpu: "100m"
-      #memory: "3096Mi"
-      memory: 2Gi
-    requests:
-      #cpu: "100m"
-      #memory: "3096Mi"
-      memory: 2Gi
+    # limits:
+    #   #cpu: "100m"
+    #   #memory: "3096Mi"
+    #   memory: 0.5Gi
+    # requests:
+    #   #cpu: "100m"
+    #   #memory: "3096Mi"
+    #   memory: 0.5Gi
 
   ## WildFly CLI configurations. They all end up in the file 'keycloak.cli' configured in the configmap which is
   ## executed on server startup.

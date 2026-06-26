@@ -7,7 +7,7 @@ global: {}
 # global:
 #   namespaceOverride: ""
 
-replicas: 3
+replicas: 1
 port: 27017
 
 ## Setting this will skip the replicaset and user creation process during bootstrapping
@@ -93,24 +93,18 @@ init:
   resources: {}
   timeout: 900
 
-resources:
-# limits:
-#   cpu: 500m
-#   memory: 512Mi
-# requests:
-#   cpu: 100m
-#   memory: 256Mi
-
-  limits:
-    #cpu: 500m
-    memory: 4Gi
-  requests:
-    #cpu: 100m
-    memory: 4Gi
+resources: {}
+  # limits:
+  #   #cpu: 500m
+  #   memory: 0.4Gi
+  # requests:
+  #   #cpu: 100m
+  #   memory: 0.3Gi
 
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-nodeSelector: {}
+nodeSelector:
+  singlenode: "true"
 
 affinity: {}
 
@@ -152,7 +146,7 @@ persistentVolume:
   storageClass: nfs-storage
   accessModes:
     - ReadWriteOnce
-  size: 10Gi
+  size: 3Gi
   annotations: {}
 
 # Annotations to be added to the secrets

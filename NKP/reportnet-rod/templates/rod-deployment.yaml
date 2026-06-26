@@ -27,10 +27,10 @@ spec:
         resources:
           limits:
             #cpu: "100m"
-            memory: 5Gi
+            memory: 0.5Gi
           requests:
             #cpu: "100m"
-            memory: 5Gi
+            memory: 0.5Gi
         ports:
         - containerPort: 9050
           protocol: TCP

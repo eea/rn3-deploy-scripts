@@ -67,10 +67,10 @@ spec:
           resources:
             limits:
               #cpu: "100m"
-              memory: 10Gi
+              memory: 1Gi
             requests:
               #cpu: "100m"
-              memory: 10Gi
+              memory: 1Gi
           volumeMounts:
           - name: storage
             mountPath: /var/lib/postgresql/data

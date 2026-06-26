@@ -19,19 +19,22 @@ global:
     #adminUsername: adminuser
     #adminPassword: adminpassword
     existingSecret: pg-secret
-    
+
+postgresql-ha:
+  storageClass: nfs-storage
+
 postgresqlImage:
   registry: docker.io
   #repository: bitnami/postgresql-repmgr
   #tag: 11.7.0-debian-10-r74
   repository: bitnamilegacy/postgresql
-  tag: 11.7.0
+  tag: 17.6.0-debian-12-r4
   pullPolicy: IfNotPresent
   debug: false
 pgpoolImage:
   registry: docker.io
   repository: bitnamilegacy/pgpool
-  tag: 4.1.1
+  tag: 4.6.3
   pullPolicy: IfNotPresent
   debug: false
 volumePermissionsImage:
@@ -59,22 +62,22 @@ postgresql:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  resources:
-    limits: 
-      #cpu: 4
-      memory: 14Gi
-    requests: 
-      #cpu: 2
-      memory: 14Gi
+  resources: {}
+    # limits: 
+    #   #cpu: 4
+    #   memory: 2Gi
+    # requests: 
+    #   #cpu: 2
+    #   memory: 2Gi
   livenessProbe:
-    enabled: true
+    enabled: false
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
   readinessProbe:
-    enabled: true
+    enabled: false
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5
@@ -93,7 +96,7 @@ postgresql:
   repmgrReconnectAttempts: 3
   repmgrReconnectInterval: 5
 pgpool:
-  replicaCount: 1
+  replicaCount: 3
   podAnnotations: {}
   affinity: {}
   nodeSelector: {}
@@ -103,13 +106,13 @@ pgpool:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  resources:
-    limits: 
-      # cpu: 500m
-      memory: 1Gi
-    requests: 
-      # cpu: 250m
-      memory: 1Gi
+  resources: {}
+    # limits: 
+    #   # cpu: 500m
+    #   memory: 1Gi
+    # requests: 
+    #   # cpu: 250m
+    #   memory: 1Gi
   livenessProbe:
     enabled: false
     initialDelaySeconds: 30
@@ -144,30 +147,30 @@ volumePermissions:
   enabled: false
   securityContext:
     runAsUser: 0
-  resources:
-    limits: {}
-    requests: {}
+  resources: {}
+    # limits: {}
+    # requests: {}
 metrics:
-  enabled: false
+  enabled: true
   securityContext:
     enabled: true
     runAsUser: 1001
-  resources:
-    limits: 
-      cpu: 100m
-      memory: 160Mi
-    requests: 
-      cpu: 100m
-      memory: 80Mi
+  resources: {}
+    # limits: 
+    #   cpu: 100m
+    #   memory: 160Mi
+    # requests: 
+    #   cpu: 100m
+    #   memory: 80Mi
   livenessProbe:
-    enabled: true
+    enabled: false
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
   readinessProbe:
-    enabled: true
+    enabled: false
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5

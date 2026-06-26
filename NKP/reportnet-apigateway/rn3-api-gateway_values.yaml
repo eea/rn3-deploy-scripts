@@ -5,6 +5,11 @@
 # Specific Values for Api Gateway
 
 # Environment Variables
+
+
+
+
+      
 consul:
   server: consul.reportnet.svc.cluster.local
   port: 8500

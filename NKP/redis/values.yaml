@@ -283,15 +283,15 @@ master:
   #resourcesPreset: {}
   ## @param master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
-  resources:
-    requests:
-      cpu: 2
-      memory: 512Mi
-    limits:
-      cpu: 3
-      memory: 1024Mi
+  # resources:
+  #   requests:
+  #     cpu: 2
+  #     memory: 512Mi
+  #   limits:
+  #     cpu: 3
+  #     memory: 1024Mi
   ##
-  resources: {}
+  #resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.podSecurityContext.enabled Enabled Redis&reg; master pods' Security Context
@@ -762,13 +762,13 @@ replica:
   #resourcesPreset: {}
   ## @param replica.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
-  resources:
-    requests:
-      cpu: 2
-      memory: 512Mi
-    limits:
-      cpu: 3
-      memory: 1024Mi
+  # resources:
+  #   requests:
+  #     cpu: 2
+  #     memory: 512Mi
+  #   limits:
+  #     cpu: 3
+  #     memory: 1024Mi
   ##
   #resources: {}
   ## Configure Pods Security Context
@@ -1341,13 +1341,13 @@ sentinel:
   #resourcesPreset: {}
   ## @param sentinel.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
-  resources:
-    requests:
-      cpu: 2
-      memory: 512Mi
-    limits:
-      cpu: 3
-      memory: 1024Mi
+  # resources:
+  #   requests:
+  #     cpu: 2
+  #     memory: 512Mi
+  #   limits:
+  #     cpu: 3
+  #     memory: 1024Mi
   ##
   #resources: {}
   ## Configure Container Security Context
@@ -1817,13 +1817,13 @@ metrics:
   #resourcesPreset: "nano"
   ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
-  resources:
-    requests:
-      cpu: 2
-      memory: 512Mi
-    limits:
-      cpu: 3
-      memory: 1024Mi
+  # resources:
+  #   requests:
+  #     cpu: 2
+  #     memory: 512Mi
+  #   limits:
+  #     cpu: 3
+  #     memory: 1024Mi
   ##
   #resources: {}
   ## @param metrics.podLabels Extra labels for Redis&reg; exporter pods
@@ -2082,13 +2082,13 @@ volumePermissions:
   #resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
-  resources:
-    requests:
-      cpu: 2
-      memory: 512Mi
-    limits:
-      cpu: 3
-      memory: 1024Mi
+  # resources:
+  #   requests:
+  #     cpu: 2
+  #     memory: 512Mi
+  #   limits:
+  #     cpu: 3
+  #     memory: 1024Mi
   ##
   #resources: {}
   ## Init container Container Security Context
@@ -2166,9 +2166,9 @@ kubectl:
   ## @param kubectl.resources.limits The resources limits for the kubectl containers
   ## @param kubectl.resources.requests The requested resources for the kubectl containers
   ##
-  resources:
-    limits: {}
-    requests: {}
+  # resources:
+  #   limits: {}
+  #   requests: {}
 
 ## init-sysctl container parameters
 ## used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)
@@ -2214,13 +2214,13 @@ sysctl:
   #resourcesPreset: "nano"
   ## @param sysctl.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
-  resources:
-    requests:
-      cpu: 2
-      memory: 512Mi
-    limits:
-      cpu: 3
-      memory: 1024Mi
+  # resources:
+  #   requests:
+  #     cpu: 2
+  #     memory: 512Mi
+  #   limits:
+  #     cpu: 3
+  #     memory: 1024Mi
   ##
   #resources: {}
 ## @section useExternalDNS Parameters

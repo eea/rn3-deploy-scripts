@@ -25,12 +25,14 @@ spec:
         image: {{.Values.repo}}/api-gateway:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         resources:
-          limits:
-            #cpu: "100m"
-            memory: 5Gi
-          requests:
-            #cpu: "100m"
-            memory: 5Gi
+{{ toYaml .Values.resources | indent 10 }}
+        # resources:
+        #   limits:
+        #     #cpu: "100m"
+        #     memory: 0.1Gi
+        #   requests:
+        #     #cpu: "100m"
+        #     memory: 0.1Gi
         ports:
         - containerPort: 8010
           protocol: TCP

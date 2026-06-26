@@ -5,6 +5,18 @@
 # Specific Values for Api Gateway
 
 # Environment Variables
+replicas: 5
+
+api-gateway:
+  resources:
+    limits:
+      #cpu: "100m"
+      memory: 0.1Gi
+    requests:
+      #cpu: "100m"
+      memory: 0.1Gi
+
+
 consul:
   server: consul.reportnet.svc.cluster.local
   port: 8500

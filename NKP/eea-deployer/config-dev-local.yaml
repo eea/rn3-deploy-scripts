@@ -83,11 +83,14 @@ charts:
           export chart_name=kafka
           export values_file=rn3-dev-local-kafka.yaml
           export NS=reportnet
-          export KC=~/.kube/dev/config
+          export KC=/home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig
           export KRAFT_CLUSTER_ID=dev-local-kafka-01
           export INTER_BROKER_PASSWORD=$(grep "INTER_BROKER_PASSWORD" .secrets.prv | cut -d '=' -f2)
           export CONTROLLER_PASSWORD=$(grep "CONTROLLER_PASSWORD" .secrets.prv | cut -d '=' -f2)
-          helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f ../kafka/$values_file --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi --debug ;
+          helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f ../kafka/$values_file --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --debug ;
+
+      #helm --kubeconfig $KC -n $NS uninstall kafka
+      #helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f ../kafka/$values_file --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=1024Mi --set resources.limit.memory=1024Mi --debug ;
 
 
       #################################### KEYCLOAK ######################################
@@ -97,7 +100,7 @@ charts:
         chart_repo: ../keycloak
         values_file: rn3-dev-local-keycloak.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: deployment
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -140,19 +143,26 @@ charts:
         chart_repo: ../postgresql
         values_file: rn3-dev-local-postgresql.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: deployment
         script_shell: >-
+          sleep 60;
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
           export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
-          kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'rm -Rf  /tmp/migration';
-          kubectl --kubeconfig $KC -n $NS cp ../postgresql/migration rn3-pg-helm-postgresql-0:/tmp/;
-          kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'ls -la  /tmp/migration';
-          chmod a+x ./scripts/migrate.sh;
-          ./scripts/migrate.sh;
+          kubectl --kubeconfig $KC -n $NS exec -n reportnet rn3-pg-helm-postgresql-1 -c postgresql -- bash -c "export PGPASSWORD=$dbpass && psql -U postgres -d postgres -c 'CREATE ROLE repmgr WITH SUPERUSER CREATEDB NOCREATEROLE INHERIT LOGIN	NOREPLICATION	NOBYPASSRLS	CONNECTION LIMIT -1;'" 
+          kubectl --kubeconfig $KC -n $NS exec -i -n reportnet rn3-pg-helm-postgresql-1 -c postgresql -- bash -c 'rm -Rf  /tmp/migration';
+          kubectl --kubeconfig $KC -n $NS cp ../postgresql/migration rn3-pg-helm-postgresql-1:/tmp/;
+          kubectl --kubeconfig $KC -n $NS exec -i -n reportnet rn3-pg-helm-postgresql-1 -c postgresql -- bash -c 'ls -la  /tmp/migration';
+          chmod a+x ./scripts/migrate.sh  ;
+          ./scripts/migrate.sh rn3-pg-helm-postgresql-1 ;
           chmod a+x ./scripts/pgpool-usr-fix.sh;
           ./scripts/pgpool-usr-fix.sh dev $NS $KC
         init_shell: >-
+          export chart_repo=../postgresql;
+          export release_name=helm;
+          export chart_name=rn3-pg;
+          export NS=reportnet;
+          kubectl --kubeconfig $KC -n $NS apply -f $chart_repo/files/rn3-dev-local-pvc-nfs-storage.yaml;
           kubectl --kubeconfig $KC -n $NS delete secret pg-secret;
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
@@ -168,6 +178,8 @@ charts:
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
           export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
           helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
+
+      #helm --kubeconfig $KC -n $NS uninstall rn3-pg-helm
       #################################### CITUS ######################################
       - release_name: citus
         chart_name: citus

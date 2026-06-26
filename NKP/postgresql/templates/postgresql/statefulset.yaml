@@ -112,7 +112,7 @@ spec:
             - name: REPMGR_PARTNER_NODES
               value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},{{ end }}
             - name: REPMGR_PRIMARY_HOST
-              value: {{ printf "%s-0.%s.%s.svc.%s" $postgresqlFullname $postgresqlHeadlessServiceName .Release.Namespace $clusterDomain | quote }}
+              value: {{ printf "%s-1.%s.%s.svc.%s" $postgresqlFullname $postgresqlHeadlessServiceName .Release.Namespace $clusterDomain | quote }}
             - name: REPMGR_NODE_NAME
               value: "$(MY_POD_NAME)"
             - name: REPMGR_NODE_NETWORK_NAME

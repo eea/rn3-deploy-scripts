@@ -40,7 +40,7 @@ yamlApplicationConfig:
   kafka:
     clusters:
       - name: yaml
-        bootstrapServers:  10.43.52.76:9092
+        bootstrapServers:  10.100.102.120:9092
   auth:
     type: disabled
   management:
@@ -144,8 +144,7 @@ ingress:
   # Http paths to add to the Ingress after the default path
   succeedingPaths: []
 
-resources:
-  {}
+resources: {}
   # limits:
   #   cpu: 200m
   #   memory: 512Mi

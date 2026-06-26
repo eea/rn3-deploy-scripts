@@ -9,12 +9,21 @@ dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
 repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
 adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
 
+kubectl --kubeconfig $KC -n $NS exec -n reportnet $1 -c postgresql -- bash -c "cd /tmp/migration/ && export PGPASSWORD=$dbpass && psql -U postgres -d postgres -c 'CREATE ROLE recordstore;' -c 'CREATE ROLE repmgr;'"
+
+# CREATE ROLE dataflow;
+# CREATE ROLE dataset;
+# CREATE ROLE validation;
+# CREATE ROLE recordstore;
+
+
+
 folder=$(ls ../postgresql/migration/*.sql | sort  -Vst '/');
 for f in $folder; 
 do 
     fname=`basename "$f"`
     echo "$fname"
-    kubectl --kubeconfig $KC -n $NS exec -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c "cd /tmp/migration/ && export PGPASSWORD=$dbpass && psql -U postgres -d metabase -c 'BEGIN TRANSACTION;' -f /tmp/migration/"$fname" -c 'COMMIT;'"
+    kubectl --kubeconfig $KC -n $NS exec -n reportnet $1 -c postgresql -- bash -c "cd /tmp/migration/ && export PGPASSWORD=$dbpass && psql -U postgres -d metabase -c 'BEGIN TRANSACTION;' -f /tmp/migration/"$fname" -c 'COMMIT;'"
     echo "########################     $fname was imported     #######################"
 done;
 exit;

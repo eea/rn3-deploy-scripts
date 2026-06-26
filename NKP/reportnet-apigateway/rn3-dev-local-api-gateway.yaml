@@ -3,13 +3,22 @@
 # Declare variables to be passed into your templates.
 
 # Specific Values for Api Gateway
+replicas: 5
+
 resources:
   limits:
     #cpu: "100m"
-    memory: 512Mi
+    memory: 0.2Gi
   requests:
     #cpu: "100m"
-    memory: 512Mi
+    memory: 0.2Gi
+
+
+
+
+
+
+
 # Environment Variables
 consul:
   server: consul.reportnet.svc.cluster.local

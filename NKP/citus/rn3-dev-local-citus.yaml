@@ -1,23 +1,71 @@
-citus-master:
-  StorageClassName: nfs-storage
-#   resources:
-#     limits: 
-#       #cpu: 8
-#       memory: 50Gi
-#     requests:
-#       #cpu: 2
-#       memory: 50Gi
+# citus-dataset-master:
+#   volumeClaimTemplates:
+#     spec:
+#       StorageClassName: nfs-storage
+#       resources:
+#         limits:
+#           memory: 1Gi
+#         requests:
+#           memory: 1Gi
 
-citus-worker:
-  StorageClassName: nfs-storage
+# citus-dataset-worker:
+#   volumeClaimTemplates:
+#     spec:
+#       StorageClassName: nfs-storage
+#       resources:
+#         limits:
+#           memory: 1Gi
+#         requests:
+#           memory: 1Gi
+# citus-master:
+#   StorageClassName: nfs-storage
 #   resources:
-#     limits: 
-#       #cpu: 8
-#       memory: 3Gi
+#     limits:
+#       memory: 1Gi
 #     requests:
-#       #cpu: 2
-#       memory: 3Gi
-  
+#       memory: 1Gi
+# citus-worker:
+#   StorageClassName: nfs-storage
+#   resources:
+#     limits:
+#       memory: 1Gi
+#     requests:
+#       memory: 1Gi
+
+
+citus-manager:
+  StorageClassName: nfs-storage
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 1Gi
+citus-dataset-worker:
+  StorageClassName: nfs-storage
+  replicas: 2
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 1Gi
+  volumeClaimTemplates:
+    storageClassName: "nfs-storage"
+
+pg-citus-dataset-worker:
+  StorageClassName: nfs-storage
+  replicas: 2
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 1Gi
+  volumeClaimTemplates:
+    storageClassName: "nfs-storage"
+
+
+
+
+
 pgpool:
   replicaCount: 1
   podAnnotations: {}
@@ -30,11 +78,11 @@ pgpool:
     fsGroup: 1001
     runAsUser: 1001
   StorageClassName: nfs-storage
-  # resources:
-  #   limits: 
-  #     memory: 3Gi
-  #   requests:
-  #     memory: 3Gi
+  resources:
+    limits: 
+      memory: 1Gi
+    requests:
+      memory: 1Gi
   livenessProbe:
     enabled: true
     initialDelaySeconds: 30

@@ -26,12 +26,12 @@ Resources:
  #   memory: "512Mi"
  requests:
    #cpu: "100m"
-   memory: "0.2Gi"
+   memory: "200Mi"
  limits:
    #cpu: "500m"
-   memory: "0.2Gi"
+   memory: "200Mi"
 priorityClassName: ""
-Storage: "20Gi"
+Storage: "2Gi"
 DisableHostNodeId: false
 # DatacenterName: dc1
 joinPeers: []

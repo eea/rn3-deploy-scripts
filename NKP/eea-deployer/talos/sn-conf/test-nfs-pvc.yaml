@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nfs-test
+  name: nfs-test-storage
   namespace: default
 spec:
   accessModes:
@@ -13,9 +13,36 @@ spec:
   storageClassName: nfs-storage
 ---
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-test-csi
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: nfs-csi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-test-client
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: nfs-client
+
+---
+apiVersion: v1
 kind: Pod
 metadata:
-  name: nfs-test-pod
+  name: nfs-test-pod-storage
   namespace: default
 spec:
   containers:
@@ -23,9 +50,45 @@ spec:
       image: busybox
       command: ["sh", "-c", "echo 'NFS works' > /data/test.txt && cat /data/test.txt && sleep 3600"]
       volumeMounts:
-        - name: nfs-test
+        - name: nfs-test-storage
           mountPath: /data
   volumes:
-    - name: nfs-test
+    - name: nfs-test-storage
       persistentVolumeClaim:
         claimName: nfs-storage
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nfs-test-pod-csi
+  namespace: default
+spec:
+  containers:
+    - name: test
+      image: busybox
+      command: ["sh", "-c", "echo 'NFS works' > /data/test.txt && cat /data/test.txt && sleep 3600"]
+      volumeMounts:
+        - name: nfs-test-csi
+          mountPath: /data
+  volumes:
+    - name: nfs-test-csi
+      persistentVolumeClaim:
+        claimName: nfs-csi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nfs-test-pod-client
+  namespace: default
+spec:
+  containers:
+    - name: test
+      image: busybox
+      command: ["sh", "-c", "echo 'NFS works' > /data/test.txt && cat /data/test.txt && sleep 3600"]
+      volumeMounts:
+        - name: nfs-test-client
+          mountPath: /data
+  volumes:
+    - name: nfs-test-client
+      persistentVolumeClaim:
+        claimName: nfs-client
