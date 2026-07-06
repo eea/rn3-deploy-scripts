@@ -13,23 +13,23 @@ ConsulDnsPort: 8600
 Domain: consul
 Component: "consul"
 DatacenterName: dc1
-Replicas: 3
+Replicas: 1
 Image: "hashicorp/consul"
 ImageTag: "1.10.0"
 ImagePullPolicy: "Always"
-Resources: 
+Resources: {}
  # requests:
  #   cpu: "100m"
  #   memory: "256Mi"
  # limits:
  #   cpu: "500m"
  #   memory: "512Mi"
- requests:
-   #cpu: "100m"
-   memory: "200Mi"
- limits:
-   #cpu: "500m"
-   memory: "200Mi"
+#  requests:
+#    #cpu: "100m"
+#    memory: "200Mi"
+#  limits:
+#    #cpu: "500m"
+#    memory: "200Mi"
 priorityClassName: ""
 Storage: "2Gi"
 DisableHostNodeId: false
@@ -41,7 +41,7 @@ Gossip:
   Create: true
 # GossipKey: key
 StorageClass: nfs-storage
-maxUnavailable: 1
+#maxUnavailable: 1
 # nodeAffinity:
 #   requiredDuringSchedulingIgnoredDuringExecution:
 #     nodeSelectorTerms:

@@ -1,55 +1,28 @@
-[2026-06-25 15:25:58] [INFO] Using file: config-dev-local.yaml
-[2026-06-25 15:25:58] [INFO] Generic/common values based on config-dev-local.yaml file
-[2026-06-25 15:25:58] [INFO] Dry Run: false
-[2026-06-25 15:25:58] [INFO] Create Namespace: false
-[2026-06-25 15:25:58] [INFO] Wait: false
-[2026-06-25 15:25:58] [INFO] Timeout: true
-[2026-06-25 15:25:58] [INFO] KubeConfig: /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig
-[2026-06-25 15:25:58] [INFO] ****************************
-[2026-06-25 15:25:58] [INFO] Chart specific values based on config-dev-local.yaml file
-[2026-06-25 15:25:58] [INFO] Release Name: keycloak
-[2026-06-25 15:25:58] [INFO] Chart Name: keycloak
-[2026-06-25 15:25:58] [INFO] Debug: 
-[2026-06-25 15:25:58] [INFO] Version: v0.0.1
-[2026-06-25 15:25:58] [INFO] Chart Repo: ../keycloak
-[2026-06-25 15:25:58] [INFO] Values File: rn3-dev-local-keycloak.yaml
-[2026-06-25 15:25:58] [INFO] Namespace: reportnet
-[2026-06-25 15:25:58] [INFO] Deploy type: deployment
-[2026-06-25 15:25:58] [INFO] Script_shell: -
-[2026-06-25 15:25:58] [INFO] Init_shell: -
-[2026-06-25 15:25:58] [INFO] Custom_deployment: -
-[2026-06-25 15:25:58] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-06-25 15:25:58] [INFO] Installing keycloak with release name keycloak from ../keycloak with version v0.0.1 using values file: rn3-dev-local-keycloak.yaml in reportnet namespace
-[2026-06-25 15:25:58] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install keycloak ../keycloak -f ../keycloak/rn3-dev-local-keycloak.yaml --timeout=20m --version v0.0.1
-[2026-06-25 15:25:58] [INFO] ****************************
-W0625 15:26:00.083373  591552 warnings.go:70] would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "keycloak" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "keycloak" must set securityContext.capabilities.drop=["ALL"]), seccompProfile (pod or container "keycloak" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
-Release "keycloak" has been upgraded. Happy Helming!
-NAME: keycloak
-LAST DEPLOYED: Thu Jun 25 15:25:58 2026
-NAMESPACE: reportnet
-STATUS: deployed
-REVISION: 2
-TEST SUITE: None
-NOTES:
-**********************************************************************
-This chart has been DEPRECATED and moved to its new home:
-
-* GitHub repo: https://github.com/codecentric/helm-charts
-* Charts repo: https://codecentric.github.io/helm-charts
-
-**********************************************************************
-
-Keycloak can be accessed:
-
-* Within your cluster, at the following DNS name at port 80:
-
-  keycloak-http.reportnet.svc.cluster.local
-
-* From outside the cluster, run these commands in the same shell:
-
-  export POD_NAME=$(kubectl get pods --namespace reportnet -l app=keycloak,release=keycloak -o jsonpath="{.items[0].metadata.name}")
-  echo "Visit http://127.0.0.1:8080 to use Keycloak"
-  kubectl port-forward --namespace reportnet $POD_NAME 8080
-[2026-06-25 15:26:00] [INFO] All Actions have been completed successfully
-[2026-06-25 15:26:00] [INFO] ****************************
-[2026-06-25 15:26:00] [INFO] All actions completed successfully
+[2026-06-26 13:52:30] [INFO] Using file: config-dev-local.yaml
+[2026-06-26 13:52:30] [INFO] Generic/common values based on config-dev-local.yaml file
+[2026-06-26 13:52:30] [INFO] Dry Run: false
+[2026-06-26 13:52:30] [INFO] Create Namespace: false
+[2026-06-26 13:52:30] [INFO] Wait: false
+[2026-06-26 13:52:30] [INFO] Timeout: true
+[2026-06-26 13:52:30] [INFO] KubeConfig: /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig
+[2026-06-26 13:52:30] [INFO] ****************************
+[2026-06-26 13:52:30] [INFO] Chart specific values based on config-dev-local.yaml file
+[2026-06-26 13:52:30] [INFO] Release Name: consul
+[2026-06-26 13:52:30] [INFO] Chart Name: consul
+[2026-06-26 13:52:30] [INFO] Debug: 
+[2026-06-26 13:52:30] [INFO] Version: v0.0.1
+[2026-06-26 13:52:30] [INFO] Chart Repo: ../consul/consul-dev-local
+[2026-06-26 13:52:30] [INFO] Values File: rn3-dev-local-consul.yaml
+[2026-06-26 13:52:30] [INFO] Namespace: reportnet
+[2026-06-26 13:52:30] [INFO] Deploy type: statefull
+[2026-06-26 13:52:30] [INFO] Script_shell: -
+[2026-06-26 13:52:30] [INFO] Init_shell: -
+[2026-06-26 13:52:30] [INFO] Custom_deployment: -
+[2026-06-26 13:52:30] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
+[2026-06-26 13:52:30] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install consul ../consul/consul-dev-local -f ../consul/consul-dev-local/rn3-dev-local-consul.yaml --timeout=20m --version v0.0.1
+[2026-06-26 13:52:30] [INFO] ****************************
+Error: UPGRADE FAILED: resource mapping not found for name: "consul-consul-server" namespace: "reportnet" from "": no matches for kind "PodDisruptionBudget" in version "policy/v1beta1"
+ensure CRDs are installed first
+[2026-06-26 13:52:32] [INFO] All Actions have been completed successfully
+[2026-06-26 13:52:32] [INFO] ****************************
+[2026-06-26 13:52:32] [INFO] All actions completed successfully

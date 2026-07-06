@@ -60,7 +60,7 @@ charts:
       - release_name: consul
         chart_name: consul
         version: v0.0.1
-        chart_repo: ../consul
+        chart_repo: ../consul/consul-dev-local
         values_file: rn3-dev-local-consul.yaml
         namespace: reportnet
         deploy_type: statefull
@@ -136,48 +136,61 @@ charts:
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
-      ################################### POSTGRESQL ######################################
+      # ################################### POSTGRESQL NON FOR DEV ######################################
+      # - release_name: rn3-pg-helm
+      #   chart_name: helm
+      #   version: v0.0.1
+      #   chart_repo: ../postgresql
+      #   values_file: rn3-dev-local-postgresql.yaml
+      #   namespace: reportnet
+      #   deploy_type: deployment
+      #   script_shell: >-
+      #     sleep 60;
+      #     export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
+      #     export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
+      #     export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
+      #     kubectl --kubeconfig $KC -n $NS exec -n reportnet rn3-pg-helm-postgresql-1 -c postgresql -- bash -c "export PGPASSWORD=$dbpass && psql -U postgres -d postgres -c 'CREATE ROLE repmgr WITH SUPERUSER CREATEDB NOCREATEROLE INHERIT LOGIN	NOREPLICATION	NOBYPASSRLS	CONNECTION LIMIT -1;'" 
+      #     kubectl --kubeconfig $KC -n $NS exec -i -n reportnet rn3-pg-helm-postgresql-1 -c postgresql -- bash -c 'rm -Rf  /tmp/migration';
+      #     kubectl --kubeconfig $KC -n $NS cp ../postgresql/migration rn3-pg-helm-postgresql-1:/tmp/;
+      #     kubectl --kubeconfig $KC -n $NS exec -i -n reportnet rn3-pg-helm-postgresql-1 -c postgresql -- bash -c 'ls -la  /tmp/migration';
+      #     chmod a+x ./scripts/migrate.sh  ;
+      #     ./scripts/migrate.sh rn3-pg-helm-postgresql-1 ;
+      #     chmod a+x ./scripts/pgpool-usr-fix.sh;
+      #     ./scripts/pgpool-usr-fix.sh dev $NS $KC
+      #   init_shell: >-
+      #     export chart_repo=../postgresql;
+      #     export release_name=helm;
+      #     export chart_name=rn3-pg;
+      #     export NS=reportnet;
+      #     kubectl --kubeconfig $KC -n $NS apply -f $chart_repo/files/rn3-dev-local-pvc-nfs-storage.yaml;
+      #     kubectl --kubeconfig $KC -n $NS delete secret pg-secret;
+      #     export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
+      #     export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
+      #     export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
+      #     kubectl --kubeconfig $KC -n $NS create secret generic pg-secret --from-literal admin-password=$adminpass --from-literal pg-pass=$dbpass --from-literal pg-sand-data-pass=postgres --from-literal postgresql-password=$dbpass --from-literal repmgr-password=$repmgrpass;
+      #   custom_deployment: >-
+      #     export chart_repo=../postgresql
+      #     export release_name=helm
+      #     export chart_name=rn3-pg
+      #     export values_file=../postgresql/rn3-dev-local-postgresql.yaml
+      #     export NS=reportnet
+      #     export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
+      #     export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
+      #     export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
+      #     helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
+
+
       - release_name: rn3-pg-helm
         chart_name: helm
         version: v0.0.1
-        chart_repo: ../postgresql
+        chart_repo: ../postgresql-dev
         values_file: rn3-dev-local-postgresql.yaml
         namespace: reportnet
         deploy_type: deployment
-        script_shell: >-
-          sleep 60;
-          export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
-          export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
-          export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
-          kubectl --kubeconfig $KC -n $NS exec -n reportnet rn3-pg-helm-postgresql-1 -c postgresql -- bash -c "export PGPASSWORD=$dbpass && psql -U postgres -d postgres -c 'CREATE ROLE repmgr WITH SUPERUSER CREATEDB NOCREATEROLE INHERIT LOGIN	NOREPLICATION	NOBYPASSRLS	CONNECTION LIMIT -1;'" 
-          kubectl --kubeconfig $KC -n $NS exec -i -n reportnet rn3-pg-helm-postgresql-1 -c postgresql -- bash -c 'rm -Rf  /tmp/migration';
-          kubectl --kubeconfig $KC -n $NS cp ../postgresql/migration rn3-pg-helm-postgresql-1:/tmp/;
-          kubectl --kubeconfig $KC -n $NS exec -i -n reportnet rn3-pg-helm-postgresql-1 -c postgresql -- bash -c 'ls -la  /tmp/migration';
-          chmod a+x ./scripts/migrate.sh  ;
-          ./scripts/migrate.sh rn3-pg-helm-postgresql-1 ;
-          chmod a+x ./scripts/pgpool-usr-fix.sh;
-          ./scripts/pgpool-usr-fix.sh dev $NS $KC
-        init_shell: >-
-          export chart_repo=../postgresql;
-          export release_name=helm;
-          export chart_name=rn3-pg;
-          export NS=reportnet;
-          kubectl --kubeconfig $KC -n $NS apply -f $chart_repo/files/rn3-dev-local-pvc-nfs-storage.yaml;
-          kubectl --kubeconfig $KC -n $NS delete secret pg-secret;
-          export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
-          export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
-          export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
-          kubectl --kubeconfig $KC -n $NS create secret generic pg-secret --from-literal admin-password=$adminpass --from-literal pg-pass=$dbpass --from-literal pg-sand-data-pass=postgres --from-literal postgresql-password=$dbpass --from-literal repmgr-password=$repmgrpass;
-        custom_deployment: >-
-          export chart_repo=../postgresql
-          export release_name=helm
-          export chart_name=rn3-pg
-          export values_file=../postgresql/rn3-dev-local-postgresql.yaml
-          export NS=reportnet
-          export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
-          export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
-          export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
-          helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-$release_name $chart_repo/. -f $values_file --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug;
+        script_shell: "-"
+        init_shell:  "-"
+        custom_deployment: "-"
+
 
       #helm --kubeconfig $KC -n $NS uninstall rn3-pg-helm
       #################################### CITUS ######################################
