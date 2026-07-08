@@ -1,0 +1,105 @@
+# namespaceOverride: "monitoring"  # Override the namespace for all components
+# prometheus:
+#   prometheusSpec:
+#     retention: 14d                      # Retention period for Prometheus data.
+#     storageSpec:
+#       volumeClaimTemplate:
+#         spec:
+#           accessModes: ["ReadWriteOnce"]
+#           resources:
+#             requests:
+#               storage: 50Gi
+# alertmanager:
+#   alertmanagerSpec:
+#     storage:
+#       volumeClaimTemplate:
+#         spec:
+#           accessModes: ["ReadWriteOnce"]
+#           resources:
+#             requests:
+#               storage: 10Gi
+# grafana:
+#   adminPassword: "admin"        # Set the Grafana admin password.
+# prometheus-values.yaml
+server:
+  # Persistent storage for metrics
+  persistentVolume:
+    storageClass: nfs-storage
+    enabled: true
+    size: 50Gi
+
+  # Retention settings
+  retention: "30d"
+
+  # Resource allocation
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 4Gi
+
+  # Service configuration
+  service:
+    type: NodePort
+    nodePort: 30090
+
+  # Global scrape interval
+  global:
+    scrape_interval: 15s
+    evaluation_interval: 15s
+
+
+    securityContext:
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+        
+
+# Enable node-exporter for node metrics
+prometheus-node-exporter:
+  enabled: true
+  # podLabels:
+  #   pod-security.kubernetes.io/enforce: privileged
+  # securityContext:
+  #   seccompProfile:
+  #     type: "RuntimeDefault"
+  #     #type: "Localhost"
+  #     # allowPrivilegeEscalation: false
+  #     # runAsNonRoot: true
+  #     # capabilities:
+  #     # drop:
+  #     #   - ALL
+
+
+
+# nodeExporter:
+#   enabled: true
+#   operatingSystems:
+#     linux:
+#       enabled: true
+#     darwin:
+#       enabled: true
+#   podLabels:
+#     pod-security.kubernetes.io/enforce: privileged
+#   securityContext:
+#     allowPrivilegeEscalation: false
+#     capabilities:
+#       drop:
+#         - ALL
+
+# Enable kube-state-metrics for Kubernetes object metrics
+kube-state-metrics:
+  enabled: true
+
+# Alertmanager configuration
+alertmanager:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 5Gi
+
+# Push gateway for batch jobs
+prometheus-pushgateway:
+  enabled: false

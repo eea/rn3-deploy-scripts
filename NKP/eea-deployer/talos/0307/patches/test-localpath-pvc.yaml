@@ -1,0 +1,31 @@
+# test-localpath-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: localpath-test
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local-path
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: localpath-test-pod
+  namespace: default
+spec:
+  containers:
+    - name: test
+      image: busybox
+      command: ["sh", "-c", "echo 'localpath works' > /data/test.txt && cat /data/test.txt && sleep 3600"]
+      volumeMounts:
+        - name: localpath-test
+          mountPath: /data
+  volumes:
+    - name: localpath-test
+      persistentVolumeClaim:
+        claimName: localpath

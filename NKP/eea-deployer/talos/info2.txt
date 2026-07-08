@@ -1,0 +1,362 @@
+
+
+
+
+#### curl -sL https://talos.dev/install | sh 
+
+
+
+
+#change the ip iusing the talos dashboard using the f3 to the one you like 
+export CONTROL_PLANE_IP=192.168.56.111
+export CLUSTER_NAME=eea-dev-talos-vbox
+
+touch ./0307/secrets.yaml
+talosctl gen secrets --output-file ./0307/secrets.yaml -f
+talosctl gen config $CLUSTER_NAME  https://$CONTROL_PLANE_IP:6443  --with-secrets ./0307/secrets.yaml --config-patch-control-plane @./talos/0307/patches/static-ip-cp01.yaml --output conf/ -f
+
+
+
+
+
+
+
+
+export CONTROL_PLANE_IP=192.168.56.111
+export TALOSCONFIG="./0307/talosconfig"
+talosctl --talosconfig $TALOSCONFIG config endpoint $CONTROL_PLANE_IP
+talosctl --talosconfig $TALOSCONFIG config node $CONTROL_PLANE_IP
+talosctl --talosconfig $TALOSCONFIG dashboard
+
+talosctl -n $CONTROL_PLANE_IP get disks --insecure
+# change the installation target disk in the controlplane file 
+#    install:
+#        disk: /dev/xvda # The disk used for installations.
+
+
+talosctl apply-config --insecure --nodes $CONTROL_PLANE_IP --file ./0307/controlplane.yaml
+###wait for reboot
+
+
+export CONTROL_PLANE_IP=192.168.56.111
+export TALOSCONFIG="./talos/0307/talosconfig"
+talosctl --talosconfig $TALOSCONFIG config endpoint $CONTROL_PLANE_IP
+talosctl --talosconfig $TALOSCONFIG config node $CONTROL_PLANE_IP
+talosctl --talosconfig $TALOSCONFIG bootstrap
+
+
+#static ip 
+talosctl --talosconfig $TALOSCONFIG patch  https://$CONTROL_PLANE_IP:6443 --patch-file ./talos/0307/patches/static-ip-cp01.yaml --insecure
+
+
+# NETWORK SYSCTL PATCH 
+talosctl --talosconfig $TALOSCONFIG patch  https://$CONTROL_PLANE_IP:6443 --patch-file ./talos/0307/patches/node-network.yaml
+
+
+
+
+
+~~~~~~~~~~~~ REBOOT THE NODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export IP=(192.168.56.111)
+talosctl reboot --nodes "$IP"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~ REBOOT THE NODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export IP=(192.168.56.111)
+talosctl shutdown --nodes "$IP"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+talosctl health --wait-timeout 5m
+talosctl kubeconfig
+talosctl kubeconfig ./talos/eea-dev-talos-vbox-sn-kubeconfig
+
+
+export KC=./eea-dev-talos-vbox-sn-kubeconfig
+export KC=./talos/eea-dev-talos-vbox-sn-kubeconfig
+
+kubectl --kubeconfig $KC get nodes
+kubectl --kubeconfig $KC get pods -n kube-system
+talosctl -n $CONTROL_PLANE_IP get volumestatus
+
+#talosctl patch machineconfig --nodes $CONTROL_PLANE_IP --patch @./talos/0307/patches/node-extra-disk.yaml
+- wait for reboot
+
+talosctl -n $CONTROL_PLANE_IP get volumestatus
+
+
+
+
+
+
+
+
+
+
+
+#Talos-pilot
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/Handfish/talos-pilot/releases/download/v0.1.9/talos-pilot-installer.sh | sh
+~/.cargo/bin/talos-pilot
+
+
+#### metrics
+##kubectl --kubeconfig $KC  apply -f https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
+##kubectl --kubeconfig $KC  apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl --kubeconfig $KC  apply -f ./talos/0307/patches/standalone-install.yaml
+kubectl --kubeconfig $KC  apply -f ./talos/0307/patches/components.yaml
+
+helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+helm repo update
+helm --kubeconfig $KC -n kube-system install metrics-server metrics-server/metrics-server  --namespace kube-system  --values ./0307/patches/metrics-server-values.yaml
+
+helm --kubeconfig $KC -n kube-system install metrics-server metrics-server/metrics-server  --namespace kube-system  --values ./talos/0307/patches/metrics-server-values.yaml
+
+
+
+
+
+
+
+
+
+
+#### helm local dev install 
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod +x get_helm.sh
+./get_helm.sh
+
+helm version
+
+
+
+
+
+
+############## metal lb
+
+	
+
+# See what changes would be made (returns non-zero if different)
+kubectl --kubeconfig $KC get configmap kube-proxy -n kube-system -o yaml | \
+sed -e "s/strictARP: false/strictARP: true/" | \
+kubectl --kubeconfig $KC  diff -f - -n kube-system
+
+# Apply the changes if needed
+kubectl --kubeconfig $KC  get configmap kube-proxy -n kube-system -o yaml | \
+sed -e "s/strictARP: false/strictARP: true/" | \
+kubectl --kubeconfig $KC  apply -f - -n kube-system
+
+
+
+
+
+
+
+
+
+
+
+kubectl --kubeconfig $KC apply -f https://raw.githubusercontent.com/metallb/metallb/v0.15.2/config/manifests/metallb-native.yaml
+kubectl --kubeconfig $KC wait --timeout=5m --for=condition=available --all deployments -n metallb-system
+kubectl --kubeconfig $KC apply -f ./0307/patches/metallb-ipaddresspool.yaml
+kubectl --kubeconfig $KC apply -f ./talos/0307/patches/metallb-ipaddresspool.yaml
+
+
+
+kubectl --kubeconfig $KC get pods -n metallb-system
+kubectl --kubeconfig $KC get pods -n kube-system -l k8s-app=kube-dns
+
+
+
+
+###########traefic 
+
+helm repo add traefik https://traefik.github.io/charts
+helm repo update
+
+kubectl --kubeconfig $KC create namespace traefik
+
+kubectl  --kubeconfig $KC  label namespace traefik \
+  pod-security.kubernetes.io/enforce=privileged \
+  pod-security.kubernetes.io/enforce-version=v1.0 \
+  pod-security.kubernetes.io/warn=privileged \
+  pod-security.kubernetes.io/warn-version=v1.0 \
+  pod-security.kubernetes.io/audit=privileged \
+  pod-security.kubernetes.io/audit-version=v1.0
+
+# Install Traefik with the dashboard enabled
+#helm --kubeconfig $KC install traefik traefik/traefik \
+#  --namespace traefik \
+#  --set api.dashboard=true \
+#  --set ingressRoute.dashboard.enabled=true \
+#  --set ports.web.nodePort=30080 \
+#  --set ports.websecure.nodePort=30443 \
+#  --set service.spec.type=NodePort
+
+
+# Install with LoadBalancer service type
+helm --kubeconfig $KC install traefik traefik/traefik \
+  --namespace traefik \
+  --set api.dashboard=true \
+  --set ingressRoute.dashboard.enabled=true \
+  --set service.spec.type=LoadBalancer
+
+kubectl --kubeconfig $KC get pods -n traefik
+kubectl --kubeconfig $KC get svc -n traefik
+kubectl --kubeconfig $KC describe deployment traefik -n traefik
+kubectl --kubeconfig $KC port-forward -n traefik deployment/traefik 9000:9000
+kubectl --kubeconfig $KC apply -f ./0307/helm/traefik/dashboard-ingress.yaml
+
+
+
+### envoy 
+#helm --kubeconfig $KC install eg oci://docker.io/envoyproxy/gateway-helm --version v1.5.1 -n envoy-gateway-system --create-namespace
+#helm --kubeconfig $KC upgrade --install eg oci://docker.io/envoyproxy/gateway-helm --version v1.5.1 -n envoy-gateway-system --create-namespace
+#kubectl --kubeconfig $KC wait --timeout=5m -n envoy-gateway-system deployment/envoy-gateway --for=condition=Available
+
+#kubectl --kubeconfig $KC apply -f https://github.com/envoyproxy/gateway/releases/download/v1.5.1/quickstart.yaml -n default
+#curl --verbose --header "Host: www.example.com" http://192.168.1.171/get
+
+
+
+
+
+###### TEST 
+#kubectl --kubeconfig $KC top nodes
+
+# Install the local path provisioner
+
+
+#kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.36/deploy/local-path-storage.yaml
+kubectl --kubeconfig $KC apply -f ./0307/patches/local-path-storage.yaml
+kubectl --kubeconfig $KC apply -f ./talos/0307/patches/local-path-storage.yaml
+kubectl label namespace local-path-storage pod-security.kubernetes.io/enforce=privileged --overwrite
+kubectl -n local-path-storage patch configmap local-path-config --type merge -p '{"data":{"config.json":"{\"nodePathMap\":[{\"node\":\"DEFAULT_PATH_FOR_NON_LISTED_NODES\",\"paths\":[\"/var/mnt/data\"]}]}"}}'
+#kubectl --kubeconfig $KC patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+#kubectl --kubeconfig $KC patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+
+
+
+# Deploy the nfs  Provisioner
+helm repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+helm repo update
+
+export KC=./talos/eea-dev-talos-vbox-sn-kubeconfig
+kubectl --kubeconfig $KC apply -f ./0307/patches/helm-service-account.yaml
+kubectl --kubeconfig $KC apply -f ./talos/0307/patches/helm-service-account.yaml
+
+helm --kubeconfig $KC upgrade --install csi-driver-nfs csi-driver-nfs/csi-driver-nfs \
+  --namespace kube-system \
+  --set driver.name=nfs.csi.k8s.io \
+  --set controller.replicas=1
+
+#kubectl --kubeconfig $KC --namespace=kube-system get pods --selector="app.kubernetes.io/instance=csi-driver-nfs" --watch
+kubectl --kubeconfig $KC -n kube-system get pods -l app.kubernetes.io/name=csi-driver-nfs
+
+
+kubectl --kubeconfig $KC apply -f ./talos/0307/patches/nfs-storageclass.yaml
+kubectl --kubeconfig $KC apply -f ./talos/0307/patches/nfs-storageclass-client.yaml
+# make this driver the default one 
+#kubectl --kubeconfig $KC patch storageclass nfs-storage -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+
+
+
+
+#### grafana
+# test 
+#kubectl --kubeconfig $KC get pods -n monitoring -l app.kubernetes.io/name=prometheus
+#
+#kubectl --kubeconfig $KC create namespace monitoring
+#helm --kubeconfig $KC upgrade --install grafana grafana/grafana   --namespace monitoring   -f ./helm/grafana/grafana-values.yaml
+#
+##uninistall
+#helm --kubeconfig $KC uninstall grafana
+#
+#kubectl --kubeconfig $KC get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+#prom-operator
+#
+#
+#export NODE_PORT=$(kubectl --kubeconfig $KC get --namespace monitoring -o jsonpath="{.spec.ports[0].nodePort}" services grafana)
+#export NODE_IP=$(kubectl --kubeconfig $KC get nodes --namespace monitoring -o jsonpath="{.items[0].status.addresses[0].address}")
+#echo http://$NODE_IP:$NODE_PORT
+
+
+
+
+	
+### Prometheus Community Helm Repository
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+
+#kubectl  --kubeconfig $KC  label namespace monitoring \
+#  pod-security.kubernetes.io/enforce=baseline \
+#  pod-security.kubernetes.io/enforce-version=latest \
+#  pod-security.kubernetes.io/warn=restricted \
+#  pod-security.kubernetes.io/warn-version=latest \
+#  pod-security.kubernetes.io/audit=restricted \
+#  pod-security.kubernetes.io/audit-version=latest
+
+
+kubectl --kubeconfig $KC create namespace monitoring
+kubectl  --kubeconfig $KC  label namespace monitoring \
+  pod-security.kubernetes.io/enforce=privileged \
+  pod-security.kubernetes.io/enforce-version=v1.0 \
+  pod-security.kubernetes.io/warn=privileged \
+  pod-security.kubernetes.io/warn-version=v1.0 \
+  pod-security.kubernetes.io/audit=privileged \
+  pod-security.kubernetes.io/audit-version=v1.0
+
+
+#kubectl --kubeconfig $KC create namespace monitoring
+helm --kubeconfig $KC upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack  --namespace monitoring   -f ./0307/helm/prometheus/kube-prometheus-values.yaml
+helm --kubeconfig $KC upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack  --namespace monitoring   -f ./helm/prometheus/kube-prometheus-values.yaml
+helm --kubeconfig $KC --namespace monitoring  uninstall kube-prometheus-stack
+kubectl --kubeconfig $KC  -n monitoring get pods
+
+kubectl --kubeconfig $KC apply -f ./helm/prometheus/grafana-ingress.yaml
+kubectl --kubeconfig $KC apply -f ./helm/prometheus/traefik-ingress.yaml
+
+	
+### Harbor
+helm repo add harbor https://helm.goharbor.io
+cd ./helm/
+helm fetch harbor/harbor --untar
+cd ./harbor
+
+cp -Rpf values.yaml akr01-dev-talos-harbor.yaml
+
+kubectl --kubeconfig $KC create namespace harbor
+
+helm --kubeconfig $KC --namespace harbor  upgrade --install harbor ./helm/harbor/. -f ./helm/harbor/akr01-dev-talos-harbor.yaml
+helm --kubeconfig $KC --namespace harbor  uninstall harbor
+
+# radar local monitoring on the localhost env 
+curl -fsSL https://get.radarhq.io | sh && kubectl --kubeconfig $KC radar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

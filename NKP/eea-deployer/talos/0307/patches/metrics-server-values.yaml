@@ -1,0 +1,42 @@
+# metrics-server-values.yaml
+args:
+  # Skip TLS verification for kubelet certificates
+  # This is necessary because Talos uses self-signed kubelet certs
+  - --kubelet-insecure-tls
+  # Use InternalIP to connect to nodes (avoids hostname resolution issues)
+  - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+  # Metric resolution interval
+  - --metric-resolution=15s
+
+# Resource allocation
+resources:
+  requests:
+    cpu: 100m
+    memory: 200Mi
+  limits:
+    cpu: 500m
+    memory: 500Mi
+
+# Run on control plane nodes for reliability
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+
+# High availability with 2 replicas
+replicas: 2
+
+# Pod disruption budget
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+# Update strategy
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+# Service monitor for Prometheus integration
+serviceMonitor:
+  enabled: false  # Enable if you have Prometheus Operator

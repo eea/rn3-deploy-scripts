@@ -12,29 +12,22 @@ resources:
   requests:
     #cpu: "100m"
     memory: 0.2Gi
+
+    
 # Environment Variables
 consul:
   server: consul.reportnet.svc.cluster.local
   port: 8500
 
 kafka:
-  bootstrap: kafka.reportnet.svc.cluster.local
+  bootstrap: 	bootstrap-kafka-controller-headless.reportnet.svc.cluster.local
   port: 9092
-zipkin:
-    ip: zipkin-ui
-    port: 9411
-    schema: https
-AgPort: 32447
 
 redis:
-    ip: redis.reportnet.svc.cluster.local
+    ip: redis
     port: 6379
     sentinel: masterset
     nodes: redis:26379
-
-sentry:
-    dsn: https://f1057cea7e954e1a8e11d76bab0a53fd@sentry.eea.europa.eu/46
-    environment: staging
 
 tagSufix: 
 replicas: 1

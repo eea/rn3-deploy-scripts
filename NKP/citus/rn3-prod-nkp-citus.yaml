@@ -1,0 +1,135 @@
+pgpool:
+  ## Number of replicas to deploy
+  ##
+  replicaCount: 1
+
+  ## Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Pod priority class
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: {}
+
+  ## K8s Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+
+  ## Pgpool containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 250m
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 250m
+    #   memory: 256Mi
+
+  ## Pgpool container's liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+
+  ## Pod disruption budget configuration
+  ##
+  pdb:
+    ## Specifies whether a Pod disruption budget should be created
+    ##
+    create: false
+    minAvailable: 1
+    # maxUnavailable: 1
+
+  ## Pgpool configuration parameters
+  ##
+  adminUsername: admin
+  # adminPassword:
+
+  ## The number of preforked Pgpool-II server processes.  It is also the concurrent
+  ## connections limit to Pgpool-II from clients. Must be a positive integer. (PGPOOL_NUM_INIT_CHILDREN)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  # numInitChildren:
+
+  ## The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  # maxPools:
+
+  ## Pgpool configuration
+  ## Specify content for pgpool.conf
+  ## Alternatively, you can put your pgpool.conf under the files/ directory
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration-file
+  ##
+  # configuration:
+
+  ## ConfigMap with Pgpool configuration
+  ## NOTE: This will override pgpool.configuration parameter
+  ##
+  # configurationCM:
+
+  ## initdb scripts
+  ## Specify dictionary of scripts to be run everytime Pgpool container is initialized
+  ## Alternatively, you can put your scripts under the files/pgpool-entrypoint-initdb.d directory
+  ##
+  # initdbScripts:
+  #   my_init_script.sh: |
+  #      #!/bin/sh
+  #      echo "Do something."
+
+  ## ConfigMap with scripts to be run everytime Pgpool container is initialized
+  ## NOTE: This will override pgpool.initdbScripts
+  ##
+  # initdbScriptsCM:
+
+  ## Use Pgpool Load-Balancing
+  ##
+  useLoadBalancing: true
+
+  ## Use Pgpool Load-Balancing
+  ##
+  cituspassword:
+    passwordFromSecret:
+    enabled: true
+    secretName: citus-secrets
+    secretKey: password
+
+createServiceAccount: true
+createRole: true
+createRoleBinding: true

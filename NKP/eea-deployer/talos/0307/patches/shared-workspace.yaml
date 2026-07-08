@@ -1,0 +1,76 @@
+# shared-workspace.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shared-workspace
+  namespace: data-processing
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: nfs-storage  # Use "nfs" if you installed the in-cluster provisioner above
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-writer
+  namespace: data-processing
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: data-writer
+  template:
+    metadata:
+      labels:
+        app: data-writer
+    spec:
+      containers:
+        - name: writer
+          image: busybox
+          command: ["sh", "-c", "for i in {1..10}; do date >> /workspace/test.txt; done"]
+          volumeMounts:
+            - name: workspace
+              mountPath: /workspace
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+      volumes:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: shared-workspace
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-reader
+  namespace: data-processing
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: data-reader
+  template:
+    metadata:
+      labels:
+        app: data-reader
+    spec:
+      containers:
+        - name: reader
+          image: busybox
+          command: ["sh", "-c", "for i in {1..1000}; do cat /workspace/test.txt && sleep 1; done"]
+          volumeMounts:
+            - name: workspace
+              mountPath: /workspace
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+      volumes:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: shared-workspace

@@ -1,0 +1,50 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-maintenance
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true" #1st change
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location /communication {
+        if ($request_uri ~* "^/communication/v2(.*)") {
+          rewrite ^/communication/v2(.*) /v2$1 break;
+        }
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+      }
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.europa.eu https://geocode.arcgis.com https://reportnet3dev.s3.amazonaws.com https://static.arcgis.com ws:; font-src 'self' data: fonts.gstatic.com; img-src 'self'  data: blob: image.flaticon.com https:; child-src blob:"
+      more_set_headers "Referrer-Policy: no-referrer";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+      more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
+      more_set_headers "Access-Control-Allow-Origin: * ";
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "20"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/keepalive: "120"
+    nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS
+spec:
+  rules:
+  - host: reportnet.europa.eu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80
+      - path: /communication
+        pathType: Prefix
+        backend:
+          service:
+            name: communication
+            port:
+              number: 9020
+  ingressClassName: nginx

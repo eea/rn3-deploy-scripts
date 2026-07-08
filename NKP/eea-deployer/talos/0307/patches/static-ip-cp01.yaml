@@ -1,0 +1,40 @@
+machine:
+  network:
+    hostname: eea-dev-talos-vbox
+    interfaces:
+      - interface: enp0s3
+        dhcp: false
+        addresses:
+          - 192.168.56.111
+      # - interface: enx1
+      #   dhcp: false
+      #   addresses:
+      #     - 192.168.1.171
+      # - interface: enx2
+      #   dhcp: false
+      #   addresses:
+      #     - 192.168.1.172
+      # - interface: enx3
+      #   dhcp: false
+      #   addresses:
+      #     - 192.168.1.173
+      # - interface: enx4
+      #   dhcp: false
+      #   addresses:
+      #     - 192.168.1.174
+      # - interface: enx5
+      #   dhcp: false
+      #   addresses:
+      #     - 192.168.1.175
+        routes:
+          - network: 0.0.0.0/0
+            metric: 1024
+            mtu: 1500
+            gateway: 192.168.1.1
+    nameservers:
+      - 127.0.0.1
+      - 192.168.56.1
+      - 192.168.1.1
+      - 8.8.8.8
+cluster:
+    allowSchedulingOnControlPlanes: true

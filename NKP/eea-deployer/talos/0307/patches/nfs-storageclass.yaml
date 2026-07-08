@@ -1,0 +1,18 @@
+# nfs-storageclass.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-storage
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: 192.168.1.199      # Your NFS server IP
+  share: /opt/nfs    # NFS export path
+  subDir: "${pvc.metadata.namespace}/${pvc.metadata.name}"
+  mountPermissions: "0755"
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+mountOptions:
+  - nfsvers=3
+  - nolock
+  # - hard
+  # - noresvport

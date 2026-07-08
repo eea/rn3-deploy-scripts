@@ -1,0 +1,13 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: akr-01-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.56.111/32  # Replace with your VM's public IP
+  #- 192.168.1.171/32
+  #- 192.168.1.172/32
+  #- 192.168.1.173/32
+  #- 192.168.1.174/32
+  #- 192.168.1.175/32 

@@ -2,29 +2,15 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# Specific Values for Api Gateway
-replicas: 5
+# Specific Values for Rod proxy
 
-resources:
-  limits:
-    #cpu: "100m"
-    memory: 0.2Gi
-  requests:
-    #cpu: "100m"
-    memory: 0.2Gi
-    
 # Environment Variables
-
-
-
-
-      
 consul:
   server: consul.reportnet.svc.cluster.local
   port: 8500
 
 kafka:
-  bootstrap: 	kafka-controller-headless.reportnet.svc.cluster.local
+  bootstrap: bootstrap-kafka.reportnet.svc.cluster.local
   port: 9092
 
 redis:
@@ -35,6 +21,6 @@ redis:
 
 tagSufix: 
 replicas: 1
-repo: eeacms
 version: v3.4-SANDBOX
+repo: eeacms
 # Other Variables

@@ -1,0 +1,37 @@
+# https://oneuptime.com/blog/post/2026-03-03-set-up-traefik-ingress-on-talos-linux/view
+# dashboard-ingress.yaml
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard
+  namespace: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`traefik-dev.eea.europa.eu.lc`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      kind: Rule
+      services:
+        - name: api@internal
+          kind: TraefikService
+      middlewares:
+        - name: dashboard-auth
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: dashboard-auth
+  namespace: traefik
+spec:
+  basicAuth:
+    secret: dashboard-auth-secret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dashboard-auth-secret
+  namespace: traefik
+type: kubernetes.io/basic-auth
+stringData:
+  username: admin
+  password: eea-AKRvIZCkSpcrNTtSxsgAU286MQp1OjIH.01.0w1s9f9wu

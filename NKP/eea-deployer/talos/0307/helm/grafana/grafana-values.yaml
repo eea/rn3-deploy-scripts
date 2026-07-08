@@ -1,0 +1,65 @@
+# grafana-values.yaml
+# Persistent storage for dashboards and settings
+persistence:
+  storageClass: "local-path"
+  enabled: true
+  size: 10Gi
+
+# Service configuration
+service:
+  type: NodePort
+  nodePort: 31300
+
+# Admin credentials
+adminUser: admin
+adminPassword: prom-operator
+
+# Resource limits
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Auto-configure Prometheus as a data source
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.monitoring.svc.cluster.local
+      access: proxy
+      isDefault: true
+
+# Provision dashboards automatically
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: default
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: false
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/default
+
+# Import community dashboards by ID
+dashboards:
+  default:
+    kubernetes-cluster:
+      gnetId: 6417
+      revision: 1
+      datasource: Prometheus
+    node-exporter:
+      gnetId: 1860
+      revision: 37
+      datasource: Prometheus
+    kubernetes-pods:
+      gnetId: 6336
+      revision: 1
+      datasource: Prometheus
