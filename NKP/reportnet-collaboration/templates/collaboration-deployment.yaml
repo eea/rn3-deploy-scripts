@@ -25,12 +25,14 @@ spec:
         image: {{.Values.repo}}/collaboration-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         resources:
-          limits:
-            #cpu: "100m"
-            memory: 0.5Gi
-          requests:
-            #cpu: "100m"
-            memory: 0.5Gi
+{{ toYaml .Values.resources | indent 10 }}
+        # resources:
+        #   limits:
+        #     #cpu: "100m"
+        #     memory: 0.5Gi
+        #   requests:
+        #     #cpu: "100m"
+        #     memory: 0.5Gi
         ports:
         - containerPort: 9060
           protocol: TCP
@@ -73,8 +75,8 @@ spec:
           value: "{{.Values.metabase.url}}"
         - name: METABASE_CONNECTION_USER
           value: "{{.Values.metabase.user}}"
-        - name: METABASE_CONNECTION_PASSWORD
-          value: "{{.Values.metabase.password}}"
+        # - name: METABASE_CONNECTION_PASSWORD
+        #   value: "{{.Values.metabase.password}}"
         - name: METABASE_CONNECTION_PASSWORD
           valueFrom:
             secretKeyRef:

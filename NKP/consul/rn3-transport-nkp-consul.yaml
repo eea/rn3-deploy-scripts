@@ -12,7 +12,7 @@ ServerPort: 8300
 ConsulDnsPort: 8600
 Domain: consul
 Component: "consul"
-Replicas: 1
+Replicas: 3
 Image: "consul"
 ImageTag: "1.5.3"
 ImagePullPolicy: "Always"
@@ -25,12 +25,12 @@ Resources:
  #   memory: "512Mi"
  requests:
    #cpu: "100m"
-   memory: "512m"
+   memory: "0.5Gi"
  limits:
    #cpu: "500m"
-   memory: "512m"
+   memory: "0.5Gi"
 priorityClassName: ""
-Storage: "5Gi"
+Storage: "1Gi"
 accessModes:
   - ReadWriteOnce
 
@@ -56,38 +56,7 @@ maxUnavailable: 1
 #         operator: NotIn
 #         values:
 #         - true
-# affinity: |
-#   nodeAffinity:
-#     required:
-#       nodeSelectorTerms:
-#       - matchExpressions:
-#         - key: kubernetes.io/hostname
-#           operator: NotIn
-#           values:
-#           - "nkp-transport-fra-md-0-trjg6-hqw6m-7h9j4"
-#   podAntiAffinity:
-#     preferredDuringSchedulingIgnoredDuringExecution:
-#     - weight: 1
-#       podAffinityTerm:
-#         topologyKey: kubernetes.io/hostname
-#         labelSelector:
-#           matchExpressions:
-#           - key: kubernetes.io/hostname
-#             operator: NotIn
-#             values:
-#             - "nkp-transport-fra-md-0-trjg6-hqw6m-7h9j4"
 
-
-
-# affinity: |
-#   nodeAffinity:
-#     requiredDuringSchedulingIgnoredDuringExecution:
-#       nodeSelectorTerms:
-#       - matchExpressions:
-#         - key: kubernetes.io/hostname
-#           operator: NotIn
-#           values:
-#           - nkp-transport-fra-md-0-trjg6-hqw6m-phszm
 affinity: |
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:

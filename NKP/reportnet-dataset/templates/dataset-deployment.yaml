@@ -25,12 +25,14 @@ spec:
         image: {{.Values.repo}}/dataset-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         resources:
-          limits:
-            #cpu: "100m"
-            memory: 0.2Gi
-          requests:
-            #cpu: "100m"
-            memory: 0.2Gi
+{{ toYaml .Values.resources | indent 10 }}
+        # resources:
+        #   limits:
+        #     #cpu: "100m"
+        #     memory: 0.2Gi
+        #   requests:
+        #     #cpu: "100m"
+        #     memory: 0.2Gi
         ports:
         - containerPort: 8030
           protocol: TCP

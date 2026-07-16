@@ -25,12 +25,14 @@ spec:
         image: {{.Values.repo}}/dataflow-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         resources:
-          limits:
-            #cpu: "100m"
-            memory: 0.6Gi
-          requests:
-            #cpu: "100m"
-            memory: 0.6Gi
+{{ toYaml .Values.resources | indent 10 }}
+        # resources:
+        #   limits:
+        #     #cpu: "100m"
+        #     memory: 0.6Gi
+        #   requests:
+        #     #cpu: "100m"
+        #     memory: 0.6Gi
         ports:
         - containerPort: 8020
           protocol: TCP

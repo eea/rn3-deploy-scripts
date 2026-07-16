@@ -1,43 +1,35 @@
-[2026-07-16 12:55:50] [INFO] Using file: config-transport-nkp.yaml
-[2026-07-16 12:55:50] [INFO] Generic/common values based on config-transport-nkp.yaml file
-[2026-07-16 12:55:50] [INFO] Dry Run: false
-[2026-07-16 12:55:50] [INFO] Create Namespace: false
-[2026-07-16 12:55:50] [INFO] Wait: false
-[2026-07-16 12:55:50] [INFO] Timeout: true
-[2026-07-16 12:55:50] [INFO] KubeConfig: /home/sotav/.kube/config
-[2026-07-16 12:55:50] [INFO] ****************************
-[2026-07-16 12:55:50] [INFO] Chart specific values based on config-transport-nkp.yaml file
-[2026-07-16 12:55:50] [INFO] Release Name: consul
-[2026-07-16 12:55:50] [INFO] Chart Name: consul
-[2026-07-16 12:55:50] [INFO] Debug: 
-[2026-07-16 12:55:50] [INFO] Version: v0.0.1
-[2026-07-16 12:55:50] [INFO] Chart Repo: ../consul
-[2026-07-16 12:55:50] [INFO] Values File: rn3-transport-nkp-consul.yaml
-[2026-07-16 12:55:50] [INFO] Namespace: reportnet
-[2026-07-16 12:55:50] [INFO] Deploy type: statefull
-[2026-07-16 12:55:50] [INFO] Script_shell: -
-[2026-07-16 12:55:50] [INFO] Init_shell: -
-[2026-07-16 12:55:50] [INFO] Custom_deployment: -
-[2026-07-16 12:55:50] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
-[2026-07-16 12:55:50] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/config -n reportnet upgrade --install consul ../consul -f ../consul/rn3-transport-nkp-consul.yaml --timeout=20m --version v0.0.1
-[2026-07-16 12:55:50] [INFO] ****************************
-I0716 12:56:20.057187   81458 warnings.go:107] "Warning: spec.template.spec.containers[0].resources.limits[memory]: fractional byte value \"512m\" is invalid, must be an integer"
-I0716 12:56:20.057292   81458 warnings.go:107] "Warning: spec.template.spec.containers[0].resources.requests[memory]: fractional byte value \"512m\" is invalid, must be an integer"
-Release "consul" has been upgraded. Happy Helming!
-NAME: consul
-LAST DEPLOYED: Thu Jul 16 12:56:09 2026
+[2026-07-16 14:48:04] [INFO] Using file: config-transport-nkp.yaml
+[2026-07-16 14:48:04] [INFO] Generic/common values based on config-transport-nkp.yaml file
+[2026-07-16 14:48:04] [INFO] Dry Run: false
+[2026-07-16 14:48:04] [INFO] Create Namespace: false
+[2026-07-16 14:48:04] [INFO] Wait: false
+[2026-07-16 14:48:04] [INFO] Timeout: true
+[2026-07-16 14:48:04] [INFO] KubeConfig: /home/sotav/.kube/config
+[2026-07-16 14:48:04] [INFO] ****************************
+[2026-07-16 14:48:04] [INFO] Chart specific values based on config-transport-nkp.yaml file
+[2026-07-16 14:48:04] [INFO] Release Name: communication
+[2026-07-16 14:48:04] [INFO] Chart Name: reportnet-communication
+[2026-07-16 14:48:04] [INFO] Debug: 
+[2026-07-16 14:48:04] [INFO] Version: v0.0.1
+[2026-07-16 14:48:04] [INFO] Chart Repo: ../reportnet-communication
+[2026-07-16 14:48:04] [INFO] Values File: rn3-transport-nkp-communication.yaml
+[2026-07-16 14:48:04] [INFO] Namespace: reportnet
+[2026-07-16 14:48:04] [INFO] Deploy type: deployment
+[2026-07-16 14:48:04] [INFO] Script_shell: -
+[2026-07-16 14:48:04] [INFO] Init_shell: -
+[2026-07-16 14:48:04] [INFO] Custom_deployment: -
+[2026-07-16 14:48:04] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-07-16 14:48:04] [INFO] Installing reportnet-communication with release name communication from ../reportnet-communication with version v0.0.1 using values file: rn3-transport-nkp-communication.yaml in reportnet namespace
+[2026-07-16 14:48:04] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/config -n reportnet upgrade --install communication ../reportnet-communication -f ../reportnet-communication/rn3-transport-nkp-communication.yaml --timeout=20m --version v0.0.1
+[2026-07-16 14:48:04] [INFO] ****************************
+Release "communication" does not exist. Installing it now.
+NAME: communication
+LAST DEPLOYED: Thu Jul 16 14:48:06 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 8
-DESCRIPTION: Upgrade complete
-NOTES:
-1. Watch all cluster members come up.
-  $ kubectl get pods --namespace=reportnet -w
-2. Test cluster health using Helm test.
-  $ helm test consul
-3. (Optional) Manually confirm consul cluster is healthy.
-  $ CONSUL_POD=$(kubectl get pods -l='release=consul' --output=jsonpath={.items[0].metadata.name})
-  $ kubectl exec $CONSUL_POD consul members --namespace=reportnet | grep server
-[2026-07-16 12:56:22] [INFO] All Actions have been completed successfully
-[2026-07-16 12:56:22] [INFO] ****************************
-[2026-07-16 12:56:22] [INFO] All actions completed successfully
+REVISION: 1
+DESCRIPTION: Install complete
+TEST SUITE: None
+[2026-07-16 14:48:08] [INFO] All Actions have been completed successfully
+[2026-07-16 14:48:08] [INFO] ****************************
+[2026-07-16 14:48:08] [INFO] All actions completed successfully

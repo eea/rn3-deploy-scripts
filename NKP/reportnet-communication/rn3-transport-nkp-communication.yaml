@@ -1,0 +1,51 @@
+# Default values for reportnet.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Specific Values for Communication
+resources:
+  limits:
+    #cpu: "100m"
+    memory: 4Gi
+  requests:
+    #cpu: "100m"
+    memory: 4Gi
+# Environment Variables
+consul:
+  server: consul.reportnet.svc.cluster.local
+  port: 8500
+
+kafka:
+  bootstrap: kafka.reportnet.svc.cluster.local
+  port: 9092
+
+mongo:
+  host: mongo-mongodb
+  port: 27017
+  hosts: mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017/?readPreference=primary&retryWrites=true
+
+##### to be removed 
+zipkin:
+    ip: zipkin-ui
+    port: 9411
+sentry:
+    dsn: https://f1057cea7e954e1a8e11d76bab0a53fd@sentry.eea.europa.eu/46
+    environment: prod2
+axon:
+    url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
+    user: postgres
+#####
+
+
+
+redis:
+    ip: redis
+    port: 6379
+    sentinel: masterset
+    nodes: redis:26379
+        
+tagSufix: 
+replicas: 1
+repo: eeacms
+version: v3.3
+# Other Variables

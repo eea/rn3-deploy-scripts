@@ -68,7 +68,7 @@ charts:
           export chart_name="kafka";
           export values_file="rn3-transport-nkp-kafka.yaml";
           export NS="reportnet";
-          export KC="~/.kube/transport/config";
+          export KC="/home/sotav/.kube/config";
           helm --kubeconfig $KC -n $NS upgrade --install kafka ../kafka -f ../kafka/rn3-transport-nkp-kafka.yaml --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;
 
 
