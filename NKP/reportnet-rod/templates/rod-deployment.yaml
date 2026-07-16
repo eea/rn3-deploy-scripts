@@ -25,12 +25,14 @@ spec:
         image: {{.Values.repo}}/rod-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         resources:
-          limits:
-            #cpu: "100m"
-            memory: 0.5Gi
-          requests:
-            #cpu: "100m"
-            memory: 0.5Gi
+{{ toYaml .Values.resources | indent 10 }}
+        # resources:
+        #   limits:
+        #     #cpu: "100m"
+        #     memory: 0.5Gi
+        #   requests:
+        #     #cpu: "100m"
+        #     memory: 0.5Gi
         ports:
         - containerPort: 9050
           protocol: TCP

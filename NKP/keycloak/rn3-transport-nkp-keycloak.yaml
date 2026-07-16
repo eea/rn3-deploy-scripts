@@ -233,10 +233,11 @@ keycloak:
     dbName: keycloak
     dbHost: rn3-pg-helm-pgpool.reportnet.svc.cluster.local
     dbPort: 5432
-    dbUser: testuser
+    dbUser: postgres
+    #dbUser: testuser
 
     # Only used if no existing secret is specified. In this case a new secret is created
-    dbPassword: "53p057n373.0!"
+    dbPassword: "get_the_value_from_the_secrets_file!!!!"
 
 postgresql:
   ### PostgreSQL User to create.

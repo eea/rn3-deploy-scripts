@@ -1,0 +1,52 @@
+---
+# Default values for reportnet.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+# Specific Values for UMS
+
+resources:
+  limits:
+    #cpu: "100m"
+    memory: 4Gi
+  requests:
+    #cpu: "100m"
+    memory: 4Gi
+
+# Environment Variables
+
+consul:
+  server: consul.reportnet.svc.cluster.local
+  port: 8500
+
+kafka:
+  bootstrap: kafka.reportnet.svc.cluster.local
+  port: 9092
+
+keycloak:
+  - name: user
+    valueFrom:
+      secretKeyRef:
+        name: ums-kc
+        key: username
+  - name: password
+    valueFrom:
+      secretKeyRef:
+        name: ums-kc
+        key: password
+    clientId: reportnet
+    realm: Reportnet
+    host: keycloak-http
+
+redis:
+  ip: redis.reportnet.svc.cluster.local
+  port: 6379
+  sentinel: masterset
+  nodes: redis:26379
+file:
+  path: /reportnet3-data/input
+
+tagSufix:
+replicas: 1
+version: v3.3
+repo: eeacms
+# Other Variables

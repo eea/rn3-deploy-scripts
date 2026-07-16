@@ -26,12 +26,14 @@ spec:
         image: {{.Values.repo}}/reportnet-frontend-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         resources:
-          limits:
-            #cpu: "100m"
-            memory: 0.3Gi
-          requests:
-            #cpu: "100m"
-            memory: 0.3Gi
+{{ toYaml .Values.resources | indent 10 }}
+        # resources:
+        #   limits:
+        #     #cpu: "100m"
+        #     memory: 0.3Gi
+        #   requests:
+        #     #cpu: "100m"
+        #     memory: 0.3Gi
         ports:
         - containerPort: 80
           protocol: TCP

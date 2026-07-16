@@ -309,7 +309,12 @@ charts:
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
-        init_shell: "-"
+        init_shell: >-
+          export NS=reportnet
+          export KC=/home/sotav/.kube/config
+          export ums_kc_password=$(grep ums_kc_password ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+          export ums_kc_username=$(grep ums_kc_username ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+          kubectl --kubeconfig $KC -n $NS create secret generic ums-kc --from-literal password=$ums_kc_password --from-literal username=$ums_kc_username
         custom_deployment: "-"
       ################################### VALIDATION ######################################
       - release_name: validation

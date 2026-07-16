@@ -46,14 +46,16 @@ spec:
           successThreshold: 1
           timeoutSeconds: 5
         resources:
-          limits:
-            #cpu: "100m"
-            #memory: "3096Mi"
-            memory: 0.5Gi
-          requests:
-            #cpu: "100m"
-            #memory: "3096Mi"
-            memory: 0.5Gi
+{{ toYaml .Values.resources | indent 10 }}
+        # resources:
+        #   limits:
+        #     #cpu: "100m"
+        #     #memory: "3096Mi"
+        #     memory: 0.5Gi
+        #   requests:
+        #     #cpu: "100m"
+        #     #memory: "3096Mi"
+        #     memory: 0.5Gi
         env:
         - name: CONSUL_HOST
           value: "{{.Values.consul.server}}"

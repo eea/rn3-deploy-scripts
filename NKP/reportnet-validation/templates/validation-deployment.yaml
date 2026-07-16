@@ -27,12 +27,14 @@ spec:
         image: {{.Values.repo}}/validation-service:{{.Values.version}}{{.Values.tagSufix}}
         imagePullPolicy: Always
         resources:
-          limits:
-            #cpu: "100m"
-            memory: 0.6Gi
-          requests:
-            #cpu: "100m"
-            memory: 0.6Gi
+{{ toYaml .Values.resources | indent 10 }}
+        # resources:
+        #   limits:
+        #     #cpu: "100m"
+        #     memory: 0.6Gi
+        #   requests:
+        #     #cpu: "100m"
+        #     memory: 0.6Gi
         ports:
         - containerPort: 8015
           protocol: TCP
@@ -89,10 +91,10 @@ spec:
           value: "{{.Values.redis.port}}"
         - name: MONGO_HOSTS
           value: "{{.Values.mongo.hosts}}"
-        - name: "MONGO_DB_HOST"
-          value: "{{.Values.mongo.host}}"
-        - name: "MONGO_DB_PORT"
-          value: "{{.Values.mongo.port}}"  
+        # - name: "MONGO_DB_HOST"
+        #   value: "{{.Values.mongo.host}}"
+        # - name: "MONGO_DB_PORT"
+        #   value: "{{.Values.mongo.port}}"  
         - name: REDIS_SENTINEL_MASTER
           value: "{{.Values.redis.sentinel}}"
         - name: REDIS_SENTINEL_NODES
