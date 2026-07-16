@@ -46,7 +46,7 @@ Gossip:
   Create: true
 # GossipKey: key
 # StorageClass: "-"
-StorageClass: ""
+# StorageClass: "nutanix-file-static"
 maxUnavailable: 1
 # nodeAffinity:
 #   requiredDuringSchedulingIgnoredDuringExecution:
@@ -79,24 +79,34 @@ maxUnavailable: 1
 
 
 
+# affinity: |
+#   nodeAffinity:
+#     requiredDuringSchedulingIgnoredDuringExecution:
+#       nodeSelectorTerms:
+#       - matchExpressions:
+#         - key: kubernetes.io/hostname
+#           operator: NotIn
+#           values:
+#           - nkp-transport-fra-md-0-trjg6-hqw6m-phszm
 affinity: |
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: NotIn
-          values:
-          - nkp-transport-fra-md-0-trjg6-hqw6m-7h9j4
-
-
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: component
+                  operator: In
+                  values:
+                    - consul-consul
+            topologyKey: kubernetes.io/hostname
+          weight: 1
 
 
 ui:
   enabled: true
 uiService:
   enabled: true
-  type: "NodePort"
+  type: "ClusterIP"
   annotations: {}
 ConsulConfig: []
 #  - type: secret

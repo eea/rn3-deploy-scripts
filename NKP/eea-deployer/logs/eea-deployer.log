@@ -1,28 +1,43 @@
-[2026-06-26 13:52:30] [INFO] Using file: config-dev-local.yaml
-[2026-06-26 13:52:30] [INFO] Generic/common values based on config-dev-local.yaml file
-[2026-06-26 13:52:30] [INFO] Dry Run: false
-[2026-06-26 13:52:30] [INFO] Create Namespace: false
-[2026-06-26 13:52:30] [INFO] Wait: false
-[2026-06-26 13:52:30] [INFO] Timeout: true
-[2026-06-26 13:52:30] [INFO] KubeConfig: /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig
-[2026-06-26 13:52:30] [INFO] ****************************
-[2026-06-26 13:52:30] [INFO] Chart specific values based on config-dev-local.yaml file
-[2026-06-26 13:52:30] [INFO] Release Name: consul
-[2026-06-26 13:52:30] [INFO] Chart Name: consul
-[2026-06-26 13:52:30] [INFO] Debug: 
-[2026-06-26 13:52:30] [INFO] Version: v0.0.1
-[2026-06-26 13:52:30] [INFO] Chart Repo: ../consul/consul-dev-local
-[2026-06-26 13:52:30] [INFO] Values File: rn3-dev-local-consul.yaml
-[2026-06-26 13:52:30] [INFO] Namespace: reportnet
-[2026-06-26 13:52:30] [INFO] Deploy type: statefull
-[2026-06-26 13:52:30] [INFO] Script_shell: -
-[2026-06-26 13:52:30] [INFO] Init_shell: -
-[2026-06-26 13:52:30] [INFO] Custom_deployment: -
-[2026-06-26 13:52:30] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
-[2026-06-26 13:52:30] [INFO] Executing command: helm --kubeconfig /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig -n reportnet upgrade --install consul ../consul/consul-dev-local -f ../consul/consul-dev-local/rn3-dev-local-consul.yaml --timeout=20m --version v0.0.1
-[2026-06-26 13:52:30] [INFO] ****************************
-Error: UPGRADE FAILED: resource mapping not found for name: "consul-consul-server" namespace: "reportnet" from "": no matches for kind "PodDisruptionBudget" in version "policy/v1beta1"
-ensure CRDs are installed first
-[2026-06-26 13:52:32] [INFO] All Actions have been completed successfully
-[2026-06-26 13:52:32] [INFO] ****************************
-[2026-06-26 13:52:32] [INFO] All actions completed successfully
+[2026-07-16 12:55:50] [INFO] Using file: config-transport-nkp.yaml
+[2026-07-16 12:55:50] [INFO] Generic/common values based on config-transport-nkp.yaml file
+[2026-07-16 12:55:50] [INFO] Dry Run: false
+[2026-07-16 12:55:50] [INFO] Create Namespace: false
+[2026-07-16 12:55:50] [INFO] Wait: false
+[2026-07-16 12:55:50] [INFO] Timeout: true
+[2026-07-16 12:55:50] [INFO] KubeConfig: /home/sotav/.kube/config
+[2026-07-16 12:55:50] [INFO] ****************************
+[2026-07-16 12:55:50] [INFO] Chart specific values based on config-transport-nkp.yaml file
+[2026-07-16 12:55:50] [INFO] Release Name: consul
+[2026-07-16 12:55:50] [INFO] Chart Name: consul
+[2026-07-16 12:55:50] [INFO] Debug: 
+[2026-07-16 12:55:50] [INFO] Version: v0.0.1
+[2026-07-16 12:55:50] [INFO] Chart Repo: ../consul
+[2026-07-16 12:55:50] [INFO] Values File: rn3-transport-nkp-consul.yaml
+[2026-07-16 12:55:50] [INFO] Namespace: reportnet
+[2026-07-16 12:55:50] [INFO] Deploy type: statefull
+[2026-07-16 12:55:50] [INFO] Script_shell: -
+[2026-07-16 12:55:50] [INFO] Init_shell: -
+[2026-07-16 12:55:50] [INFO] Custom_deployment: -
+[2026-07-16 12:55:50] [INFO] Deployment type is *** statefull ***  execution will only upgrade 
+[2026-07-16 12:55:50] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/config -n reportnet upgrade --install consul ../consul -f ../consul/rn3-transport-nkp-consul.yaml --timeout=20m --version v0.0.1
+[2026-07-16 12:55:50] [INFO] ****************************
+I0716 12:56:20.057187   81458 warnings.go:107] "Warning: spec.template.spec.containers[0].resources.limits[memory]: fractional byte value \"512m\" is invalid, must be an integer"
+I0716 12:56:20.057292   81458 warnings.go:107] "Warning: spec.template.spec.containers[0].resources.requests[memory]: fractional byte value \"512m\" is invalid, must be an integer"
+Release "consul" has been upgraded. Happy Helming!
+NAME: consul
+LAST DEPLOYED: Thu Jul 16 12:56:09 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 8
+DESCRIPTION: Upgrade complete
+NOTES:
+1. Watch all cluster members come up.
+  $ kubectl get pods --namespace=reportnet -w
+2. Test cluster health using Helm test.
+  $ helm test consul
+3. (Optional) Manually confirm consul cluster is healthy.
+  $ CONSUL_POD=$(kubectl get pods -l='release=consul' --output=jsonpath={.items[0].metadata.name})
+  $ kubectl exec $CONSUL_POD consul members --namespace=reportnet | grep server
+[2026-07-16 12:56:22] [INFO] All Actions have been completed successfully
+[2026-07-16 12:56:22] [INFO] ****************************
+[2026-07-16 12:56:22] [INFO] All actions completed successfully
