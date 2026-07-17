@@ -1,38 +1,35 @@
-[2026-07-16 16:06:54] [INFO] Using file: config-transport-nkp.yaml
-[2026-07-16 16:06:54] [INFO] Generic/common values based on config-transport-nkp.yaml file
-[2026-07-16 16:06:54] [INFO] Dry Run: false
-[2026-07-16 16:06:54] [INFO] Create Namespace: false
-[2026-07-16 16:06:54] [INFO] Wait: false
-[2026-07-16 16:06:54] [INFO] Timeout: true
-[2026-07-16 16:06:54] [INFO] KubeConfig: /home/sotav/.kube/config
-[2026-07-16 16:06:54] [INFO] ****************************
-[2026-07-16 16:06:54] [INFO] Chart specific values based on config-transport-nkp.yaml file
-[2026-07-16 16:06:54] [INFO] Release Name: ums
-[2026-07-16 16:06:54] [INFO] Chart Name: reportnet-ums
-[2026-07-16 16:06:54] [INFO] Debug: 
-[2026-07-16 16:06:54] [INFO] Version: v0.0.1
-[2026-07-16 16:06:54] [INFO] Chart Repo: ../reportnet-ums
-[2026-07-16 16:06:54] [INFO] Values File: rn3-transport-nkp-ums.yaml
-[2026-07-16 16:06:54] [INFO] Namespace: reportnet
-[2026-07-16 16:06:54] [INFO] Deploy type: deployment
-[2026-07-16 16:06:54] [INFO] Script_shell: -
-[2026-07-16 16:06:54] [INFO] Init_shell: export NS=reportnet export KC=/home/sotav/.kube/config export ums_kc_password=$(grep ums_kc_password ../eea-deployer/.secrets.prv | cut -d '=' -f2); export ums_kc_username=$(grep ums_kc_username ../eea-deployer/.secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS create secret generic ums-kc --from-literal password=$ums_kc_password --from-literal username=$ums_kc_username
-[2026-07-16 16:06:54] [INFO] Custom_deployment: -
-[2026-07-16 16:06:54] [INFO] Custom SHELL INIT  detected
-[2026-07-16 16:06:54] [INFO] Executing SHELL INIT command: export NS=reportnet export KC=/home/sotav/.kube/config export ums_kc_password=$(grep ums_kc_password ../eea-deployer/.secrets.prv | cut -d '=' -f2); export ums_kc_username=$(grep ums_kc_username ../eea-deployer/.secrets.prv | cut -d '=' -f2); kubectl --kubeconfig $KC -n $NS create secret generic ums-kc --from-literal password=$ums_kc_password --from-literal username=$ums_kc_username
-Error from server (AlreadyExists): secrets "ums-kc" already exists
-[2026-07-16 16:06:56] [INFO] Deployment type is  *** deployment ***  execution will proceed 
-[2026-07-16 16:06:56] [INFO] Installing reportnet-ums with release name ums from ../reportnet-ums with version v0.0.1 using values file: rn3-transport-nkp-ums.yaml in reportnet namespace
-[2026-07-16 16:06:56] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/config -n reportnet upgrade --install ums ../reportnet-ums -f ../reportnet-ums/rn3-transport-nkp-ums.yaml --timeout=20m --version v0.0.1
-[2026-07-16 16:06:56] [INFO] ****************************
-Release "ums" has been upgraded. Happy Helming!
-NAME: ums
-LAST DEPLOYED: Thu Jul 16 16:06:58 2026
+[2026-07-17 10:51:07] [INFO] Using file: config-transport-nkp.yaml
+[2026-07-17 10:51:07] [INFO] Generic/common values based on config-transport-nkp.yaml file
+[2026-07-17 10:51:08] [INFO] Dry Run: false
+[2026-07-17 10:51:08] [INFO] Create Namespace: false
+[2026-07-17 10:51:08] [INFO] Wait: false
+[2026-07-17 10:51:08] [INFO] Timeout: true
+[2026-07-17 10:51:08] [INFO] KubeConfig: /home/sotav/.kube/config
+[2026-07-17 10:51:08] [INFO] ****************************
+[2026-07-17 10:51:08] [INFO] Chart specific values based on config-transport-nkp.yaml file
+[2026-07-17 10:51:08] [INFO] Release Name: devops-helper
+[2026-07-17 10:51:08] [INFO] Chart Name: devops-helper
+[2026-07-17 10:51:08] [INFO] Debug: 
+[2026-07-17 10:51:08] [INFO] Version: v0.0.1
+[2026-07-17 10:51:08] [INFO] Chart Repo: ../devops-helper
+[2026-07-17 10:51:08] [INFO] Values File: rn3-transport-nkp-devops-helper.yaml
+[2026-07-17 10:51:08] [INFO] Namespace: reportnet
+[2026-07-17 10:51:08] [INFO] Deploy type: deployment
+[2026-07-17 10:51:08] [INFO] Script_shell: -
+[2026-07-17 10:51:08] [INFO] Init_shell: -
+[2026-07-17 10:51:08] [INFO] Custom_deployment: -
+[2026-07-17 10:51:08] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-07-17 10:51:08] [INFO] Installing devops-helper with release name devops-helper from ../devops-helper with version v0.0.1 using values file: rn3-transport-nkp-devops-helper.yaml in reportnet namespace
+[2026-07-17 10:51:08] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/config -n reportnet upgrade --install devops-helper ../devops-helper -f ../devops-helper/rn3-transport-nkp-devops-helper.yaml --timeout=20m --version v0.0.1
+[2026-07-17 10:51:08] [INFO] ****************************
+Release "devops-helper" does not exist. Installing it now.
+NAME: devops-helper
+LAST DEPLOYED: Fri Jul 17 10:51:10 2026
 NAMESPACE: reportnet
 STATUS: deployed
-REVISION: 9
-DESCRIPTION: Upgrade complete
+REVISION: 1
+DESCRIPTION: Install complete
 TEST SUITE: None
-[2026-07-16 16:07:00] [INFO] All Actions have been completed successfully
-[2026-07-16 16:07:00] [INFO] ****************************
-[2026-07-16 16:07:00] [INFO] All actions completed successfully
+[2026-07-17 10:51:11] [INFO] All Actions have been completed successfully
+[2026-07-17 10:51:11] [INFO] ****************************
+[2026-07-17 10:51:11] [INFO] All actions completed successfully

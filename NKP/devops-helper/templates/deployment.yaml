@@ -38,5 +38,6 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.podName }}-pvc
+            #claimName: {{ .Values.podName }}
+            claimName: "devops-helper"
       {{- end }}

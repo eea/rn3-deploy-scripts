@@ -5,7 +5,11 @@ image:
   tag: trixie
   pullPolicy: IfNotPresent
 
+
 persistence:
   enabled: true
-  storageClassName: "nutanix-file-static"
-  accessMode: ReadWriteMany
+  storageClassName: nutanix-file-static
+  accessMode: 
+    - ReadWriteMany
+  size: 20Gi
+  mountPath: /data
