@@ -50,6 +50,41 @@ charts:
       #####################################################################################
       ####################                                           ######################
       ####################                                           ######################
+      ####################                  INGRESS                  ######################
+      ####################                                           ######################
+      ####################                                           ######################
+      ####################                                           ######################
+      #####################################################################################
+      # for nginx we do not deploy a helm - we only need to apply some ingress files with 
+      # kubectl. For such a case we use the devops helpr with a custom deployment to be able 
+      # to do so from the eea_deployer script
+      # you just need to create the ingress and then add it to the list of the custom_deployment
+      # you can alos use a master file with all the ingresses - the choise is up to you 
+      - release_name: devops-helper-nginx
+        chart_name: devops-helper
+        version: v0.0.1
+        chart_repo: ../devops-helper
+        values_file: rn3-transport-nkp-devops-helper.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        script_shell: "-"
+        init_shell: "-"
+        custom_deployment: >-
+          export NS=reportnet;
+          export KC=/home/sotav/.kube/config;
+          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-cipher-config-map.yaml;
+          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-frontend.yaml;
+          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-apigateway.yaml;
+          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-keycloak.yaml;
+          
+        #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-master.yaml
+        #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-master.yaml
+
+
+
+      #####################################################################################
+      ####################                                           ######################
+      ####################                                           ######################
       ####################                 STATEFULL                 ######################
       ####################                                           ######################
       ####################                                           ######################

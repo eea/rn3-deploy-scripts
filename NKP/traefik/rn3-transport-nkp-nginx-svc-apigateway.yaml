@@ -1,0 +1,48 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-apigateway
+  annotations:
+    nginx.ingress.kubernetes.io/server-snippet: |
+      if ($uri ~* ^/actuator) {
+        return 403;
+      }
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.reportnet.europa.eu"
+      more_set_headers "Referrer-Policy: no-referrer";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+      more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
+      more_set_headers "Access-Control-Allow-Origin: * ";
+    nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m" #-> 3G
+spec:
+  rules:
+  - host: transport-api-awstest.reportnet.europa.eu
+    http:
+      paths:
+        - backend:
+            service:
+              name: api-gateway
+              port:
+                number: 8010
+          path: /
+          pathType: Prefix
+        - backend:
+            service:
+              name: dataset
+              port:
+                number: 8030
+          path: /dataset/v2/importFileData
+          pathType: Prefix
+        - backend:
+            service:
+              name: dataset
+              port:
+                number: 8030
+          path: /dataset/v2/etlExport
+          pathType: Prefix
+  ingressClassName: nginx
