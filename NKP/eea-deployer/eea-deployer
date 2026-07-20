@@ -39,22 +39,6 @@ option_picked(){
     printf "${msgcolor}${message}${normal}\n"
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Function to show help on how to use this utility? and what all options are available
 # It also contains a sample config.yaml file which is a must for this utility to function properly.
 show_help() {
@@ -296,13 +280,6 @@ new_env(){
 
 }
 
-
-
-
-
-
-
-
 # Function to check pod health and to make sure pods of a given release are in running state 
 # This script will terminate if the pods are not running for more than 20 minutes, which is something that should ideally not happen.
 check_pod_status() {
@@ -420,10 +397,6 @@ perform_action() {
   fi
 
 
-
-
-
-
   if [ "$ACTION" == "new-env" ]; then
 
     #eea-deployer "Starting deployments of chart $app_name !"
@@ -445,14 +418,6 @@ perform_action() {
 
     done < <(yq e '.charts[] | [.chart_repo, .values_file] | @tsv' $CONFIG_FILE_NAME)
   fi
-
-
-
-
-
-
-
-
 
   if [ "$ACTION" == "install" ]; then
 
@@ -595,8 +560,6 @@ if [ ! -f "$CONFIG_FILE_NAME" ]; then
     exit 8
 fi
 
-
-
 ###########################################################################################
 # Based on the action install, uninstall, etc perform it and provide indented results and logs
 # selection menu 6
@@ -619,8 +582,6 @@ if [ "$ACTION" == "app" ]; then
     #sleep 2s
   done < <(yq e '.charts[] | [.release_name, .chart_name, .version, .chart_repo, .values_file, .namespace, .deploy_type, .script_shell, .init_shell, .custom_deployment] | @tsv' $CONFIG_FILE_NAME | grep $app_name)
 
-
-
 elif [ "$ACTION" == "new-env" ]; then
   eea-deployer "Starting deployments of chart $app_name !"
   log_message "INFO" "Using file: $CONFIG_FILE_NAME"
@@ -632,9 +593,6 @@ elif [ "$ACTION" == "new-env" ]; then
     #new-env "$env_name" "$env_base" "$CHART_REPO" "$VALUES_FILE" 
     #echo "hello there - new env $new_env old_env $base_env"
   done < <(yq e '.charts[] | [.release_name, .chart_name, .version, .chart_repo, .values_file, .namespace, .deploy_type, .script_shell, .init_shell, .custom_deployment] | @tsv' $CONFIG_FILE_NAME )
-
-
-
 
 # selection menu 4
 elif [ "$ACTION" == "statefull" ]; then
@@ -655,8 +613,6 @@ elif [ "$ACTION" == "statefull" ]; then
     fi
     #sleep 2s
   done < <(yq e '.charts[] | [.release_name, .chart_name, .version, .chart_repo, .values_file, .namespace, .deploy_type, .script_shell, .init_shell, .custom_deployment] | @tsv' $CONFIG_FILE_NAME | grep $type_sel)
-
-
 
 # selection menu 5
 elif [ "$ACTION" == "deployment" ]; then
@@ -756,8 +712,6 @@ fi
 
 log_message "INFO" "All actions completed successfully"
 }
-
-
 
 clear
 show_menu

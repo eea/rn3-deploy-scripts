@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-keycloak
+  name: ingress-keycloak-admin
   annotations:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /
@@ -18,30 +18,14 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS
 spec:
   rules:
-  - host: transport-auth-awstest.reportnet.europa.eu
+  - host: transport-authadmin-awstest.reportnet.europa.eu
     http:
       paths:
-        - backend:
-            service:
-              name: keycloak-http
-              port:
-                number: 80
-          path: /auth/realms/Reportnet
-          pathType: Prefix
-        - backend:
-            service:
-              name: keycloak-http
-              port:
-                number: 80
-          path: /auth/resources
-          pathType: Prefix
-    # http:
-    #   paths:
-    #   - path: /
-    #     pathType: Prefix
-    #     backend:
-    #       service:
-    #         name: keycloak-http
-    #         port:
-    #           number: 80
+      - path: /auth
+        pathType: Prefix
+        backend:
+          service:
+            name: keycloak-http
+            port:
+              number: 80
   ingressClassName: nginx

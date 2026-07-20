@@ -47,6 +47,18 @@ charts:
         init_shell: "-"
         custom_deployment: "-"
 
+      ###################################  NETDATA ######################################
+      # - release_name: netdata
+      #   chart_name: netdata
+      #   version: v0.0.1
+      #   chart_repo: ../netdata
+      #   values_file: rn3-transport-nkp-netdata.yaml
+      #   namespace: reportnet
+      #   deploy_type: deployment
+      #   script_shell: "-"
+      #   init_shell: "-"
+      #   custom_deployment: "-"
+
       #####################################################################################
       ####################                                           ######################
       ####################                                           ######################
@@ -76,7 +88,7 @@ charts:
           kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-frontend.yaml;
           kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-apigateway.yaml;
           kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-keycloak.yaml;
-          
+          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-keycloak-admin.yaml;
         #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-master.yaml
         #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-master.yaml
 
