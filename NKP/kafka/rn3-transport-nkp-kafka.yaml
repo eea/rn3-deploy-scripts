@@ -137,7 +137,7 @@ initContainers: []
 dnsPolicy: ""
 dnsConfig: {}
 controller:
-  replicaCount: 1
+  replicaCount: 3
   controllerOnly: false
   minId: 0
   zookeeperMigrationMode: false
@@ -187,11 +187,11 @@ controller:
     requests:
       #cpu: 2
       #memory: 3Gi
-      memory: 512m
+      memory: 3Gi
     limits:
       #cpu: 3
       #memory: 3Gi
-      memory: 1Gi
+      memory: 3Gi
   #resources: {}
   podSecurityContext:
     enabled: true
@@ -566,10 +566,10 @@ metrics:
     resources:
       requests:
         cpu: 2
-        memory: 512Mi
+        memory: 2Gi
       limits:
         cpu: 3
-        memory: 1024Mi
+        memory: 2Gi
     resources: {}
     service:
       ports:
