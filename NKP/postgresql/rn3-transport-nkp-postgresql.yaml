@@ -9,7 +9,7 @@ global:
     #password: custompassword
     #database: customdatabase
     #repmgrUsername: repmgruser
-    #repmgrPassword: OWI9xc2s6R
+    #repmgrPassword: ---------
     #repmgrDatabase: repmgrdatabase
     existingSecret: pg-secret
   # ldap:

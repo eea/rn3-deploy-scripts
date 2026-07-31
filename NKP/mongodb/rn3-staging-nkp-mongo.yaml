@@ -76,7 +76,7 @@ metrics:
   resources: {}
   securityContext:
     enabled: true
-    runAsUser: 1001
+    runAsUser: 0
 
 serviceAccount: ""
 
@@ -84,9 +84,9 @@ serviceAccount: ""
 podAnnotations: {}
 
 securityContext:
-  enabled: true
-  runAsUser: 999
-  fsGroup: 999
+  enabled: false
+  runAsUser: 0
+  fsGroup: 0
   runAsNonRoot: true
 
 init:
@@ -151,7 +151,7 @@ persistentVolume:
   ##
   storageClass: ""
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   size: 10Gi
   annotations: {}
 

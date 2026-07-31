@@ -78,7 +78,7 @@ charts:
         chart_repo: ../keycloak
         values_file: rn3-staging-nkp-keycloak.yaml
         namespace: reportnet
-        deploy_type: "-"
+        deploy_type: "statefull"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -99,7 +99,7 @@ charts:
         chart_repo: ../mongodb
         values_file: rn3-staging-nkp-mongo.yaml
         namespace: reportnet
-        deploy_type: "-"
+        deploy_type: "statefull"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -110,7 +110,7 @@ charts:
         chart_repo: ../redis
         values_file: rn3-staging-nkp-redis.yaml
         namespace: reportnet
-        deploy_type: "-"
+        deploy_type: "statefull"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -121,7 +121,7 @@ charts:
         chart_repo: ../postgresql
         values_file: rn3-staging-nkp-postgresql.yaml
         namespace: reportnet
-        deploy_type: "-" #statefull
+        deploy_type: "statefull" #statefull
         script_shell: >-
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
@@ -131,9 +131,11 @@ charts:
           kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'ls -la  /tmp/migration';
           chmod a+x ./scripts/migrate.sh;
           ./scripts/migrate.sh;
-          chmod a+x ./scripts/./scripts/pgpool-usr-fix.sh;
+          chmod a+x ./scripts/pgpool-usr-fix.sh;
           ./scripts/pgpool-usr-fix.sh dev $NS $KC
         init_shell: >-
+          export NS=reportnet
+          export KC=~/.kube/staging/config
           kubectl --kubeconfig $KC -n $NS delete secret pg-secret;
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
@@ -156,15 +158,20 @@ charts:
         chart_repo: ../citus
         values_file: rn3-staging-nkp-citus.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "statefull"
         script_shell: "-"
         init_shell: >-
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export pass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           kubectl --kubeconfig $KC -n $NS delete secret citus-secrets;
           kubectl --kubeconfig $KC -n $NS create secret generic citus-secrets --from-literal password=$pass --from-literal userpass=$dbpass ;
-        custom_deployment: "-"
-          #helm --kubeconfig $KC -n $NS upgrade --install citus . -f rn3-staging-nkp-citus.yaml --set fullnameOverride=citus,metrics.enabled=true --debug
+        custom_deployment: >-
+          export NS=reportnet;
+          export KC=~/.kube/staging/config;
+          export release_name=citus;
+          export chart_repo=../citus;
+          export values_file=rn3-staging-nkp-citus.yaml;
+          helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f $chart_repo/$values_file --set fullnameOverride=citus,metrics.enabled=true --debug;
 
 
       #####################################################################################

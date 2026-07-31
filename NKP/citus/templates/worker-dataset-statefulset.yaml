@@ -19,7 +19,7 @@ metadata:
     app: citus-dataset-worker
   name: pg-citus-dataset-worker
 spec:
-  replicas: 5
+  replicas: 4
   selector:
     matchLabels:
       app: citus-dataset-worker
