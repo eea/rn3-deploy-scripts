@@ -81,6 +81,13 @@ charts:
         deploy_type: "statefull"
         script_shell: "-"
         init_shell: "-"
+        # init_shell: >-
+        #   export chart_repo=../keycloak;
+        #   export release_name=keycloak;
+        #   export chart_name=keycloak;
+        #   export NS=reportnet;
+        #   export KC=~/.kube/staging/config;
+        #   kubectl --kubeconfig $KC -n $NS apply -f $chart_repo/keycloak-x509-patch-configmap.yaml;
         custom_deployment: "-"
       ################################### KEYCLOAK 6-9 ######################################
       # - release_name: keycloak6
@@ -97,6 +104,17 @@ charts:
         chart_name: mongo
         version: v0.0.1
         chart_repo: ../mongodb
+        values_file: rn3-staging-nkp-mongo.yaml
+        namespace: reportnet
+        deploy_type: "statefull"
+        script_shell: "-"
+        init_shell: "-"
+        custom_deployment: "-"
+      #################################### MONGO-M ######################################
+      - release_name: mongo-m
+        chart_name: mongo-m
+        version: v0.0.1
+        chart_repo: ../mongodb-m
         values_file: rn3-staging-nkp-mongo.yaml
         namespace: reportnet
         deploy_type: "statefull"
