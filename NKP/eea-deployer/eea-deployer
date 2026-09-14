@@ -761,7 +761,7 @@ while [ $opt != '' ]
             show_menu;
         ;;
         7) clear;
-            option_picked "Option selected (6) = New env";
+            option_picked "Option selected (7) = New env";
             read -p "Please give me the name of the new environment: " env_name
             #read -p "Please give me the name of the base environment to copy from: " env_base
             #printf "$1 $2 $3";
