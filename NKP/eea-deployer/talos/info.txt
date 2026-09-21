@@ -1,0 +1,631 @@
+cd ./NKP/eea-deployer/talos
+################ SINGLE NODE
+export CLUSTER_NAME=eea-dev-talos-vbox
+export CONTROL_PLANE_IP=192.168.56.111
+cd ./0307
+talosctl gen secrets -o secrets.yaml --force
+talosctl gen config $CLUSTER_NAME https://$CONTROL_PLANE_IP:6443 -f --with-secrets secrets.yaml --additional-sans "10.0.3.15" --additional-sans "eea-dev-talos-vbox"
+cd ../
+
+#talosctl gen config $CLUSTER_NAME https://$CONTROL_PLANE_IP:6443  --output-dir ./0307 --force
+
+
+
+
+#talosctl gen config eea-dev-talos-vbox https://$CONTROL_PLANE_IP:6443 --output-dir ./0307 --force --install-image=factory.talos.dev/metal-installer/46f4c3b36294fc62d44d2552b3108c60eb7073f1afb5c1e2ac881045bbd5f758:v1.13.5
+#            - siderolabs/iscsi-tools
+#            - siderolabs/qemu-guest-agent
+#            - siderolabs/tailscale
+#            - siderolabs/util-linux-tools
+
+
+talosctl apply-config --insecure --nodes 192.168.56.111 --file ./0307/controlplane.yaml
+talosctl apply-config  --nodes 192.168.56.111 --file ./0307/controlplane.yaml
+~wait for a reboot of the node
+
+export CONTROL_PLANE_IP=192.168.56.111
+export TALOSCONFIG="./0307/talosconfig"
+talosctl --talosconfig $TALOSCONFIG config endpoint $CONTROL_PLANE_IP
+talosctl --talosconfig $TALOSCONFIG config node $CONTROL_PLANE_IP
+
+#talosctl --talosconfig $TALOSCONFIG bootstrap
+talosctl bootstrap
+talosctl services
+
+
+~~~~~~~~~~~~ REBOOT THE NODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export IP=(192.168.56.111)
+talosctl reboot --nodes "$IP" 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~ SHUTDOWN THE NODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export IP=(192.168.56.111)
+talosctl shutdown --nodes "$IP"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+talosctl health --wait-timeout 5m
+talosctl kubeconfig
+talosctl kubeconfig ./eea-dev-talos-vbox-sn-kubeconfig
+
+export KC=./eea-dev-talos-vbox-sn-kubeconfig
+kubectl --kubeconfig $KC get nodes
+kubectl --kubeconfig $KC get pods -n kube-system
+
+
+
+
+
+
+#export WORKER_IP1=192.168.56.103
+#talosctl apply-config --insecure --nodes $WORKER_IP1 --file ./0307/worker.yaml
+
+#export WORKER_IP2=192.168.56.104
+#talosctl apply-config --insecure --nodes $WORKER_IP2 --file ./0307/worker.yaml
+
+
+
+
+
+talosctl -n $CONTROL_PLANE_IP get disks --insecure
+#talosctl get machineconfig -o yaml > ./0307/machineconfig.yaml
+
+
+talosctl patch machineconfig --nodes $CONTROL_PLANE_IP --patch @./0307/node-extra-disk.yaml
+- wait for reboot
+talosctl -n $CONTROL_PLANE_IP get volumestatus
+talosctl -n $WORKER_IP1 get volumestatus
+talosctl -n $WORKER_IP2 get volumestatus
+talosctl get volumestatus /dev/sdb-1
+talosctl get volumestatus /dev/sdb-2
+talosctl get volumestatus /dev/sdb-3
+talosctl get volumestatus /dev/sdb-4
+talosctl get mountstatus
+talosctl get volumeconfigs
+talosctl get volumeconfig /dev/sdb-1 -o yaml #mnt/data
+talosctl get volumeconfig /dev/sdb-2 -o yaml #mnt/app-data
+talosctl get volumeconfig /dev/sdb-3 -o yaml #mnt/logs
+talosctl get volumeconfig /dev/sdb-4 -o yaml #mnt/longhorn
+
+
+
+export KC=./eea-dev-talos-vbox-sn-kubeconfig
+kubectl --kubeconfig $KC apply -f ./talos/0307/patches/helm-service-account.yaml
+
+
+# metrics server for hpa and general metrics
+#kubectl --kubeconfig $KC apply -f https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
+#kubectl --kubeconfig $KC apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl --kubeconfig $KC apply -f ./0307/standalone-install.yaml
+kubectl --kubeconfig $KC apply -f ./0307/metrics-components.yaml
+
+
+###### TEST 
+kubectl --kubeconfig $KC top nodes
+
+# Install the local path provisioner
+#kubectl --kubeconfig $KC apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
+kubectl --kubeconfig $KC apply -f ./0307/local-path-storage.yaml
+#kubectl --kubeconfig $KC patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+#kubectl --kubeconfig $KC patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+
+#helm repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+#helm repo update
+
+
+
+helm --kubeconfig $KC upgrade --install csi-driver-nfs csi-driver-nfs/csi-driver-nfs \
+  --namespace kube-system \
+  --set driver.name=nfs.csi.k8s.io \
+  --set controller.replicas=1
+
+#kubectl --kubeconfig $KC --namespace=kube-system get pods --selector="app.kubernetes.io/instance=csi-driver-nfs" --watch
+kubectl --kubeconfig $KC -n kube-system get pods -l app.kubernetes.io/name=csi-driver-nfs
+
+
+kubectl --kubeconfig $KC apply -f ./0307/nfs-storageclass.yaml
+
+# make this driver the default one 
+kubectl --kubeconfig $KC patch storageclass nfs-storage -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+# add an extra if you like just for the fun of it 
+kubectl --kubeconfig $KC apply -f ./0307/nfs-storageclass-client.yaml
+
+####### test
+#
+#kubectl --kubeconfig $KC  apply -f ./0307/test-nfs-pvc.yaml
+#kubectl --kubeconfig $KC create namespace data-processing
+#kubectl --kubeconfig $KC  apply -f ./0307/shared-workspace.yaml
+#kubectl --kubeconfig $KC  get pvc nfs-test
+#kubectl --kubeconfig $KC  logs nfs-test-pod
+
+
+
+############# finally .......
+kubectl --kubeconfig $KC create namespace reportnet
+
+# on another shell now ........
+
+export WD=~/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer
+export KC=./talos/eea-dev-talos-vbox-sn-kubeconfig
+export NAMESPACE=reportnet
+echo "######################################"
+echo "Working directory is :"$WD
+echo "Kubeconfig file is :" $KC
+echo "Namespace is :" $NAMESPACE
+echo "######################################"
+
+
+cd $WD
+
+
+kubectl --kubeconfig $KC get nodes
+kubectl --kubeconfig $KC get pods -n kube-system
+kubectl --kubeconfig $KC get pods -A
+
+helm --kubeconfig $KC -n "$NAMESPACE" upgrade --install devops-helper ../devops-helper -f "../devops-helper/rn3-dev-local-devops-helper.yaml"
+kubectl --kubeconfig $KC get pods -n $NAMESPACE |grep devops
+#helm --kubeconfig $KC -n "$NAMESPACE" uninstall devops-helper 
+
+
+#
+kubectl --kubeconfig $KC -n $NAMESPACE create -f ../reportnet-recordstore/rn3-dev-local-data-pvc-nfs.yaml
+
+
+
+
+
+################
+
+
+
+#####dev
+consul x 1
+redis x 1
+postgresl x 1 non replicated
+keycloak x 1
+kafka x 1
+mongo x 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################ MULTI  NODE
+
+export CONTROL_PLANE_IP=192.168.56.111
+talosctl gen config eea-dev-talos-vbox https://$CONTROL_PLANE_IP:6443 --output-dir ./conf
+
+talosctl apply-config --insecure --nodes $CONTROL_PLANE_IP --file ./conf/controlplane.yaml
+
+
+
+
+export WORKER_IP1=192.168.56.103
+talosctl apply-config --insecure --nodes $WORKER_IP1 --file ./0307/worker.yaml
+
+export WORKER_IP2=192.168.56.104
+talosctl apply-config --insecure --nodes $WORKER_IP2 --file ./0307/worker.yaml
+
+
+
+# bootstrap
+export TALOSCONFIG="./conf/talosconfig"
+export CONTROL_PLANE_IP=192.168.56.111
+talosctl --talosconfig $TALOSCONFIG config endpoint $CONTROL_PLANE_IP
+talosctl --talosconfig $TALOSCONFIG config node $CONTROL_PLANE_IP
+
+talosctl --talosconfig $TALOSCONFIG bootstrap
+
+
+export TALOSCONFIG="./conf/talosconfig"
+talosctl config endpoint $CONTROL_PLANE_IP
+talosctl config node $CONTROL_PLANE_IP
+
+
+talosctl --talosconfig $TALOSCONFIG kubeconfig .
+
+
+
+
+
+
+############################################### CONNECT ###########################################
+export WD=~/TRASYS_GIT_PRV/EAA
+cd $WD/rn3-deploy-scripts/NKP/eea-deployer/talos/
+export KC=$(pwd)/kubeconfig
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+
+cd $WD/rn3-deploy-scripts/NKP/eea-deployer/talos/
+
+kubectl --kubeconfig $KC get nodes
+kubectl --kubeconfig $KC get pods -A
+kubectl --kubeconfig $KC describe node talos-egi-224
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#talosctl machineconfig patch ./conf/worker_disk.yaml -p '[{"op": "add", "path": "/machine/features/hostDNS/enabled", "value": true}, {"op": "add", "path": "/machine/systemExtensions/installation", "value": ["open-iscsi"]}]'
+
+####################### longhorn
+
+talosctl health --nodes 192.168.56.111
+
+talosctl get disks --nodes 192.168.56.111
+talosctl get disks --nodes 192.168.56.103
+talosctl get disks --nodes 192.168.56.104
+
+# patch the nodes to be able to mount the longhorn disks
+talosctl patch machineconfig --nodes 192.168.56.111 --patch @./longhorn/longhorn-patch.yaml
+talosctl patch machineconfig --nodes 192.168.56.103 --patch @./longhorn/longhorn-patch.yaml
+talosctl patch machineconfig --nodes 192.168.56.104 --patch @./longhorn/longhorn-patch.yaml
+
+
+# edit the patching file "longhorn-user-disk.yaml" and change the selector according to your needs .....
+
+
+
+
+
+
+
+export WORKER_IPS=(192.168.56.104,192.168.56.103)
+# apply the patch to all the nodes
+~~~~~~~~~~ 
+for ip in "${WORKER_IPS[@]}"; do
+    echo "Applying patch to worker node: $ip"
+    talosctl patch machineconfig --nodes "$ip" --patch @./longhorn/longhorn-user-disk.yaml
+done
+~~~~~~~~~
+
+# shutdown the nodes
+~~~~~~~ 
+for ip in "${WORKER_IPS[@]}"; do
+  echo "Shuting down node: $ip"
+  talosctl shutdown --nodes "$IP"
+done
+~~~~~~~~
+
+# reboot the nodes
+~~~~~~~ 
+for ip in "${WORKER_IPS[@]}"; do
+  echo "Rebooting node: $ip"
+  talosctl reboot --nodes "$ip"
+done
+~~~~~~~~
+
+# Enable privileged pod security
+~~~~~~~~~~~~~~~~
+kubectl --kubeconfig $KC apply -f - <<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: longhorn-system
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+EOF
+~~~~~~~~~~~~~~~
+
+#talosctl patch mc -n 192.168.56.104 --patch @./longhorn/machine-config-patch.yaml
+
+kubectl --kubeconfig $KC  get pods -A
+#kubectl --kubeconfig $KC  get pod kube-apiserver-talos-192-168-56-102 -n kube-system -o yaml |  grep -A 5 "admission-control"
+
+
+
+#kubectl --kubeconfig $KC label namespace longhorn-system \
+#  pod-security.kubernetes.io/enforce=privileged \
+#  --overwrite
+
+#kubectl --kubeconfig $KC  get psp
+
+
+
+
+
+
+# more info here : https://joshrnoll.com/installing-longhorn-on-talos-with-helm/
+kubectl --kubeconfig $KC create namespace longhorn-system
+kubectl --kubeconfig $KC label namespace longhorn-system pod-security.kubernetes.io/enforce=baseline --overwrite
+kubectl --kubeconfig $KC label namespace longhorn-system pod-security.kubernetes.io/audit=baseline --overwrite
+kubectl --kubeconfig $KC label namespace longhorn-system pod-security.kubernetes.io/warn=baseline --overwrite
+
+
+
+
+
+# install
+helm repo add longhorn https://charts.longhorn.io && helm repo update
+
+#helm --kubeconfig $KC upgrade --install longhorn longhorn/longhorn \
+#  --namespace longhorn-system \
+#  --set defaultSettings.defaultDataPath=/var/mnt/longhorn
+
+#helm --kubeconfig $KC upgrade --install longhorn longhorn/longhorn --namespace longhorn-system --values=./longhorn/lc-dev-longhorn.yaml
+helm --kubeconfig $KC upgrade --install longhorn ./longhorn/ --namespace longhorn-system --values=./longhorn/lc-dev-longhorn.yaml
+kubectl --kubeconfig $KC label --overwrite ns longhorn-system pod-security.kubernetes.io/enforce=privileged pod-security.kubernetes.io/warn=privileged
+kubectl --kubeconfig $KC create namespace longhorn-system --dry-run=client -o yaml | kubectl apply -f -
+kubectl --kubeconfig $KC label namespace longhorn-system pod-security.kubernetes.io/enforce=privileged --overwrite
+kubectl --kubeconfig $KC label namespace longhorn-system pod-security.kubernetes.io/warn=privileged --overwrite
+kubectl --kubeconfig $KC label namespace longhorn-system pod-security.kubernetes.io/audit=privileged --overwrite
+talosctl apply-config --nodes 192.168.56.103 --file ./conf/worker.yaml
+
+
+kubectl --kubeconfig $KC -n longhorn-system get pods
+kubectl --kubeconfig $KC get storageclass longhorn
+kubectl --kubeconfig $KC -n longhorn-system get nodes.longhorn.io
+
+kubectl --kubeconfig $KC apply -f ./conf/secure-pod.yaml
+
+talosctl upgrade \
+  --nodes 192.168.56.103 \
+  --image factory.talos.dev/metal-installer/9e8200bb4efb4c5a4dddbe4e93f279b0a4666df2a37ee577adf346803680dfe6:v1.13.4 
+
+
+
+
+
+
+
+
+
+# uninstall 
+helm --kubeconfig=$KC --namespace longhorn-system uninstall longhorn
+
+#check 
+kubectl --kubeconfig $KC -n longhorn-system rollout status deploy/longhorn-driver-deployer
+kubectl --kubeconfig $KC get pods -n longhorn-system
+kubectl --kubeconfig $KC get nodes.longhorn.io -n longhorn-system
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-test-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 1Gi
+EOF
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+
+
+
+~~~~~~~~~~~~~~~~~~~ longhorn UI
+kubectl --kubeconfig $KC port-forward service/longhorn-frontend 8080:80 -n longhorn-system
+~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+First Boot
+
+Here are the options for the initial boot of Talos Linux on Nocloud:
+
+Disk Image
+    https://factory.talos.dev/image/02107090220739b1831b825ca0a077a61fa60d067eca08d81e645a0d2e76c44c/v1.13.5/nocloud-amd64.raw.xz (checksums) 
+ISO
+    https://factory.talos.dev/image/02107090220739b1831b825ca0a077a61fa60d067eca08d81e645a0d2e76c44c/v1.13.5/nocloud-amd64.iso (checksums) 
+PXE boot (iPXE script)
+    https://pxe.factory.talos.dev/pxe/02107090220739b1831b825ca0a077a61fa60d067eca08d81e645a0d2e76c44c/v1.13.5/nocloud-amd64 
+
+Initial Installation
+
+For the initial installation of Talos Linux (not applicable for disk image boot), add the following installer image to the machine configuration:
+factory.talos.dev/nocloud-installer/02107090220739b1831b825ca0a077a61fa60d067eca08d81e645a0d2e76c44c:v1.13.5
+
+Upgrading Talos Linux
+
+To upgrade Talos Linux on the machine, use the following image:
+factory.talos.dev/nocloud-installer/02107090220739b1831b825ca0a077a61fa60d067eca08d81e645a0d2e76c44c:v1.13.5
+
+Local Test Cluster
+
+To create a local Talos Linux test cluster from this schematic on macOS (Apple Silicon) or Linux, run:
+talosctl cluster create qemu --schematic-id=02107090220739b1831b825ca0a077a61fa60d067eca08d81e645a0d2e76c44c --talos-version=v1.13.5
+
+PXE Boot with booter
+
+To easily PXE boot bare-metal machines using booter with this schematic, run the following command on a host in the same subnet:
+docker run --rm --network host ghcr.io/siderolabs/booter:v0.3.0 --talos-version=v1.13.5 --schematic-id=02107090220739b1831b825ca0a077a61fa60d067eca08d81e645a0d2e76c44c 

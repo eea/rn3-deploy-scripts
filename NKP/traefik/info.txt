@@ -1,0 +1,332 @@
+
+
+cd /home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/traefik
+
+helm repo add rn3-traefik https://helm.traefik.io/traefik 
+helm repo update
+helm --kubeconfig $KC -n $NS show values rn3-traefik/traefik  > rn3-traefik_values.yaml 
+
+# Edit the file rn3-traefik_values.yaml
+#
+#
+#Code remove all lines with comments from yaml
+^.*(#).*\n?
+# Code remove all empty lines
+^(s)*$\n
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 01DEV
+################ DEV ENV
+################ traefik-svc-api NKP
+
+~~~~~~~~~
+# kavoulas
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/dev-r2/config
+export NS=kavoulas
+echo $KC
+echo $NS
+echo $WD
+
+# reportnet
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/dev-r2/config
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+~~~~~~~~~
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+kubectl --kubeconfig $KC -n $NS get svc
+kubectl --kubeconfig $KC get namespaces |grep $NS
+
+cd $WD/rn3-deploy-scripts/NKP/traefik
+
+#Poc Install
+helm --kubeconfig $KC -n $NS install rn3-traefik . -f rn3-dev-traefik_values.yaml  --debug --dry-run 
+#install
+helm --kubeconfig $KC -n $NS install rn3-traefik . -f rn3-dev-traefik_values.yaml --debug
+#upgrade
+helm --kubeconfig $KC -n $NS upgrade --install rn3-traefik . -f rn3-dev-traefik_values.yaml
+
+helm --kubeconfig $KC -n $NS uninstall rn3-traefik
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ traefik-svc-api NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+kubectl --kubeconfig $KC -n $NS get svc
+kubectl --kubeconfig $KC get namespaces |grep $NS
+
+cd $WD/rn3-deploy-scripts/NKP/traefik
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install rn3-traefik . -f rn3-staging-traefik_values.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install rn3-traefik. -f rn3-staging-traefik_values.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install rn3-traefik . -f rn3-staging-traefik_values.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall rn3-traefik
+
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+
+################ DEPLOY THE NEW INGRESSES 
+################
+################
+
+################ Rancher 01DEV
+################ DEV ENV
+################ traefik-svc-api
+~~~~~~~~~
+# kavoulas
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/dev-r2/config
+export NS=kavoulas
+echo $KC
+echo $NS
+echo $WD
+
+# reportnet
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/dev-r2/config
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+~~~~~~~~~
+cd $WD/rn3-deploy-scripts/NKP/traefik
+kubectl --kubeconfig $KC -n $NS get svc
+
+
+# kavoulas
+#nginx
+kubectl --kubeconfig $KC -n $NS apply -f  kavoulas-dev-nkp-nginx-svc-api.yaml
+#traefik
+kubectl --kubeconfig $KC apply -f  kavoulas-dev-nkp-traefik-svc-api.yaml
+
+# reportnet3
+#nginx
+kubectl --kubeconfig $KC -n $NS apply -f  rn3-dev-nkp-nginx-svc-api.yaml
+#traefik
+kubectl --kubeconfig $KC apply -f  rn3-dev-nkp-traefik-svc-api.yaml
+
+
+
+################ Rancher 06d
+################ STAGING ENV
+################ traefik-svc-api NKP
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+~~~~~~~~~
+cd $WD/rn3-deploy-scripts/NKP/traefik
+kubectl --kubeconfig $KC -n $NS get svc
+
+
+#nginx
+kubectl --kubeconfig $KC -n $NS apply -f  rn3-staging-nkp-nginx-svc-api.yaml
+#traefik
+kubectl --kubeconfig $KC apply -f  rn3-staging-nkp-traefik-svc-api.yaml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+######################
+
+kubectl --kubeconfig $KC exec -i -t -n kaloropan debian-linux-env-9c7b6df6-fsgtt -c linux -- bash -c "clear;"
+kubectl --kubeconfig $KC exec -i -t -n kaloropan debian-linux-env-9c7b6df6-fsgtt -- sh -c "/bin/bash"
+
+
+~/.kube/NKP-PROD/config
+
+
+
+kubectl config set-cluster sotirios.tavoulas-kavoulas-172.22.145.202 \
+    --certificate-authority=${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.202/k8s-ca.crt \
+    --server=https://172.22.145.202/dkp/api-server
+
+kubectl config set-credentials sotirios.tavoulas-kavoulas-172.22.145.202 \
+    --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjBmOTMyNWEzNDc0ZDZkN2VlNDBiZDA1ZTQ1MDM0NzM4YmQxMGQwZTAifQ.eyJhdF9oYXNoIjoiMEdEbEJtejE1ZHhmeDZfV2hPQ0tZZyIsImF1ZCI6WyJkZXgtY29udHJvbGxlci1kZXh0ZmEtY2xpZW50LW5rcC1wcm9kLWZyYS1xMmNqeCIsImRleC1jb250cm9sbGVyLWRleC1ka2EtY2xpZW50LWt1YmUtYXBpc2VydmVyIl0sImF6cCI6ImRleC1jb250cm9sbGVyLWRleC1ka2EtY2xpZW50LWt1YmUtYXBpc2VydmVyIiwiY19oYXNoIjoiNTdfY0lYQ2xWX2tnWmpxMFpQR0xKQSIsImVtYWlsIjoic290aXJpb3MudGF2b3VsYXMta2F2b3VsYXNAdHJhc3lzLmdyIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImV4cCI6MTc3Njg2Mjc3MCwiZmVkZXJhdGVkX2NsYWltcyI6bnVsbCwiZ3JvdXBzIjpbImM3NDZmYzcxLWNmZGYtNDRkZi1hOGY5LTA2ZmM5YjliODQyNyIsImRkNWRkY2RhLTk2MjUtNDdhMi1iYmNkLThmODc3MmY3NDMzNSIsIjUxMmQ1MWJmLWRiNzUtNDVhNC1hNDI0LTIxYzBhZGUxOWMwYyJdLCJpYXQiOjE3NzY3NzYzNzAsImlzcyI6Imh0dHBzOi8vMTcyLjIyLjE0Mi4yMDEvZGV4IiwibmFtZSI6IlRBVk9VTEFTLUtBVk9VTEFTIFNvdGlyaW9zIiwibm9uY2UiOiIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJwNzA2OTNAbnJiLmJlIiwic3ViIjoiQ2lzdE1GaHhiRTl6Y20xV1ZWOWpkelp3TkdkdmQzWm9WM2N6TUc5TFJVeGZaMkZvTUZGRlNFSXpWVUk0RWpWa1pYZ3RZMjl1ZEhKdmJHeGxjbDlyYjIxdFlXNWtaWEpmYjJsa1l5MXBaR1Z1ZEdsMGVTMXdjbTkyYVdSbGNpMTNOR3R1TncifQ.Zv7axgV9hMrSoBHcGv26ymmgtiqzyIuRcAriLkKZ57MqoJmkYkdLP6d-Rs9swpDdrzVn-_Lylkj-VdYzYQa3ZTqCBzTK8uxOb0dFUPLoQRSZiWHvyyerpd9NFAOJD8lSouU0-y35C1yEHRURNuDdj4PrpwCv0vDIbdfOgb0_sVZpKDoPRE6YADWvRzD8JgRwXL2bBPdMMPrjXNLvaqX_OYTJheCndGVrJmTAM2aqy0-WXF_K8RLuHq2c3LNwXj3KeukVRCd57z7ZeP7RU4OOlm0gWRhOaUYVFe8BLOnhTtRBI-cTLoLDOuvRZVE6P9NbRWjaNyDAAPIg1Sz3NI4Z2Q
+
+
+kubectl config set-context sotirios.tavoulas-kavoulas-172.22.145.202 \
+    --cluster=sotirios.tavoulas-kavoulas-172.22.145.202 \
+    --user=sotirios.tavoulas-kavoulas-172.22.145.202
+
+
+kubectl config use-context sotirios.tavoulas-kavoulas-172.22.145.202
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rancher 2
+
+
+export KC=~/.kube/dev-r2/01dev.yaml
+export NS=kavoulas
+echo $KC
+echo $NS
+
+
+
+
+
+
+
+
+
+cat << EOF | kubectl apply -n demo -f -
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: whoami
+  name: whoami
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+        - image: traefik/whoami:latest
+          name: whoami
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: whoami
+  ports:
+    - port: 80
+---    
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: whoami-http
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+    - host: whoami.$IP.sslip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: whoami-svc
+                port:
+                  number: 80
+EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ # transport-authadmin-awstest.reportnet.europa.eu : auth
+ # transport-awstest.reportnet.europa.eu : frontend / maintenance
+ # transport-api-awstest.reportnet.europa.eu : api-gateway / dataset
+ # transport-auth-awstest.reportnet.europa.eu : keycloak

@@ -1,0 +1,3 @@
+############################# Debian Environment Setup #############################
+
+helm --kube-context ${CONTEXT} upgrade --install debian-13 . -f values.yaml

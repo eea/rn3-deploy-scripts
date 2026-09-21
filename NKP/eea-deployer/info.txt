@@ -1,0 +1,311 @@
+USAGE : 
+./eea-deployer $ACTION -f config-$ENV-$CLUSTER.yaml
+EX:
+./eea-deployer install -f config-transport-nkp.yaml
+./eea-deployer install -f config-staging-nkp.yaml
+
+
+
+
+TIP :
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ TRANSPORT NKP
+################ TRANSPORT ENV
+################ keycloak NKP
+# follow this link : 
+# https://172.22.142.201/dkp/kommander/dashboard/clusters/
+# connect and select the cluster you need to connect onto
+# then select from the icon top right of your profile-name and select genarate token 
+# a new new url will be created like the bellow 
+# https://172.22.142.201/token/callback?code=eimxbpso5vquf2o362la3ihcg&state=Vgn2lp5QnymFtLntKX5dM8k773PwcM87T4hQtiESC1q8wkUBgw5D3kH0r5qJ
+# just follow the steps to create the context and use that to connect to the nutanix cluster
+
+
+mkdir -p ${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/ && cat << EOF > ${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/k8s-ca.crt
+-----BEGIN CERTIFICATE-----
+MIIBbzCCARWgAwIBAgIRAO2HiLIygWIs9HFLaE57O3QwCgYIKoZIzj0EAwIwFzEV
+MBMGA1UEAxMMa29tbWFuZGVyLWNhMB4XDTI2MDUwODEwMTQ0OFoXDTM2MDUwNTEw
+MTQ0OFowFzEVMBMGA1UEAxMMa29tbWFuZGVyLWNhMFkwEwYHKoZIzj0CAQYIKoZI
+zj0DAQcDQgAE9HM0RCnmbaAodS5wy1o/APtCoTydu6tXhC342OF47NfSKSNjE45Z
+YDnz2O9j4FPm+Y0mBTTat8y6qIkLdU3B4aNCMEAwDgYDVR0PAQH/BAQDAgKkMA8G
+A1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFK81KT4oRIQi1f8hL1HUY5uWr4t2MAoG
+CCqGSM49BAMCA0gAMEUCIQDmXW5tMlztIRK0eSGFNvspoDIL/nN6cSr2G6+19o7d
+lAIgF+OUu1Ew19tu4WRGkkxoPeFNNuYPhRRILtyZVAAmANU=
+-----END CERTIFICATE-----
+
+EOF
+
+kubectl config set-cluster sotirios.tavoulas-kavoulas-172.22.145.232     --certificate-authority=${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/k8s-ca.crt     --server=https://172.22.145.232/dkp/api-server
+kubectl config set-credentials sotirios.tavoulas-kavoulas-172.22.145.232     --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjI4MzVhMmQ3MTNkZDAyMGYyZjcwNWE4NWY0NGE0Nzc4Mzc5OTA0ZTcifQ.eyJhdF9oYXNoIjoiMWRtYWMyQ3VWOWY4V3JzUGpuOVBYZyIsImF1ZCI6WyJkZXgtY29udHJvbGxlci1kZXh0ZmEtY2xpZW50LW5rcC10cmFuc3BvcnQtZnJhLWJ2aDVuIiwiZGV4LWNvbnRyb2xsZXItZGV4LWRrYS1jbGllbnQta3ViZS1hcGlzZXJ2ZXIiXSwiYXpwIjoiZGV4LWNvbnRyb2xsZXItZGV4LWRrYS1jbGllbnQta3ViZS1hcGlzZXJ2ZXIiLCJjX2hhc2giOiJUMFZZRi1fLUlsSHd1bWxjdHBMaHRBIiwiZW1haWwiOiJzb3Rpcmlvcy50YXZvdWxhcy1rYXZvdWxhc0B0cmFzeXMuZ3IiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZXhwIjoxNzc4NjU1MTE4LCJmZWRlcmF0ZWRfY2xhaW1zIjpudWxsLCJncm91cHMiOlsiYzc0NmZjNzEtY2ZkZi00NGRmLWE4ZjktMDZmYzliOWI4NDI3IiwiZGQ1ZGRjZGEtOTYyNS00N2EyLWJiY2QtOGY4NzcyZjc0MzM1IiwiNTEyZDUxYmYtZGI3NS00NWE0LWE0MjQtMjFjMGFkZTE5YzBjIl0sImlhdCI6MTc3ODU2ODcxOCwiaXNzIjoiaHR0cHM6Ly8xNzIuMjIuMTQyLjIwMS9kZXgiLCJuYW1lIjoiVEFWT1VMQVMtS0FWT1VMQVMgU290aXJpb3MiLCJub25jZSI6IiIsInByZWZlcnJlZF91c2VybmFtZSI6InA3MDY5M0BucmIuYmUiLCJzdWIiOiJDaXN0TUZoeGJFOXpjbTFXVlY5amR6WndOR2R2ZDNab1YzY3pNRzlMUlV4ZloyRm9NRkZGU0VJelZVSTRFalZrWlhndFkyOXVkSEp2Ykd4bGNsOXJiMjF0WVc1a1pYSmZiMmxrWXkxcFpHVnVkR2wwZVMxd2NtOTJhV1JsY2kxM05HdHVOdyJ9.k3OTI-FA5GFhtGqlb8983bcL9zIqMGHRI5WzQfItKv7Ct7S63bmM5VdfVWqy2AbFZk6a7mC_nIp5yGXsED_6PsLBmxqR6dloXIZKb_DN_LLgUpsczBl_TLshkK-VcfGtENZXAna-1gKGT0USkuouH5Z0i905DizD9vI2OloKqmrXVqboRBDz_iNs78mN2LPAr98tLiB751PKEOP0Kk336dwOItGNE7CDxmbhLQwakIczEicokXwwR3zkjTnLJkmlLsCOY5InG5RT3R0iKjsGMTSyxc9oUP5y50x5wAldjtFN9reJ0LfUcjSYvRdYP_yfsDg6xSz_7xdkApnA1Ps1KA
+kubectl config set-context sotirios.tavoulas-kavoulas-172.22.145.232     --cluster=sotirios.tavoulas-kavoulas-172.22.145.232     --user=sotirios.tavoulas-kavoulas-172.22.145.232
+kubectl config use-context sotirios.tavoulas-kavoulas-172.22.145.232
+kubectl config get-contexts
+kubectl get pods
+
+
+~~~~~~~~~
+export WD=~/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl create namespace $NS
+kubectl get namespaces |grep  $NS
+
+kubectl -n $NS get pods
+
+
+kubectl config get-contexts
+#dev
+kubectl config use-context sotirios.tavoulas-kavoulas-172.22.145.232
+#prod
+kubectl config use-context sotirios.tavoulas-kavoulas-172.22.145.202
+
+cd $WD/rn3-deploy-scripts/NKP/eea-deployer/
+
+
+./eea-deployer install -f ./config-staging-nkp.yaml
+
+./eea-deployer install -f ./config-transport-nkp.yaml
+
+
+./eea-deployer install -f ./config-dev-ran2.yaml
+
+
+
+
+
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
+
+
+
+
+# Quick Guide 
+
+# GET THE CODE 
+cd /$your_prefered_directory
+git clone https://github.com/eea/rn3-deploy-scripts.git .
+
+#git checkout sotav-NKP
+
+cd NKP/eea-deployer/
+
+
+# Naming conventions 
+the value files to be used need to have the names like this : config-$ENV-$CLUSTER.yaml
+values of CLUSTER: "nkp", "ran", "ran2", "pre"
+values of ENV: "dev", "test", "staging", "sandbox", "transport", "prod"
+ex: config-staging-nkp.yaml
+    config-transport-nkp.yaml
+    config-dev-ran.yaml
+    config-sandbox-nkp.yaml
+    config-test-ran.yaml
+    config-prod-prem.yaml
+
+
+
+
+# first thing to do !!!!! after git clone
+
+WARNING : every value file needs to have the correct kubeconfig file to the cluster it targets 
+edit the config file and put 'kc: $YOUR_DIRECTORY_PATH_OF_THE_KUBECONFIG' on the main block of the file (at the start....)
+ex: kc: /home/$USER/.kube/staging/config
+
+TIP: in case you use a single config file make sure before you run the script to have selected 
+the correct context you need from the config using : kubectl config get-contexts and kubectl config use-context $YOUR_CONTEXT
+ex :    #dev
+        kubectl config use-context sotirios.tavoulas-kavoulas-172.22.145.232
+        #prod
+        kubectl config use-context sotirios.tavoulas-kavoulas-172.22.145.202
+
+edit the config file and put 'ns: $YOUR_NAMESPACE' on the main block of the file (at the start....)
+ex: ns: reportnet
+
+Usage : ./eea-deployer $ACTION -f ./$config
+ex: ./eea-deployer install -f ./config-staging-nkp.yaml
+    ./eea-deployer install -f ./config-transport-nkp.yaml
+    ./eea-deployer uninstall -f ./config-staging-nkp.yaml
+    ./eea-deployer uninstall -f ./config-transport-nkp.yaml
+
+
+# set an app to  get deployed to another namespace insted of the global one 
+edit the config file go to the block of the application and set 'namespace: $YOUR_NAMESPACE'
+ex: namespace: reportnet
+
+# set an app to not get deployed at all
+edit the config file and put 'deploy_type = "-"'
+
+# set a deployment to run any command before the deployment 
+edit the config file go to the block of the application and set 'init_shell: >- $commands; '
+
+# set an app to run any command after the deployment 
+edit the config file go to the block of the application and set 'script_shell: >- $commands; '
+
+# set an app to get deployed with a custom command line 
+edit the config file go to the block of the application and set 'custom_deployment: >- $commands; '
+
+
+
+
+
+
+##################### net data 
+export KC=~/.kube/config
+export NS=reportnet
+
+helm repo add netdata https://netdata.github.io/helmchart/
+helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+
+cd ../netdata/
+helm dependency build
+
+helm  --kubeconfig $KC -n $NS install netdata -f ../netdata/$valuesfile
+helm --kubeconfig $KC -n $NS  uninstall netdata
+
+############## error for me !
+Release "netdata" does not exist. Installing it now.
+Error: unable to continue with install: could not get information about the resource ClusterRole "netdata" in namespace "": clusterroles.rbac.authorization.k8s.io "netdata" is forbidden: User "sotirios.tavoulas-kavoulas@trasys.gr" cannot get resource "clusterroles" in API group "rbac.authorization.k8s.io" at the cluster scope
+
+
+
+
+
+
+
+
+
+
+########### HISTORY DEPLOYMENT ROLLOUT AND RESTORE TO PREVIOUS !!!!!
+
+kubectl --kubeconfig $KC get pods -n $NAMESPACE
+export KC=/home/sotav/.kube/staging/config
+
+# deployments
+kubectl --kubeconfig $KC -n $NS get deployments
+kubectl --kubeconfig $KC -n $NS rollout status deployment api-gateway
+kubectl --kubeconfig $KC -n $NS rollout history deployment api-gateway
+kubectl --kubeconfig $KC -n $NS rollout undo deployment api-gateway --to-revision=2
+
+# statefullsets
+kubectl --kubeconfig $KC -n $NS get statefulsets
+kubectl --kubeconfig $KC -n $NS rollout status statefulsets redis-node
+kubectl --kubeconfig $KC -n $NS rollout history statefulsets  redis-node
+kubectl --kubeconfig $KC -n $NS rollout undo statefulsets redis-node --to-revision=4
+
+
+
+
+
+
+
+
+
+
+
+
+
+#####################
+#####################   NEW ENV !!!!!!
+#####################
+
+
+#### you need a base to copy the values first 
+#### so for now we will use 06d to create a values file for 03d
+
+06D : new sandbox(staging)
+03D : new test
+
+radar --kubeconfig ~/.kube/06d-staging/06prod.yaml -namespace reportnet
+radar --kubeconfig ~/.kube/03d-test/03prod.yaml -namespace reportnet
+
+#from 06d
+#####################
+export WD=~/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/06prod.config
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+#######################
+
+cd $WD/rn3-deploy-scripts/NKP/eea-deployer
+
+./eea-deployer install  -f config-staging-nkp.yaml
+# press  7
+# write the new env 
+test-nkp
+
+# wait for the process to finish 
+# edit the newlly created file which should be like (config-test-nkp.yaml)
+# and remove all references to the staging environment (multireplace from Code)
+# and also fix the path of the new env kubeconfig file path
+# for example search for : ~/.kube/06d-sandbox/06prod.yaml
+# and replace it with : ~/.kube/03d-test/03prod.yaml
+# another one would be : rn3-staging-nkp 
+# and replace it with : rn3-test-nkp 
+# just to see if there is any other refeerence to staging search only for staging 
+#
+# save the file 
+# press 
+x
+# to exit the app on the terminal 
+# and rerun the same command with the newlly created master-config file of the new env 
+# for example 
+./eea-deployer install -f config-test-nkp.yaml
+
+# press 6 and write 
+frontend
+# press again 6 and write 
+redis
+# press again 6 and write 
+kafka
+
+# or you can select 3 or 4 or 5 and after the process has finished validate that all is well deployed
+# check by  : cat  ./logs/eea-deployer.log
+
+# you can always run the same redeployment of any app after having changed the config file of the app 
+# for the environment
+# for example if you need to alter the size of ram allocated to the pod - change the values file for the
+# environment of the application and just select 6 and write again the name of the app you have changed 
+# the config file .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

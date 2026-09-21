@@ -1,0 +1,163 @@
+TIP :
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ TRANSPORT NKP
+################ TRANSPORT ENV
+################ keycloak NKP
+# follow this link : 
+# https://172.22.142.201/dkp/kommander/dashboard/clusters/
+# connect and select the cluster you need to connect onto
+# then select from the icon top right of your profile-name and select genarate token 
+# a new new url will be created like the bellow 
+# https://172.22.142.201/token/callback?code=eimxbpso5vquf2o362la3ihcg&state=Vgn2lp5QnymFtLntKX5dM8k773PwcM87T4hQtiESC1q8wkUBgw5D3kH0r5qJ
+# just follow the steps to create the context and use that to connect to the nutanix cluster
+
+
+mkdir -p ${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/ && cat << EOF > ${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/k8s-ca.crt
+-----BEGIN CERTIFICATE-----
+MIIBbzCCARWgAwIBAgIRAO2HiLIygWIs9HFLaE57O3QwCgYIKoZIzj0EAwIwFzEV
+MBMGA1UEAxMMa29tbWFuZGVyLWNhMB4XDTI2MDUwODEwMTQ0OFoXDTM2MDUwNTEw
+MTQ0OFowFzEVMBMGA1UEAxMMa29tbWFuZGVyLWNhMFkwEwYHKoZIzj0CAQYIKoZI
+zj0DAQcDQgAE9HM0RCnmbaAodS5wy1o/APtCoTydu6tXhC342OF47NfSKSNjE45Z
+YDnz2O9j4FPm+Y0mBTTat8y6qIkLdU3B4aNCMEAwDgYDVR0PAQH/BAQDAgKkMA8G
+A1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFK81KT4oRIQi1f8hL1HUY5uWr4t2MAoG
+CCqGSM49BAMCA0gAMEUCIQDmXW5tMlztIRK0eSGFNvspoDIL/nN6cSr2G6+19o7d
+lAIgF+OUu1Ew19tu4WRGkkxoPeFNNuYPhRRILtyZVAAmANU=
+-----END CERTIFICATE-----
+
+EOF
+
+kubectl config set-cluster sotirios.tavoulas-kavoulas-172.22.145.232     --certificate-authority=${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/k8s-ca.crt     --server=https://172.22.145.232/dkp/api-server
+kubectl config set-credentials sotirios.tavoulas-kavoulas-172.22.145.232     --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjI4MzVhMmQ3MTNkZDAyMGYyZjcwNWE4NWY0NGE0Nzc4Mzc5OTA0ZTcifQ.eyJhdF9oYXNoIjoiMWRtYWMyQ3VWOWY4V3JzUGpuOVBYZyIsImF1ZCI6WyJkZXgtY29udHJvbGxlci1kZXh0ZmEtY2xpZW50LW5rcC10cmFuc3BvcnQtZnJhLWJ2aDVuIiwiZGV4LWNvbnRyb2xsZXItZGV4LWRrYS1jbGllbnQta3ViZS1hcGlzZXJ2ZXIiXSwiYXpwIjoiZGV4LWNvbnRyb2xsZXItZGV4LWRrYS1jbGllbnQta3ViZS1hcGlzZXJ2ZXIiLCJjX2hhc2giOiJUMFZZRi1fLUlsSHd1bWxjdHBMaHRBIiwiZW1haWwiOiJzb3Rpcmlvcy50YXZvdWxhcy1rYXZvdWxhc0B0cmFzeXMuZ3IiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZXhwIjoxNzc4NjU1MTE4LCJmZWRlcmF0ZWRfY2xhaW1zIjpudWxsLCJncm91cHMiOlsiYzc0NmZjNzEtY2ZkZi00NGRmLWE4ZjktMDZmYzliOWI4NDI3IiwiZGQ1ZGRjZGEtOTYyNS00N2EyLWJiY2QtOGY4NzcyZjc0MzM1IiwiNTEyZDUxYmYtZGI3NS00NWE0LWE0MjQtMjFjMGFkZTE5YzBjIl0sImlhdCI6MTc3ODU2ODcxOCwiaXNzIjoiaHR0cHM6Ly8xNzIuMjIuMTQyLjIwMS9kZXgiLCJuYW1lIjoiVEFWT1VMQVMtS0FWT1VMQVMgU290aXJpb3MiLCJub25jZSI6IiIsInByZWZlcnJlZF91c2VybmFtZSI6InA3MDY5M0BucmIuYmUiLCJzdWIiOiJDaXN0TUZoeGJFOXpjbTFXVlY5amR6WndOR2R2ZDNab1YzY3pNRzlMUlV4ZloyRm9NRkZGU0VJelZVSTRFalZrWlhndFkyOXVkSEp2Ykd4bGNsOXJiMjF0WVc1a1pYSmZiMmxrWXkxcFpHVnVkR2wwZVMxd2NtOTJhV1JsY2kxM05HdHVOdyJ9.k3OTI-FA5GFhtGqlb8983bcL9zIqMGHRI5WzQfItKv7Ct7S63bmM5VdfVWqy2AbFZk6a7mC_nIp5yGXsED_6PsLBmxqR6dloXIZKb_DN_LLgUpsczBl_TLshkK-VcfGtENZXAna-1gKGT0USkuouH5Z0i905DizD9vI2OloKqmrXVqboRBDz_iNs78mN2LPAr98tLiB751PKEOP0Kk336dwOItGNE7CDxmbhLQwakIczEicokXwwR3zkjTnLJkmlLsCOY5InG5RT3R0iKjsGMTSyxc9oUP5y50x5wAldjtFN9reJ0LfUcjSYvRdYP_yfsDg6xSz_7xdkApnA1Ps1KA
+kubectl config set-context sotirios.tavoulas-kavoulas-172.22.145.232     --cluster=sotirios.tavoulas-kavoulas-172.22.145.232     --user=sotirios.tavoulas-kavoulas-172.22.145.232
+kubectl config use-context sotirios.tavoulas-kavoulas-172.22.145.232
+kubectl config get-contexts
+kubectl get pods
+
+
+~~~~~~~~~
+export WD=~/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl create namespace $NS
+kubectl get namespaces |grep  $NS
+
+kubectl -n $NS get pods
+
+
+kubectl config get-contexts
+kubetcl config use-context
+
+
+
+cd $WD/rn3-deploy-scripts/NKP/reportnet-recordstore
+
+#create the pv for the report3-data storage as this is mounted from the pod 
+#kubectl --kubeconfig $KC -n $NS create -f ./rn3-transport--data-pv-nfs.yaml - pv is automatically created so no need to run !
+kubectl --kubeconfig $KC -n $NS create -f ./rn3-transport-data-pvc-nfs.yaml
+
+
+
+#test - check install 
+helm  -n $NS upgrade --install recordstore . -f rn3-transport-nkp-recordstore.yaml --debug --dry-run
+#install
+helm -n $NS install recordstore . -f rn3-transport-nkp-recordstore.yaml --debug
+#update
+helm -n $NS upgrade --install recordstore . -f rn3-transport-nkp-recordstore.yaml --debug
+#remove
+helm -n $NS uninstall recordstore
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+kubectl --kubeconfig $KC -n $NS get secret recordstore-http -o jsonpath="{.data.password}" | base64 --decode; echo
+ZC7ZcWavwx
+
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ recordstore NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/reportnet-recordstore
+
+
+
+
+
+#create the pv for the report3-data storage as this is mounted from the pod 
+#kubectl --kubeconfig $KC -n $NS create -f ./rn3-staging-data-pv-nfs.yaml - pv is automatically created so no need to run !
+kubectl --kubeconfig $KC -n $NS create -f ./rn3-staging-data-pvc-nfs.yaml
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install recordstore . -f rn3-staging-nkp-recordstore.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install recordstore . -f rn3-staging-nkp-recordstore.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install recordstore . -f rn3-staging-nkp-recordstore.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall recordstore
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+kubectl --kubeconfig $KC -n $NS get secret recordstore-http -o jsonpath="{.data.password}" | base64 --decode; echo
+ZC7ZcWavwx
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+
+
+
+
+
+

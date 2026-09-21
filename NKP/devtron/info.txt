@@ -1,0 +1,240 @@
+
+
+############## dev
+export NS=devtroncd
+export KC=~/.kube/config
+export KUBECONFIG_SAVED="$KC"
+export CODE_SRC_PATH=/home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP
+
+
+
+
+echo $NS
+echo $KC
+echo $KUBECONFIG_SAVED
+echo $CODE_SRC_PATH
+
+
+
+
+
+# validate  the correct 
+kubectl config get-contexts
+
+kubectl --kubeconfig $KC  describe role
+
+
+kubectl --kubeconfig $KC cluster-info
+kubectl --kubeconfig $KC -n monitoring get pods
+kubectl --kubeconfig $KC create namespace $NS
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get services
+
+
+
+
+
+cd $CODE_SRC_PATH/devtron
+#########################################################################################################################
+
+
+
+
+helm repo add rn3-staging-nkp-devtron https://helm.devtron.ai
+
+helm repo update
+helm search repo rn3-staging-nkp-devtron
+
+
+
+
+cd $CODE_SRC_PATH/devtron/devtron
+helm show values rn3-staging-nkp-devtron/devtron-operator > ov-rn3-staging-nkp-devtron-values-prod.yaml
+helm show values rn3-staging-nkp-devtron/devtron-operator > values.yaml
+helm dependency build
+
+
+cd $CODE_SRC_PATH/devtron/devtron
+
+
+
+
+
+
+#####################################################################################################################################################
+# DEV
+# check install
+#helm -n $NS --kubeconfig $KC install  rn3-staging-nkp-devtron rn3-staging-nkp-devtron/devtron-operator -f  ov-rn3-staging-nkp-devtron-values-dev.yaml --debug --dry-run
+helm -n $NS --kubeconfig $KC install  rn3-staging-nkp-devtron . -f  ov-rn3-staging-nkp-devtron-values-dev.yaml --debug --dry-run
+# install
+#helm -n $NS --kubeconfig $KC upgrade --install rn3-staging-nkp-devtron rn3-staging-nkp-devtron/devtron-operator -f ov-rn3-staging-nkp-devtron-values-dev.yaml --debug
+helm -n $NS --kubeconfig $KC install  rn3-staging-nkp-devtron . -f  ov-rn3-staging-nkp-devtron-values-dev.yaml --debug 
+# upgrade
+helm -n $NS --kubeconfig $KC upgrade --install rn3-staging-nkp-devtron . -f  ov-rn3-staging-nkp-devtron-values-dev.yaml --debug 
+ #removal
+helm -n $NS --kubeconfig $KC uninstall rn3-staging-nkp-devtron
+
+kubectl --kubeconfig $KC -n $NS apply -f argo-repo-server-pvc-dev.yaml
+kubectl --kubeconfig $KC -n $NS apply -f devtron-ingress-dev.yaml
+kubectl --kubeconfig $KC -n $NS apply -f argo-cd-ingress-dev.yaml
+#kubectl --kubeconfig $KC -n $NS apply -f minio-ingress-dev.yaml
+
+###### in case of Error: configmap "devtron-common-cm" not found.
+kubectl -n $NS --kubeconfig $KC apply -f https://raw.githubusercontent.com/devtron-labs/utilities/refs/heads/main/scripts/postgres-upgrade/devtron-upgrade-init.yaml
+
+###### Error: INSTALLATION FAILED: no ServiceAccount with the name "argocd-dex-server" found
+kubectl --kubeconfig $KC delete po -n devtroncd -l app.kubernetes.io/name=argocd-dex-server
+
+
+
+##### fully remove devtron
+helm uninstall devtron --namespace devtroncd
+kubectl --kubeconfig $KC delete -n devtroncd -f https://raw.githubusercontent.com/devtron-labs/charts/main/charts/devtron/crds/crd-devtron.yaml
+kubectl --kubeconfig $KC delete -n argo -f https://raw.githubusercontent.com/devtron-labs/devtron/main/manifests/yamls/workflow.yaml
+kubectl --kubeconfig $KC delete ns devtroncd devtron-cd devtron-ci devtron-demo argo
+
+
+
+
+
+
+
+
+
+##############################################################################################
+
+
+kubectl -n $NS --kubeconfig $KC get svc devtron-service -o jsonpath='{.status.loadBalancer.ingress}'
+
+
+kubectl -n $NS --kubeconfig $KC  get secret devtron-secret -o jsonpath='{.data.ADMIN_PASSWORD}' | base64 -d
+
+
+
+
+
+
+
+
+
+
+
+
+
+helm install devtron devtron/devtron-operator --namespace devtroncd \
+--set installer.modules={cicd} --set argo-cd.enabled=true \ 
+--set security.enabled=true  --set notifier.enabled=true  \
+--set security.trivy.enabled=true --set monitoring.grafana.enabled=true
+
+
+helm install devtron devtron/devtron-operator --create-namespace --namespace devtroncd \
+--set secrets.POSTGRESQL_PASSWORD=change-me \
+--set configs.BLOB_STORAGE_PROVIDER=S3
+
+
+helm repo update
+
+helm upgrade devtron devtron/devtron-operator --namespace devtroncd \
+--reuse-values \
+--set installer.modules={cicd} \
+--set configs.BLOB_STORAGE_PROVIDER=S3 \
+--set configs.DEFAULT_CACHE_BUCKET=demo-s3-bucket \
+--set configs.DEFAULT_CACHE_BUCKET_REGION=us-east-1 \
+--set configs.DEFAULT_BUILD_LOGS_BUCKET=demo-s3-bucket \
+--set configs.DEFAULT_CD_LOGS_BUCKET_REGION=us-east-1
+
+
+
+
+    Kube Prometheus Stack as a end-to-end Kubernetes cluster monitoring with Prometheus
+    Argocd as a declarative, GitOps CD tool
+    Argo Workflows as a container-native workflow engine for orchestrating parallel jobs on Kubernetes, it works as a CI in Devtron Dashboard
+    Clair & Guard for Image Scanning in application containers
+    Nats Server as a High Performance Server for NATS
+    Nats Streaming for NATS Streaming Cluster Setup in Devtron
+    Argo Rollout used as a K8s controller which provide advanced deployment capabilities such as blue-green, canary, canary analysis, experimentation, and progressive delivery features to Kubernetes
+    Kubewatch a Kubernetes watcher that currently publishes events notifications through webhooks
+    Calico Networking implements the Kubernetes Container Network Interface (CNI) as a plug-in and provides agents for K8s to provide networking for containers and pods.
+    Dgraph as a distributed graph database
+    Coralogix for log collection, real time insights and trend analysis
+    AWS SSM Agent used to install SSM Agent on EKS worker nodes
+    Cluster Essentials used to install all the infra essentials that a kubernetes cluster needs
+    Devtron Backup used to take backup of Devtron
+    Devtron Generic Helm used to deploy any custom YAML file or group of resources
+    Devtron used to install and configure Devtron
+    Devtron Secrets used to create Secrets in Devtron Cluster
+    GitSensor used for devtron component git-sensor which keeps checking for recent commits on your source code repository
+    Mautic used as a email-marketing tool in K8s Cluster
+    Knative Installer to enable serverless workloads to run on Kubernetes Cluster
+    Kube State Metric used to install kube-state-metrics to generate and expose cluster-level metrics
+    Secret Replicator used to create secrets in multiple NameSpace in Devtron Cluster
+
+helm repo add devtron http://helm.devtron.ai
+helm install Chart-Release-Name devtron/chartName
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############## https://rancher.eea.europa.eu  06d staging
+export NS=devtroncd
+export KC=~/.kube/staging/config
+export KUBECONFIG_SAVED="$KC"
+export CODE_SRC_PATH=/home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/devtron
+echo $NS
+echo $KC
+echo $KUBECONFIG_SAVED
+echo $CODE_SRC_PATH
+
+
+cd $CODE_SRC_PATH
+
+
+
+# check install
+#helm -n $NS --kubeconfig $KC install  devtron rn3-staging-nkp-devtron/devtron-operator -f  ov-rn3-staging-nkp-devtron-values-dev.yaml --debug --dry-run
+helm -n $NS --kubeconfig $KC install  devtron ./devtron/ -f  ./devtron/rn3-staging-nkp-devtron-values.yaml --debug --dry-run
+# install
+#helm -n $NS --kubeconfig $KC upgrade --install devtron rn3-staging-nkp-devtron/devtron-operator -f rn3-staging-nkp-devtron-values-dev.yaml --debug
+helm -n $NS --kubeconfig $KC install  rn3-staging-nkp-devtron ./devtron/ -f  ./devtron/rn3-staging-nkp-devtron-values.yaml --debug 
+# upgrade
+helm -n $NS --kubeconfig $KC upgrade --install rn3-staging-nkp-devtron ./devtron/ -f  ./devtron/rn3-staging-nkp-devtron-values-dev.yaml --debug 
+ #removal
+helm -n $NS --kubeconfig $KC uninstall rn3-staging-nkp-devtron
+
+kubectl --kubeconfig $KC -n $NS apply -f argo-repo-server-pvc-dev.yaml
+kubectl --kubeconfig $KC -n $NS apply -f devtron-ingress-dev.yaml
+kubectl --kubeconfig $KC -n $NS apply -f argo-cd-ingress-dev.yaml
+#kubectl --kubeconfig $KC -n $NS apply -f minio-ingress-dev.yaml
+
+###### in case of Error: configmap "devtron-common-cm" not found.
+kubectl -n $NS --kubeconfig $KC apply -f https://raw.githubusercontent.com/devtron-labs/utilities/refs/heads/main/scripts/postgres-upgrade/devtron-upgrade-init.yaml
+
+###### Error: INSTALLATION FAILED: no ServiceAccount with the name "argocd-dex-server" found
+kubectl --kubeconfig $KC delete po -n devtroncd -l app.kubernetes.io/name=argocd-dex-server
+
+
+
+##### fully remove devtron
+helm uninstall devtron --namespace devtroncd
+kubectl --kubeconfig $KC delete -n devtroncd -f https://raw.githubusercontent.com/devtron-labs/charts/main/charts/devtron/crds/crd-devtron.yaml
+kubectl --kubeconfig $KC delete -n argo -f https://raw.githubusercontent.com/devtron-labs/devtron/main/manifests/yamls/workflow.yaml
+kubectl --kubeconfig $KC delete ns devtroncd devtron-cd devtron-ci devtron-demo argo
+
+

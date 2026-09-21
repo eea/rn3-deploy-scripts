@@ -1,0 +1,68 @@
+frontendTIP :
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ communication NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/reportnet-communication
+
+
+
+
+
+#create the pv for the report3-data storage as this is mounted from the pod 
+#kubectl --kubeconfig $KC -n $NS create -f ./rn3-staging-data-pv-nfs.yaml - pv is automatically created so no need to run !
+kubectl --kubeconfig $KC -n $NS create -f ./rn3-staging-data-pvc-nfs.yaml
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install communication . -f rn3-staging-nkp-communication.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install communication . -f rn3-staging-nkp-communication.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install communication . -f rn3-staging-nkp-communication.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall communication
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+kubectl --kubeconfig $KC -n $NS get secret communication-http -o jsonpath="{.data.password}" | base64 --decode; echo
+ZC7ZcWavwx
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+
+
+
+
+
+

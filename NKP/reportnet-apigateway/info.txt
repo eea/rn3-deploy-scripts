@@ -1,0 +1,106 @@
+frontendTIP :
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ TRANSPORT NKP
+################ TRANSPORT ENV
+################ api-gateway NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/reportnet-apigateway
+
+
+
+
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install api-gateway . -f rn3-transport-nkp-api-gateway.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install api-gateway . -f rn3-transport-nkp-api-gateway.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install api-gateway . -f rn3-transport-nkp-api-gateway.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall api-gateway
+
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ api-gateway NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/reportnet-apigateway
+
+
+
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install api-gateway . -f rn3-staging-nkp-api-gateway.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install api-gateway . -f rn3-staging-nkp-api-gateway.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install api-gateway . -f rn3-staging-nkp-api-gateway.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall api-gateway
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+kubectl --kubeconfig $KC -n $NS get secret api-gateway-http -o jsonpath="{.data.password}" | base64 --decode; echo
+ZC7ZcWavwx
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+
+
+
+
+
+

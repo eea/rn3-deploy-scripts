@@ -1,0 +1,174 @@
+TIP :
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ postgresql NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+dbpass=-
+
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/postgresql-k
+
+
+$WD/rn3-deploy-scripts/NKP/postgresql/pgpool-usr-fix.sh dev reportnet ~/.kube/staging/config 
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-kc . -f rn3-staging-nkp-postgresql.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install rn3-pg-kc . -f rn3-staging-nkp-postgresql.yaml --set fullnameOverride=rn3-pg-kc,metrics.enabled=true  --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pg-kc . -f rn3-staging-nkp-postgresql.yaml --set fullnameOverride=rn3-pg-kc,metrics.enabled=true --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall rn3-pg-kc
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods |grep kc
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods |grep postgresql
+rn3-pg-kc-postgresql-0
+export DN=rn3-pg-kc-postgresql-0
+
+
+
+cd $WD/rn3-deploy-scripts/helm/eaa-deploy/database/src/main/resources/db/migration
+
+
+
+
+
+
+##################################################################################3
+kubectl --kubeconfig $KC -n $NS cp $WD/rn3-deploy-scripts/helm/eaa-deploy/database/src/main/resources/db/migration rn3-pg-kc-postgresql-0:/tmp/
+
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-kc-postgresql-0 -c postgresql -- bash -c "ls -la /tmp/migration"
+
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-kc-postgresql-0 -c postgresql -- bash -c "cd /tmp/migration/ && export PGPASSWORD=$dbpass && psql -U postgres -c 'BEGIN TRANSACTION;' -f /tmp/migration/V1__Init_Metabase_BD.sql -f V2__Alter_Codelist.sql -f V3__Alter_Representative.sql -c 'COMMIT;'"
+
+
+
+
+
+cd $WD/rn3-deploy-scripts/helm/eaa-deploy/database/src/main/resources/db/migration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dbpass=GET_THE_PASS_FROM_K8s
+folder=$(ls ./*.sql | sort  -Vst '/');
+for f in $folder; 
+do 
+    fname=`basename "$f"`
+    echo "$fname"
+    kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-kc-postgresql-0 -c postgresql -- bash -c "cd /tmp/migration/ && export PGPASSWORD=$dbpass && psql -U postgres -d metabase -c 'BEGIN TRANSACTION;' -f /tmp/migration/"$fname" -c 'COMMIT;'"
+    echo "########################     $fname was imported     #######################"
+done
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# helpers
+kubectl --kubeconfig $KC -n $NS describe pod/rn3-pg-kc-postgresql-0
+
+kubectl --kubeconfig $KC exec -i -t -n reportnet -c rn3-pg-kc-postgresql-0 -- bash -c  "'export PGPASSWORD=$dbpass && psql -U postgres -c "BEGIN TRANSACTION;" -f V1__Init_Metabase_BD.sql -f V2__Alter_Codelist.sql -c "COMMIT;"'"
+
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-kc-postgresql-0 -c postgresql -- bash -c "clear; (bash || ash || sh) && export PGPASSWORD=$dbpass && psql -u postgres -c '\dt'"
+
+
+
+###################################################################################
+
+kubectl cp ./myfile.txt default/mypod:/app/myfile.txt
+kubectl --kubeconfig $KC exec -i -t -n reportnet -c rn3-pg-kc-postgresql-0 -- bash -c  "'export PGPASSWORD=$dbpass && psql -U postgres -c "BEGIN TRANSACTION;" -f V1__Init_Metabase_BD.sql -f V2__Alter_Codelist.sql -c "COMMIT;"'"
+
+
+
+
+##############################################
+############################################## COPY DATABASE FROM ENV TO ANOTHER ENV 
+# from test env to staging
+
+# connect to test
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/test/config 
+export NS=reportnet
+export DB=keycloak
+echo $KC
+echo $NS
+echo $WD
+dbpass=-
+
+
+kubectl --kubeconfig $KC -n $NS get pods |grep postgresql
+
+
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- sh -c "clear; (bash || ash || sh)"
+
+pg_dump -Fc -d keycloak -U postgres -h localhost -p 5432 > /tmp/test_keycloak_070526.dump
+-
+
+du /tmp/test_keycloak_070526.dump
+ctrl+c
+ctrl+d
+
+kubectl --kubeconfig $KC -n $NS cp rn3-pg-helm-postgresql-0:/tmp/test_keycloak_070526.dump ./test_keycloak_070526.dump
+
+
+
+
+
+
+# connect to staging 
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+dbpass=-
+
+#for the real keycloak restore version 5 
+kubectl --kubeconfig $KC -n $NS cp ./test_keycloak_070526.dump rn3-pg-helm-postgresql-0:/tmp/test_keycloak_070526.dump 
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- sh -c "clear; (bash || ash || sh)"
+
+pg_restore -U postgres --clean --if-exists -d keycloak -1 /tmp/test_keycloak_070526.dump
+-
+
+ctrl+c
+ctrl+d
+
+# for keycloak on staging for the upgrade
+kubectl --kubeconfig $KC -n $NS cp ./test_keycloak_070526.dump rn3-pg-kc-postgresql-0:/tmp/test_keycloak_070526.dump 
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-kc-postgresql-0 -c postgresql -- sh -c "clear; (bash || ash || sh)"
+
+pg_restore -U postgres --clean --if-exists -d keycloak -1 /tmp/test_keycloak_070526.dump
+-
+ctrl+c
+ctrl+d

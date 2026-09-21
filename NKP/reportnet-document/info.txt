@@ -1,0 +1,65 @@
+frontendTIP :
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ document NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/reportnet-document
+
+
+
+
+
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install document . -f rn3-staging-nkp-document.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install document . -f rn3-staging-nkp-document.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install document . -f rn3-staging-nkp-document.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall document
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+kubectl --kubeconfig $KC -n $NS get secret document-http -o jsonpath="{.data.password}" | base64 --decode; echo
+ZC7ZcWavwx
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+
+
+
+
+
+

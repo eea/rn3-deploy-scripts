@@ -1,0 +1,39 @@
+
+# DEV 
+export ENV=dev
+export NS=argo-cd
+export KC=~/.kube/config
+export KUBECONFIG_SAVED="$KC"
+export CN=$CONFIG_CONTEXT_TO_USE
+export BASE_SRC_CODE=/home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/
+echo $NS
+echo $KC
+echo $KUBECONFIG_SAVED
+echo $BASE_SRC_CODE
+
+
+
+
+#change context to the cluster you set 
+kubectl config --kubeconfig=$KC use-context $CN
+
+#debug 
+kubectl --kubeconfig $KC cluster-info
+
+
+# response dev
+kubectl --kubeconfig $KC cluster-info dump
+
+
+
+################################################# Argo deploy project and app 
+# dev
+cd $BASE_SRC_CODE/argo-cd/apps/_argo_manifests/$ENV/_demo
+kubectl --kubeconfig=$KC -n $NS apply --filename argo_project_demo.yaml
+
+
+kubectl --kubeconfig=$KC -n $NS apply --filename argo_application_demo-helm.yaml
+
+
+
+

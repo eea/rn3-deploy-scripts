@@ -1,0 +1,63 @@
+frontendTIP :
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ validation NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/reportnet-validation
+
+
+
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install validation . -f rn3-staging-nkp-validation.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install validation . -f rn3-staging-nkp-validation.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install validation . -f rn3-staging-nkp-validation.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall validation
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+kubectl --kubeconfig $KC -n $NS get secret validation-http -o jsonpath="{.data.password}" | base64 --decode; echo
+ZC7ZcWavwx
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+
+
+
+
+
+

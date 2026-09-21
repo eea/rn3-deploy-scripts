@@ -1,0 +1,267 @@
+TIP :
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ TRANSPORT NKP
+################ STAGING ENV
+################ keycloak NKP
+# follow this link : 
+# https://172.22.142.201/dkp/kommander/dashboard/clusters/
+# connect and select the cluster you need to connect onto
+# then select from the icon top right of your profile-name and select genarate token 
+# a new new url will be created like the bellow 
+# https://172.22.142.201/token/callback?code=eimxbpso5vquf2o362la3ihcg&state=Vgn2lp5QnymFtLntKX5dM8k773PwcM87T4hQtiESC1q8wkUBgw5D3kH0r5qJ
+# just follow the steps to create the context and use that to connect to the nutanix cluster
+
+
+mkdir -p ${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/ && cat << EOF > ${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/k8s-ca.crt
+-----BEGIN CERTIFICATE-----
+MIIBbzCCARWgAwIBAgIRAO2HiLIygWIs9HFLaE57O3QwCgYIKoZIzj0EAwIwFzEV
+MBMGA1UEAxMMa29tbWFuZGVyLWNhMB4XDTI2MDUwODEwMTQ0OFoXDTM2MDUwNTEw
+MTQ0OFowFzEVMBMGA1UEAxMMa29tbWFuZGVyLWNhMFkwEwYHKoZIzj0CAQYIKoZI
+zj0DAQcDQgAE9HM0RCnmbaAodS5wy1o/APtCoTydu6tXhC342OF47NfSKSNjE45Z
+YDnz2O9j4FPm+Y0mBTTat8y6qIkLdU3B4aNCMEAwDgYDVR0PAQH/BAQDAgKkMA8G
+A1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFK81KT4oRIQi1f8hL1HUY5uWr4t2MAoG
+CCqGSM49BAMCA0gAMEUCIQDmXW5tMlztIRK0eSGFNvspoDIL/nN6cSr2G6+19o7d
+lAIgF+OUu1Ew19tu4WRGkkxoPeFNNuYPhRRILtyZVAAmANU=
+-----END CERTIFICATE-----
+
+EOF
+
+kubectl config set-cluster sotirios.tavoulas-kavoulas-172.22.145.232     --certificate-authority=${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/k8s-ca.crt     --server=https://172.22.145.232/dkp/api-server
+kubectl config set-credentials sotirios.tavoulas-kavoulas-172.22.145.232     --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjI4MzVhMmQ3MTNkZDAyMGYyZjcwNWE4NWY0NGE0Nzc4Mzc5OTA0ZTcifQ.eyJhdF9oYXNoIjoiMWRtYWMyQ3VWOWY4V3JzUGpuOVBYZyIsImF1ZCI6WyJkZXgtY29udHJvbGxlci1kZXh0ZmEtY2xpZW50LW5rcC10cmFuc3BvcnQtZnJhLWJ2aDVuIiwiZGV4LWNvbnRyb2xsZXItZGV4LWRrYS1jbGllbnQta3ViZS1hcGlzZXJ2ZXIiXSwiYXpwIjoiZGV4LWNvbnRyb2xsZXItZGV4LWRrYS1jbGllbnQta3ViZS1hcGlzZXJ2ZXIiLCJjX2hhc2giOiJUMFZZRi1fLUlsSHd1bWxjdHBMaHRBIiwiZW1haWwiOiJzb3Rpcmlvcy50YXZvdWxhcy1rYXZvdWxhc0B0cmFzeXMuZ3IiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZXhwIjoxNzc4NjU1MTE4LCJmZWRlcmF0ZWRfY2xhaW1zIjpudWxsLCJncm91cHMiOlsiYzc0NmZjNzEtY2ZkZi00NGRmLWE4ZjktMDZmYzliOWI4NDI3IiwiZGQ1ZGRjZGEtOTYyNS00N2EyLWJiY2QtOGY4NzcyZjc0MzM1IiwiNTEyZDUxYmYtZGI3NS00NWE0LWE0MjQtMjFjMGFkZTE5YzBjIl0sImlhdCI6MTc3ODU2ODcxOCwiaXNzIjoiaHR0cHM6Ly8xNzIuMjIuMTQyLjIwMS9kZXgiLCJuYW1lIjoiVEFWT1VMQVMtS0FWT1VMQVMgU290aXJpb3MiLCJub25jZSI6IiIsInByZWZlcnJlZF91c2VybmFtZSI6InA3MDY5M0BucmIuYmUiLCJzdWIiOiJDaXN0TUZoeGJFOXpjbTFXVlY5amR6WndOR2R2ZDNab1YzY3pNRzlMUlV4ZloyRm9NRkZGU0VJelZVSTRFalZrWlhndFkyOXVkSEp2Ykd4bGNsOXJiMjF0WVc1a1pYSmZiMmxrWXkxcFpHVnVkR2wwZVMxd2NtOTJhV1JsY2kxM05HdHVOdyJ9.k3OTI-FA5GFhtGqlb8983bcL9zIqMGHRI5WzQfItKv7Ct7S63bmM5VdfVWqy2AbFZk6a7mC_nIp5yGXsED_6PsLBmxqR6dloXIZKb_DN_LLgUpsczBl_TLshkK-VcfGtENZXAna-1gKGT0USkuouH5Z0i905DizD9vI2OloKqmrXVqboRBDz_iNs78mN2LPAr98tLiB751PKEOP0Kk336dwOItGNE7CDxmbhLQwakIczEicokXwwR3zkjTnLJkmlLsCOY5InG5RT3R0iKjsGMTSyxc9oUP5y50x5wAldjtFN9reJ0LfUcjSYvRdYP_yfsDg6xSz_7xdkApnA1Ps1KA
+kubectl config set-context sotirios.tavoulas-kavoulas-172.22.145.232     --cluster=sotirios.tavoulas-kavoulas-172.22.145.232     --user=sotirios.tavoulas-kavoulas-172.22.145.232
+kubectl config use-context sotirios.tavoulas-kavoulas-172.22.145.232
+kubectl config get-contexts
+kubectl get pods
+
+
+~~~~~~~~~
+export WD=~/TRASYS_GIT_PRV/EAA
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl create namespace $NS
+kubectl get namespaces |grep  $NS
+
+
+cd $WD/rn3-deploy-scripts/NKP/keycloak
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install keycloak . -f rn3-transport-nkp-keycloak.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install keycloak . -f rn3-transport-nkp-keycloak.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install keycloak . -f rn3-transport-nkp-keycloak.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall keycloak
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ keycloak NKP
+
+~~~~~~~~~
+export WD=~/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+export DB=keycloak
+echo $KC
+echo $NS
+echo $WD
+dbpass=#
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/keycloak
+
+
+
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install keycloak . -f rn3-staging-nkp-keycloak.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install keycloak . -f rn3-staging-nkp-keycloak.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install keycloak . -f rn3-staging-nkp-keycloak.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall keycloak
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+kubectl --kubeconfig $KC -n $NS get secret keycloak-http -o jsonpath="{.data.password}" | base64 --decode; echo
+ZC7ZcWavwx
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+# users for a new deployment 
+$WD/rn3-deploy-scripts/helm/eaa-deploy/scripts/pgpool-usr-fix.sh dev reportnet ~/.kube/staging/config 
+# so now only missing the database "rn3-keycloak"
+
+
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher2 DEV
+################ DEV ENV
+################ keycloak dev ran2
+
+~~~~~~~~~
+export WD=~/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/dev/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/keycloak
+
+
+
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install keycloak . -f rn3-dev-ran2-keycloak.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install keycloak . -f rn3-dev-ran2-keycloak.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install keycloak . -f rn3-dev-ran2-keycloak.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall keycloak
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+kubectl --kubeconfig $KC -n $NS get secret keycloak-http -o jsonpath="{.data.password}" | base64 --decode; echo
+ZC7ZcWavwx
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+
+
+
+# from transport-ran2 to transport-nkp
+
+#connect to transport-ran2
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/prod2/config 
+export NS=reportnet
+export DB=keycloak
+echo $KC
+echo $NS
+echo $WD
+dbpass=
+
+kubectl --kubeconfig $KC -n $NS get pods |grep postgresql
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- sh -c "clear; (bash || ash || sh)"
+pg_dump -Fc -d keycloak -U postgres -h localhost -p 5432 > /tmp/test_keycloak_tran_prod2.dump
+-
+du /tmp/test_keycloak_tran_prod2.dump
+ctrl+c
+ctrl+d
+kubectl --kubeconfig $KC -n $NS cp rn3-pg-helm-postgresql-0:/tmp/test_keycloak_tran_prod2.dump ./test_keycloak_tran_prod2.dump
+
+
+
+
+
+#connect to transport-nkp !!!!!!!!!!!!!!!! you need to have done the NKP transport-FRA CONTEXT actions first !
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+dbpass=#
+
+kubectl --kubeconfig $KC -n $NS get pods |grep postgresql
+kubectl --kubeconfig $KC -n $NS cp ./test_keycloak_tran_prod2.dump rn3-pg-helm-postgresql-0:/tmp/test_keycloak_tran_prod2.dump
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- sh -c "clear; (bash || ash || sh)"
+
+pg_restore -U postgres --clean --if-exists -d keycloak -1 /tmp/test_keycloak_tran_prod2.dump
+-
+ctrl+c
+ctrl+d
+
+rm -Rf ./test_keycloak_tran_prod2.dump
+
+
+
+
+
+
+#############################################################################################################################
+# debug for the spi change of env value KC_HTTP_CLIENT_MAX_IDLE_TIME_MILLIS
+# get the pod of keycloak and change the commands accordinlgy !
+kubectl --kubeconfig $KC -n $NS get pods |grep keycloak
+
+#get the outcome of the command
+kubectl --kubeconfig $KC -n $NS  exec -it keycloak6-0 -c keycloak  --   grep -nA8 -B3 "connectionsHttpClient" /opt/jboss/keycloak/standalone/configuration/standalone-ha.xml
+
+
+# redeploy with the values in the  ./scripts/logging.cli file !
+#
+# # Add env.KC_HTTP_CLIENT_CONNECTION_TTL_MILLIS
+# /subsystem=keycloak-server/spi=connectionsHttpClient/provider=default:write-attribute(name=properties.connection-ttl-millis,value=240000)
+# # Add env.KC_HTTP_CLIENT_MAX_IDLE_TIME_MILLIS
+# /subsystem=keycloak-server/spi=connectionsHttpClient/provider=default:write-attribute(name=properties.max-connection-idle-time-millis,value=240000)
+
+
+#re-run to see the diff if any 
+# for ha 
+kubectl --kubeconfig $KC -n $NS  exec -it keycloak6-0 -c keycloak  --   grep -nA8 -B3 "connectionsHttpClient" /opt/jboss/keycloak/standalone/configuration/standalone-ha.xml
+# for standalone
+kubectl --kubeconfig $KC -n $NS  exec -it keycloak6-0 -c keycloak  --   grep -nA8 -B3 "connectionsHttpClient" /opt/jboss/keycloak/standalone/configuration/standalone.xml
+#
+# kubectl --kubeconfig $KC -n $NS  exec -it keycloak6-0 -c keycloak  --   cat /opt/jboss/keycloak/standalone/configuration/standalone-ha.xml
+#
+
+
+
+
+
+
+2
+
+

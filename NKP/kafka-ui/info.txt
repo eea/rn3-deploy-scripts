@@ -1,0 +1,185 @@
+TIP :
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ kafka NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+export INTER_BROKER_PASSWORD=Summer_24_Kafk@
+export CONTROLLER_PASSWORD=Summer_24_K_Contr01l3r
+export KRAFT_CLUSTER_ID=nkp-stg-kafka-01
+echo $KC
+echo $NS
+echo $INTER_BROKER_PASSWORD
+echo $CONTROLLER_PASSWORD
+echo $KRAFT_CLUSTER_ID
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/kafka-ui-chart/kafka-ui/
+
+
+#helm --kubeconfig $KC -n $NS repo add kafka-ui https://provectus.github.io/kafka-ui-charts
+#helm --kubeconfig $KC -n $NS repo update
+#helm --kubeconfig $KC -n $NS install kafka-ui . --version 0.7.2
+#helm --kubeconfig $KC -n $NS uninstall kafka-ui
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install kafka-ui . -f rn3-staging-nkp-kafka-ui.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install kafka-ui . -f rn3-staging-nkp-kafka-ui.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install kafka-ui . -f rn3-staging-nkp-kafka-ui.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall kafka-ui
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+
+
+export POD_NAME=$(kubectl --kubeconfig $KC -n $NS get pods -l "app.kubernetes.io/name=kafka-ui,app.kubernetes.io/instance=kafka-ui" -o jsonpath="{.items[0].metadata.name}") && echo $POD_NAME
+kubectl --kubeconfig $KC -n $NS port-forward $POD_NAME 8080:8080
+kubectl --kubeconfig $KC -n $NS get svc
+# get the kafka service ip and port and change the vaules file in "yamlApplicationConfig:"
+helm --kubeconfig $KC -n $NS upgrade --install kafka-ui . -f rn3-staging-nkp-kafka-ui.yaml --debug
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+
+
+
+
+
+
+
+
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+
+
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo add rn3-kafkaui https://provectus.github.io/kafka-ui-charts
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet install rn3-kafkaui rn3-kafkaui/kafka-ui --version 0.7.2
+
+export POD_NAME=$(kubectl get pods --namespace reportnet -l "app.kubernetes.io/name=kafka-ui,app.kubernetes.io/instance=rn3-kafkaui" -o jsonpath="{.items[0].metadata.name}")
+
+kubectl --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace reportnet port-forward $POD_NAME 8080:8080
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet uninstall rn3-kafkaui
+
+
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo add rn3-kafka-ui https://provectus.github.io/kafka-ui-charts
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo update
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet install rn3-kafka-ui rn3-kafka-ui/kafka-ui --version 0.7.2
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet uninstall rn3-kafka-ui
+
+
+
+
+
+
+#####################################################
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo add rn3-kafka-ui https://provectus.github.io/kafka-ui-charts
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo update
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet install rn3-kafka-ui rn3-kafka-ui/kafka-ui --version 0.6.1 --set envs.config.KAFKA_CLUSTERS_0_NAME=rn3-kafka-dev --set envs.config.KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=10.42.7.213:9092
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet upgrade rn3-kafka-ui rn3-kafka-ui/kafka-ui --version 0.5.0 --set envs.config.KAFKA_CLUSTERS_0_NAME=rn3-kafka-dev --set envs.config.KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=10.42.152.237:9092
+
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet install rn3-kafka-ui rn3-kafka-ui/kafka-ui --version 0.5.0
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet uninstall rn3-kafka-ui
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo remove rn3-kafka-ui
+############################################################
+
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo add rn3-kafka-ui https://provectus.github.io/kafka-ui
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo update
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet install rn3-kafka-ui rn3-kafka-ui/kafka-ui --version 0.6.1
+
+
+
+
+
+
+
+
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet install rn3-kafka-ui . -f .\values.yaml
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet uninstall rn3-kafka-ui
+
+
+
+
+
+
+
+
+
+
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo add rn3-kafka-mgr https://radar-base.github.io/radar-helm-charts
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet repo update
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet  install rn3-kafka-mgr rn3-kafka-mgr/kafka-manager --version 2.1.6
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet uninstall rn3-kafka-mgr
+
+
+
+
+
+
+
+
+
+
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet install rn3-kafka-ui . -f .\values.yaml
+
+
+
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet  repo add kafka-ui https://provectus.github.io/kafka-ui-charts
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet  install my-kafka-ui kafka-ui/kafka-ui --version v0.7.2
+helm --kubeconfig=C:\Users\P70693\EAA\.kube\dev\config --namespace=reportnet uninstall my-kafka-ui
+
+
+
+
+
+
+
+
+

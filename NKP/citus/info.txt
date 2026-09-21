@@ -1,0 +1,142 @@
+TIP :
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ TRANSPORT NKP
+################ TRANSPORT ENV
+################ citus NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+export pass=-
+export userpass=-
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/citus
+
+
+#create the password to be used as the user admin 
+kubectl --kubeconfig $KC -n $NS create secret generic citus-secrets \
+--from-literal password=$pass \
+--from-literal userpass=$dbpass 
+
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install citus . -f rn3-transport-nkp-citus.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install citus . -f rn3-transport-nkp-citus.yaml
+##update
+helm --kubeconfig $KC -n $NS upgrade --install citus . -f rn3-transport-nkp-citus.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall citus
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ citus NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+export dbpass=$(grep DBPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+export pass=$(grep DBPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/citus
+
+
+k9s --kubeconfig $KC -n $NS 
+
+#create the password to be used as the user admin 
+kubectl --kubeconfig $KC -n $NS create secret generic citus-secrets \
+--from-literal password=$pass \
+--from-literal userpass=$dbpass 
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install citus . -f rn3-staging-nkp-citus.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install citus . -f rn3-staging-nkp-citus.yaml --set fullnameOverride=citus,metrics.enabled=true  --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install citus . -f rn3-staging-nkp-citus.yaml --set fullnameOverride=citus,metrics.enabled=true --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall citus
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+# dev local
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=/home/sotav/TRASYS_GIT_PRV/EAA/rn3-deploy-scripts/NKP/eea-deployer/talos/eea-dev-talos-vbox-sn-kubeconfig
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+export dbpass=$(grep DBPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+export pass=$(grep DBPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/citus
+
+
+k9s --kubeconfig $KC -n $NS 
+
+#create the password to be used as the user admin 
+kubectl --kubeconfig $KC -n $NS create secret generic citus-secrets \
+--from-literal password=$pass \
+--from-literal userpass=$dbpass 
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install citus . -f rn3-dev-local-citus.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install citus . -f rn3-dev-local-citus.yaml --set fullnameOverride=citus,metrics.enabled=true  --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install citus . -f rn3-dev-local-citus.yaml --set fullnameOverride=citus,metrics.enabled=true --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall citus
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 

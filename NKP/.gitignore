@@ -5,7 +5,7 @@ secrets/
 ingress/
 
 # Ignore any file named info.txt anywhere in the repo
-**/info.txt
+#**/info.txt
 
 # Ignore any file named *.sql anywhere in the repo
 *.sql

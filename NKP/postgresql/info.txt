@@ -1,0 +1,514 @@
+TIP :
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ TRANSPORT NKP
+################ TRANSPORT ENV
+################ postgresql NKP
+# follow this link : 
+# https://172.22.142.201/dkp/kommander/dashboard/clusters/
+# connect and select the cluster you need to connect onto
+# then select from the icon top right of your profile-name and select genarate token 
+# a new new url will be created like the bellow 
+# https://172.22.142.201/token/callback?code=eimxbpso5vquf2o362la3ihcg&state=Vgn2lp5QnymFtLntKX5dM8k773PwcM87T4hQtiESC1q8wkUBgw5D3kH0r5qJ
+# just follow the steps to create the context and use that to connect to the nutanix cluster
+
+
+mkdir -p ${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/ && cat << EOF > ${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/k8s-ca.crt
+-----BEGIN CERTIFICATE-----
+MIIBbzCCARWgAwIBAgIRAO2HiLIygWIs9HFLaE57O3QwCgYIKoZIzj0EAwIwFzEV
+MBMGA1UEAxMMa29tbWFuZGVyLWNhMB4XDTI2MDUwODEwMTQ0OFoXDTM2MDUwNTEw
+MTQ0OFowFzEVMBMGA1UEAxMMa29tbWFuZGVyLWNhMFkwEwYHKoZIzj0CAQYIKoZI
+zj0DAQcDQgAE9HM0RCnmbaAodS5wy1o/APtCoTydu6tXhC342OF47NfSKSNjE45Z
+YDnz2O9j4FPm+Y0mBTTat8y6qIkLdU3B4aNCMEAwDgYDVR0PAQH/BAQDAgKkMA8G
+A1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFK81KT4oRIQi1f8hL1HUY5uWr4t2MAoG
+CCqGSM49BAMCA0gAMEUCIQDmXW5tMlztIRK0eSGFNvspoDIL/nN6cSr2G6+19o7d
+lAIgF+OUu1Ew19tu4WRGkkxoPeFNNuYPhRRILtyZVAAmANU=
+-----END CERTIFICATE-----
+
+EOF
+
+kubectl config set-cluster sotirios.tavoulas-kavoulas-172.22.145.232     --certificate-authority=${HOME}/.kube/certs/sotirios.tavoulas-kavoulas-172.22.145.232/k8s-ca.crt     --server=https://172.22.145.232/dkp/api-server
+kubectl config set-credentials sotirios.tavoulas-kavoulas-172.22.145.232     --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjI4MzVhMmQ3MTNkZDAyMGYyZjcwNWE4NWY0NGE0Nzc4Mzc5OTA0ZTcifQ.eyJhdF9oYXNoIjoiMWRtYWMyQ3VWOWY4V3JzUGpuOVBYZyIsImF1ZCI6WyJkZXgtY29udHJvbGxlci1kZXh0ZmEtY2xpZW50LW5rcC10cmFuc3BvcnQtZnJhLWJ2aDVuIiwiZGV4LWNvbnRyb2xsZXItZGV4LWRrYS1jbGllbnQta3ViZS1hcGlzZXJ2ZXIiXSwiYXpwIjoiZGV4LWNvbnRyb2xsZXItZGV4LWRrYS1jbGllbnQta3ViZS1hcGlzZXJ2ZXIiLCJjX2hhc2giOiJUMFZZRi1fLUlsSHd1bWxjdHBMaHRBIiwiZW1haWwiOiJzb3Rpcmlvcy50YXZvdWxhcy1rYXZvdWxhc0B0cmFzeXMuZ3IiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZXhwIjoxNzc4NjU1MTE4LCJmZWRlcmF0ZWRfY2xhaW1zIjpudWxsLCJncm91cHMiOlsiYzc0NmZjNzEtY2ZkZi00NGRmLWE4ZjktMDZmYzliOWI4NDI3IiwiZGQ1ZGRjZGEtOTYyNS00N2EyLWJiY2QtOGY4NzcyZjc0MzM1IiwiNTEyZDUxYmYtZGI3NS00NWE0LWE0MjQtMjFjMGFkZTE5YzBjIl0sImlhdCI6MTc3ODU2ODcxOCwiaXNzIjoiaHR0cHM6Ly8xNzIuMjIuMTQyLjIwMS9kZXgiLCJuYW1lIjoiVEFWT1VMQVMtS0FWT1VMQVMgU290aXJpb3MiLCJub25jZSI6IiIsInByZWZlcnJlZF91c2VybmFtZSI6InA3MDY5M0BucmIuYmUiLCJzdWIiOiJDaXN0TUZoeGJFOXpjbTFXVlY5amR6WndOR2R2ZDNab1YzY3pNRzlMUlV4ZloyRm9NRkZGU0VJelZVSTRFalZrWlhndFkyOXVkSEp2Ykd4bGNsOXJiMjF0WVc1a1pYSmZiMmxrWXkxcFpHVnVkR2wwZVMxd2NtOTJhV1JsY2kxM05HdHVOdyJ9.k3OTI-FA5GFhtGqlb8983bcL9zIqMGHRI5WzQfItKv7Ct7S63bmM5VdfVWqy2AbFZk6a7mC_nIp5yGXsED_6PsLBmxqR6dloXIZKb_DN_LLgUpsczBl_TLshkK-VcfGtENZXAna-1gKGT0USkuouH5Z0i905DizD9vI2OloKqmrXVqboRBDz_iNs78mN2LPAr98tLiB751PKEOP0Kk336dwOItGNE7CDxmbhLQwakIczEicokXwwR3zkjTnLJkmlLsCOY5InG5RT3R0iKjsGMTSyxc9oUP5y50x5wAldjtFN9reJ0LfUcjSYvRdYP_yfsDg6xSz_7xdkApnA1Ps1KA
+kubectl config set-context sotirios.tavoulas-kavoulas-172.22.145.232     --cluster=sotirios.tavoulas-kavoulas-172.22.145.232     --user=sotirios.tavoulas-kavoulas-172.22.145.232
+kubectl config use-context sotirios.tavoulas-kavoulas-172.22.145.232
+kubectl config get-contexts
+kubectl get pods
+
+
+~~~~~~~~~
+export WD=~/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+export dbpass=-
+export repmgrpass=-
+export adminpass=-
+~~~~~~~~~
+kubectl create namespace $NS
+kubectl get namespaces |grep  $NS
+
+kubectl -n $NS get pods
+
+
+kubectl config get-contexts
+kubetcl config use-context
+
+
+cd $WD/rn3-deploy-scripts/NKP/postgresql
+
+#create the password to be used as the user admin 
+kubectl --kubeconfig $KC -n $NS create secret generic pg-secret \
+--from-literal admin-password=$adminpass \
+--from-literal pg-pass=$dbpass \
+--from-literal pg-sand-data-pass=postgres \
+--from-literal postgresql-password=$dbpass \
+--from-literal repmgr-password=$repmgrpass
+
+
+#test - check install 
+helm  -n $NS upgrade --install rn3-pg . -f rn3-transport-nkp-postgresql.yaml --debug --dry-run
+#install
+helm -n $NS install rn3-pg . -f rn3-transport-nkp-postgresql.yaml --debug
+#update
+helm -n $NS upgrade --install rn3-pg . -f rn3-transport-nkp-postgresql.yaml --debug
+#remove
+helm -n $NS uninstall rn3-pg
+
+
+# debug repmgr-pass
+export REPMGR_PASSWORD=$(kubectl get secret --namespace reportnet pg-secret -o jsonpath="{.data.repmgr-password}" | base64 --decode) && echo $REPMGR_PASSWORD
+
+
+#/opt/bitnami/postgresql/conf
+#
+#host     all            repmgr    0.0.0.0/0    md5
+#host     repmgr         repmgr    0.0.0.0/0    md5
+#host     replication      repmgr    0.0.0.0/0    md5
+#host     all              all       0.0.0.0/0    md5
+#host     all              all       ::1/128      md5
+#local    all              all                    md5
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ postgresql NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+export dbpass=-
+export repmgrpass=-
+export adminpass=-
+export dbpass=$(grep DBPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+export repmgrpass=$(grep REPMGRPASS ../eea-deployer/.secrets.prv  | cut -d '=' -f2);
+export adminpass=$(grep ADMINPASS ../eea-deployer/.secrets.prv  | cut -d '=' -f2);
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/postgresql
+
+
+$WD/rn3-deploy-scripts/NKP/postgresql/pgpool-usr-fix.sh dev reportnet ~/.kube/staging/config 
+#$WD/rn3-deploy-scripts/NKP/postgresql/pgpool-kc-usr-fix.sh dev reportnet ~/.kube/staging/config 
+
+
+
+
+
+
+
+
+
+#create the password to be used as the user admin 
+kubectl --kubeconfig $KC -n $NS create secret generic pg-secret \
+--from-literal admin-password=$adminpass \
+--from-literal pg-pass=$dbpass \
+--from-literal pg-sand-data-pass=postgres \
+--from-literal postgresql-password=$dbpass \
+--from-literal repmgr-password=$repmgrpass
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pg . -f rn3-staging-nkp-postgresql.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install rn3-pg . -f rn3-staging-nkp-postgresql.yaml --set fullnameOverride=rn3-pg-helm,metrics.enabled=true  --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pg . -f rn3-staging-nkp-postgresql.yaml --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall rn3-pg
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+# do the database migration - see below and then run the below 
+cd $WD/rn3-deploy-scripts/NKP/postgresql
+./pgpool-usr-fix.sh dev reportnet $KC
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher2 DEV
+################ DEV ENV
+################ postgresql dev-ran2
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/dev/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/postgresql
+
+~~~~~~~~~~~~~~~~~
+export dbpass=$(grep DBPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $dbpass
+export repmgrpass=$(grep REPMGRPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $repmgrpass
+export adminpass=$(grep ADMINPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $adminpass
+~~~~~~~~~~~~~~~~~~
+
+
+$WD/rn3-deploy-scripts/NKP/postgresql/pgpool-usr-fix.sh dev reportnet ~/.kube/staging/config 
+
+#create the password to be used as the user admin 
+kubectl --kubeconfig $KC -n $NS create secret generic pg-secret \
+--from-literal admin-password=$adminpass \
+--from-literal pg-pass=$dbpass \
+--from-literal pg-sand-data-pass=postgres \
+--from-literal postgresql-password=$dbpass \
+--from-literal repmgr-password=$repmgrpass \
+--from-literal repmgrpassword=$repmgrpass
+
+
+
+
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pg . -f rn3-staging-nkp-postgresql.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install rn3-pg . -f rn3-staging-nkp-postgresql.yaml --set fullnameOverride=rn3-pg-helm,metrics.enabled=true  --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pg . -f rn3-staging-nkp-postgresql.yaml --set fullnameOverride=rn3-pg-helm,metrics.enabled=true --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall rn3-pg
+
+
+#export KC=~/.kube/config 
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+# do the database migration - see below and then run the below 
+cd $WD/rn3-deploy-scripts/NKP/postgresql
+./pgpool-usr-fix.sh dev reportnet $KC
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+###############n   INIT THE DATABASE THIS IS FOR ALL ENV
+
+
+kubectl --kubeconfig $KC -n $NS get pods |grep postgresql
+#rn3-pg-helm-postgresql-0
+export DN=rn3-pg-helm-postgresql-0
+
+
+
+##################################################################################3
+# old paths
+#kubectl --kubeconfig $KC -n $NS cp $WD/rn3-deploy-scripts/helm/eaa-deploy/database/src/main/resources/db/migration rn3-pg-helm-postgresql-0:/tmp/
+#kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c "ls -la /tmp/migration"
+#kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c "cd /tmp/migration/ && export PGPASSWORD=$dbpass && psql -U postgres -c 'BEGIN TRANSACTION;' -f /tmp/migration/V1__Init_Metabase_BD.sql -f V2__Alter_Codelist.sql -f V3__Alter_Representative.sql -c 'COMMIT;'"
+#cd $WD/rn3-deploy-scripts/helm/eaa-deploy/database/src/main/resources/db/migration
+# helpers
+#kubectl --kubeconfig $KC -n $NS describe pod/rn3-pg-helm-postgresql-0
+#kubectl --kubeconfig $KC exec -i -t -n reportnet -c rn3-pg-helm-postgresql-0 -- bash -c  "'export PGPASSWORD=$dbpass && psql -U postgres -c "BEGIN TRANSACTION;" -f V1__Init_Metabase_BD.sql -f V2__Alter_Codelist.sql -c "COMMIT;"'"
+
+
+#######             AUTOMATE THE IMPORT OF THE MIGRATION AFTER COPYING THEM TO THE POD 
+#######
+
+# copy the files of the migration  to the remote 
+# old path
+#cd $WD/rn3-deploy-scripts/helm/eaa-deploy/database/src/main/resources/db/migration
+#kubectl --kubeconfig $KC -n $NS cp $WD/rn3-deploy-scripts/helm/eaa-deploy/database/src/main/resources/db/migration rn3-pg-helm-postgresql-0:/tmp/
+
+# new path
+cd $WD/rn3-deploy-scripts/NKP/postgresql
+kubectl --kubeconfig $KC -n $NS cp ./migration rn3-pg-helm-postgresql-0:/tmp/
+
+####### from your local node run the below 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+folder=$(ls ./migration/*.sql | sort  -Vst '/');
+for f in $folder; 
+do 
+    fname=`basename "$f"`
+    echo "$fname"
+    kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c "cd /tmp/migration/ && export PGPASSWORD=$dbpass && psql -U postgres -d metabase -c 'BEGIN TRANSACTION;' -f /tmp/migration/"$fname" -c 'COMMIT;'"
+    echo "########################     $fname was imported     #######################"
+done
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# check the databases  
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c "export PGPASSWORD=$dbpass && psql -U postgres -c '\l'"
+# check the tables  
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c "export PGPASSWORD=$dbpass && psql -U postgres -c '\dt'"
+###################################################################################
+
+
+
+
+
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+###############n   DUMP THE DATABASE THIS IS FOR ALL ENV
+
+kubectl --kubeconfig $KC -n $NS get pods |grep postgresql
+#rn3-pg-helm-postgresql-0
+export DN=rn3-pg-helm-postgresql-0
+echo $DN
+export dbpass=$(grep DBPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $dbpass
+export repmgrpass=$(grep REPMGRPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $repmgrpass
+export adminpass=$(grep ADMINPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $adminpass
+
+
+
+############ dump each database !
+
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "PGPASSWORD=$dbpass pg_dump -U postgres keycloak > /tmp/keycloak_ori.sql"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "PGPASSWORD=$dbpass pg_dump -U postgres metabase > /tmp/metabase_ori.sql"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "PGPASSWORD=$dbpass pg_dump -U postgres datasets > /tmp/datasets_ori.sql"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "PGPASSWORD=$dbpass pg_dump -U postgres repmgr > /tmp/repmgr_ori.sql"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "PGPASSWORD=$dbpass pg_dump -U postgres postgres > /tmp/postgres_ori.sql"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "PGPASSWORD=$dbpass pg_dump -U postgres orchestrator_db > /tmp/orchestrator_db_ori.sql"
+
+
+############ copy the databases locally and delete them from the remote 
+mkdir -p db_backups
+rm -Rf ./db_backups/*
+kubectl --kubeconfig $KC -n $NS cp  $DN:/tmp/keycloak_ori.sql  ./db_backups/keycloak_ori.sql
+kubectl --kubeconfig $KC -n $NS cp  $DN:/tmp/metabase_ori.sql  ./db_backups/metabase_ori.sql
+kubectl --kubeconfig $KC -n $NS cp  $DN:/tmp/datasets_ori.sql ./db_backups/datasets_ori.sql
+kubectl --kubeconfig $KC -n $NS cp  $DN:/tmp/repmgr_ori.sql  ./db_backups/repmgr_ori.sql
+kubectl --kubeconfig $KC -n $NS cp  $DN:/tmp/postgres_ori.sql  ./db_backups/postgres_ori.sql
+
+
+# cleanup remote
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c "rm -Rf /tmp/*.sql* && ls -la /tmp/"
+
+
+############ export the kubeconfig of the target cluster
+# tip : export KC=~/.kube/$ENVIRONMENT/config 
+export KC=~/.kube/dev/config 
+
+############ copy the databases remotely
+kubectl --kubeconfig $KC -n $NS cp ./db_backups/keycloak_ori.sql $DN:/tmp/keycloak_ori.sql
+kubectl --kubeconfig $KC -n $NS cp ./db_backups/metabase_ori.sql $DN:/tmp/metabase_ori.sql
+kubectl --kubeconfig $KC -n $NS cp ./db_backups/datasets_ori.sql $DN:/tmp/datasets_ori.sql
+kubectl --kubeconfig $KC -n $NS cp ./db_backups/repmgr_ori.sql $DN:/tmp/repmgr_ori.sql
+kubectl --kubeconfig $KC -n $NS cp ./db_backups/postgres_ori.sql $DN:/tmp/postgres_ori.sql
+
+
+############ restore the databases remotely
+
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "ls -la /tmp/"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "export PGPASSWORD=$dbpass && psql -Upostgres < /tmp/keycloak_ori.sql;"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "export PGPASSWORD=$dbpass && psql -Upostgres < /tmp/metabase_ori.sql;"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "export PGPASSWORD=$dbpass && psql -Upostgres < /tmp/datasets_ori.sql;"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "export PGPASSWORD=$dbpass && psql -Upostgres < /tmp/repmgr_ori.sql;"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "export PGPASSWORD=$dbpass && psql -Upostgres < /tmp/postgres_ori.sql;"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "export PGPASSWORD=$dbpass && psql -Upostgres < /tmp/orchestrator_db.sql;"
+
+
+
+
+
+
+
+
+
+
+
+#######################################################################
+#######################################################################
+#######################################################################
+#######################################################################
+####################################################################### 
+for prod to 01dev
+#######################################################################
+### dev01
+### reportnet3 pg-citus-dataset-master-0
+
+############# from prod
+#for prod
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+export DN=rn3-pg-helm-postgresql-0
+echo $DN
+export dbpass=$(grep DBPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $dbpass
+export repmgrpass=$(grep REPMGRPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $repmgrpass
+export adminpass=$(grep ADMINPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $adminpass
+
+
+
+# dump the dbs
+
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "ls -la /tmp/"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "rm -Rf /tmp/*.sql"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "rm -Rf /tmp/*.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "PGPASSWORD=$dbpass pg_dump -Fc -d keycloak -U postgres > /tmp/keycloak_ori.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "PGPASSWORD=$dbpass pg_dump -Fc -d repmgr -U postgres > /tmp/repmgr_ori.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "PGPASSWORD=$dbpass pg_dump -Fc -d postgres -U postgres > /tmp/postgres_ori.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "PGPASSWORD=$dbpass pg_dump -Fc -d orchestrator_db -U postgres > /tmp/orchestrator_db_ori.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "PGPASSWORD=$dbpass pg_dump -Fc -d metabase -U postgres > /tmp/metabase_ori.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet $DN -c postgresql -- bash -c "ls -la /tmp/"
+
+
+
+
+# copy the dbs locally
+mkdir -p db_backups_prod_nkp
+kubectl --kubeconfig $KC -n $NS cp  $DN:/tmp/keycloak_ori.dump  ./db_backups_prod_nkp/keycloak_ori.dump
+kubectl --kubeconfig $KC -n $NS cp  $DN:/tmp/datasets_ori.dump ./db_backups_prod_nkp/datasets_ori.dump
+kubectl --kubeconfig $KC -n $NS cp  $DN:/tmp/repmgr_ori.dump  ./db_backups_prod_nkp/repmgr_ori.dump
+kubectl --kubeconfig $KC -n $NS cp  $DN:/tmp/postgres_ori.dump  ./db_backups_prod_nkp/postgres_ori.dump
+kubectl --kubeconfig $KC -n $NS cp  $DN:/tmp/orchestrator_db_ori.dump ./db_backups_prod_nkp/orchestrator_db_ori.dump
+kubectl --kubeconfig $KC -n $NS cp  $DN:/tmp/metabase_ori.dump  ./db_backups_prod_nkp/metabase_ori.dump
+
+
+
+
+# in a new shell ......
+#for 01dev
+export KC=~/.kube/dev/config 
+export NS=reportnet3
+kubectl --kubeconfig $KC -n $NS get pods |grep pg-citus-dataset-master-0
+#pg-citus-dataset-master-0
+export DN=pg-citus-dataset-master-0
+echo $DN
+export dbpass=$(grep DBPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $dbpass
+export repmgrpass=$(grep REPMGRPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $repmgrpass
+export adminpass=$(grep ADMINPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $adminpass
+
+
+
+kubectl --kubeconfig $KC -n $NS cp ./db_backups_prod_nkp/keycloak_ori.dump $DN:/tmp/keycloak_ori.dump
+kubectl --kubeconfig $KC -n $NS cp ./db_backups_prod_nkp/datasets_ori.dump $DN:/tmp/datasets_ori.dump
+kubectl --kubeconfig $KC -n $NS cp ./db_backups_prod_nkp/repmgr_ori.dump $DN:/tmp/repmgr_ori.dump
+kubectl --kubeconfig $KC -n $NS cp ./db_backups_prod_nkp/postgres_ori.dump $DN:/tmp/postgres_ori.dump
+kubectl --kubeconfig $KC -n $NS cp ./db_backups_prod_nkp/orchestrator_db_ori.dump $DN:/tmp/orchestrator_db_ori.dump
+kubectl --kubeconfig $KC -n $NS cp ./db_backups_prod_nkp/metabase_ori.dump $DN:/tmp/metabase_ori.dump
+
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet3 $DN -c citus-master -- bash -c "ls -la /tmp/"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet3 $DN -c citus-master -- bash -c "rm -Rf /tmp/*.sql"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet3 $DN -c citus-master -- bash -c "rm -Rf /tmp/*.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet3 $DN -c citus-master -- bash -c "ls -la /tmp/"
+
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet3 $DN -c citus-master -- bash -c "export PGPASSWORD=$dbpass && pg_restore --clean -U postgres -d keycloak /tmp/keycloak_ori.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet3 $DN -c citus-master -- bash -c "export PGPASSWORD=$dbpass && pg_restore --clean -U postgres -d datasets /tmp/datasets_ori.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet3 $DN -c citus-master -- bash -c "export PGPASSWORD=$dbpass && pg_restore --clean -U postgres -d repmgr /tmp/repmgr_ori.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet3 $DN -c citus-master -- bash -c "export PGPASSWORD=$dbpass && pg_restore --clean -U postgres -d postgres /tmp/postgres_ori.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet3 $DN -c citus-master -- bash -c "export PGPASSWORD=$dbpass && pg_restore --clean -U postgres -d orchestrator_db /tmp/orchestrator_db_ori.dump"
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet3 $DN -c citus-master -- bash -c "export PGPASSWORD=$dbpass && pg_restore --clean -U postgres -d metabase /tmp/metabase_ori.dump"
+
+
+
+
+
+# if not.. connect and do that !
+
+export dbpass=$(grep DBPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $dbpass
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c "clear; (bash || ash || sh)"
+
+# inside the pod
+export PGPASSWORD=$dbpass && psql -Upostgres < /tmp/keycloak_ori.sql;
+export PGPASSWORD=$dbpass && psql -Upostgres < /tmp/metabase_ori.sql;
+export PGPASSWORD=$dbpass && psql -Upostgres < /tmp/datasets_ori.sql;
+export PGPASSWORD=$dbpass && psql -Upostgres < /tmp/repmgr_ori.sql;
+export PGPASSWORD=$dbpass && psql -Upostgres < /tmp/postgres_ori.sql;
+
+
+
+
+
+
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+###############n   pg_hba.conf  THIS IS FOR ALL ENV
+
+psql -t -P format=unaligned - u postgres -c 'show hba_file';
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+host     all            repmgr    0.0.0.0/0    md5
+host     repmgr         repmgr    0.0.0.0/0    md5
+host     replication      repmgr    0.0.0.0/0    md5
+host     all              all       0.0.0.0/0    md5
+host     all              all       ::1/128      md5
+local    all              all                    md5
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods |grep postgresql
+#rn3-pg-helm-postgresql-0
+export DN=rn3-pg-helm-postgresql-0
+echo $DN
+export KC=~/.kube/test/config 
+kubectl --kubeconfig $KC --namespace reportnet cp  rn3-pg-helm-postgresql-0:/opt/bitnami/postgresql/conf/pg_hba.conf  ./db_backups/pg_hba.conf
+export KC=~/.kube/staging/config 
+kubectl --kubeconfig $KC --namespace reportnet cp  ./db_backups/pg_hba.conf rn3-pg-helm-postgresql-0:/opt/bitnami/postgresql/conf/pg_hba.conf 
+

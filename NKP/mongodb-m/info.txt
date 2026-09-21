@@ -1,0 +1,134 @@
+TIP :
+
+
+# remove all comments from Visual code
+^.*(##).*\n?
+# remove all nulled lines from Visual code
+^(s)*$\n
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ TRANSPORT NKP
+################ TRANSPORT ENV
+################ mongo NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/mongodb
+
+
+
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install mongo . -f rn3-transport-nkp-mongo.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install mongo . -f rn3-transport-nkp-mongo.yaml
+##update
+helm --kubeconfig $KC -n $NS upgrade --install mongo . -f rn3-transport-nkp-mongo.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall mongo
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+#check which instance is primary by running:
+for ((i = 0; i < 3; ++i)); do kubectl --kubeconfig $KC -n $NS exec mongo-mongodb-replicaset-$i -- sh -c 'mongo --eval="printjson(rs.isMaster())"'; done
+
+#One can insert a key into the primary instance of the mongodb replica set by running the following:
+MASTER_POD_NAME must be replaced with the name of the master found from the previous step.
+kubectl --kubeconfig $KC -n $NS exec --namespace reportnet MASTER_POD_NAME -- mongo --eval="printjson(db.test.insert({key1: 'value1'}))"
+
+#One can fetch the keys stored in the primary or any of the slave nodes in the following manner.
+POD_NAME must be replaced by the name of the pod being queried.
+kubectl --kubeconfig $KC -n $NS exec  POD_NAME -- mongo --eval="rs.slaveOk(); db.test.find().forEach(printjson)"
+
+
+
+
+
+
+
+
+
+
+
+
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 06d
+################ STAGING ENV
+################ mongo NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/staging/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/mongodb
+
+
+
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install mongo . -f rn3-staging-nkp-mongo.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install mongo . -f rn3-staging-nkp-mongo.yaml
+##update
+helm --kubeconfig $KC -n $NS upgrade --install mongo . -f rn3-staging-nkp-mongo.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall mongo
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+#check which instance is primary by running:
+for ((i = 0; i < 3; ++i)); do kubectl --kubeconfig $KC -n $NS exec mongo-mongodb-replicaset-$i -- sh -c 'mongo --eval="printjson(rs.isMaster())"'; done
+
+#One can insert a key into the primary instance of the mongodb replica set by running the following:
+MASTER_POD_NAME must be replaced with the name of the master found from the previous step.
+kubectl --kubeconfig $KC -n $NS exec --namespace reportnet MASTER_POD_NAME -- mongo --eval="printjson(db.test.insert({key1: 'value1'}))"
+
+#One can fetch the keys stored in the primary or any of the slave nodes in the following manner.
+POD_NAME must be replaced by the name of the pod being queried.
+kubectl --kubeconfig $KC -n $NS exec  POD_NAME -- mongo --eval="rs.slaveOk(); db.test.find().forEach(printjson)"
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+
+
+
+
+
+
