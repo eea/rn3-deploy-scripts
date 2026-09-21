@@ -8,7 +8,7 @@
 # Description: This is a small bash utility which can help to install and uninstall multiple helm charts in one go.
 # Github URL: https://github.com/eea/rn3-deploy-scripts.git
 # usage: 
-#     ./eea-deployer install -f ./config-staging-nkp.yaml
+#     ./eea-deployer install -f config-staging-nkp.yaml
 
 # Enable debug mode for the currect script (only for development needs ! )
 # set -x
@@ -266,7 +266,7 @@ new_env(){
   #cd $CHART_REPO
   CONF_ENV_FILE=$(echo $OLDENVCONF |awk -F "." '{print $1}' |awk -F "-" '{print $2 "-" $3}')
   #echo "current conf file is "$CONF_ENV_FILE
-  NEW_ENV_CONF=$(echo $OLDENVCONF| sed "s/$CONF_ENV_FILE/$env_name/g")
+  NEW_ENV_CONF=$(echo $CONF_ENV_FILE| sed "s/$CONF_ENV_FILE/$env_name/g")
   FILE_ENV=$NEW_ENV_CONF   
   echo "new file name is "$FILE_ENV
   if [ -f $FILE_ENV ]; then
