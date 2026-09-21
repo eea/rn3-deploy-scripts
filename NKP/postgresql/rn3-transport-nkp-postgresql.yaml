@@ -265,7 +265,7 @@ persistence:
   mountPath: /bitnami/postgresql
   accessModes:
     - ReadWriteOnce
-  size: 20Gi
+  size: 1000Gi
   annotations: {}
 service:
   type: ClusterIP

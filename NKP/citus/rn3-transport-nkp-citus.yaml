@@ -70,3 +70,8 @@ createServiceAccount: false
 createRole: false
 createRoleBinding: false
 ##############################################
+Worker:
+  Storage: 1Gi
+  StorageClass: "-"
+
+
