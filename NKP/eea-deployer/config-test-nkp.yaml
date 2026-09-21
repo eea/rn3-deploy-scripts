@@ -3,7 +3,7 @@ create_namespace: false
 wait: false
 timeout: true # If true, defaults to 20 mins
 debug: true
-kc: ~/.kube/config
+kc: ~/.kube/03d-test/03prod.yaml
 ns: reportnet
 init: true
 script: true
@@ -27,71 +27,6 @@ charts:
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
-      #####################################################################################
-      ####################                                           ######################
-      ####################                                           ######################
-      ####################             DEVOPS HELPER TOOLS           ######################
-      ####################                                           ######################
-      ####################                                           ######################
-      ####################                                           ######################
-      #####################################################################################
-      ################################### DEVOPS-HELPER ######################################
-      - release_name: devops-helper
-        chart_name: devops-helper
-        version: v0.0.1
-        chart_repo: ../devops-helper
-        values_file: rn3-transport-nkp-devops-helper.yaml
-        namespace: reportnet
-        deploy_type: deployment
-        script_shell: "-"
-        init_shell: "-"
-        custom_deployment: "-"
-
-      ###################################  NETDATA ######################################
-      # - release_name: netdata
-      #   chart_name: netdata
-      #   version: v0.0.1
-      #   chart_repo: ../netdata
-      #   values_file: rn3-transport-nkp-netdata.yaml
-      #   namespace: reportnet
-      #   deploy_type: deployment
-      #   script_shell: "-"
-      #   init_shell: "-"
-      #   custom_deployment: "-"
-
-      #####################################################################################
-      ####################                                           ######################
-      ####################                                           ######################
-      ####################                  INGRESS                  ######################
-      ####################                                           ######################
-      ####################                                           ######################
-      ####################                                           ######################
-      #####################################################################################
-      # for nginx we do not deploy a helm - we only need to apply some ingress files with 
-      # kubectl. For such a case we use the devops helpr with a custom deployment to be able 
-      # to do so from the eea_deployer script
-      # you just need to create the ingress and then add it to the list of the custom_deployment
-      # you can alos use a master file with all the ingresses - the choise is up to you 
-      - release_name: devops-helper-nginx
-        chart_name: devops-helper
-        version: v0.0.1
-        chart_repo: ../devops-helper
-        values_file: rn3-transport-nkp-devops-helper.yaml
-        namespace: reportnet
-        deploy_type: deployment
-        script_shell: "-"
-        init_shell: "-"
-        custom_deployment: >-
-          export NS=reportnet;
-          export KC=/home/sotav/.kube/config;
-          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-cipher-config-map.yaml;
-          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-frontend.yaml;
-          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-apigateway.yaml;
-          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-keycloak.yaml;
-          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-keycloak-admin.yaml;
-        #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-master.yaml
-        #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-master.yaml
-
 
 
       #####################################################################################
@@ -108,9 +43,9 @@ charts:
         chart_name: consul
         version: v0.0.1
         chart_repo: ../consul
-        values_file: rn3-transport-nkp-consul.yaml
+        values_file: rn3-test-nkp-consul.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "-"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -119,43 +54,49 @@ charts:
         chart_name: kafka
         version: v0.0.1
         chart_repo: ../kafka
-        values_file: rn3-transport-nkp-kafka.yaml
+        values_file: rn3-test-nkp-kafka.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "-"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: >-
-          export INTER_BROKER_PASSWORD=$(grep "INTER_BROKER_PASSWORD" .secrets.prv | cut -d '=' -f2);
-          export CONTROLLER_PASSWORD=$(grep "CONTROLLER_PASSWORD" .secrets.prv | cut -d '=' -f2);
-          export KRAFT_CLUSTER_ID="nkp-stg-kafka-01";
-          export chart_repo="../kafka";
-          export release_name="kafka";
-          export chart_name="kafka";
-          export values_file="rn3-transport-nkp-kafka.yaml";
-          export NS="reportnet";
-          export KC="/home/sotav/.kube/config";
-          helm --kubeconfig $KC -n $NS upgrade --install kafka ../kafka -f ../kafka/rn3-transport-nkp-kafka.yaml --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi;
-
+          export chart_repo=../kafka
+          export release_name=kafka
+          export chart_name=kafka
+          export values_file=rn3-test-nkp-kafka.yaml
+          export NS=reportnet
+          export KC=~/.kube/03d-test/03prod.yaml
+          export KRAFT_CLUSTER_ID=test-nkp-kafka-01
+          export INTER_BROKER_PASSWORD=$(grep "INTER_BROKER_PASSWORD" .secrets.prv | cut -d '=' -f2)
+          export CONTROLLER_PASSWORD=$(grep "CONTROLLER_PASSWORD" .secrets.prv | cut -d '=' -f2)
+          helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f ../kafka/$values_file --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi --debug ;
 
       #################################### KEYCLOAK ######################################
       - release_name: keycloak
         chart_name: keycloak
         version: v0.0.1
         chart_repo: ../keycloak
-        values_file: rn3-transport-nkp-keycloak.yaml
+        values_file: rn3-test-nkp-keycloak.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "statefull"
         script_shell: "-"
         init_shell: "-"
+        # init_shell: >-
+        #   export chart_repo=../keycloak;
+        #   export release_name=keycloak;
+        #   export chart_name=keycloak;
+        #   export NS=reportnet;
+        #   export KC=~/.kube/03d-test/03prod.yaml;
+        #   kubectl --kubeconfig $KC -n $NS apply -f $chart_repo/keycloak-x509-patch-configmap.yaml;
         custom_deployment: "-"
       ################################### KEYCLOAK 6-9 ######################################
       # - release_name: keycloak6
       #   chart_name: keycloak6
       #   #version: v0.0.1
       #   chart_repo: ../keycloak-k
-      #   values_file: rn3-transport-nkp-keycloak6.yaml
+      #   values_file: rn3-test-nkp-keycloak6.yaml
       #   namespace: reportnet
-      #   deploy_type: statefull
+      #   deploy_type: "-"
       #   #script_shell: 
       #   #init_shell:
       #################################### MONGO ######################################
@@ -163,20 +104,32 @@ charts:
         chart_name: mongo
         version: v0.0.1
         chart_repo: ../mongodb
-        values_file: rn3-transport-nkp-mongo.yaml
+        values_file: rn3-test-nkp-mongo.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "statefull"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
+      #################################### MONGO-M ######################################
+      # this was only for a test on pvc ownership no need to run again !
+      # - release_name: mongo-m
+      #   chart_name: mongo-m
+      #   version: v0.0.1
+      #   chart_repo: ../mongodb-m
+      #   values_file: rn3-test-nkp-mongo.yaml
+      #   namespace: reportnet
+      #   deploy_type: "statefull"
+      #   script_shell: "-"
+      #   init_shell: "-"
+      #   custom_deployment: "-"
       #################################### REDIS ######################################
       - release_name: redis
         chart_name: redis
         version: v0.0.1
         chart_repo: ../redis
-        values_file: rn3-transport-nkp-redis.yaml
+        values_file: rn3-test-nkp-redis.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "statefull"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -185,9 +138,9 @@ charts:
         chart_name: helm
         version: v0.0.1
         chart_repo: ../postgresql
-        values_file: rn3-transport-nkp-postgresql.yaml
+        values_file: rn3-test-nkp-postgresql.yaml
         namespace: reportnet
-        deploy_type: "-" #statefull
+        deploy_type: "statefull" #statefull
         script_shell: >-
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
@@ -197,9 +150,11 @@ charts:
           kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'ls -la  /tmp/migration';
           chmod a+x ./scripts/migrate.sh;
           ./scripts/migrate.sh;
-          chmod a+x ./scripts/./scripts/pgpool-usr-fix.sh;
+          chmod a+x ./scripts/pgpool-usr-fix.sh;
           ./scripts/pgpool-usr-fix.sh dev $NS $KC
         init_shell: >-
+          export NS=reportnet
+          export KC=~/.kube/03d-test/03prod.yaml
           kubectl --kubeconfig $KC -n $NS delete secret pg-secret;
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
@@ -209,7 +164,7 @@ charts:
           export chart_repo=../postgresql
           export release_name=helm
           export chart_name=rn3-pg
-          export values_file=../postgresql/rn3-transport-nkp-postgresql.yaml
+          export values_file=../postgresql/rn3-test-nkp-postgresql.yaml
           export NS=reportnet
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
@@ -220,18 +175,57 @@ charts:
         chart_name: citus
         version: v0.0.1
         chart_repo: ../citus
-        values_file: rn3-transport-nkp-citus.yaml
+        values_file: rn3-test-nkp-citus.yaml
         namespace: reportnet
-        deploy_type: statefull
+        deploy_type: "statefull"
         script_shell: "-"
         init_shell: >-
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export pass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           kubectl --kubeconfig $KC -n $NS delete secret citus-secrets;
           kubectl --kubeconfig $KC -n $NS create secret generic citus-secrets --from-literal password=$pass --from-literal userpass=$dbpass ;
-        custom_deployment: "-"
-          #helm --kubeconfig $KC -n $NS upgrade --install citus . -f rn3-staging-nkp-citus.yaml --set fullnameOverride=citus,metrics.enabled=true --debug
+        custom_deployment: >-
+          export NS=reportnet;
+          export KC=~/.kube/03d-test/03prod.yaml;
+          export release_name=citus;
+          export chart_repo=../citus;
+          export values_file=rn3-test-nkp-citus.yaml;
+          helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f $chart_repo/$values_file --set fullnameOverride=citus,metrics.enabled=true --debug;
 
+
+      #####################################################################################
+      ####################                                           ######################
+      ####################                                           ######################
+      ####################              INGRESSES                    ######################
+      ####################                                           ######################
+      ####################                                           ######################
+      ####################                                           ######################
+      #####################################################################################
+
+
+      ################################### NGINX  ######################################
+      # - release_name: nginx
+      #   chart_name: nginx
+      #   version: v0.0.1
+      #   chart_repo: ../traefik
+      #   values_file: rn3-dev-ran2-nginx-svc-api.yaml
+      #   namespace: reportnet
+      #   deploy_type: "-"
+      #   script_shell: "-"
+      #   init_shell: "-"
+      #   custom_deployment: "-"
+      ################################### TRAEFIK ######################################
+      - release_name: traefik
+        chart_name: traefik
+        version: v0.0.1
+        chart_repo: ../traefik
+        values_file: rn3-test-nkp-traefik_values.yaml
+        namespace: reportnet
+        deploy_type: "-"
+        script_shell: >-
+          kubectl --kubeconfig $KC apply -f  ../traefik/rn3-test-nkp-traefik-svc-api.yaml
+        init_shell: "-"
+        custom_deployment: "-"
 
 
       #####################################################################################
@@ -249,7 +243,7 @@ charts:
         debug: true
         version: v0.0.1
         chart_repo: ../kafka-ui
-        values_file: rn3-transport-nkp-kafka-ui.yaml
+        values_file: rn3-test-nkp-kafka-ui.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -260,7 +254,7 @@ charts:
         chart_name: helm
         version: v0.0.1
         chart_repo: ../reportnet-recordstore
-        values_file: rn3-transport-nkp-recordstore.yaml
+        values_file: rn3-test-nkp-recordstore.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -271,7 +265,7 @@ charts:
         chart_name: reportnet-api-gateway
         version: v0.0.1
         chart_repo: ../reportnet-apigateway
-        values_file: rn3-transport-nkp-api-gateway.yaml
+        values_file: rn3-test-nkp-api-gateway.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -282,7 +276,7 @@ charts:
         chart_name: reportnet-collaboration
         version: v0.0.1
         chart_repo: ../reportnet-collaboration
-        values_file: rn3-transport-nkp-collaboration.yaml
+        values_file: rn3-test-nkp-collaboration.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -293,7 +287,7 @@ charts:
         chart_name: reportnet-communication
         version: v0.0.1
         chart_repo: ../reportnet-communication
-        values_file: rn3-transport-nkp-communication.yaml
+        values_file: rn3-test-nkp-communication.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -304,7 +298,7 @@ charts:
         chart_name: reportnet-dataflow
         version: v0.0.1
         chart_repo: ../reportnet-dataflow
-        values_file: rn3-transport-nkp-dataflow.yaml
+        values_file: rn3-test-nkp-dataflow.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -315,7 +309,7 @@ charts:
         chart_name: reportnet-dataset
         version: v0.0.1
         chart_repo: ../reportnet-dataset
-        values_file: rn3-transport-nkp-dataset.yaml
+        values_file: rn3-test-nkp-dataset.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -326,7 +320,7 @@ charts:
         chart_name: reportnet-document
         version: v0.0.1
         chart_repo: ../reportnet-document
-        values_file: rn3-transport-nkp-document.yaml
+        values_file: rn3-test-nkp-document.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -337,7 +331,7 @@ charts:
         chart_name: reportnet-frontend
         version: v0.0.1
         chart_repo: ../reportnet-frontend
-        values_file: rn3-transport-nkp-frontend.yaml
+        values_file: rn3-test-nkp-frontend.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -348,7 +342,7 @@ charts:
         chart_name: reportnet-orchestrator
         version: v0.0.1
         chart_repo: ../reportnet-orchestrator
-        values_file: rn3-transport-nkp-orchestrator.yaml
+        values_file: rn3-test-nkp-orchestrator.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -359,7 +353,7 @@ charts:
         chart_name: reportnet-rod
         version: v0.0.1
         chart_repo: ../reportnet-rod
-        values_file: rn3-transport-nkp-rod.yaml
+        values_file: rn3-test-nkp-rod.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -370,23 +364,18 @@ charts:
         chart_name: reportnet-ums
         version: v0.0.1
         chart_repo: ../reportnet-ums
-        values_file: rn3-transport-nkp-ums.yaml
+        values_file: rn3-test-nkp-ums.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
-        init_shell: >-
-          export NS=reportnet
-          export KC=/home/sotav/.kube/config
-          export ums_kc_password=$(grep ums_kc_password ../eea-deployer/.secrets.prv | cut -d '=' -f2);
-          export ums_kc_username=$(grep ums_kc_username ../eea-deployer/.secrets.prv | cut -d '=' -f2);
-          kubectl --kubeconfig $KC -n $NS create secret generic ums-kc --from-literal password=$ums_kc_password --from-literal username=$ums_kc_username
+        init_shell: "-"
         custom_deployment: "-"
       ################################### VALIDATION ######################################
       - release_name: validation
         chart_name: reportnet-validation
         version: v0.0.1
         chart_repo: ../reportnet-validation
-        values_file: rn3-transport-nkp-validation.yaml
+        values_file: rn3-test-nkp-validation.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
@@ -397,7 +386,7 @@ charts:
         chart_name: reportnet-maintenance
         version: v0.0.1
         chart_repo: ../reportnet-maintenance
-        values_file: rn3-transport-nkp-maintenance.yaml
+        values_file: rn3-test-nkp-maintenance.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"

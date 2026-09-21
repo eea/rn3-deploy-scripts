@@ -1,0 +1,288 @@
+global:
+  fullnameOverride: "rn3-pg-helm"
+  # imageRegistry: myRegistryName
+  # imagePullSecrets:
+  #   - myRegistryKeySecretName
+  # storageClass: myStorageClass
+  postgresql:
+    #username: customuser
+    #password: custompassword
+    #database: customdatabase
+    #repmgrUsername: repmgruser
+    #repmgrPassword: ----------
+    #repmgrDatabase: repmgrdatabase
+    existingSecret: pg-secret
+  # ldap:
+  #   bindpw: bindpassword
+  #   existingSecret: myExistingSecret
+  pgpool:
+    #adminUsername: adminuser
+    #adminPassword: adminpassword
+    existingSecret: pg-secret
+
+# postgresqlImage:
+#   registry: docker.io
+#   #repository: bitnami/postgresql-repmgr
+#   #tag: 11.7.0-debian-10-r74
+#   repository: bitnamilegacy/postgresql
+#   tag: 11.7.0
+#   pullPolicy: IfNotPresent
+#   debug: false
+postgresqlImage:
+  registry: ghcr.io
+  repository: eea/postgresql-repmgr
+  tag: 11.7.0-debian-10-r74
+  pullPolicy: IfNotPresent
+  debug: false
+
+# pgpoolImage:
+#   registry: docker.io
+#   repository: bitnamilegacy/pgpool
+#   tag: 4.1.1
+#   pullPolicy: IfNotPresent
+#   debug: false
+pgpoolImage:
+  registry: ghcr.io
+  repository: eea/pgpool
+  tag: 4.1.1-debian-10-r50
+  pullPolicy: IfNotPresent
+  debug: false
+
+
+volumePermissionsImage:
+  registry: docker.io
+  repository: bitnami/minideb
+  tag: buster
+  pullPolicy: Always
+metricsImage:
+  registry: docker.io
+  repository: bitnami/postgres-exporter
+  #tag: 0.8.0-debian-10-r71
+  tag: latest
+  pullPolicy: IfNotPresent
+  debug: false
+clusterDomain: cluster.local
+postgresql:
+  replicaCount: 3
+  updateStrategyType: RollingUpdate
+  podAnnotations: {}
+  affinity: {}
+  nodeSelector: {}
+  priorityClassName: ""
+  tolerations: {}
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  resources:
+    limits: 
+      #cpu: 4
+      memory: 14Gi
+    requests: 
+      #cpu: 2
+      memory: 14Gi
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  pdb:
+    create: false
+    minAvailable: 1
+  username: postgres
+  upgradeRepmgrExtension: false
+  pgHbaTrustAll: false
+  repmgrUsername: repmgr
+  repmgrDatabase: repmgr
+  repmgrLogLevel: NOTICE
+  repmgrConnectTimeout: 5
+  repmgrReconnectAttempts: 3
+  repmgrReconnectInterval: 5
+
+
+  ## Repmgr configuration
+  ## Specify content for repmgr.conf
+  ## Default: do not create repmgr.conf
+  ## Alternatively, you can put your repmgr.conf under the files/ directory
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration-file
+  ##
+  # repmgrConfiguration: |-
+
+  ## PostgreSQL configuration
+  ## Specify runtime configuration parameters as a dict, using camelCase, e.g.
+  ## {"sharedBuffers": "500MB"}
+  ## Alternatively, you can put your postgresql.conf under the files/ directory
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration-file
+  ##
+  # configuration:
+
+  ## PostgreSQL client authentication configuration
+  ## Specify content for pg_hba.conf
+  ## Default: do not create pg_hba.conf
+  ## Alternatively, you can put your pg_hba.conf under the files/ directory
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration-file
+  ##
+  # pgHbaConfiguration: |-
+  #   host     all            repmgr    0.0.0.0/0    md5
+  #   host     repmgr         repmgr    0.0.0.0/0    md5
+  #   host     replication      repmgr    0.0.0.0/0    md5
+  #   host     all              all       0.0.0.0/0    md5
+  #   host     all              all       ::1/128      md5
+  #   local    all              all                    md5
+
+  ## ConfigMap with PostgreSQL configuration
+  ## NOTE: This will override repmgrConfiguration, configuration and pgHbaConfiguration
+  ##
+  # configurationCM:
+
+  ## PostgreSQL extended configuration
+  ## As above, but _appended_ to the main configuration
+  ## Alternatively, you can put your *.conf under the files/conf.d/ directory
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
+  ##
+  # extendedConf:
+
+  ## ConfigMap with PostgreSQL extended configuration
+  ## NOTE: This will override extendedConf
+  ##
+  # extendedConfCM:
+
+  ## initdb scripts
+  ## Specify dictionary of scripts to be run at first boot
+  ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+  ##
+  # initdbScripts:
+  #   my_init_script.sh: |
+  #      #!/bin/sh
+  #      echo "Do something."
+
+  ## ConfigMap with scripts to be run at first boot
+  ## NOTE: This will override initdbScripts
+  ##
+  # initdbScriptsCM:
+
+
+
+pgpool:
+  replicaCount: 1
+  podAnnotations: {}
+  affinity: {}
+  nodeSelector: {}
+  priorityClassName: ""
+  tolerations: {}
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  resources:
+    limits: 
+      # cpu: 500m
+      memory: 1Gi
+    requests: 
+      # cpu: 250m
+      memory: 1Gi
+  livenessProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  pdb:
+    create: false
+    minAvailable: 1
+  adminUsername: admin
+  #adminPassword:
+  useLoadBalancing: true
+ldap:
+  enabled: false
+  uri:
+  base:
+  binddn:
+  bindpw:
+  bslookup:
+  scope:
+  tlsReqcert:
+  nssInitgroupsIgnoreusers: root,nslcd
+volumePermissions:
+  enabled: false
+  securityContext:
+    runAsUser: 0
+  resources:
+    limits: {}
+    requests: {}
+metrics:
+  enabled: false
+  securityContext:
+    enabled: true
+    runAsUser: 1001
+  resources:
+    limits: 
+      cpu: 100m
+      memory: 160Mi
+    requests: 
+      cpu: 100m
+      memory: 80Mi
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9187"
+  serviceMonitor:
+    enabled: false
+    selector:
+      prometheus: kube-prometheus
+persistence:
+  enabled: true
+  mountPath: /bitnami/postgresql
+  accessModes:
+    - ReadWriteOnce
+  size: 20Gi
+  annotations: {}
+service:
+  type: ClusterIP
+  port: 5432
+  annotations: {}
+ingress:
+  enabled: false
+  certManager: false
+  annotations: {}
+  hosts:
+    - name: postgresql.local
+      path: /
+  tls:
+    - hosts:
+        - postgresql.local
+      secretName: postgresql.local-tls
+  secrets:
+networkPolicy:
+  enabled: false
+  allowExternal: true
