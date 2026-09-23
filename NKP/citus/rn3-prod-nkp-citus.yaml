@@ -130,6 +130,18 @@ pgpool:
     secretName: citus-secrets
     secretKey: password
 
-createServiceAccount: true
-createRole: true
-createRoleBinding: true
+#createServiceAccount: true
+#createRole: true
+#createRoleBinding: true
+##############################################
+createServiceAccount: false
+createRole: false
+createRoleBinding: false
+##############################################
+Worker:
+  Storage: 100Gi
+  StorageClass: nfs-client
+
+Master:
+  Storage: 100Gi
+  StorageClass: nfs-client

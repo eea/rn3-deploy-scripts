@@ -309,3 +309,102 @@ kafka
 
 
 
+
+
+
+
+############################## clean up disk space of REPORTNET3-DATA-PV from reportnet dataset pods 
+############################## on prod 2 on rancher
+##############################
+
+
+export WD=~/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/prod2/config
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+
+kubectl --kubeconfig $KC -n $NS get pods |grep dataset
+
+####
+dataset-656c6546f5-lj2w9                      1/1     Running     7          98d
+dataset-656c6546f5-qdd6p                      1/1     Running     18         105d
+dataset-656c6546f5-zsql7                      1/1     Running     15         105d
+####
+export TP=dataset-656c6546f5-lj2w9
+
+kubectl --kubeconfig $KC -n $NS exec -it $TP  -- /bin/sh
+
+find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec ls -l {} \;
+find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec ls -l {} \;
+
+#ls -la /reportnet3-data/input/4deletion
+ls -la /reportnet3-data/4deletion/760_more
+ls -la /reportnet3-data/4deletion/360_more
+
+/reportnet3-data # mkdir -p /reportnet3-data/4deletion/360_more
+####### if the folder does not exist
+#mkdir /reportnet3-data/input/4deletion
+#mkdir -p /reportnet3-data/input/4deletion/760_more
+#mkdir -p /reportnet3-data/input/4deletion/365_more
+
+mkdir -p /reportnet3-data/4deletion/760_more
+mkdir -p /reportnet3-data/4deletion/360_more
+#######
+
+
+
+find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +760 -print | xargs -0 du -hc | tail -n1;
+find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +360 -printf | xargs -0 du -hc | tail -n1;
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +760 -print0 | xargs -0 du -hc | tail -n1;
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 2 -mindepth 0 -type f -mtime +360 -print0 | xargs -0 du -hc | tail -n1;
+
+find /reportnet3-data/input/  -name "*.bin" -type f -mtime +360 -print0 | xargs -0 du -hc | tail -n1;
+
+find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec ls -l {} \;
+find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec mv "{}" /reportnet3-data/4deletion/760_more/ \;
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec ls -l {} \;
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec mv "{}" /reportnet3-data/4deletion/760_more/ \;
+
+find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec ls -l {} \;
+find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec mv "{}" /reportnet3-data/4deletion/365_more \;
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec ls -l {} \;
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec mv "{}" /reportnet3-data/4deletion/365_more \;
+
+
+
+#rm -Rf /reportnet3-data/4deletion/760_more.tar.gz
+#rm -Rf /reportnet3-data/4deletion/365_more.tar.gz
+
+tar -zcvf /reportnet3-data/4deletion/760_more.tar.gz /reportnet3-data/4deletion/760_more/
+tar -zcvf /reportnet3-data/4deletion/365_more.tar.gz /reportnet3-data/4deletion/365_more/
+
+
+
+
+
+
+#TESTING ##############################################################################
+# TEST FIRST: CREATION OF FOLDERS
+find /reportnet3-data/input/ -type f -iname \*.snap -mtime +365 -maxdepth 1 -mindepth 0  -printf '%h\n' | sort | uniq | xargs -n 1 -d '\n' -I '{}' echo mkdir -vp "/reportnet3-data/input/4deletion/760_more/ {}"
+
+# EXECUTE CREATION OF EMPTY TARGET FOLDERS
+find /reportnet3-data/input/ -type f -iname \*.mov -printf '%h\n' | sort | uniq | xargs -n 1 -d '\n' -I '{}' mkdir -vp "/TARGET_FOLDER_ROOT/{}"
+
+# TEST FIRST: REVIEW FILES TO BE MOVED
+find /reportnet3-data/input/ -type f -iname \*.mov -exec echo mv {} /TARGET_FOLDER_ROOT/{} \;
+
+# EXECUTE MOVE FILES
+find /reportnet3-data/input/ -type f -iname \*.mov -exec mv {} /TARGET_FOLDER_ROOT/{} \;
+
+
+
+#TESTING ##############################################################################
+find /reportnet3-data/input/ -name "*.snap" -maxdepth 3 -mindepth 0 -type f -mtime -760 -print0 | xargs -0 -I {} sh -c '
+    file="{}"
+    echo $file
+    destination="'/reportnet3-data/4deletion/760_more'"
+    mkdir -p "/reportnet3-data/4deletion/760_more/${file%/*}"
+    cp "$file" "/reportnet3-data/4deletion/760_more/$file"'

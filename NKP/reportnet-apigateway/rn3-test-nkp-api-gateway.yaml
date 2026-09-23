@@ -40,5 +40,5 @@ sentry:
 tagSufix: 
 replicas: 1
 repo: eeacms
-version: v3.4-SANDBOX
+version: v3.4-TEST
 # Other Variables

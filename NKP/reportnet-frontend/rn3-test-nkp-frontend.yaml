@@ -12,6 +12,6 @@ eulogin: https://rn3poc-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/
 websocket: wss://rn3poc.reportnet.europa.eu/communication/reportnet-websocket
 tagSufix: 
 replicas: 1
-version: v3.4-SANDBOX
+version: v3.4-TEST
 repo: eeacms
 # Other Variables

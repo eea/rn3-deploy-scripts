@@ -60,6 +60,49 @@ ZC7ZcWavwx
 
 
 
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 03d
+################ TEST ENV
+################ document NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/03d-test/03prod.yaml
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get pods |grep document 
+
+cd $WD/rn3-deploy-scripts/NKP/reportnet-document
+
+
+
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install document . -f rn3-test-nkp-document.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install document . -f rn3-test-nkp-document.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install document . -f rn3-test-nkp-document.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall document
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+
+
+kubectl --kubeconfig $KC -n $NS get secret document-http -o jsonpath="{.data.password}" | base64 --decode; echo
+ZC7ZcWavwx
 
 
 

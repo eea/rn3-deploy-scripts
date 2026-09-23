@@ -40,6 +40,6 @@ snapshot:
 
 tagSufix: 
 replicas: 1
-version: v3.4-SANDBOX
+version: v3.4-TEST
 repo: eeacms
 # Other Variables

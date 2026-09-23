@@ -99,7 +99,17 @@ spec:
         #StorageClassName: ""
         accessModes:
           - ReadWriteOnce
+#        resources:
+#          requests:
+#            storage: 100Mi
         resources:
           requests:
-            storage: 100Mi
-
+            # upstream recommended max is 700M
+            storage: "{{ .Values.Master.Storage }}"
+      {{- if .Values.Master.StorageClass }}
+      {{- if (eq "-" .Values.Master.StorageClass) }}
+        storageClassName: ""
+      {{- else }}
+        storageClassName: "{{ .Values.Master.StorageClass }}"
+      {{- end }}
+      {{- end }}

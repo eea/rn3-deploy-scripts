@@ -71,7 +71,11 @@ createRole: false
 createRoleBinding: false
 ##############################################
 Worker:
-  Storage: 1Gi
-  StorageClass: "-"
+  Storage: 100Gi
+  StorageClass: nfs-client
+
+Master:
+  Storage: 100Gi
+  StorageClass: nfs-client
 
 

@@ -3,7 +3,7 @@ create_namespace: false
 wait: false
 timeout: true # If true, defaults to 20 mins
 debug: true
-kc: ~/.kube/03d-test/03prod.yaml
+kc: /home/sotav/.kube/03d-test/03prod.yaml
 ns: reportnet
 init: true
 script: true
@@ -45,7 +45,7 @@ charts:
         chart_repo: ../consul
         values_file: rn3-test-nkp-consul.yaml
         namespace: reportnet
-        deploy_type: "-"
+        deploy_type: "statefull"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
@@ -56,21 +56,13 @@ charts:
         chart_repo: ../kafka
         values_file: rn3-test-nkp-kafka.yaml
         namespace: reportnet
-        deploy_type: "-"
+        deploy_type: "statefull"
         script_shell: "-"
         init_shell: "-"
         custom_deployment: >-
-          export chart_repo=../kafka
-          export release_name=kafka
-          export chart_name=kafka
-          export values_file=rn3-test-nkp-kafka.yaml
-          export NS=reportnet
-          export KC=~/.kube/03d-test/03prod.yaml
-          export KRAFT_CLUSTER_ID=test-nkp-kafka-01
-          export INTER_BROKER_PASSWORD=$(grep "INTER_BROKER_PASSWORD" .secrets.prv | cut -d '=' -f2)
-          export CONTROLLER_PASSWORD=$(grep "CONTROLLER_PASSWORD" .secrets.prv | cut -d '=' -f2)
-          helm --kubeconfig $KC -n $NS upgrade --install $release_name $chart_repo/. -f ../kafka/$values_file --set sasl.interbroker.password=$INTER_BROKER_PASSWORD --set sasl.controller.password=$CONTROLLER_PASSWORD --set kraft.clusterId=$KRAFT_CLUSTER_ID --set resources.requests.memory=3Gi --set resources.limit.memory=3Gi --debug ;
-
+          chmod a+x ./scripts/deploy_script_kafka.sh;
+          ./scripts/deploy_script_kafka.sh ~/.kube/03d-test/03prod.yaml reportnet ../kafka/. ../kafka/rn3-test-nkp-kafka.yaml  $(grep INTER_BROKER_PASSWORD .secrets.prv | cut -d '=' -f2)  $(grep CONTROLLER_PASSWORD .secrets.prv | cut -d '=' -f2) test-nkp-kafka-01 3Gi  3Gi;
+          
       #################################### KEYCLOAK ######################################
       - release_name: keycloak
         chart_name: keycloak
@@ -142,16 +134,24 @@ charts:
         namespace: reportnet
         deploy_type: "statefull" #statefull
         script_shell: >-
+          export chart_repo=../postgresql
+          export release_name=helm
+          export chart_name=rn3-pg
+          export values_file=../postgresql/rn3-test-nkp-postgresql.yaml
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
-          export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
-          kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'rm -Rf  /tmp/migration';
-          kubectl --kubeconfig $KC -n $NS cp ../postgresql/migration rn3-pg-helm-postgresql-0:/tmp/;
-          kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet rn3-pg-helm-postgresql-0 -c postgresql -- bash -c 'ls -la  /tmp/migration';
+          export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);          
+          export NS=reportnet
+          export KC=~/.kube/03d-test/03prod.yaml
+          export TP=rn3-pg-helm-postgresql-1
+          sleep 120;
+          kubectl --kubeconfig $KC -n $NS exec -i -t -n $NS $TP -c postgresql -- bash -c 'rm -Rf  /tmp/migration';
+          kubectl --kubeconfig $KC -n $NS cp ../postgresql/migration $TP:/tmp/;
+          kubectl --kubeconfig $KC -n $NS exec -i -t -n $NS $TP -c postgresql -- bash -c 'ls -la  /tmp/migration';
           chmod a+x ./scripts/migrate.sh;
-          ./scripts/migrate.sh;
+          ./scripts/migrate.sh $KC $NS $TP
           chmod a+x ./scripts/pgpool-usr-fix.sh;
-          ./scripts/pgpool-usr-fix.sh dev $NS $KC
+          ./scripts/pgpool-usr-fix.sh test $NS $KC
         init_shell: >-
           export NS=reportnet
           export KC=~/.kube/03d-test/03prod.yaml
@@ -166,6 +166,7 @@ charts:
           export chart_name=rn3-pg
           export values_file=../postgresql/rn3-test-nkp-postgresql.yaml
           export NS=reportnet
+          export KC=~/.kube/03d-test/03prod.yaml
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
           export adminpass=$(grep ADMINPASS .secrets.prv | cut -d '=' -f2);
@@ -258,7 +259,8 @@ charts:
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
-        init_shell: "-"
+        init_shell: >-
+          kubectl --kubeconfig $KC apply -f  ../reportnet-recordstore/rn3-test-data-pvc-nfs.yaml
         custom_deployment: "-"
       ################################### APIGATEWAY ######################################
       - release_name: api-gateway

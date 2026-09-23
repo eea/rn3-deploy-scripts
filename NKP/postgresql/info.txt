@@ -130,6 +130,39 @@ $WD/rn3-deploy-scripts/NKP/postgresql/pgpool-usr-fix.sh dev reportnet ~/.kube/st
 #$WD/rn3-deploy-scripts/NKP/postgresql/pgpool-kc-usr-fix.sh dev reportnet ~/.kube/staging/config 
 
 
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+################ Rancher 03d
+################ test ENV
+################ postgresql NKP
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/03d-test/03prod.yaml
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+export dbpass=-
+export repmgrpass=-
+export adminpass=-
+export dbpass=$(grep DBPASS ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+export repmgrpass=$(grep REPMGRPASS ../eea-deployer/.secrets.prv  | cut -d '=' -f2);
+export adminpass=$(grep ADMINPASS ../eea-deployer/.secrets.prv  | cut -d '=' -f2);
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/postgresql
+
+
+
+helm --kubeconfig $KC -n $NS upgrade --install rn3-pg . -f rn3-test-nkp-postgresql.yaml --debug
+
+$WD/rn3-deploy-scripts/NKP/postgresql/pgpool-usr-fix.sh test reportnet ~/.kube/03d-test/03prod.yaml
+#$WD/rn3-deploy-scripts/NKP/postgresql/pgpool-kc-usr-fix.sh dev reportnet ~/.kube/03d-test/03prod.yaml
+
 
 
 

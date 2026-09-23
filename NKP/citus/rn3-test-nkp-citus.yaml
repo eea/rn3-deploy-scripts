@@ -70,3 +70,10 @@ createServiceAccount: false
 createRole: false
 createRoleBinding: false
 ##############################################
+Worker:
+  Storage: 100Gi
+  StorageClass: nfs-client
+
+Master:
+  Storage: 100Gi
+  StorageClass: nfs-client
