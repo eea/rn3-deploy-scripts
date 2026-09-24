@@ -341,45 +341,61 @@ find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mt
 find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec ls -l {} \;
 
 #ls -la /reportnet3-data/input/4deletion
-ls -la /reportnet3-data/4deletion/760_more
-ls -la /reportnet3-data/4deletion/360_more
+ls -la /reportnet3-data/input/4deletion/760_more
+ls -la /reportnet3-data/input/4deletion/360_more
 
-/reportnet3-data # mkdir -p /reportnet3-data/4deletion/360_more
+/reportnet3-data # mkdir -p /reportnet3-data/input/4deletion/360_more
 ####### if the folder does not exist
 #mkdir /reportnet3-data/input/4deletion
 #mkdir -p /reportnet3-data/input/4deletion/760_more
 #mkdir -p /reportnet3-data/input/4deletion/365_more
 
-mkdir -p /reportnet3-data/4deletion/760_more
-mkdir -p /reportnet3-data/4deletion/360_more
+mkdir -p /reportnet3-data/input/4deletion/760_more
+mkdir -p /reportnet3-data/input/4deletion/360_more
+ls -lhts /reportnet3-data/input/4deletion/760_more
 #######
 
 
 
 find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +760 -print | xargs -0 du -hc | tail -n1;
 find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +360 -printf | xargs -0 du -hc | tail -n1;
-find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +760 -print0 | xargs -0 du -hc | tail -n1;
-find /reportnet3-data/input/  -name "*.bin" -maxdepth 2 -mindepth 0 -type f -mtime +360 -print0 | xargs -0 du -hc | tail -n1;
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +760 -printf | xargs -0 du -hc | tail -n1;
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +360 -printf | xargs -0 du -hc | tail -n1;
 
-find /reportnet3-data/input/  -name "*.bin" -type f -mtime +360 -print0 | xargs -0 du -hc | tail -n1;
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +760 -printf | xargs -0 du -hc | tail -n1;
 
 find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec ls -l {} \;
-find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec mv "{}" /reportnet3-data/4deletion/760_more/ \;
+find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec mv -f "{}" /reportnet3-data/input/4deletion/760_more/ \;
+
+############ the whole thing with testing first 
 find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec ls -l {} \;
-find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec mv "{}" /reportnet3-data/4deletion/760_more/ \;
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec cp "{}" /reportnet3-data/input/4deletion/760_more/ \;
+ls -lhts /reportnet3-data/input/4deletion/760_more
+du -ch /reportnet3-data/input/4deletion/760_more
+rm -Rf /reportnet3-data/input/4deletion/760_more/*.bin
+mv /reportnet3-data/input/4deletion/760_more /reportnet3-data/input/4deletion/760_more_test_from_cp
+mkdir  /reportnet3-data/input/4deletion/760_more
+rm -Rf /reportnet3-data/input/4deletion/760_more_test_from_cp
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec mv -f "{}" /reportnet3-data/input/4deletion/760_more/ \;
+export CT=$(date "+%Y%m%d_%H%M%S") && echo $CT && tar -zcvf /reportnet3-data/input/4deletion/760_more_$CT.tar.gz /reportnet3-data/input/4deletion/760_more/
+rm -Rf /reportnet3-data/input/4deletion/760_more/*.bin
+find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec mv -f "{}" /reportnet3-data/input/4deletion/760_more/ \;
+export CT=$(date "+%Y%m%d_%H%M%S") && echo $CT && tar -zcvf /reportnet3-data/input/4deletion/760_more_snap_$CT.tar.gz /reportnet3-data/input/4deletion/760_more/
+rm -Rf /reportnet3-data/input/4deletion/760_more/*.snap
+
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +360 -exec mv -f "{}" /reportnet3-data/input/4deletion/360_more/ \;
+#############
+
+
 
 find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec ls -l {} \;
-find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec mv "{}" /reportnet3-data/4deletion/365_more \;
+find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec mv "{}" /reportnet3-data/input/4deletion/365_more \;
 find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec ls -l {} \;
-find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec mv "{}" /reportnet3-data/4deletion/365_more \;
+find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +365 -exec mv "{}" /reportnet3-data/input/4deletion/365_more \;
 
 
 
-#rm -Rf /reportnet3-data/4deletion/760_more.tar.gz
-#rm -Rf /reportnet3-data/4deletion/365_more.tar.gz
-
-tar -zcvf /reportnet3-data/4deletion/760_more.tar.gz /reportnet3-data/4deletion/760_more/
-tar -zcvf /reportnet3-data/4deletion/365_more.tar.gz /reportnet3-data/4deletion/365_more/
+export CT=$(date "+%Y%m%d_%H%M%S") && echo $CT && tar -zcvf /reportnet3-data/input/4deletion/365_more_$CT.tar.gz /reportnet3-data/input/4deletion/365_more/
 
 
 
@@ -405,6 +421,6 @@ find /reportnet3-data/input/ -type f -iname \*.mov -exec mv {} /TARGET_FOLDER_RO
 find /reportnet3-data/input/ -name "*.snap" -maxdepth 3 -mindepth 0 -type f -mtime -760 -print0 | xargs -0 -I {} sh -c '
     file="{}"
     echo $file
-    destination="'/reportnet3-data/4deletion/760_more'"
-    mkdir -p "/reportnet3-data/4deletion/760_more/${file%/*}"
-    cp "$file" "/reportnet3-data/4deletion/760_more/$file"'
+    destination="'/reportnet3-data/input/4deletion/760_more'"
+    mkdir -p "/reportnet3-data/input/4deletion/760_more/${file%/*}"
+    cp "$file" "/reportnet3-data/input/4deletion/760_more/$file"'

@@ -11,7 +11,7 @@ TIP :
 ###################################################################################################################
 ################ Rancher 06d
 ################ STAGING ENV
-################ ums NKP
+################ ums ran2
 
 ~~~~~~~~~
 export WD=/home/sotav/TRASYS_GIT_PRV/EAA
@@ -47,20 +47,64 @@ kubectl --kubeconfig $KC -n $NS get sts
 
 
 kubectl --kubeconfig $KC -n $NS get secret ums-http -o jsonpath="{.data.password}" | base64 --decode; echo
-ZC7ZcWavwx
-
-###################################################################################################################
-###################################################################################################################
-###################################################################################################################
 
 
-export ums_kc_password=$(grep ums_kc_password ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+export ums_kc_password=$(grep ums_kc_password_staging_nkp ../eea-deployer/.secrets.prv | cut -d '=' -f2);
 echo $ums_kc_password
-export ums-kc-username=$(grep ums-kc-username ../eea-deployer/.secrets.prv | cut -d '=' -f2);
-echo $ums-kc-username
+export ums_kc_username=$(grep ums_kc_username_staging_nkp ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $ums_kc_username
 
 #create the password to be used as the user admin 
 kubectl --kubeconfig $KC -n $NS create secret generic ums-kc \
 --from-literal password=$ums_kc_password \
---from-literal username=$ums-kc-username
+--from-literal username=$ums_kc_username
 
+
+###################################################################################################################
+###################################################################################################################
+###################################################################################################################
+
+
+################ Rancher 01dev
+################ dev ENV
+################ ums rancher
+
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/dev/config 
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+~~~~~~~~~
+kubectl --kubeconfig $KC -n $NS get pods
+
+cd $WD/rn3-deploy-scripts/NKP/reportnet-ums
+
+
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install ums . -f rn3-dev-ran2-ums.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install ums . -f rn3-dev-ran2-ums.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install ums . -f rn3-dev-ran2-ums.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall ums
+
+
+
+kubectl --kubeconfig $KC -n $NS get pods
+kubectl --kubeconfig $KC -n $NS get sts 
+
+kubectl --kubeconfig $KC -n $NS get secret ums-http -o jsonpath="{.data.password}" | base64 --decode; echo
+
+export ums_kc_password=$(grep ums_kc_password_dev_ran2 ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $ums_kc_password
+export ums_kc_username=$(grep ums_kc_username_dev_ran2 ../eea-deployer/.secrets.prv | cut -d '=' -f2);
+echo $ums_kc_username
+
+#create the password to be used as the user admin 
+kubectl --kubeconfig $KC -n $NS delete secret ums-kc
+kubectl --kubeconfig $KC -n $NS create secret generic ums-kc \
+--from-literal password=$ums_kc_password \
+--from-literal username=$ums_kc_username
