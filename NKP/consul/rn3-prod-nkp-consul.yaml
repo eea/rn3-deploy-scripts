@@ -113,8 +113,8 @@ ui:
 ## Create dedicated UI service
 ##
 uiService:
-  enabled: true
-  type: "NodePort"
+  enabled: false
+  type: "ClusterIP"
   annotations: {}
 
 ConsulConfig: []

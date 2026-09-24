@@ -65,8 +65,8 @@ affinity: |
 ui:
   enabled: true
 uiService:
-  enabled: true
-  type: "NodePort"
+  enabled: false
+  type: "ClusterIP"
   annotations: {}
 ConsulConfig: []
 #  - type: secret

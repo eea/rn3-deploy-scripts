@@ -17,17 +17,35 @@ charts:
       ####################                                           ######################
       #####################################################################################
       ################################### ARGO-CD ######################################
-      - release_name: argocd
-        chart_name: argo-cd
-        chart_repo: https://argoproj.github.io/argo-helm
-        values_file: values/argo-cd.yaml
-        version: 6.4.0
+      # - release_name: argocd
+      #   chart_name: argo-cd
+      #   chart_repo: https://argoproj.github.io/argo-helm
+      #   values_file: values/argo-cd.yaml
+      #   version: 6.4.0
+      #   namespace: reportnet
+      #   deploy_type: "-"
+      #   script_shell: "-"
+      #   init_shell: "-"
+      #   custom_deployment: "-"
+      #####################################################################################
+      ####################                                           ######################
+      ####################                                           ######################
+      ####################             DEVOPS HELPER TOOLS           ######################
+      ####################                                           ######################
+      ####################                                           ######################
+      ####################                                           ######################
+      #####################################################################################
+      ################################### DEVOPS-HELPER ######################################
+      - release_name: devops-helper
+        chart_name: devops-helper
+        version: v0.0.1
+        chart_repo: ../devops-helper
+        values_file: rn3-test-nkp-devops-helper.yaml
         namespace: reportnet
-        deploy_type: "-"
+        deploy_type: deployment
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
-
 
       #####################################################################################
       ####################                                           ######################
