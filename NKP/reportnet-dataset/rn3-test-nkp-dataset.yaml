@@ -3,6 +3,14 @@
 # Declare variables to be passed into your templates.
 
 # Specific Values for Dataset
+resources:
+  limits:
+    #cpu: "100m"
+    memory: 6Gi
+  requests:
+    #cpu: "100m"
+    memory: 6Gi
+
 
 # Environment Variables
 consul:

@@ -377,8 +377,14 @@ mv /reportnet3-data/input/4deletion/760_more /reportnet3-data/input/4deletion/76
 mkdir  /reportnet3-data/input/4deletion/760_more
 rm -Rf /reportnet3-data/input/4deletion/760_more_test_from_cp
 find /reportnet3-data/input/  -name "*.bin" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec mv -f "{}" /reportnet3-data/input/4deletion/760_more/ \;
-export CT=$(date "+%Y%m%d_%H%M%S") && echo $CT && tar -zcvf /reportnet3-data/input/4deletion/760_more_$CT.tar.gz /reportnet3-data/input/4deletion/760_more/
+export GZIP=-9 && export CT=$(date "+%Y%m%d_%H%M%S") && echo $CT && tar -zcvf /reportnet3-data/input/4deletion/760_more_$CT.tar.gz /reportnet3-data/input/4deletion/760_more/
+
+ls -a1 /reportnet3-data/input/4deletion/760_more/ | wc -l
+tar -tzf /reportnet3-data/input/4deletion/760_more_$CT.tar.gz | wc -l
+
 rm -Rf /reportnet3-data/input/4deletion/760_more/*.bin
+
+
 find /reportnet3-data/input/  -name "*.snap" -maxdepth 1 -mindepth 0 -type f -mtime +760 -exec mv -f "{}" /reportnet3-data/input/4deletion/760_more/ \;
 export CT=$(date "+%Y%m%d_%H%M%S") && echo $CT && tar -zcvf /reportnet3-data/input/4deletion/760_more_snap_$CT.tar.gz /reportnet3-data/input/4deletion/760_more/
 rm -Rf /reportnet3-data/input/4deletion/760_more/*.snap
