@@ -1,0 +1,18 @@
+podName: devops-helper
+
+image:
+  repository: debian
+  tag: trixie-slim
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8501
+  targetPort: 8501
+
+persistence:
+  enabled: true
+  storageClassName: "nfs-client"
+  accessMode: ReadWriteOnce
+  size: 20Gi
+  mountPath: /data

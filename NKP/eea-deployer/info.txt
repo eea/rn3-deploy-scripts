@@ -423,7 +423,14 @@ rm -Rf /reportnet3-data/input/4deletion/365_more
 
 
 
-#############
+############# YQ ERROR ON parse error at @
+#yq version : yq version 4.5.0 DOES NOT support the yq with | @tsv
+#yq version : yq (https://github.com/mikefarah/yq/) version v4.30.5 DOES so use that 
+#so .....
+wget https://github.com/mikefarah/yq/releases/download/v4.30.5/yq_linux_amd64
+mv /home/sotav/.local/bin/yq /home/sotav/.local/bin/yq-old
+mv yq_linux_amd64 /home/sotav/.local/bin/yq
 
-
+yq --version
+#should output this : yq (https://github.com/mikefarah/yq/) version v4.30.5
 

@@ -32,7 +32,7 @@ spec:
             - name: data
               mountPath: {{ .Values.persistence.mountPath | default "/data" }}
             - name: reportnet3-data
-              mountPath: {{ .Values.extraDisks.mountPath | default "/reportnet3-data/input" }}
+              mountPath: {{ .Values.persistence.mountPath | default "/reportnet3-data" }}
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
@@ -41,9 +41,8 @@ spec:
         - name: data
           persistentVolumeClaim:
             #claimName: {{ .Values.podName }}
-            claimName: devops-helper
+            claimName: "devops-helper"
         - name: reportnet3-data
           persistentVolumeClaim:
-              claimName: reportnet3-data
+              claimName: "reportnet3-data"
       {{- end }}
-

@@ -13,3 +13,8 @@ persistence:
     - ReadWriteMany
   size: 20Gi
   mountPath: /data
+
+
+extraDisks:
+  existingClaim: reportnet3-data
+  mountPath: /reportnet3-data/input

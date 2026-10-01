@@ -3,7 +3,7 @@ create_namespace: false
 wait: false
 timeout: true # If true, defaults to 20 mins
 debug: true
-kc: /home/sotav/.kube/config
+kc: ~/.kube/config
 ns: reportnet
 init: true
 script: true
@@ -72,27 +72,24 @@ charts:
       # to do so from the eea_deployer script
       # you just need to create the ingress and then add it to the list of the custom_deployment
       # you can also use a master file with all the ingresses - the choise is up to you 
-      - release_name: nginx-helper
-        chart_name: "-"
-        version: "-"
-        chart_repo: "-"
-        values_file: "-"
+      - release_name: devops-helper-nginx
+        chart_name: devops-helper
+        version: v0.0.1
+        chart_repo: ../devops-helper
+        values_file: rn3-transport-nkp-devops-helper.yaml
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
-        init_shell: >-
-          export NS=reportnet;
-          export KC=/home/sotav/.kube/config;
-          kubectl --kubeconfig $KC -n $NS get ingresses;
+        init_shell:  >-
+          export NS=reportnet
+          export KC=/home/sotav/.kube/config
+          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-cipher-config-map.yaml;
           kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-frontend.yaml;
           kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-apigateway.yaml;
           kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-keycloak.yaml;
           kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-keycloak-admin.yaml;
-          kubectl --kubeconfig $KC -n kube-system apply -f  ../traefik/rn3-transport-nkp-nginx-svc-cipher-config-map.yaml;
         #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-master.yaml
         custom_deployment: "-"
-
-
 
       #####################################################################################
       ####################                                           ######################
@@ -264,12 +261,7 @@ charts:
         namespace: reportnet
         deploy_type: deployment
         script_shell: "-"
-        init_shell: >-
-          export NS=reportnet;
-          export KC=/home/sotav/.kube/config;
-          export EXISTS=$(kubectl --kubeconfig $KC -n $NS get pvc | grep reportnet3-data);
-          echo $EXISTS
-          [ -z "$EXISTS" ] && kubectl --kubeconfig $KC -n $NS create -f ../reportnet-recordstore/rn3-transport-data-pvc-nfs.yaml || echo "Volume reportnet3-data exists. I will not recreate it ";
+        init_shell: "-"
         custom_deployment: "-"
       ################################### APIGATEWAY ######################################
       - release_name: api-gateway
