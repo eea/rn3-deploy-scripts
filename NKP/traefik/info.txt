@@ -171,10 +171,36 @@ kubectl --kubeconfig $KC apply -f  rn3-staging-nkp-traefik-svc-api.yaml
 
 
 
+################ PROD2 NKP
+################ transport ENV
+################ nginx  NKP
+~~~~~~~~~
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=/home/sotav/.kube/config
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+~~~~~~~~~
+
+kubectl --kubeconfig $KC -n $NS get ingresses
+
+#nginx
+kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-cipher-config-map.yaml
+kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-frontend.yaml
+kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-apigateway.yaml
+kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-keycloak.yaml
+kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-transport-nkp-nginx-svc-keycloak-admin.yaml
 
 
 
 
+# all of the above are now integrated to the eea_deployer 
+# check config-transport-nkp.yaml values for the devops-helper-nginx block
+# as of that the new way of deployments for the nginx ingresses you run the eea deployer
+# with value 6 and set the devops-helper-nginx app to be deployed 
+# the same coes with all environments - 
+# PS : first create the files for the ingresses inside the traefik folder 
 
 
 

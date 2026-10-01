@@ -329,12 +329,12 @@ echo $WD
 kubectl --kubeconfig $KC -n $NS get pods |grep dataset
 
 ####
-dataset-656c6546f5-lj2w9                      1/1     Running     7          98d
-dataset-656c6546f5-qdd6p                      1/1     Running     18         105d
-dataset-656c6546f5-zsql7                      1/1     Running     15         105d
+dataset-656c6546f5-9j9ks                      1/1     Running     0          40h
+dataset-656c6546f5-c74rq                      1/1     Running     0          40h
+dataset-656c6546f5-kkq9m                      1/1     Running     0          40h
 ####
-export TP=dataset-656c6546f5-lj2w9
-export TP=dataset-656c6546f5-qdd6p
+export TP=dataset-656c6546f5-9j9ks 
+
 
 kubectl --kubeconfig $KC -n $NS exec -it $TP  -- /bin/sh
 

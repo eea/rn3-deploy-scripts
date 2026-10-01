@@ -1,0 +1,8 @@
+[2026-10-01 10:14:09] [INFO] Generic/common values based on config-transport-nkp.yaml file
+[2026-10-01 10:14:10] [INFO] Dry Run: false
+[2026-10-01 10:14:10] [INFO] Create Namespace: false
+[2026-10-01 10:14:10] [INFO] Wait: false
+[2026-10-01 10:14:10] [INFO] Timeout: true
+[2026-10-01 10:14:10] [INFO] KubeConfig: ~/.kube/config
+[2026-10-01 10:14:10] [INFO] ****************************
+[2026-10-01 10:14:10] [INFO] All actions completed successfully
