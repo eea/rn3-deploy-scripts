@@ -9,6 +9,7 @@
 # Github URL: https://github.com/eea/rn3-deploy-scripts.git
 # usage: 
 #     ./eea-deployer install -f config-staging-nkp.yaml
+#     ./eea-deployer preinstall -f config-staging-nkp.yaml
 
 # Enable debug mode for the currect script (only for development needs ! )
 # set -x

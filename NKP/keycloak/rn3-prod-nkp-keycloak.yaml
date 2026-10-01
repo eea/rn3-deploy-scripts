@@ -10,9 +10,10 @@ keycloak:
   replicas: 1
 
   image:
-    repository: jboss/keycloak
-    tag: 5.0.0
-    pullPolicy: Always
+    repository: eeacms/rn3-keycloak
+    #tag: 13.0.1
+    tag: "1.0"
+    pullPolicy: IfNotPresent
 
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
