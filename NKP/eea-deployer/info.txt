@@ -315,7 +315,7 @@ kafka
 
 ############################## clean up disk space of REPORTNET3-DATA-PV from reportnet dataset pods 
 ############################## on prod 2 on rancher
-##############################
+############################## you can also use the devops-helper pod as now mounts the same PV under /reportnet3/input
 
 
 export WD=~/TRASYS_GIT_PRV/EAA
@@ -327,6 +327,8 @@ echo $WD
 
 
 kubectl --kubeconfig $KC -n $NS get pods |grep dataset
+#if it is deployed !!!! you can also use this 
+kubectl --kubeconfig $KC -n $NS get pods |grep devops 
 
 ####
 dataset-656c6546f5-9j9ks                      1/1     Running     0          40h
