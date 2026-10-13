@@ -33,6 +33,8 @@ spec:
               mountPath: {{ .Values.persistence.mountPath | default "/data" }}
             - name: reportnet3-data
               mountPath: {{ .Values.extraDisks.mountPath | default "/reportnet3-data/input" }}
+            - name: reportnet3-pg-data
+              mountPath: {{ .Values.extraDisks.mountPath | default "/reportnet3-pg-data" }}
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
@@ -45,5 +47,8 @@ spec:
         - name: reportnet3-data
           persistentVolumeClaim:
               claimName: reportnet3-data
+        - name: reportnet3-pg-data
+          persistentVolumeClaim:
+              claimName: data-rn3-pg-helm-postgresql-0
       {{- end }}
 

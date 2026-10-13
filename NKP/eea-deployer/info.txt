@@ -445,3 +445,32 @@ yq --version
 # IT should output this : yq (https://github.com/mikefarah/yq/) version v4.30.5
 # so we are ok - please retest ! 
 
+
+
+
+#############
+#############          Klustr Kluster viewer 
+#############            https://klustr.dev/
+#############  
+############# on windows 
+v0.85.0 ~ from power shell .....
+
+$V = (Invoke-RestMethod https://api.github.com/repos/SametKUM/klustr/releases/latest).tag_name
+Invoke-WebRequest "https://github.com/SametKUM/klustr/releases/download/$V/klustr-$V-windows-amd64.zip" -OutFile klustr.zip
+Expand-Archive klustr.zip "$env:LOCALAPPDATA\Programs\Klustr" -Force
+& "$env:LOCALAPPDATA\Programs\Klustr\klustr.exe"
+
+############# on linux 
+
+V=$(curl -fsSL https://api.github.com/repos/SametKUM/klustr/releases/latest  | grep -oP '"tag_name":\s*"\K[^"]+')
+curl -LO https://github.com/SametKUM/klustr/releases/download/$V/klustr_${V#v}_amd64.deb
+sudo apt install ./klustr_${V#v}_amd64.deb
+
+############# on mac
+brew tap sametkum/klustr
+brew install klustr
+
+
+
+
+

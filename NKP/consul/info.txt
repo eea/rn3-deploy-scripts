@@ -221,3 +221,25 @@ kubectl --kubeconfig $KC -n $NS cp ./key_transport_ran2_values.json.prv consul-0
 kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet consul-0 -c consul -- sh -c "consul kv import @/tmp/key_values.json"
 
 
+
+
+
+
+
+# from 01-dev to dev-ran2
+
+# FROM
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/dev/config
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
+
+dev_consul_kv_backup.json
+kubectl --kubeconfig $KC exec -i -t -n $NS consul-0 -c consul -- sh -c "consul kv export > /tmp/key_values.json"
+kubectl --kubeconfig $KC -n $NS cp  consul-0:/tmp/key_values.json  ./key_transport_01dev_values_2nd.json.prv
+# TO 
+export KC=~/.kube/config
+kubectl --kubeconfig $KC -n $NS cp ./key_transport_ran2_values.json.prv consul-0:/tmp/key_values.json
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet consul-0 -c consul -- sh -c "consul kv import @/tmp/key_values.json"
