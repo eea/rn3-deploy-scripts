@@ -27,28 +27,62 @@ spec:
           command:
             - sleep
             - infinity
-          {{- if .Values.persistence.enabled }}
+#          {{- if .Values.persistence.enabled }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath | default "/data" }}
-            - name: reportnet3-data
+#          {{- end }}
+#          {{- if .Values.extraDisks.enabled }}
+            - name: {{ .Values.extraDisks.name }}
               mountPath: {{ .Values.extraDisks.mountPath | default "/reportnet3-data/input" }}
-            - name: reportnet3-pg-data
-              mountPath: {{ .Values.extraDisks.mountPath | default "/reportnet3-pg-data" }}
-          {{- end }}
+#          {{- end }}
+#          {{- if .Values.extraDisks1.enabled }}
+            - name: {{ .Values.extraDisks1.name }}
+              mountPath: {{ .Values.extraDisks1.mountPath | default "/reportnet3-pg-data0" }}
+#          {{- end }}
+#          {{- if .Values.extraDisks1.enabled }}
+            - name: {{ .Values.extraDisks2.name }}
+              mountPath: {{ .Values.extraDisks2.mountPath | default "/reportnet3-pg-data1" }}
+#          {{- end }}
+#          {{- if .Values.extraDisks1.enabled }}
+            - name: {{ .Values.extraDisks3.name }}
+              mountPath: {{ .Values.extraDisks1.mountPath | default "/reportnet3-pg-data2" }}
+#          {{- end }}
+#          {{- if .Values.extraDisks2.enabled }}
+            - name: {{ .Values.extraDisks3.name }}
+              mountPath: {{ .Values.extraDisks2.mountPath | default "/reportnet-data" }}
+#          {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-      {{- if .Values.persistence.enabled }}
       volumes:
+      {{- if .Values.persistence.enabled }}
         - name: data
           persistentVolumeClaim:
-            #claimName: {{ .Values.podName }}
             claimName: devops-helper
-        - name: reportnet3-data
+      {{- end }}
+      {{- if .Values.extraDisks.enabled }}
+        - name: {{ .Values.extraDisks.name }}
           persistentVolumeClaim:
-              claimName: reportnet3-data
-        - name: reportnet3-pg-data
+            claimName: {{ .Values.extraDisks.existingClaim }}
+      {{- end }}
+      {{- if .Values.extraDisks1.enabled }}
+        - name: {{ .Values.extraDisks1.name }}
           persistentVolumeClaim:
-              claimName: data-rn3-pg-helm-postgresql-0
+            claimName: {{ .Values.extraDisks1.existingClaim }}
+      {{- end }}
+      {{- if .Values.extraDisks2.enabled }}
+        - name: {{ .Values.extraDisks2.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.extraDisks2.existingClaim }}
+      {{- end }}
+      {{- if .Values.extraDisks3.enabled }}
+        - name: {{ .Values.extraDisks3.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.extraDisks3.existingClaim }}
+      {{- end }}
+      {{- if .Values.extraDisks4.enabled }}
+        - name: {{ .Values.extraDisks4.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.extraDisks4.existingClaim }}
       {{- end }}
 

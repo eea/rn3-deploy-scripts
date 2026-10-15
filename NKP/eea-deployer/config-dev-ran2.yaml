@@ -3,7 +3,7 @@ create_namespace: false
 wait: false
 timeout: true # If true, defaults to 20 mins
 debug: true
-kc: ~/.kube/dev/config
+kc: /home/sotav/.kube/dev/config
 ns: reportnet
 init: true
 script: true
@@ -140,7 +140,7 @@ charts:
         chart_repo: ../postgresql
         values_file: rn3-dev-ran2-postgresql.yaml
         namespace: reportnet
-        deploy_type: "-" #statefull
+        deploy_type: "statefull" #statefull
         script_shell: >-
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);
@@ -153,6 +153,8 @@ charts:
           chmod a+x ./scripts/pgpool-usr-fix.sh;
           ./scripts/pgpool-usr-fix.sh dev $NS $KC
         init_shell: >-
+          export NS=reportnet
+          export KC=~/.kube/dev/config
           kubectl --kubeconfig $KC -n $NS delete secret pg-secret;
           export dbpass=$(grep DBPASS .secrets.prv | cut -d '=' -f2);
           export repmgrpass=$(grep REPMGRPASS .secrets.prv | cut -d '=' -f2);

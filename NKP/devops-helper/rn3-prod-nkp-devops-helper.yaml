@@ -9,3 +9,30 @@ persistence:
   enabled: true
   storageClassName: "nutanix-file-static"
   accessMode: ReadWriteMany
+
+extraDisks:
+  enabled: false
+  name: reportnet3-data
+  storageClassName: "nutanix-file-static"
+  existingClaim: "reportnet3-data"
+  mountPath: /reportnet3-data/input
+  accessMode: 
+    - ReadWriteMany
+
+extraDisks1:
+  enabled: false
+  name: reportnet3-pg-data
+  storageClassName: "nutanix-file-static"
+  existingClaim: "data-rn3-pg-helm-postgresql-0"
+  mountPath: /reportnet3-pg-data
+  accessMode: 
+    - ReadWriteMany
+
+extraDisks2:
+  enabled: false
+  name: reportnet-data
+  storageClassName: "nutanix-file-static"
+  existingClaim: "reportnet-data"
+  mountPath: /reportnet-data
+  accessMode: 
+    - ReadWriteMany
