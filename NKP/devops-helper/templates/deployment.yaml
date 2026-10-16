@@ -46,11 +46,11 @@ spec:
 #          {{- end }}
 #          {{- if .Values.extraDisks1.enabled }}
             - name: {{ .Values.extraDisks3.name }}
-              mountPath: {{ .Values.extraDisks1.mountPath | default "/reportnet3-pg-data2" }}
+              mountPath: {{ .Values.extraDisks3.mountPath | default "/reportnet3-pg-data2" }}
 #          {{- end }}
 #          {{- if .Values.extraDisks2.enabled }}
-            - name: {{ .Values.extraDisks3.name }}
-              mountPath: {{ .Values.extraDisks2.mountPath | default "/reportnet-data" }}
+            - name: {{ .Values.extraDisks4.name }}
+              mountPath: {{ .Values.extraDisks4.mountPath | default "/mongo" }}
 #          {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}

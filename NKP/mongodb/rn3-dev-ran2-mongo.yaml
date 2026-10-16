@@ -75,7 +75,7 @@ metrics:
   prometheusServiceDiscovery: true
   resources: {}
   securityContext:
-    enabled: true
+    enabled: false
     runAsUser: 1001
 
 serviceAccount: ""
@@ -84,7 +84,7 @@ serviceAccount: ""
 podAnnotations: {}
 
 securityContext:
-  enabled: true
+  enabled: false
   runAsUser: 999
   fsGroup: 999
   runAsNonRoot: true

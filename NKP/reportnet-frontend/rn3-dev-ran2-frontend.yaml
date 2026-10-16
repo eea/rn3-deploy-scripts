@@ -5,13 +5,13 @@
 # Specific Values for Api Gateway
 
 # Environment Variables
-backend: https://rn3poc-api.reportnet.europa.eu
+backend: https://rn3-api.01dev.eea.europa.eu
 keycloak: true
 documentationFolder: test
-eulogin: https://rn3poc-auth.reportnet.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet&redirect_uri=https%3A%2F%2Frn3poc.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment&response_type=code&scope=openid
-websocket: wss://rn3poc.reportnet.europa.eu/communication/reportnet-websocket
+eulogin: https://rn3-auth.01dev.eea.europa.eu/auth/realms/Reportnet/protocol/openid-connect/auth?client_id=reportnet&redirect_uri=https%3A%2F%2Frn3poc.reportnet.europa.eu%2Feulogin%2F&response_mode=fragment&response_type=code&scope=openid
+websocket: wss://rn3-frontend.01dev.eea.europa.eu/communication/reportnet-websocket
 tagSufix: 
 replicas: 1
-version: v3.4-SANDBOX
+version: v3.3-DEV
 repo: eeacms
 # Other Variables

@@ -49,11 +49,11 @@ extraDisks3:
 
 
 extraDisks4:
-  enabled: false
-  name: reportnet-data
+  enabled: true
+  name: mongo
   storageClassName: "nfs-client"
-  existingClaim: "reportnet-data"
-  mountPath: /reportnet-data
+  existingClaim: "datadir-mongo-mongodb-replicaset-0"
+  mountPath: /mongo
   accessMode: 
     - ReadWriteMany
 

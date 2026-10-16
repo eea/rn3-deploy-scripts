@@ -198,28 +198,38 @@ charts:
 
 
       ################################### NGINX  ######################################
-      # - release_name: nginx
-      #   chart_name: nginx
-      #   version: v0.0.1
-      #   chart_repo: ../traefik
-      #   values_file: rn3-dev-ran2-nginx-svc-api.yaml
-      #   namespace: reportnet
-      #   deploy_type: "-"
-      #   script_shell: "-"
-      #   init_shell: "-"
-      #   custom_deployment: "-"
-      ################################### TRAEFIK ######################################
-      - release_name: traefik
-        chart_name: traefik
+      # for nginx we do not deploy a helm - we only need to apply some ingress files with 
+      # kubectl. For such a case we use the devops helper with a custom deployment to be able 
+      # to do so from the eea_deployer script
+      # you just need to create the ingress and then add it to the list of the custom_deployment
+      # you can also use a master file with all the ingresses - the choise is up to you 
+      - release_name: nginx-helper
+        chart_name: "nginx-helper"
         version: v0.0.1
         chart_repo: ../traefik
-        values_file: rn3-dev-ran2-traefik_values.yaml
+        values_file: rn3-dev-ran2-nginx-svc-master.yaml
         namespace: reportnet
         deploy_type: "-"
-        script_shell: >-
-          kubectl --kubeconfig $KC apply -f  ../traefik/rn3-dev-ran2-traefik-svc-api.yaml
-        init_shell: "-"
+        script_shell: "-"
+        init_shell: >-
+          export NS=reportnet;
+          export KC=/home/sotav/.kube/dev/config;
+          kubectl --kubeconfig $KC -n $NS get ingresses;
+          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-dev-ran2-nginx-svc-master.yaml
+          kubectl --kubeconfig $KC -n $NS get ingresses;
         custom_deployment: "-"
+      ################################### TRAEFIK ######################################
+      # - release_name: traefik
+      #   chart_name: traefik
+      #   version: v0.0.1
+      #   chart_repo: ../traefik
+      #   values_file: rn3-dev-ran2-traefik_values.yaml
+      #   namespace: reportnet
+      #   deploy_type: "-"
+      #   script_shell: >-
+      #     kubectl --kubeconfig $KC apply -f  ../traefik/rn3-dev-ran2-traefik-svc-api.yaml
+      #   init_shell: "-"
+      #   custom_deployment: "-"
 
       #####################################################################################
       ####################                                           ######################

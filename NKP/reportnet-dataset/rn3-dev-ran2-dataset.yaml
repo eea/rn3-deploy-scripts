@@ -34,8 +34,8 @@ zipkin:
 mongo:
   host: mongo-mongodb
   port: 27017
-  #hosts: mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017/?readPreference=primary&retryWrites=true
-  hosts: mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017
+  hosts: mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017/?readPreference=primary&retryWrites=true
+  #hosts: mongo-mongodb-replicaset.reportnet.svc.cluster.local:27017
 
 
 redis:
@@ -59,6 +59,6 @@ postgres:
 
 tagSufix: 
 replicas: 1
-version: v3.4-SANDBOX
+version: v3.3-DEV
 repo: eeacms
 # Other Variables

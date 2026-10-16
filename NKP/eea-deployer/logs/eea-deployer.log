@@ -1,0 +1,35 @@
+[2026-10-16 16:41:30] [INFO] Using file: config-dev-ran2.yaml
+[2026-10-16 16:41:30] [INFO] Generic/common values based on config-dev-ran2.yaml file
+[2026-10-16 16:41:30] [INFO] Dry Run: false
+[2026-10-16 16:41:30] [INFO] Create Namespace: false
+[2026-10-16 16:41:30] [INFO] Wait: false
+[2026-10-16 16:41:30] [INFO] Timeout: true
+[2026-10-16 16:41:30] [INFO] KubeConfig: /home/sotav/.kube/dev/config
+[2026-10-16 16:41:30] [INFO] ****************************
+[2026-10-16 16:41:30] [INFO] Chart specific values based on config-dev-ran2.yaml file
+[2026-10-16 16:41:30] [INFO] Release Name: frontend
+[2026-10-16 16:41:30] [INFO] Chart Name: reportnet-frontend
+[2026-10-16 16:41:30] [INFO] Debug: 
+[2026-10-16 16:41:30] [INFO] Version: v0.0.1
+[2026-10-16 16:41:30] [INFO] Chart Repo: ../reportnet-frontend
+[2026-10-16 16:41:30] [INFO] Values File: rn3-dev-ran2-frontend.yaml
+[2026-10-16 16:41:30] [INFO] Namespace: reportnet
+[2026-10-16 16:41:30] [INFO] Deploy type: deployment
+[2026-10-16 16:41:30] [INFO] Script_shell: -
+[2026-10-16 16:41:30] [INFO] Init_shell: -
+[2026-10-16 16:41:30] [INFO] Custom_deployment: -
+[2026-10-16 16:41:30] [INFO] Deployment type is  *** deployment ***  execution will proceed 
+[2026-10-16 16:41:30] [INFO] Installing reportnet-frontend with release name frontend from ../reportnet-frontend with version v0.0.1 using values file: rn3-dev-ran2-frontend.yaml in reportnet namespace
+[2026-10-16 16:41:30] [INFO] Executing command: helm --kubeconfig /home/sotav/.kube/dev/config -n reportnet upgrade --install frontend ../reportnet-frontend -f ../reportnet-frontend/rn3-dev-ran2-frontend.yaml --timeout=20m --version v0.0.1
+[2026-10-16 16:41:30] [INFO] ****************************
+Release "frontend" has been upgraded. Happy Helming!
+NAME: frontend
+LAST DEPLOYED: Fri Oct 16 16:41:32 2026
+NAMESPACE: reportnet
+STATUS: deployed
+REVISION: 13
+DESCRIPTION: Upgrade complete
+TEST SUITE: None
+[2026-10-16 16:41:39] [INFO] All Actions have been completed successfully
+[2026-10-16 16:41:39] [INFO] ****************************
+[2026-10-16 16:41:39] [INFO] All actions completed successfully

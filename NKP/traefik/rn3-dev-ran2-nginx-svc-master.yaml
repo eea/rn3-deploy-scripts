@@ -1,0 +1,205 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-api-gateway
+  annotations:
+    cert-manager.io/cluster-issuer: 01dev-eea-letsencrypt
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options nosniff";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.eea.europa.eu"
+      more_set_headers "Referrer-Policy: no-referrer";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+      more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
+      more_set_headers "Access-Control-Allow-Origin * ";
+    nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS
+spec:
+  tls:
+    - hosts:
+        - rn3-api.01dev.eea.europa.eu
+      secretName: le-rn3-api-01dev-eea-europa-eu
+  rules:
+  - host: rn3-api.01dev.eea.europa.eu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api-gateway
+            port:
+              number: 8010
+  ingressClassName: nginx
+
+
+
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-frontend
+  annotations:
+    cert-manager.io/cluster-issuer: 01dev-eea-letsencrypt
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options nosniff";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.eea.europa.eu"
+      more_set_headers "Referrer-Policy: no-referrer";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+      more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
+      more_set_headers "Access-Control-Allow-Origin * ";
+    nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS
+spec:
+  tls:
+    - hosts:
+        - rn3-frontend.01dev.eea.europa.eu
+      secretName: le-rn3-frontend-01dev-eea-europa-eu
+
+  rules:
+  - host: rn3-frontend.01dev.eea.europa.eu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80
+  ingressClassName: nginx
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-keycloak  
+  annotations:
+    cert-manager.io/cluster-issuer: 01dev-eea-letsencrypt
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options nosniff";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.eea.europa.eu"
+      more_set_headers "Referrer-Policy: no-referrer";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+      more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
+      more_set_headers "Access-Control-Allow-Origin * ";
+    nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS
+spec:
+  tls:
+    - hosts:
+        - rn3-auth.01dev.eea.europa.eu
+      secretName: le-rn3-auth-01dev-eea-europa-eu
+  rules:
+  - host: rn3-auth.01dev.eea.europa.eu
+    http:
+      paths:
+        - backend:
+            service:
+              name: keycloak-http
+              port:
+                number: 80
+          path: /auth
+          pathType: Prefix
+        - backend:
+            service:
+              name: keycloak-http
+              port:
+                number: 80
+          path: /auth/realms/Reportnet
+          pathType: Prefix
+        - backend:
+            service:
+              name: keycloak-http
+              port:
+                number: 80
+          path: /auth/resources
+          pathType: Prefix
+  ingressClassName: nginx
+
+######################### DEMO..... for traefik - very old - for reference only !!!
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ingress-reportnet-consul-ui
+# spec:
+#   rules:
+#   - host: rn3-consul-ui.01dev.eea.europa.eu
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: rn3-consul-ui
+#             port:
+#               number: 8500
+#   ingressClassName: nginx
+
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ingress-reportnet-traefik-api
+# spec:
+#   rules:
+#   - host: rn3-api-t.01dev.eea.europa.eu
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: rn3-traefik
+#             port:
+#               number: 8000
+#   ingressClassName: nginx
+####################################################################
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ingress-reportnet-traefik-front
+# spec:
+#   rules:
+#   - host: rn3-frn-t.01dev.eea.europa.eu
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: rn3-traefik
+#             port:
+#               number: 80
+#   ingressClassName: nginx
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ingress-reportnet-traefik-api
+# spec:
+#   rules:
+#   - host: rn3-api-t.01dev.eea.europa.eu
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: rn3-traefik
+#             port:
+#               number: 80
+#   ingressClassName: nginx
+

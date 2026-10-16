@@ -8,10 +8,10 @@ replicas: 5
 resources:
   limits:
     #cpu: "100m"
-    memory: 0.2Gi
+    memory: 4Gi
   requests:
     #cpu: "100m"
-    memory: 0.2Gi
+    memory: 4Gi
 # Environment Variables
 consul:
   server: consul.reportnet.svc.cluster.local
@@ -39,5 +39,5 @@ sentry:
 tagSufix: 
 replicas: 1
 repo: eeacms
-version: v3.4-SANDBOX
+version: v3.3-DEV
 # Other Variables
