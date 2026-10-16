@@ -73,12 +73,12 @@ charts:
       # you just need to create the ingress and then add it to the list of the custom_deployment
       # you can also use a master file with all the ingresses - the choise is up to you 
       - release_name: nginx-helper
-        chart_name: "-"
-        version: "-"
-        chart_repo: "-"
-        values_file: "-"
+        chart_name: nginx-helper
+        version: v0.0.1
+        chart_repo: ../nginx-helper
+        values_file: values.yaml
         namespace: reportnet
-        deploy_type: deployment
+        deploy_type: "deployment"
         script_shell: "-"
         init_shell: >-
           export NS=reportnet;
