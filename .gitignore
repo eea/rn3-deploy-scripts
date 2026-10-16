@@ -1,3 +1,5 @@
 //*.secret
 //*.secrets
+*.prv
+*.sotav
 prop/
