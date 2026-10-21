@@ -62,7 +62,20 @@ ZC7ZcWavwx
 
 
 
+export WD=/home/sotav/TRASYS_GIT_PRV/EAA
+export KC=~/.kube/03d-test/03prod.yaml
+export NS=reportnet
+echo $KC
+echo $NS
+echo $WD
 
 
-
+##test - check install 
+helm --kubeconfig $KC -n $NS upgrade --install rod . -f rn3-test-nkp-rod.yaml --debug --dry-run
+##install
+helm --kubeconfig $KC -n $NS install rod . -f rn3-test-nkp-rod.yaml --debug
+##update
+helm --kubeconfig $KC -n $NS upgrade --install rod . -f rn3-test-nkp-rod.yaml --debug
+##remove
+helm --kubeconfig $KC -n $NS uninstall rod
 

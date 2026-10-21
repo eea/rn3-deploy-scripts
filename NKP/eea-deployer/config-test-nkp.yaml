@@ -80,7 +80,7 @@ charts:
         custom_deployment: >-
           chmod a+x ./scripts/deploy_script_kafka.sh;
           ./scripts/deploy_script_kafka.sh ~/.kube/03d-test/03prod.yaml reportnet ../kafka/. ../kafka/rn3-test-nkp-kafka.yaml  $(grep INTER_BROKER_PASSWORD .secrets.prv | cut -d '=' -f2)  $(grep CONTROLLER_PASSWORD .secrets.prv | cut -d '=' -f2) test-nkp-kafka-01 3Gi  3Gi;
-          
+
       #################################### KEYCLOAK ######################################
       - release_name: keycloak
         chart_name: keycloak
@@ -220,19 +220,28 @@ charts:
       ####################                                           ######################
       ####################                                           ######################
       #####################################################################################
-
-
       ################################### NGINX  ######################################
-      # - release_name: nginx
-      #   chart_name: nginx
-      #   version: v0.0.1
-      #   chart_repo: ../traefik
-      #   values_file: rn3-dev-ran2-nginx-svc-api.yaml
-      #   namespace: reportnet
-      #   deploy_type: "-"
-      #   script_shell: "-"
-      #   init_shell: "-"
-      #   custom_deployment: "-"
+      # for nginx we do not deploy a helm - we only need to apply some ingress files with 
+      # kubectl. For such a case we use the devops helper with a custom deployment to be able 
+      # to do so from the eea_deployer script
+      # you just need to create the ingress and then add it to the list of the custom_deployment
+      # you can also use a master file with all the ingresses - the choise is up to you 
+      - release_name: nginx-helper
+        chart_name: nginx-helper
+        version: v0.0.1
+        chart_repo: ../nginx-helper
+        values_file: rn3-sandbox-nkp-devops-helper-nginx.yaml
+        namespace: reportnet
+        deploy_type: "deployment"
+        script_shell: "-"
+        init_shell: >-
+          export NS=reportnet;
+          export KC=/home/sotav/.kube/03d-test/03prod.yaml;
+          kubectl --kubeconfig $KC -n $NS get ingresses;
+          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-test-nkp-nginx-svc-api.yaml
+        custom_deployment: "-"
+
+
       ################################### TRAEFIK ######################################
       - release_name: traefik
         chart_name: traefik
@@ -246,43 +255,6 @@ charts:
         init_shell: "-"
         custom_deployment: "-"
 
-
-      #####################################################################################
-      ####################                                           ######################
-      ####################                                           ######################
-      ####################                  INGRESS                  ######################
-      ####################                                           ######################
-      ####################                                           ######################
-      ####################                                           ######################
-      #####################################################################################
-      # for nginx we do not deploy a helm - we only need to apply some ingress files with 
-      # kubectl. For such a case we use the devops helpr with a custom deployment to be able 
-      # to do so from the eea_deployer script
-      # you just need to create the ingress and then add it to the list of the custom_deployment
-      # you can alos use a master file with all the ingresses - the choise is up to you 
-      - release_name: devops-helper-nginx
-        chart_name: devops-helper
-        version: v0.0.1
-        chart_repo: ../devops-helper
-        values_file: rn3-test-nkp-devops-helper.yaml
-        namespace: reportnet
-        deploy_type: deployment
-        script_shell: "-"
-        init_shell: "-"
-        custom_deployment: >-
-          export NS=reportnet;
-          export KC=/home/sotav/.kube/config;
-          #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-test-nkp-nginx-svc-cipher-config-map.yaml;
-          #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-test-nkp-nginx-svc-frontend.yaml;
-          #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-test-nkp-nginx-svc-apigateway.yaml;
-          #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-test-nkp-nginx-svc-keycloak.yaml;
-          #kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-test-nkp-nginx-svc-keycloak-admin.yaml;
-
-
-
-
-
-
       #####################################################################################
       ####################                                           ######################
       ####################                                           ######################
@@ -291,7 +263,17 @@ charts:
       ####################                                           ######################
       ####################                                           ######################
       #####################################################################################
-
+      ################################### ROD ######################################
+      - release_name: rod
+        chart_name: reportnet-rod
+        version: v0.0.1
+        chart_repo: ../reportnet-rod
+        values_file: rn3-test-nkp-rod.yaml
+        namespace: reportnet
+        deploy_type: deployment
+        script_shell: "-"
+        init_shell: "-"
+        custom_deployment: "-"
       #################################### KAFKA-UI ######################################
       - release_name: kafka-ui
         chart_name: kafka-ui
@@ -404,17 +386,7 @@ charts:
         script_shell: "-"
         init_shell: "-"
         custom_deployment: "-"
-      ################################### ROD ######################################
-      - release_name: rod
-        chart_name: reportnet-rod
-        version: v0.0.1
-        chart_repo: ../reportnet-rod
-        values_file: rn3-test-nkp-rod.yaml
-        namespace: reportnet
-        deploy_type: deployment
-        script_shell: "-"
-        init_shell: "-"
-        custom_deployment: "-"
+
       ################################### UMS ######################################
       - release_name: ums
         chart_name: reportnet-ums
@@ -427,10 +399,10 @@ charts:
         init_shell: >-
           export KC=~/.kube/03d-test/03prod.yaml
           export NS=reportnet
-          export ums_kc_password=$(grep ums_kc_password_test_nkp ../eea-deployer/.secrets.prv | cut -d '=' -f2);
-          export ums_kc_username=$(grep ums_kc_username_test_nkp ../eea-deployer/.secrets.prv | cut -d '=' -f2);
-          kubectl --kubeconfig $KC -n $NS delete secret ums-kc
-          kubectl --kubeconfig $KC -n $NS create secret generic ums-kc --from-literal password=$ums_kc_password --from-literal username=$ums_kc_username
+          export ums_kc_password=$(grep ums_kc_password_test_nkp .secrets.prv | cut -d '=' -f2);
+          export ums_kc_username=$(grep ums_kc_username_test_nkp .secrets.prv | cut -d '=' -f2);
+          kubectl --kubeconfig $KC -n $NS delete secret ums-kc;
+          kubectl --kubeconfig $KC -n $NS create secret generic ums-kc --from-literal password=$ums_kc_password --from-literal username=$ums_kc_username;
         custom_deployment: "-"
       ################################### VALIDATION ######################################
       - release_name: validation

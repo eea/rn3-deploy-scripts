@@ -47,6 +47,6 @@ axon:
 
 tagSufix: 
 replicas: 1
-version: 1.0.0
+version: v3.4-TEST
 repo: eeacms
 # Other Variables

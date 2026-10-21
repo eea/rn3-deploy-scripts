@@ -188,15 +188,18 @@ kubectl --kubeconfig $KC exec $CONSUL_POD consul members --namespace=reportnet |
 
 kubectl --kubeconfig $KC -n $NS get pods |grep consul
 #consul-0
+export NS=reportnet
 export DN=consul-0
 
 # FROM
-export KC=~/.kube/test/config 
+export KC=~/.kube/test/config
 kubectl --kubeconfig $KC exec -i -t -n $NS consul-0 -c consul -- sh -c "consul kv export > key_values.json"
 kubectl --kubeconfig $KC -n $NS cp  consul-0:/key_values.json  ./key_values.json.prv
 # TO 
-export KC=~/.kube/staging/config
-kubectl --kubeconfig $KC -n $NS cp ./key_values_dev-ran2.json.prv consul-0:/tmp/key_values.json
+export KC=~/.kube/03d-test/03prod.yaml
+kubectl --kubeconfig $KC -n $NS cp ./key_values.json.prv consul-0:/tmp/key_values.json
+kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet consul-0 -c consul -- sh -c "ls -la /tmp"
+kubectl --kubeconfig $KC exec -i -t -n $NS consul-0 -c consul -- sh -c "consul kv export > key_original_values.json"
 kubectl --kubeconfig $KC -n $NS exec -i -t -n reportnet consul-0 -c consul -- sh -c "consul kv import @/tmp/key_values.json"
 
 
