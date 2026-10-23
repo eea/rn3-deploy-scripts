@@ -207,7 +207,7 @@ charts:
         chart_name: nginx-helper
         version: v0.0.1
         chart_repo: ../nginx-helper
-        values_file: values.yaml
+        values_file: rn3-dev-ran2-devops-helper-nginx.yaml
         namespace: reportnet
         deploy_type: "deployment"
         script_shell: "-"

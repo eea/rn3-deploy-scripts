@@ -4,14 +4,14 @@ kind: Ingress
 metadata:
   name: ingress-api-gateway
   annotations:
-    cert-manager.io/cluster-issuer: 01dev-eea-letsencrypt
+    #cert-manager.io/cluster-issuer: 01dev-eea-letsencrypt
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Content-Type-Options nosniff";
       more_set_headers "X-Frame-Options: DENY";
       more_set_headers "X-XSS-Protection: 1; mode=block";
-      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.eea.europa.eu"
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.europa.eu"
       more_set_headers "Referrer-Policy: no-referrer";
       more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
       more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
@@ -20,10 +20,11 @@ metadata:
 spec:
   tls:
     - hosts:
-        - rn3-api.01dev.eea.europa.eu
-      secretName: le-rn3-api-01dev-eea-europa-eu
+        - dev-api.reportnet.europa.eu
+      #secretName: le-rn3-frontend-01dev-eea-europa-eu
+      secretName: star-reportnet-europa-eu
   rules:
-  - host: rn3-api.01dev.eea.europa.eu
+  - host: dev-api.reportnet.europa.eu
     http:
       paths:
       - path: /
@@ -44,14 +45,14 @@ kind: Ingress
 metadata:
   name: ingress-frontend
   annotations:
-    cert-manager.io/cluster-issuer: 01dev-eea-letsencrypt
+    #cert-manager.io/cluster-issuer: 01dev-eea-letsencrypt
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Content-Type-Options nosniff";
       more_set_headers "X-Frame-Options: DENY";
       more_set_headers "X-XSS-Protection: 1; mode=block";
-      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.eea.europa.eu"
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.europa.eu"
       more_set_headers "Referrer-Policy: no-referrer";
       more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
       more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
@@ -60,11 +61,12 @@ metadata:
 spec:
   tls:
     - hosts:
-        - rn3-frontend.01dev.eea.europa.eu
-      secretName: le-rn3-frontend-01dev-eea-europa-eu
+        - dev.reportnet.europa.eu
+      #secretName: le-rn3-frontend-01dev-eea-europa-eu
+      secretName: star-reportnet-europa-eu
 
   rules:
-  - host: rn3-frontend.01dev.eea.europa.eu
+  - host: dev.reportnet.europa.eu
     http:
       paths:
       - path: /
@@ -82,14 +84,13 @@ kind: Ingress
 metadata:
   name: ingress-keycloak  
   annotations:
-    cert-manager.io/cluster-issuer: 01dev-eea-letsencrypt
+    #cert-manager.io/cluster-issuer: 01dev-eea-letsencrypt
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    #nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Content-Type-Options nosniff";
-      more_set_headers "X-Frame-Options: DENY";
       more_set_headers "X-XSS-Protection: 1; mode=block";
-      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.eea.europa.eu"
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.europa.eu"
       more_set_headers "Referrer-Policy: no-referrer";
       more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
       more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
@@ -98,10 +99,12 @@ metadata:
 spec:
   tls:
     - hosts:
-        - rn3-auth.01dev.eea.europa.eu
-      secretName: le-rn3-auth-01dev-eea-europa-eu
+        - dev-auth.reportnet.europa.eu
+      #secretName: le-rn3-auth-01dev-eea-europa-eu
+      secretName: star-reportnet-europa-eu
+      
   rules:
-  - host: rn3-auth.01dev.eea.europa.eu
+  - host: dev-auth.reportnet.europa.eu
     http:
       paths:
         - backend:
@@ -135,7 +138,7 @@ spec:
 #   name: ingress-reportnet-consul-ui
 # spec:
 #   rules:
-#   - host: rn3-consul-ui.01dev.eea.europa.eu
+#   - host: rn3-consul-ui.reportnet.europa.eu
 #     http:
 #       paths:
 #       - path: /
@@ -154,7 +157,7 @@ spec:
 #   name: ingress-reportnet-traefik-api
 # spec:
 #   rules:
-#   - host: rn3-api-t.01dev.eea.europa.eu
+#   - host: rn3-api-t.reportnet.europa.eu
 #     http:
 #       paths:
 #       - path: /
@@ -173,7 +176,7 @@ spec:
 #   name: ingress-reportnet-traefik-front
 # spec:
 #   rules:
-#   - host: rn3-frn-t.01dev.eea.europa.eu
+#   - host: rn3-frn-t.reportnet.europa.eu
 #     http:
 #       paths:
 #       - path: /
@@ -191,7 +194,7 @@ spec:
 #   name: ingress-reportnet-traefik-api
 # spec:
 #   rules:
-#   - host: rn3-api-t.01dev.eea.europa.eu
+#   - host: rn3-api-t.reportnet.europa.eu
 #     http:
 #       paths:
 #       - path: /

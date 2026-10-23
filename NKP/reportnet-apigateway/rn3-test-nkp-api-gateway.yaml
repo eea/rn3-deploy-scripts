@@ -8,10 +8,10 @@ replicas: 5
 resources:
   limits:
     #cpu: "100m"
-    memory: 0.2Gi
+    memory: 2Gi
   requests:
     #cpu: "100m"
-    memory: 0.2Gi
+    memory: 2Gi
     
 # Environment Variables
 consul:
