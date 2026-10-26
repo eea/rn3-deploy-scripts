@@ -1,0 +1,2 @@
+
+helm --kubeconfig /home/sotav/.kube/prod2/config -n reportnet upgrade --install maintenance ../reportnet-maintenance -f ../reportnet-maintenance/rn3-transport-ran2-maintenance.yaml --server-side false
