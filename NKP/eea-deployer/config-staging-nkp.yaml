@@ -252,7 +252,7 @@ charts:
           export NS=reportnet;
           export KC=/home/sotav/.kube/06d-sandbox/06prod.yaml;
           kubectl --kubeconfig $KC -n $NS get ingresses;
-          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-test-nkp-nginx-svc-master.yaml
+          kubectl --kubeconfig $KC -n $NS apply -f  ../traefik/rn3-staging-nkp-nginx-svc-master.yaml
         custom_deployment: "-"
 
 

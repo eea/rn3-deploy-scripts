@@ -7,7 +7,7 @@ init:
 clusterDomain: cluster.local
 
 keycloak:
-  replicas: 2
+  replicas: 3
 
   image:
     repository: eeacms/rn3-keycloak

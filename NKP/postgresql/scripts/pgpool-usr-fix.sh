@@ -22,7 +22,7 @@
 #           # ./pgpool-usr-fix.sh dev reportnet ~/.kube/sandbox/config
 #           # ./pgpool-usr-fix.sh dev reportnet ~/.kube/staging/config 
 #           # ./pgpool-usr-fix.sh dev reportnet ~/.kube/config 
-
+			# ./pgpool-usr-fix.sh dev reportnet ~/.kube/06d-sandbox/06prod.yaml
 
 ### Using wsl 
 

@@ -73,7 +73,7 @@ metadata:
       more_set_headers "X-Content-Type-Options: nosniff";
       more_set_headers "X-Frame-Options: DENY";
       more_set_headers "X-XSS-Protection: 1; mode=block";
-      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.reportnet.europa.eu"
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.europa.eu"
       more_set_headers "Referrer-Policy: no-referrer";
       more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
       more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
@@ -82,7 +82,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "100m" #-> 3G
 spec:
   rules:
-  - host: api-sandbox.reportnet.europa.eu
+  - host: sandbox-api.reportnet.europa.eu
     http:
       paths:
         - backend:
@@ -114,12 +114,12 @@ kind: Ingress
 metadata:
   name: ingress-keycloak
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    #nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Content-Type-Options nosniff";
       more_set_headers "X-Frame-Options: DENY";
       more_set_headers "X-XSS-Protection: 1; mode=block";
-      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.reportnet.europa.eu"
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.europa.eu"
       more_set_headers "Referrer-Policy: no-referrer";
       more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
       more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
@@ -127,7 +127,7 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS
 spec:
   rules:
-  - host: auth.sandbox.reportnet.europa.eu
+  - host: sandbox-auth.reportnet.europa.eu
     http:
       paths:
         - backend:
