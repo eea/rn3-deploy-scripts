@@ -3,7 +3,14 @@
 # Declare variables to be passed into your templates.
 
 # Specific Values for Recordstore
-
+# Specific Values for Recordstore
+resources:
+  limits:
+    #cpu: "100m"
+    memory: 6Gi
+  requests:
+    #cpu: "100m"
+    memory: 6Gi
 # Environment Variables
 consul:
   server: consul.reportnet.svc.cluster.local
