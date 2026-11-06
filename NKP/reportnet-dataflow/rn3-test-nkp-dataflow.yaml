@@ -38,7 +38,7 @@ fme:
 
     integration:
         callback:
-            urlbase: https://sandbox-api.reportnet.europa.eu
+            urlbase: https://test-api.reportnet.europa.eu
             
 axon:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon

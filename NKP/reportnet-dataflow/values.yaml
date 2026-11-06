@@ -36,6 +36,7 @@ sentry:
 fme:
     topic: Reportnet3_Test_Topic
 
+# TODO replace with the corresponding to env api url.
     integration:
         callback:
             urlbase: https://rn3api.eionet.europa.eu

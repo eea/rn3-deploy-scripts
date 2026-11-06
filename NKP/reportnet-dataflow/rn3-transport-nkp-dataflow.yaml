@@ -47,7 +47,7 @@ fme:
 
     integration:
         callback:
-            urlbase: https://rn3api.eionet.europa.eu
+            urlbase: https://transport-api-awstest.reportnet.europa.eu/
             
 axon:
     url: jdbc:postgresql://rn3-pg-helm-pgpool:5432/axon
