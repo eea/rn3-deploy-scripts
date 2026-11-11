@@ -1,0 +1,61 @@
+#Administration console
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-keycloak-admin
+  namespace: reportnet
+  annotations:
+    traefik.ingress.kubernetes.io/router.tls: "true"
+spec:
+  ingressClassName: traefik-internal
+  tls:
+    - hosts:
+        - sandbox-auth-admin.reportnet.europa.eu
+  rules:
+    - host: sandbox-auth-admin.reportnet.europa.eu
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak-http
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-keycloak
+  namespace: reportnet
+  annotations:
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options nosniff";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Content-Security-Policy: default-src 'self' 'unsafe-inline' https://*.europa.eu"
+      more_set_headers "Referrer-Policy: no-referrer";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+      more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
+      more_set_headers "Access-Control-Allow-Origin * ";
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: sandbox-auth.reportnet.europa.eu
+      http:
+        paths:
+          - path: /auth/realms/Reportnet
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak-http
+                port:
+                  number: 80
+          - path: /auth/resources
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak-http
+                port:
+                  number: 80
