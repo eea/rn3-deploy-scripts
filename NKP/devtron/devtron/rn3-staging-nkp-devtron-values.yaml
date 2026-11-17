@@ -307,14 +307,9 @@ argo-cd:
       #   username: ""
       #   password: ""
       # extra:
-      #   accounts.freddy.password: $2y$10$p5knGMvbVSSBzvbeM1tLne2rYBW.4L6aJqN.Fp1AalKe3qh3LuBq6 #fancy_password
-      #   accounts.freddy.passwordMtime: 2026-02-19T17:45:10Z
       #   accounts.sotav.password: $2y$10$p5knGMvbVSSBzvbeM1tLne2rYBW.4L6aJqN.Fp1AalKe3qh3LuBq6 #fancy_password
       #   accounts.sotav.passwordMtime: 2026-02-19T17:45:10Z
-      #   accounts.victor.password: $2y$10$p5knGMvbVSSBzvbeM1tLne2rYBW.4L6aJqN.Fp1AalKe3qh3LuBq6 #fancy_password
-      #   accounts.victor.passwordMtime: 2026-02-19T17:45:10Z
-      #   accounts.carlos.password: $2y$10$p5knGMvbVSSBzvbeM1tLne2rYBW.4L6aJqN.Fp1AalKe3qh3LuBq6 #fancy_password
-      #   accounts.carlos.passwordMtime: 2026-02-19T17:45:10Z
+
 
     cm:
       create: true

@@ -234,10 +234,10 @@ keycloak:
     ## The following values only apply if "deployPostgres" is set to "false"
 
     # Specifies an existing secret to be used for the database password
-    existingSecret: ""
+    existingSecret: pg-secret
 
     # The key in the existing secret that stores the password
-    existingSecretKey: password
+    existingSecretKey: pg-pass
 
     dbName: keycloak
     dbHost: rn3-pg-helm-pgpool.reportnet.svc.cluster.local
@@ -245,7 +245,7 @@ keycloak:
     dbUser: testuser
 
     # Only used if no existing secret is specified. In this case a new secret is created
-    dbPassword: "53p057n373.0!"
+    #dbPassword: ""
 
 postgresql:
   ### PostgreSQL User to create.
