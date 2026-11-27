@@ -79,7 +79,9 @@ metadata:
       more_set_headers "Feature-Policy: camera 'self'; microphone 'self'";
       more_set_headers "Access-Control-Allow-Origin: * ";
     nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS
-    nginx.ingress.kubernetes.io/proxy-body-size: "100m" #-> 3G
+    nginx.ingress.kubernetes.io/proxy-body-size: "11g"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
 spec:
   rules:
   - host: sandbox-api.reportnet.europa.eu
